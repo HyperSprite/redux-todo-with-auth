@@ -9,7 +9,11 @@ function tokenForUser(user) {
   return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
 }
 
-exports.signin = (req, res, next) => {
+exports.signin = (err, req, res, next) => {
+  if (err) {
+    console.log(`AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`);
+    return res.send(JSON.stringify({ error: 'Signin failed: Bad Email or Password.' }));
+  }
   hlpr.consLog(['res.send signin token']);
   res.send({ token: tokenForUser(req.user) });
 };
