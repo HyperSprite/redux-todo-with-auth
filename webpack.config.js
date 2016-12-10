@@ -6,7 +6,7 @@ module.exports = {
     // Set up an ES6-ish environment
     'babel-polyfill',
     // Add your application's scripts below
-    './src/client/main.jsx',
+    './src/client/index.jsx',
   ],
   output: {
     path: './src/server/public/assets/',
@@ -45,6 +45,10 @@ module.exports = {
           plugins: ['transform-flow-strip-types', 'transform-runtime'],
           presets: ['es2015', 'stage-0', 'react'],
         },
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
       },
     ],
     preLoaders: [

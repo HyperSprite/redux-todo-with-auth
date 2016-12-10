@@ -8,7 +8,7 @@ module.exports = {
     'babel-polyfill',
     // Add your application's scripts below
     'webpack-hot-middleware/client',
-    './src/client/main.jsx',
+    './src/client/index.jsx',
   ],
   output: {
     path: '/../../public/assets/',
@@ -33,7 +33,11 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loaders: ['react-hot', 'babel'],
+        loaders: ['react-hot-loader/webpack', 'babel'],
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
       },
     ],
     preLoaders: [
