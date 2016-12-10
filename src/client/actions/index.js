@@ -35,7 +35,7 @@ export function signinUser({ email, password }) {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: TYPES.AUTH_USER });
       })
-      .catch(error => dispatch(authError(error.response.data)));
+      .catch(error => dispatch(authError(error.response.data.error)));
   };
 }
 

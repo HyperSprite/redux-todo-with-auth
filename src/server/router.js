@@ -9,14 +9,11 @@ const passportService = require('./services/passport');
 
 // Auth middleware
 const requireAuth = passport.authenticate('jwt', { session: false });
-const requireSignin = passport.authenticate('local', { session: false });
+const requireSignin = passport.authenticate('local', { session: false, failWithError: true });
 
 module.exports = (app) => {
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(rootDir, 'index.html'));
-  });
-  app.get('/signin', (req, res) => {
-    res.send(JSON.stringify({ error: 'Signin failed' }));
   });
   app.post('/signin', requireSignin, Authentication.signin);
   app.post('/signup', Authentication.signup);
