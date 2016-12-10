@@ -6,6 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const config = require('./config');
 const router = require('./router');
 
@@ -14,7 +15,10 @@ const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
 const rootDir = `${__dirname}/${config.public}/`;
 const port = process.env.PORT || 3080;
 const portS = (port * 1) + 363;
+const hlpr = require('./lib/helpers');
 let httpServer;
+
+hlpr.isProd();
 
 isSSL ?
   console.log('**** Using SSL certs') :
@@ -33,9 +37,9 @@ if (isSSL) {
 }
 
 // Webpack dev server setup
-if (process.env.NODE_ENV !== 'production') {
+if (!hlpr.isProd()) {
   mongoose.connect(config.mongoconnect.dev);
-  console.log('**** Using Webpack Dev Middleware');
+  hlpr.consLog(['**** Using Webpack Dev Middleware']);
   const test = process.argv[2] || false;
 
   const webpack = require('webpack');
@@ -53,6 +57,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Express Middleware
+app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(rootDir));

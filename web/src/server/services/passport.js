@@ -1,6 +1,6 @@
 const passport = require('passport');
-const JwtStrategy = require('passport-jwt').Strategy;
 const LocalStrategy = require('passport-local');
+const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
 const User = require('../models/user');
@@ -10,9 +10,7 @@ const localOptions = { usernameField: 'email' };
 const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
   User.findOne({ email: email}, (err, user) => {
     if (err) { return done(err); }
-    if (!user) {
-      console.log('Login faild, no user', email);
-      return done(null, false); }
+    if (!user) { return done(null, false); }
 
     user.comparePassword(password, (err, isMatch) => {
       if (err) { return done(err); }
