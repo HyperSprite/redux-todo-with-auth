@@ -53,7 +53,7 @@ if (!hlpr.isProd()) {
   app.use(webpackHotMiddleware(compiler));
   app.use(morgan('combined'));
 } else {
-  mongoose.connect(config.mongoconnect.prod);
+  // mongoose.connect(config.mongoconnect.prod);
 }
 
 // Express Middleware

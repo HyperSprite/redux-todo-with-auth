@@ -6,6 +6,10 @@ exports.isProd = () => {
   }
 };
 
+// Only runs in non-prod
+// This takes an array for argumetns
+// For every element of the array,
+// a console.log message is generated.
 exports.consLog = (arr) => {
   if (!exports.isProd()) {
     [].slice.call(arr).forEach((arg) => {

@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form';
 import { Redirect, Link } from 'react-router';
 
 import { signinUser } from '../../actions';
+import validate from './../form/validate';
 import Input from './../form/input';
 import Alert from './../form/alert';
 
@@ -26,7 +27,7 @@ let Signin = class Signin extends Component {
   }
 
   render() {
-    const { handleSubmit, authenticated } = this.props;
+    const { handleSubmit, authenticated, pristine, reset, submitting } = this.props;
 
     if (authenticated) {
       return (
@@ -55,9 +56,8 @@ let Signin = class Signin extends Component {
           />
         </fieldset>
         { this.renderAlert() }
-        <button action="submit" className="btn btn-primary">
-          Sign in
-        </button>
+        <button type="submit" className="btn btn-primary" disabled={pristine || submitting}>Submit</button>
+        <button type="button" className="btn btn-secondary" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
         <span>
           {' or '}
           <Link to="/signup">
@@ -82,6 +82,7 @@ function mapStateToProps(state) {
 
 Signin = reduxForm({
   form: 'signin',
+  validate,
 })(Signin);
 
 export default Signin = connect(mapStateToProps, { signinUser })(Signin);

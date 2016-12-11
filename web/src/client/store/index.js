@@ -4,7 +4,10 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import logger from 'redux-logger';
 
+import { TYPES } from '../actions';
 import reducers from '../reducers';
+
+const token = localStorage.getItem('token');
 
 const prodMiddleware = [
   promise(),
@@ -29,5 +32,9 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 const store = createStore(reducers, middlewareOptions);
+
+if (token) {
+  store.dispatch({ type: TYPES.AUTH_USER });
+}
 
 export default store;

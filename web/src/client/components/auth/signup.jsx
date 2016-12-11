@@ -38,27 +38,27 @@ let Signup = class Signup extends Component {
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
         <fieldset className="form-group">
           <Field
+            component={Input}
             label="Email:"
             name="email"
-            component={Input}
             type="email"
             placeholder="Type your email"
           />
         </fieldset>
         <fieldset className="form-group">
           <Field
+            component={Input}
             label="Password:"
             name="password"
-            component={Input}
             type="password"
             placeholder="Choose a password"
           />
         </fieldset>
         <fieldset className="form-group">
           <Field
+            component={Input}
             label="Confirm Password:"
             name="passwordConfirm"
-            component={Input}
             type="password"
             placeholder="Retype your password"
           />

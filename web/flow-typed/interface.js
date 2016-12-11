@@ -14,6 +14,7 @@ export type ActionStrings = (
   'AUTH_USER' |
   'UNAUTH_USER' |
   'AUTH_ERROR' |
+  'FETCH_DATA' |
   'SET_USER' |
   'SET_TSS_GOAL'
   )

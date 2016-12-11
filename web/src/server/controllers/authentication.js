@@ -6,15 +6,18 @@ const hlpr = require('../lib/helpers');
 
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
-  return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+  const newJWT = jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+  hlpr.consLog(['tokenForUser', newJWT]);
+  return newJWT;
 }
 
-exports.signin = (err, req, res, next) => {
-  if (err) {
-    console.log(`AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`);
-    return res.send(JSON.stringify({ error: 'Signin failed: Bad Email or Password.' }));
-  }
-  hlpr.consLog(['res.send signin token']);
+exports.signinError = (err, req, res, next) => {
+  hlpr.consLog(['signin', `AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`]);
+  return res.status(422).send({ error: 'Signin failed: Bad Email or Password.' });
+};
+
+exports.signin = (req, res, next) => {
+  hlpr.consLog(['signin', `res.send signin token ${req.user}`]);
   res.send({ token: tokenForUser(req.user) });
 };
 
@@ -23,14 +26,14 @@ exports.signup = (req, res, next) => {
   const password = req.body.password;
 
   if (!email || !password) {
-    hlpr.consLog(['AUTH ERROR: No email or password']);
+    hlpr.consLog(['signup', 'AUTH ERROR: No email or password']);
     return res.status(422).send({ error: 'You must provide email and password!' });
   }
 
   User.findOne({ email: email }, (err, existingUser) => {
     if (err) { return next(err); }
     if (existingUser) {
-      hlpr.consLog('AUTH ERROR: Email in use');
+      hlpr.consLog(['signup', 'AUTH ERROR: Email in use']);
       return res.status(422).send({ error: 'Email is in use!' });
     }
     const user = new User({
@@ -39,7 +42,7 @@ exports.signup = (req, res, next) => {
     });
     user.save((err) => {
       if (err) { return next(err); }
-      hlpr.consLog(['AUTH SUCCESS: Token Sent']);
+      hlpr.consLog(['signup', 'AUTH SUCCESS: Token Sent']);
       res.json({ token: tokenForUser(user) });
     });
   });

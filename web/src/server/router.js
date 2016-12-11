@@ -15,7 +15,7 @@ module.exports = (app) => {
   app.get('/', (req, res) => {
     res.sendFile(path.resolve(rootDir, 'index.html'));
   });
-  app.post('/signin', requireSignin, Authentication.signin);
+  app.post('/signin', requireSignin, Authentication.signin, Authentication.signinError);
   app.post('/signup', Authentication.signup);
   app.get('/secret', requireAuth, (req, res) => {
     res.setHeader('Content-Type', 'application/json');
