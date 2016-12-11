@@ -17,6 +17,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   AUTH_USER: 'AUTH_USER',
   UNAUTH_USER: 'UNAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
+  FETCH_DATA: 'FETCH_DATA',
 };
 
 // handle error mesages
@@ -53,6 +54,26 @@ export function signupUser({ email, password }) {
 export function signoutUser() {
   localStorage.removeItem('token');
   return ({ type: TYPES.UNAUTH_USER });
+}
+
+export function fetchMessage() {
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/secret`, {
+      headers: { authorization: localStorage.getItem('token') },
+    })
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: response.data.secret,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
 }
 
 export function addTodo(text: string) {

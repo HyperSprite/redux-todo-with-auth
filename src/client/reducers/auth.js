@@ -10,6 +10,8 @@ export default function (state = {}, action) {
       return { ...state, authenticated: false };
     case TYPES.AUTH_ERROR:
       return { ...state, error: action.payload };
+    case TYPES.FETCH_DATA:
+      return { ...state, message: action.payload };
     default:
       return state;
   }
