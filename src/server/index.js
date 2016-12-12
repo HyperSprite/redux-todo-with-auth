@@ -62,7 +62,7 @@ app.use(cors());
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(rootDir));
 
-router(app);
+app.use('/', router);
 
 // 404 catch-all handler (middleware)
 app.use(

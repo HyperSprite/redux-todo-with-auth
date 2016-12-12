@@ -31,7 +31,7 @@ export function authError(error) {
 // Action creators
 export function signinUser({ email, password }) {
   return function (dispatch) {
-    axios.post(`${ROOT_URL}/signin`, { email, password })
+    axios.post(`${ROOT_URL}/auth/signin`, { email, password })
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: TYPES.AUTH_USER });
@@ -42,7 +42,7 @@ export function signinUser({ email, password }) {
 
 export function signupUser({ email, password }) {
   return function (dispatch) {
-    axios.post(`${ROOT_URL}/signup`, { email, password })
+    axios.post(`${ROOT_URL}/auth/signup`, { email, password })
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: TYPES.AUTH_USER });

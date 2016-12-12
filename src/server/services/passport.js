@@ -1,5 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const StravaStrategy = require('passport-strava-oauth2').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 
@@ -21,6 +22,15 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
   });
 });
 
+const stravaOauth2 = new StravaStrategy({
+  clientID: config.stravaOauth2.clientID,
+  clientSecret: config.stravaOauth2.clientSecret,
+  callbackURL: config.stravaOauth2.callbackURL,
+},
+(accessToken, refreshToken, profile, done) => {
+  User.findOrCreate({ stravaId: profile.id }, (err, user) => done(err, user));
+});
+
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
   secretOrKey: config.secret,
@@ -36,3 +46,4 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 
 passport.use(jwtLogin);
 passport.use(localLogin);
+passport.use(stravaOauth2);
