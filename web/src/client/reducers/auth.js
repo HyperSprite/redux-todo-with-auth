@@ -2,7 +2,7 @@
 
 import { TYPES } from '../actions';
 
-export default function (state = {}, action) {
+export default function (state = { user: {} }, action) {
   switch (action.type) {
     case TYPES.AUTH_USER:
       return { ...state, error: '', authenticated: true };
@@ -12,6 +12,8 @@ export default function (state = {}, action) {
       return { ...state, error: action.payload };
     case TYPES.FETCH_DATA:
       return { ...state, message: action.payload };
+    case TYPES.FETCH_JSON:
+      return { ...state, user: action.payload };
     default:
       return state;
   }

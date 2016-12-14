@@ -13,7 +13,7 @@ const router = require('./router');
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
 const rootDir = `${__dirname}/${config.public}/`;
-const port = process.env.PORT || 3080;
+const port = process.env.PORT || config.port;
 const portS = (port * 1) + 363;
 const hlpr = require('./lib/helpers');
 let httpServer;

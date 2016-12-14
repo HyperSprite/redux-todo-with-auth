@@ -47,3 +47,13 @@ exports.signup = (req, res, next) => {
     });
   });
 };
+
+exports.user = (req, res, next) => {
+  User.findOne({ $or: [{ email: req.user.email },{ stravaId: req.user.stravaId }] }, (err, user) => {
+    if (err) { return next(err); }
+    if (user) {
+      hlpr.consLog(['auth-user', 'AUTH USER: User found', user.email]);
+      return res.json({ user: user });
+    }
+  });
+};
