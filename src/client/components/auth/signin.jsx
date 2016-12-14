@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { Redirect, Link } from 'react-router';
 
-import { signinUser } from '../../actions';
+import { signinUser, stravaAuth } from '../../actions';
 import validate from './../form/validate';
 import Input from './../form/input';
 import Alert from './../form/alert';
@@ -11,11 +11,18 @@ import Alert from './../form/alert';
 const propTypes = {
   handleSubmit: PropTypes.func,
   signinUser: PropTypes.func,
+  onClickStravaAuth: PropTypes.func,
+  stravaAuth: PropTypes.func,
 };
 
 let Signin = class Signin extends Component {
   handleFormSubmit(formProps) {
     this.props.signinUser(formProps);
+  }
+
+  handleStravaAuth() {
+    console.log('button clicked');
+    this.props.stravaAuth();
   }
 
   renderAlert() {
@@ -27,7 +34,7 @@ let Signin = class Signin extends Component {
   }
 
   render() {
-    const { handleSubmit, authenticated, pristine, reset, submitting } = this.props;
+    const { handleSubmit, onClickStravaAuth, authenticated, pristine, reset, submitting } = this.props;
 
     if (authenticated) {
       return (
@@ -36,36 +43,39 @@ let Signin = class Signin extends Component {
     }
     return (
       <div>
-      <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <fieldset className="form-group">
-          <Field
-            component={Input}
-            label="Email:"
-            name="email"
-            type="email"
-            placeholder="Type your email"
-          />
-        </fieldset>
-        <fieldset className="form-group">
-          <Field
-            component={Input}
-            label="Password:"
-            name="password"
-            type="password"
-            placeholder="Type a password"
-          />
-        </fieldset>
-        { this.renderAlert() }
-        <button type="submit" className="btn btn-primary" disabled={pristine || submitting}>Submit</button>
-        <button type="button" className="btn btn-secondary" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
-        <span>
-          {' or '}
-          <Link to="/signup">
-            {'Sign up!'}
-          </Link>
-        </span>
-      </form>
-
+        <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+          <fieldset className="form-group">
+            <Field
+              component={Input}
+              label="Email:"
+              name="email"
+              type="email"
+              placeholder="Type your email"
+            />
+          </fieldset>
+          <fieldset className="form-group">
+            <Field
+              component={Input}
+              label="Password:"
+              name="password"
+              type="password"
+              placeholder="Type a password"
+            />
+          </fieldset>
+          { this.renderAlert() }
+          <button type="submit" className="btn btn-primary" disabled={pristine || submitting}>Submit</button>
+          <button type="button" className="btn btn-secondary" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
+          <span>
+            {' or '}
+            <Link to="/signup">
+              {'Sign up!'}
+            </Link>
+          </span>
+        </form>
+        <div>
+          <a href="/auth/strava">Strava</a>
+          <button type="button" className="btn btn-default" onClick={this.handleStravaAuth.bind(this)}>Signin with Strava</button>
+        </div>
       </div>
     );
   }
@@ -85,4 +95,4 @@ Signin = reduxForm({
   validate,
 })(Signin);
 
-export default Signin = connect(mapStateToProps, { signinUser })(Signin);
+export default Signin = connect(mapStateToProps, { signinUser, stravaAuth })(Signin);

@@ -29,7 +29,6 @@ const userSchema = new Schema({
   profile_medium: String,
   profile: String,
   city: String,
-  state: String,
   country: String,
   sex: String,
   premium: Boolean,

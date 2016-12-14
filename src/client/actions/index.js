@@ -3,7 +3,9 @@
 import axios from 'axios';
 import { Redirect } from 'react-router';
 
-const ROOT_URL = '';
+import config from '../../server/config';
+
+const ROOT_URL = config.rootURL;
 const getID = () => new Date().getTime();
 
 
@@ -18,6 +20,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   UNAUTH_USER: 'UNAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_DATA: 'FETCH_DATA',
+  FETCH_JSON: 'FETCH_JSON',
 };
 
 // handle error mesages
@@ -56,6 +59,17 @@ export function signoutUser() {
   return ({ type: TYPES.UNAUTH_USER });
 }
 
+export function stravaAuth() {
+  return function (dispatch) {
+    axios.request('http://localhost:3080/auth/strava')
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        dispatch({ type: TYPES.AUTH_USER });
+      })
+      .catch(error => dispatch(authError(error.Error)));
+  };
+}
+
 export function fetchMessage() {
   return (dispatch) => {
     axios.get(`${ROOT_URL}/secret`, {
@@ -65,6 +79,26 @@ export function fetchMessage() {
         dispatch({
           type: TYPES.FETCH_DATA,
           payload: response.data.secret,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function fetchData(relURL) {
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/${relURL}`, {
+      headers: { authorization: localStorage.getItem('token') },
+    })
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_JSON,
+          payload: response.data.user,
         });
       })
       .catch((error) => {
