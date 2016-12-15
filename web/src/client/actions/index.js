@@ -2,11 +2,11 @@
 
 import axios from 'axios';
 import { Redirect } from 'react-router';
+import { v4 } from 'uuid';
 
 import config from '../../server/config';
 
 const ROOT_URL = config.rootURL;
-const getID = () => new Date().getTime();
 
 
 // If any of these have a flow error about
@@ -59,16 +59,25 @@ export function signoutUser() {
   return ({ type: TYPES.UNAUTH_USER });
 }
 
-export function stravaAuth() {
-  return function (dispatch) {
-    axios.request('http://localhost:3080/auth/strava')
-      .then((response) => {
-        localStorage.setItem('token', response.data.token);
-        dispatch({ type: TYPES.AUTH_USER });
-      })
-      .catch(error => dispatch(authError(error.Error)));
-  };
+export function ifToken() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    return (dispatch) => {
+      dispatch({ type: TYPES.AUTH_USER });
+    };
+  }
 }
+
+// export function stravaAuth() {
+//   return function (dispatch) {
+//     axios.request('http://localhost:3080/auth/strava')
+//       .then((response) => {
+//         localStorage.setItem('token', response.data.token);
+//         dispatch({ type: TYPES.AUTH_USER });
+//       })
+//       .catch(error => dispatch(authError(error.Error)));
+//   };
+// }
 
 export function fetchMessage() {
   return (dispatch) => {
@@ -114,7 +123,7 @@ export function addTodo(text: string) {
   return {
     type: TYPES.ADD_TODO,
     payload: {
-      id: getID(),
+      id: v4(),
       text,
     },
   };

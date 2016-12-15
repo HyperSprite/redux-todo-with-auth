@@ -15,7 +15,7 @@ router.post('/signin', requireSignin, Authentication.signin, Authentication.sign
 router.post('/signup', Authentication.signup);
 
 // router.get('/strava', requireStravaReq);
-router.get('/strava', requireStravaRes, Authentication.signin, Authentication.signinError);
+router.get('/strava', requireStravaRes, Authentication.stravaSignin, Authentication.signinError);
 
 router.get('/user', requireAuth, Authentication.user);
 
