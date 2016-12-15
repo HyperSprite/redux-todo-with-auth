@@ -21,6 +21,17 @@ exports.signin = (req, res, next) => {
   res.send({ token: tokenForUser(req.user) });
 };
 
+exports.stravaSignin = (req, res, next) => {
+  hlpr.consLog(['stravaSignin', `res.send signin token ${req.user}`]);
+  hlpr.consLog(['req', req.user.stravaId]);
+  const result = `
+      <script>
+        localStorage.setItem('token', '${tokenForUser(req.user)}');
+      </script>`;
+
+  res.send(result);
+};
+
 exports.signup = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;

@@ -4,9 +4,11 @@ import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import logger from 'redux-logger';
 
+import { loadState, saveState } from './localstorage';
 import { TYPES } from '../actions';
 import reducers from '../reducers';
 
+const persitedState = loadState();
 const token = localStorage.getItem('token');
 
 const prodMiddleware = [
@@ -31,7 +33,13 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-const store = createStore(reducers, middlewareOptions);
+const store = createStore(reducers, persitedState, middlewareOptions);
+
+store.subscribe(() => {
+  saveState({
+    todos: store.getState().todos,
+  });
+});
 
 if (token) {
   store.dispatch({ type: TYPES.AUTH_USER });
