@@ -56,6 +56,7 @@ export function signupUser({ email, password }) {
 
 export function signoutUser() {
   localStorage.removeItem('token');
+  localStorage.removeItem('state');
   return ({ type: TYPES.UNAUTH_USER });
 }
 
