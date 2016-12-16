@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import * as actions from '../../actions';
 
 const propTypes = {
@@ -13,7 +14,7 @@ class Signout extends Component {
 
   render() {
     return (
-      <div>Sorry to see you go...</div>
+      <Redirect to="/" />
     );
   }
 }
