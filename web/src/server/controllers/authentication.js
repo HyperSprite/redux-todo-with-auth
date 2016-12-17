@@ -1,4 +1,5 @@
 const jwt = require('jwt-simple');
+const strava = require('strava-v3');
 
 const User = require('../models/user');
 const config = require('../config');
@@ -22,8 +23,35 @@ exports.signin = (req, res, next) => {
 };
 
 exports.stravaSignin = (req, res, next) => {
-  hlpr.consLog(['stravaSignin', `res.send signin token ${req.user}`]);
-  hlpr.consLog(['req', req.user.stravaId]);
+  hlpr.consLog([
+    'authentication.stravaSignin',
+    'req.user:',
+    req.user,
+    'req.query:',
+    req.query,
+  ]);
+  strava.oauth.getToken(req.query.code, (err, tokenPayload) => {
+    hlpr.consLog([
+      'authentication.getToken',
+      `strava req.query.code: ${req.query.code}`,
+      'strava tokenPayload: ',
+      tokenPayload,
+      'getToken err: ',
+      err,
+    ]);
+    User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
+      $set: { access_token: tokenPayload.access_token },
+    }, { new: true }, (err, user) => {
+      hlpr.consLog(['User', err, user]);
+      strava.athlete.get({ access_token: user.access_token }, (err, payload) => {
+        if (!err) {
+          hlpr.consLog(['strava query code:', req.query.code, 'strava payload:', payload]);
+        } else {
+          hlpr.consLog(['strava query code:', req.query.code, 'strava err:', err]);
+        }
+      });
+    });
+  });
   const result = `
       <script>
         localStorage.setItem('token', '${tokenForUser(req.user)}');

@@ -18,6 +18,11 @@ const portS = (port * 1) + 363;
 const hlpr = require('./lib/helpers');
 let httpServer;
 
+process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || config.stravaLogin.access_token;
+process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.stravaLogin.clientID;
+process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.stravaLogin.clientSecret;
+process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.stravaLogin.redirectURI;
+
 hlpr.isProd();
 
 isSSL ?
@@ -51,9 +56,9 @@ if (!hlpr.isProd()) {
     publicPath: webpackConfig.output.publicPath,
   }));
   app.use(webpackHotMiddleware(compiler));
-  app.use(morgan('combined'));
+  // app.use(morgan('combined'));
 } else {
-  // mongoose.connect(config.mongoconnect.prod);
+  mongoose.connect(config.mongoconnect.prod);
 }
 
 // Express Middleware

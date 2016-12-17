@@ -29,7 +29,10 @@ const stravaLogin = new StravaStrategy({
   callbackURL: `${config.siteURL}/auth/strava`,
 },
 (accessToken, refreshToken, profile, done) => {
-  User.findOrCreate({ stravaId: profile.id }, (err, user) => done(err, user));
+  User.findOrCreate({ stravaId: profile.id }, (err, user) => {
+    hlpr.consLog(['passport.stravaLogin', 'err', err, 'user', user]);
+    return done(err, user);
+  });
 });
 
 const jwtOptions = {
