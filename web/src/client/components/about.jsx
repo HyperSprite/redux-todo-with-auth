@@ -17,172 +17,96 @@ class About extends Component {
         <h1>About</h1>
         <p>{'This is an about page. :)'}</p>
         <h2>{ this.props.message }</h2>
-        <p>{ this.props.email }</p>
-        <p>{ this.props.stravaId }</p>
-        <form>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="email:"
-              name="email"
-              type="email"
-              value={this.props.email}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="stravaId:"
-              name="stravaId"
-              type="stravaId"
-              value={this.props.stravaId}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="resource_state:"
-              name="resource_state"
-              type="resource_state"
-              value={this.props.resource_state}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="firstname:"
-              name="firstname"
-              type="firstname"
-              value={this.props.firstname}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="lastname:"
-              name="lastname"
-              type="lastname"
-              value={this.props.lastname}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-          <Field
-              component={Input}
-              label="profile_medium:"
-              name="profile_medium"
-              type="profile_medium"
-              value={this.props.profile_medium}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="profile:"
-              name="profile"
-              type="profile"
-              value={this.props.profile}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="city:"
-              name="city"
-              type="city"
-              value={this.props.city}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="country:"
-              name="country"
-              type="country"
-              value={this.props.country}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="sex:"
-              name="sex"
-              type="sex"
-              value={this.props.sex}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="premium:"
-              name="premium"
-              type="premium"
-              value={this.props.premium}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="created_at:"
-              name="created_at"
-              type="created_at"
-              value={this.props.created_at}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="updated_at:"
-              name="updated_at"
-              type="updated_at"
-              value={this.props.updated_at}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="athlete_type:"
-              name="athlete_type"
-              type="athlete_type"
-              value={this.props.athlete_type}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="date_preference:"
-              name="date_preference"
-              type="date_preference"
-              value={this.props.date_preference}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="measurement_preference:"
-              name="measurement_preference"
-              type="measurement_preference"
-              value={this.props.measurement_preference}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="ftp:"
-              name="ftp"
-              type="ftp"
-              value={this.props.ftp}
-            />
-          </fieldset>
-          <fieldset className="form-group">
-            <Field
-              component={Input}
-              label="weight:"
-              name="weight"
-              type="weight"
-              value={this.props.weight}
-            />
-          </fieldset>
-        </form>
+        <div className="control-group">
+          <label className="control-label">Email</label>
+          <div className="contorl">
+            { this.props.email }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Strava ID</label>
+          <div className="contorl">
+            { this.props.stravaId }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Resource State</label>
+          <div className="contorl">
+            { this.props.resource_state }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Name</label>
+          <div className="contorl">
+            { this.props.firstname + ' ' + this.props.lastname }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Profile Med URL</label>
+          <div className="contorl">
+            <img src={ this.props.profile_medium } />
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Profile</label>
+          <div className="contorl">
+            <img src={ this.props.profile } />
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">City</label>
+          <div className="contorl">
+            { this.props.city }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Country</label>
+          <div className="contorl">
+            { this.props.country }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Sex</label>
+          <div className="contorl">
+            { this.props.sex }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">Premium</label>
+          <div className="contorl">
+            { this.props.premium }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">created_at</label>
+          <div className="contorl">
+            { this.props.created_at }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">updated_at</label>
+          <div className="contorl">
+            { this.props.updated_at }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">athlete_type</label>
+          <div className="contorl">
+            { this.props.athlete_type }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">date_preference</label>
+          <div className="contorl">
+            { this.props.date_preference }
+          </div>
+        </div>
+        <div className="control-group">
+          <label className="control-label">measurement_preference</label>
+          <div className="contorl">
+            { this.props.measurement_preference }
+          </div>
+        </div>
       </div>
     );
   }

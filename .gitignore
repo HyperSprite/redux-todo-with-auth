@@ -19,3 +19,7 @@ npm-debug.log
 
 # local files for testing
 *hs-local*
+
+# Config file
+config.js
+strava_config
