@@ -23,6 +23,7 @@ const userSchema = new Schema({
   email: { type: String, unique: true, lowercase: true },
   password: String,
   stravaId: Number,
+  access_token: String,
   resource_state: Number,
   firstname: String,
   lastname: String,
