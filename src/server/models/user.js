@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt-nodejs');
 const Schema = mongoose.Schema;
 
 const tssGoalSchema = new Schema({
-  week_of: { type: String, unique: true }, // time string "2012-12-13T03:43:19Z"
+  week_of: String, // time string "2012-12-13T03:43:19Z"
   tssGoal: Number, // User enters number.
   weekFTP: Number, // get this number from User FTP when created,
   trainingLog: String, // how did this week go?
@@ -19,8 +19,18 @@ const eventGoalSchema = new Schema({
   notes: String,
 });
 
+const weightHitorySchema = Schema({
+  weight: Number,
+  date: String,
+});
+
+const ftpHistorySchema = Schema({
+  ftp: Number,
+  date: String,
+});
+
 const userSchema = new Schema({
-  email: { type: String, unique: true, lowercase: true },
+  email: { type: String, lowercase: true },
   password: String,
   stravaId: Number,
   access_token: String,
@@ -38,9 +48,9 @@ const userSchema = new Schema({
   athlete_type: Number,
   date_preference: String,
   measurement_preference: String,
-  ftp: Number,
-  weight: Number,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
+  ftpHistory: ftpHistorySchema,
+  weightHitory: weightHitorySchema,
   tssGoals: tssGoalSchema,
   eventGoals: eventGoalSchema,
 });

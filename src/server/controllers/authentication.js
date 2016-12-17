@@ -40,7 +40,22 @@ exports.stravaSignin = (req, res, next) => {
       err,
     ]);
     User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
-      $set: { access_token: tokenPayload.access_token },
+      $set: {
+        email: tokenPayload.athlete.email,
+        access_token: tokenPayload.access_token,
+        firstname: tokenPayload.athlete.firstname,
+        lastname: tokenPayload.athlete.lastname,
+        profile_medium: tokenPayload.athlete.profile_medium,
+        profile: tokenPayload.athlete.profile,
+        city: tokenPayload.athlete.city,
+        country: tokenPayload.athlete.country,
+        sex: tokenPayload.athlete.sex,
+        premium: tokenPayload.athlete.premium,
+        created_at: tokenPayload.athlete.created_at,
+        updated_at: tokenPayload.athlete.updated_at,
+        date_preference: tokenPayload.athlete.date_preference,
+        measurement_preference: tokenPayload.athlete.measurement_preference,
+      },
     }, { new: true }, (err, user) => {
       hlpr.consLog(['User', err, user]);
       strava.athlete.get({ access_token: user.access_token }, (err, payload) => {
