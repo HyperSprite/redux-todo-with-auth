@@ -6,9 +6,9 @@ import Static from './form/static';
 
 const propTypes = {
   fetchData: PropTypes.func,
-  user: {
+  user: PropTypes.shape({
     email: PropTypes.string,
-    stravaId: PropTypes.string,
+    stravaId: PropTypes.number,
     firstname: PropTypes.string,
     lastname: PropTypes.string,
     profile_medium: PropTypes.string,
@@ -16,12 +16,12 @@ const propTypes = {
     city: PropTypes.string,
     country: PropTypes.string,
     sex: PropTypes.string,
-    premium: PropTypes.string,
+    premium: PropTypes.bool,
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
     date_preference: PropTypes.string,
     measurement_preference: PropTypes.string,
-  },
+  }),
 };
 
 class About extends Component {
