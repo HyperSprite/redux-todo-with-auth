@@ -1,146 +1,125 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form';
 import * as actions from './../actions';
 
-import Input from './form/input';
+import Static from './form/static';
+
+const propTypes = {
+  fetchData: PropTypes.func,
+  user: {
+    email: PropTypes.string,
+    stravaId: PropTypes.string,
+    firstname: PropTypes.string,
+    lastname: PropTypes.string,
+    profile_medium: PropTypes.string,
+    profile: PropTypes.string,
+    city: PropTypes.string,
+    country: PropTypes.string,
+    sex: PropTypes.string,
+    premium: PropTypes.string,
+    created_at: PropTypes.string,
+    updated_at: PropTypes.string,
+    date_preference: PropTypes.string,
+    measurement_preference: PropTypes.string,
+  },
+};
 
 class About extends Component {
-  componentWillMount() {
-    this.props.fetchMessage();
+  componentDidMount() {
     this.props.fetchData('auth/user');
   }
 
   render() {
+    const {
+      email,
+      stravaId,
+      firstname,
+      lastname,
+      profile_medium,
+      profile,
+      city,
+      country,
+      sex,
+      created_at,
+      updated_at,
+      date_preference,
+      measurement_preference,
+    } = this.props.user;
     return (
+
       <div>
-        <h1>About</h1>
-        <p>{'This is an about page. :)'}</p>
-        <h2>{ this.props.message }</h2>
-        <div className="control-group">
-          <label className="control-label">Email</label>
-          <div className="contorl">
-            { this.props.email }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Strava ID</label>
-          <div className="contorl">
-            { this.props.stravaId }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Resource State</label>
-          <div className="contorl">
-            { this.props.resource_state }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Name</label>
-          <div className="contorl">
-            { this.props.firstname + ' ' + this.props.lastname }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Profile Med URL</label>
-          <div className="contorl">
-            <img src={ this.props.profile_medium } />
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Profile</label>
-          <div className="contorl">
-            <img src={ this.props.profile } />
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">City</label>
-          <div className="contorl">
-            { this.props.city }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Country</label>
-          <div className="contorl">
-            { this.props.country }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Sex</label>
-          <div className="contorl">
-            { this.props.sex }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">Premium</label>
-          <div className="contorl">
-            { this.props.premium }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">created_at</label>
-          <div className="contorl">
-            { this.props.created_at }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">updated_at</label>
-          <div className="contorl">
-            { this.props.updated_at }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">athlete_type</label>
-          <div className="contorl">
-            { this.props.athlete_type }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">date_preference</label>
-          <div className="contorl">
-            { this.props.date_preference }
-          </div>
-        </div>
-        <div className="control-group">
-          <label className="control-label">measurement_preference</label>
-          <div className="contorl">
-            { this.props.measurement_preference }
-          </div>
-        </div>
+        <h1><a href={`https://www.strava.com/athletes/${stravaId}`} target="blank">About You:</a></h1>
+        <Static
+          contentLabel="Email"
+          content={email}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Strava ID"
+          content={stravaId}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Name"
+          content={`${firstname} ${lastname}`}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Profile IMG Med URL"
+          content={profile_medium}
+          contentType="img"
+        />
+        <Static
+          contentLabel="Profile IMG URL"
+          content={profile}
+          contentType="img"
+        />
+        <Static
+          contentLabel="City"
+          content={city}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Country"
+          content={country}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Sex"
+          content={sex}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Created On"
+          content={created_at}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Last Updated"
+          content={updated_at}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Date Pref."
+          content={date_preference}
+          contentType="text"
+        />
+        <Static
+          contentLabel="Dist Pref."
+          content={measurement_preference}
+          contentType="text"
+        />
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
+About.propTypes = propTypes;
 
+function mapStateToProps(state) {
   return {
-    message: state.auth.message,
-    email: state.auth.user.email,
-    stravaId: state.auth.user.stravaId,
-    resource_state: state.auth.user.resource_state,
-    firstname: state.auth.user.firstname,
-    lastname: state.auth.user.lastname,
-    profile_medium: state.auth.user.profile_medium,
-    profile: state.auth.user.profile,
-    city: state.auth.user.city,
-    country: state.auth.user.country,
-    sex: state.auth.user.sex,
-    premium: state.auth.user.premium,
-    created_at: state.auth.user.created_at,
-    updated_at: state.auth.user.updated_at,
-    athlete_type: state.auth.user.athlete_type,
-    date_preference: state.auth.user.date_preference,
-    measurement_preference: state.auth.user.measurement_preference,
-    ftp: state.auth.user.ftp,
-    weight: state.auth.user.weight,
+    user: state.auth.user,
   };
 }
-
-
-
-About = reduxForm({
-  form: 'about',
-})(About);
 
 export default connect(mapStateToProps, actions)(About);
