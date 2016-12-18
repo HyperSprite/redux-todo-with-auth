@@ -19,7 +19,7 @@ exports.consLog = (arr) => {
 };
 
 // Date String helper
-exports.corectedTZDate = (stringDate) => {
+exports.correctedTZDate = (stringDate) => {
   const d = new Date(stringDate);
   return `${d.getUTCHours()}:${d.getUTCMinutes()}`;
 };

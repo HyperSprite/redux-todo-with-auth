@@ -2,11 +2,12 @@ const express = require('express');
 const router = require('express').Router();
 const path = require('path');
 const passport = require('passport');
-const React = require('react');
-const renderToString = require('react-dom/server').renderToString;
+
+const passportService = require('./../services/passport');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const config = require('./../config');
+const hlpr = require('../lib/helpers');
 
 const authRoutes = require('./auth');
 const apiv1Routes = require('./apiv1');
@@ -30,8 +31,10 @@ router.get('/', (req, res) => {
 
 router.get('/secret', requireAuth, (req, res) => {
   res.setHeader('Content-Type', 'application/json');
+  hlpr.consLog(['index/secret']);
   res.send(JSON.stringify({ secret: 'Authorized' }));
 });
+
 router.use('/auth', authRoutes);
 router.use('/apiv1', apiv1Routes);
 

@@ -1,21 +1,10 @@
-const jwt = require('jwt-simple');
+
 const strava = require('strava-v3');
 
 const User = require('../models/user');
 const config = require('../config');
 const hlpr = require('../lib/helpers');
 
-function tokenForUser(user) {
-  const timestamp = new Date().getTime();
-  const newJWT = jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
-  hlpr.consLog(['tokenForUser', newJWT]);
-  return newJWT;
-}
-
-exports.signinError = (err, req, res, next) => {
-  hlpr.consLog(['signin', `AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`]);
-  return res.status(422).send({ error: 'Signin failed: Bad Email or Password.' });
-};
 
 exports.stravaSignin = (req, res, next) => {
   hlpr.consLog([
@@ -35,21 +24,22 @@ exports.stravaSignin = (req, res, next) => {
       err,
     ]);
     User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
-      $set: {
-        email: tokenPayload.athlete.email,
-        access_token: tokenPayload.access_token,
-        firstname: tokenPayload.athlete.firstname,
-        lastname: tokenPayload.athlete.lastname,
-        profile_medium: tokenPayload.athlete.profile_medium,
-        profile: tokenPayload.athlete.profile,
-        city: tokenPayload.athlete.city,
-        country: tokenPayload.athlete.country,
-        sex: tokenPayload.athlete.sex,
-        premium: tokenPayload.athlete.premium,
-        created_at: tokenPayload.athlete.created_at,
-        updated_at: tokenPayload.athlete.updated_at,
-        date_preference: tokenPayload.athlete.date_preference,
-        measurement_preference: tokenPayload.athlete.measurement_preference,
+      $set: { access_token: tokenPayload.access_token,
+        tokenPayload.athlete,
+        // email: tokenPayload.athlete.email,
+        // access_token: tokenPayload.access_token,
+        // firstname: tokenPayload.athlete.firstname,
+        // lastname: tokenPayload.athlete.lastname,
+        // profile_medium: tokenPayload.athlete.profile_medium,
+        // profile: tokenPayload.athlete.profile,
+        // city: tokenPayload.athlete.city,
+        // country: tokenPayload.athlete.country,
+        // sex: tokenPayload.athlete.sex,
+        // premium: tokenPayload.athlete.premium,
+        // created_at: tokenPayload.athlete.created_at,
+        // updated_at: tokenPayload.athlete.updated_at,
+        // date_preference: tokenPayload.athlete.date_preference,
+        // measurement_preference: tokenPayload.athlete.measurement_preference,
       },
     }, { new: true }, (err, user) => {
       hlpr.consLog(['User', err, user]);
@@ -72,7 +62,7 @@ exports.stravaSignin = (req, res, next) => {
 };
 
 exports.user = (req, res, next) => {
-  User.findOne({ stravaId: req.user.stravaId }, (err, user) => {
+  User.findOne({ $or: [{ email: req.user.email }, { stravaId: req.user.stravaId }] }, (err, user) => {
     if (err) { return next(err); }
     if (user) {
       hlpr.consLog(['auth-user', 'AUTH USER: User found', user.email]);
