@@ -42,8 +42,9 @@ exports.stravaSignin = (req, res, next) => {
         lastname: tokenPayload.athlete.lastname,
         profile_medium: tokenPayload.athlete.profile_medium,
         profile: tokenPayload.athlete.profile,
-        city: tokenPayload.athlete.city,
-        country: tokenPayload.athlete.country,
+        loc_city: tokenPayload.athlete.city,
+        loc_state: tokenPayload.athlete.state,
+        loc_country: tokenPayload.athlete.country,
         sex: tokenPayload.athlete.sex,
         premium: tokenPayload.athlete.premium,
         created_at: tokenPayload.athlete.created_at,
@@ -72,7 +73,7 @@ exports.stravaSignin = (req, res, next) => {
 };
 
 exports.user = (req, res, next) => {
-  User.findOne({ stravaId: req.user.stravaId }, (err, user) => {
+  User.findOne({ stravaId: req.user.stravaId },{ password: 0 }, (err, user) => {
     if (err) { return next(err); }
     if (user) {
       hlpr.consLog(['auth-user', 'AUTH USER: User found', user.email]);
