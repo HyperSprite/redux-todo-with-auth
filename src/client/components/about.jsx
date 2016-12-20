@@ -13,8 +13,9 @@ const propTypes = {
     lastname: PropTypes.string,
     profile_medium: PropTypes.string,
     profile: PropTypes.string,
-    city: PropTypes.string,
-    country: PropTypes.string,
+    loc_city: PropTypes.string,
+    loc_state: PropTypes.string,
+    loc_country: PropTypes.string,
     sex: PropTypes.string,
     premium: PropTypes.bool,
     created_at: PropTypes.string,
@@ -37,8 +38,9 @@ class About extends Component {
       lastname,
       profile_medium,
       profile,
-      city,
-      country,
+      loc_city,
+      loc_state,
+      loc_country,
       sex,
       created_at,
       updated_at,
@@ -76,12 +78,17 @@ class About extends Component {
         />
         <Static
           contentLabel="City"
-          content={city}
+          content={loc_city}
+          contentType="text"
+        />
+        <Static
+          contentLabel="State"
+          content={loc_state}
           contentType="text"
         />
         <Static
           contentLabel="Country"
-          content={country}
+          content={loc_country}
           contentType="text"
         />
         <Static
