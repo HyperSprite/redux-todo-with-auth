@@ -81,6 +81,6 @@ userSchema.methods.comparePassword = function userSchemaCompPasswords(candidateP
 
 userSchema.plugin(findOrCreate);
 
-const ModelClass = mongoose.model('user', userSchema);
+const Users = mongoose.model('user', userSchema);
 
-module.exports = ModelClass;
+module.exports = Users;

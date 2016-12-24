@@ -1,4 +1,3 @@
-const express = require('express');
 const router = require('express').Router();
 const path = require('path');
 const passport = require('passport');
@@ -10,7 +9,7 @@ const config = require('./../config');
 const hlpr = require('../lib/helpers');
 
 const authRoutes = require('./auth');
-const apiv1Routes = require('./apiv1');
+const eventsRoutes = require('./events');
 
 router.get('/', (req, res) => {
   res.send(`
@@ -36,6 +35,6 @@ router.get('/secret', requireAuth, (req, res) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/apiv1', apiv1Routes);
+router.use('/events', eventsRoutes);
 
 module.exports = router;

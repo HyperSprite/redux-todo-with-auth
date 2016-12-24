@@ -56,7 +56,7 @@ if (!hlpr.isProd()) {
     publicPath: webpackConfig.output.publicPath,
   }));
   app.use(webpackHotMiddleware(compiler));
-  // app.use(morgan('combined'));
+  app.use(morgan('combined'));
 } else {
   mongoose.connect(config.mongoconnect.prod);
 }
