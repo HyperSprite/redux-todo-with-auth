@@ -70,36 +70,12 @@ export function ifToken() {
 }
 
 // Events
-export function addEvent({
-  eventTitle,
-  eventCreator,
-  eventDate,
-  eventLocCity,
-  eventLocState,
-  eventLocCountry,
-  eventStartElevation,
-  eventURL,
-  eventDesc,
-  eventRouteURL,
-  eventType,
-}) {
+export function postForm(formProps, relURL) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/auth/addevent`, {
-      eventTitle,
-      eventCreator,
-      eventDate,
-      eventLocCity,
-      eventLocState,
-      eventLocCountry,
-      eventStartElevation,
-      eventURL,
-      eventDesc,
-      eventRouteURL,
-      eventType,
-    }, axiosConfig)
+    axios.post(`${ROOT_URL}/${relURL}`, formProps, axiosConfig)
       .then((response) => {
         dispatch({
           type: TYPES.FETCH_DATA,

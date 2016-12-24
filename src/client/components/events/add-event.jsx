@@ -13,10 +13,11 @@ const propTypes = {
 
 };
 
+const relURL = 'events/addevent';
 
 let AddEvent = class AddEvent extends Component {
   handleFormSubmit(formProps) {
-    this.props.addEvent(formProps);
+    this.props.postForm(formProps, relURL);
   }
 
   renderAlert() {

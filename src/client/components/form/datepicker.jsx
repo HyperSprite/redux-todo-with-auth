@@ -10,8 +10,8 @@ momentLocalizer(Moment);
 const propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
-  time: PropTypes.string,
-  calendar: PropTypes.string,
+  time: PropTypes.bool,
+  calendar: PropTypes.bool,
   meta: PropTypes.object,
 };
 
