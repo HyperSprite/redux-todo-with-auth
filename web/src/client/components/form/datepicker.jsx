@@ -1,22 +1,18 @@
 import React, { PropTypes } from 'react';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-import 'react-widgets/dist/css/react-widgets.css';
-import './styles.css';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
+import 'react-widgets/dist/css/react-widgets.css';
+import './styles.css';
+
 momentLocalizer(Moment);
 
-
-
-
-
 const propTypes = {
-  // input: PropTypes.object,
-  // label: PropTypes.string,
-  // type: PropTypes.string,
-  // placeholder: PropTypes.string,
-  // initialValue: PropTypes.any,
-  // meta: PropTypes.object,
+  input: PropTypes.object,
+  label: PropTypes.string,
+  time: PropTypes.string,
+  calendar: PropTypes.string,
+  meta: PropTypes.object,
 };
 
 const renderDatePicker = ({
