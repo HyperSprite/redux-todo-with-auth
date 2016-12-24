@@ -17,5 +17,8 @@ export type ActionStrings = (
   'FETCH_DATA' |
   'FETCH_JSON' |
   'SET_USER' |
+  'POST_EVENT' |
+  'FETCH_EVENT' |
+  'FETCH_EVENTS' |
   'SET_TSS_GOAL'
   )

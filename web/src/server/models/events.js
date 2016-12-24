@@ -2,9 +2,11 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const eventSchema = new Schema({
   eventTitle: String,
+  eventCreator: ObjectId,
   eventDate: String,
   eventLocCity: String,
   eventLocState: String,
@@ -18,6 +20,6 @@ const eventSchema = new Schema({
 
 eventSchema.plugin(findOrCreate);
 
-const ModelClass = mongoose.model('event', eventSchema);
+const Events = mongoose.model('events', eventSchema);
 
-module.exports = ModelClass;
+module.exports = Events;

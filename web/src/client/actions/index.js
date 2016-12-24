@@ -69,16 +69,53 @@ export function ifToken() {
   }
 }
 
-// export function stravaAuth() {
-//   return function (dispatch) {
-//     axios.request('http://localhost:3080/auth/strava')
-//       .then((response) => {
-//         localStorage.setItem('token', response.data.token);
-//         dispatch({ type: TYPES.AUTH_USER });
-//       })
-//       .catch(error => dispatch(authError(error.Error)));
-//   };
-// }
+// Events
+export function addEvent({
+  eventTitle,
+  eventCreator,
+  eventDate,
+  eventLocCity,
+  eventLocState,
+  eventLocCountry,
+  eventStartElevation,
+  eventURL,
+  eventDesc,
+  eventRouteURL,
+  eventType,
+}) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
+  return (dispatch) => {
+    axios.post(`${ROOT_URL}/auth/addevent`, {
+      eventTitle,
+      eventCreator,
+      eventDate,
+      eventLocCity,
+      eventLocState,
+      eventLocCountry,
+      eventStartElevation,
+      eventURL,
+      eventDesc,
+      eventRouteURL,
+      eventType,
+    }, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: response.data.secret,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+// end Events
 
 export function fetchMessage() {
   return (dispatch) => {

@@ -8,10 +8,13 @@ class Header extends Component {
   renderLinks() {
     return this.props.authenticated ? (
       [
-        // <li className="nav-item" key={1}>
-        //   <Link to="/todos">Todos</Link>
-        // </li>,
         <li className="nav-item" key={2}>
+          <Link to="/addevent">AddEvent</Link>
+        </li>,
+        <li className="nav-item" key={3}>
+          <Link to="/events">Events</Link>
+        </li>,
+        <li className="nav-item" key={4}>
           <Link className="nav-link" to="/signout">Sign Out</Link>
         </li>,
       ]
@@ -30,7 +33,7 @@ class Header extends Component {
         <Link to="/" className="navbar-brand" >Home</Link>
         <ul className="nav navbar-nav">
           {this.renderLinks()}
-          <li className="nav-item">
+          <li className="nav-item" key={5}>
             <Link className="nav-link" to="/about">About</Link>
           </li>
         </ul>

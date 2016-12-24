@@ -7,10 +7,18 @@ const propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   placeholder: PropTypes.string,
+  initialValue: PropTypes.any,
   meta: PropTypes.object,
 };
 
-const renderInput = ({ input, label, placeholder, type, meta: { touched, error, warning } }) => (
+const renderInput = ({
+  input,
+  label,
+  placeholder,
+  type,
+  initialValue,
+  meta: { touched, error, warning },
+}) => (
   <div>
     <label
       htmlFor={input}
@@ -18,7 +26,13 @@ const renderInput = ({ input, label, placeholder, type, meta: { touched, error, 
       {label}
     </label>
     <div>
-      <input className="form-control" {...input} placeholder={placeholder} type={type} />
+      <input
+        className="form-control"
+        {...input}
+        placeholder={placeholder}
+        type={type}
+        value={initialValue}
+      />
       {touched && (
         (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
       )}
