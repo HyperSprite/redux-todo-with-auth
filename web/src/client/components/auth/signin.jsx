@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
+import { FlatButton } from 'material-ui';
 
 import { signinUser, ifToken } from '../../actions';
 import Alert from './../form/alert';
@@ -37,9 +38,7 @@ let Signin = class Signin extends Component {
       );
     }
     return (
-      <div>
-        <button type="button" className="btn btn-default" onClick={this.stravaClick}>Signin with Strava</button>
-      </div>
+      <FlatButton onClick={this.stravaClick} label="Signin with Strava" />
     );
   }
 };

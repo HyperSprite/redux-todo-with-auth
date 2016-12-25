@@ -3,6 +3,7 @@ import { Match } from 'react-router';
 
 import MatchAuthorized from './matchauth';
 
+import Home from './../components/home';
 import Signin from './../components/auth/signin';
 import Signout from './../components/auth/signout';
 import About from './../components/about';
@@ -14,7 +15,7 @@ import Todos from './../components/todos';
 
 const router = (
   <div>
-    <Match exactly pattern="/" component={Signin} />
+    <Match exactly pattern="/" component={Home} />
     <Match pattern="/signin" component={Signin} />
     <Match pattern="/signout" component={Signout} />
     {/* <Match pattern="/events" component={Events} /> */}
