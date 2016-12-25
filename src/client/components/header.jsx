@@ -1,52 +1,74 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import { AppBar, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
+
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import router from './../router';
+import Signin from './auth/signin';
 
 class Header extends Component {
-  renderLinks() {
+  constructor(props) {
+    super(props);
+    this.state = { open: false };
+  }
+
+  handleToggle = () => this.setState({ open: !this.state.open });
+  handleClose = () => this.setState({ open: false });
+
+  renderRightMenu() {
     return this.props.authenticated ? (
-      [
-        <li className="nav-item" key={2}>
-          <Link to="/addevent">AddEvent</Link>
-        </li>,
-        <li className="nav-item" key={3}>
-          <Link to="/events">Events</Link>
-        </li>,
-        <li className="nav-item" key={4}>
-          <Link className="nav-link" to="/signout">Sign Out</Link>
-        </li>,
-      ]
+      <IconMenu
+        iconButtonElement={
+          <IconButton><MoreVertIcon /></IconButton>
+        }
+        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+      >
+        <MenuItem primaryText="User" containerElement={<Link to="/about">User</Link>} />
+        <MenuItem primaryText="Help" />
+        <MenuItem primaryText="Sign out" containerElement={<Link to="/signout">Sign out</Link>} />
+      </IconMenu>
     ) : (
-      [
-        // <li className="nav-item" key={3}>
-        //   <Link className="nav-link" to="/signin">Sign In</Link>
-        // </li>,
-      ]
+      <Signin />
+    );
+  }
+
+  renderLeftMenu() {
+    return this.props.authenticated ? (
+      <Drawer
+        open={this.state.open}
+        onRequestChange={open => this.setState({ open })}
+      >
+        <MenuItem onTouchTap={this.handleClose} primaryText="Home" containerElement={<Link to="/">Home</Link>} />
+        <MenuItem onTouchTap={this.handleClose} primaryText="Todos" containerElement={<Link to="/todos">Todos</Link>} />
+        <MenuItem onTouchTap={this.handleClose} primaryText="Add Event" containerElement={<Link to="/addevent">Add Event</Link>} />
+        <MenuItem onTouchTap={this.handleClose} primaryText="Events" containerElement={<Link to="/events">Events</Link>} />
+      </Drawer>
+    ) : (
+      <span />
     );
   }
 
   render() {
     return (
-      <nav className="navbar navbar-light">
-        <Link to="/" className="navbar-brand" >Home</Link>
-        <ul className="nav navbar-nav">
-          {this.renderLinks()}
-          <li className="nav-item" key={5}>
-            <Link className="nav-link" to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
+      <AppBar
+        title="A Race Athlete"
+        onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
+        showMenuIconButton={this.props.authenticated}
+        iconElementRight={this.renderRightMenu()}
+      >
+        {this.renderLeftMenu()}
+      </AppBar>
     );
   }
 }
 
-
-
 function mapStateToProps(state) {
   return {
-    authenticated: state.auth.authenticated
+    authenticated: state.auth.authenticated,
   };
 }
 
