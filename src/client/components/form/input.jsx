@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { TextField } from 'redux-form-material-ui';
 
 import './styles.css';
 
@@ -26,12 +27,12 @@ const renderInput = ({
       {label}
     </label>
     <div>
-      <input
+      <TextField
         className="form-control"
         {...input}
         placeholder={placeholder}
         type={type}
-        value={initialValue}
+        // value={initialValue}
       />
       {touched && (
         (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)

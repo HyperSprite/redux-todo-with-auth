@@ -1,13 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, reduxForm } from 'redux-form';
+import { RaisedButton, FlatButton } from 'material-ui';
+import { DatePicker, TextField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
 import * as actions from '../../actions';
 import validate from './../form/validate';
 import Alert from './../form/alert';
-import DatePicker from './../form/datepicker';
+// import DatePicker from './../form/datepicker';
 import Input from './../form/input';
+
+const style = {
+  margin: 12,
+};
 
 const propTypes = {
 
@@ -39,109 +45,103 @@ let AddEvent = class AddEvent extends Component {
     }
     return (
       <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
-        <fieldset className="form-group">
+        <div>
           <Field
-            component={Input}
-            label="Title:"
+            component={TextField}
+            floatingLabelText="Title"
             name="eventTitle"
             type="text"
-            placeholder="Event Title"
-            initialValue="Epic Ride"
+            hintText="Event Title"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
             component={DatePicker}
-            label="Event Date:"
+            floatingLabelText="Event Date"
             name="eventDate"
-            time={false}
-            calendar={true}
+            format={null}
+            onChange={(value) => {
+              console.log('date changed ', value) // eslint-disable-line no-console
+            }}
+            hintText="Event Day?"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="City:"
+            component={TextField}
+            floatingLabelText="City"
             name="eventLocCity"
             type="text"
-            placeholder="Type the City"
-            initialValue="San Jose"
+            hintText="Type the City"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="State:"
+            component={TextField}
+            floatingLabelText="State"
             name="eventLocState"
             type="text"
-            placeholder="Type the State"
-            initialValue="CA"
+            hintText="Type the State"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Country:"
+            component={TextField}
+            floatingLabelText="Country"
             name="eventLocCountry"
             type="text"
-            placeholder="Type the Country"
-            initialValue="United States"
+            hintText="Type the Country"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Starting Elevation:"
+            component={TextField}
+            floatingLabelText="Starting Elevation"
             name="eventStartElevation"
             type="number"
-            placeholder="Meters"
-            initialValue="40"
+            hintText="Meters"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Event URL:"
+            component={TextField}
+            floatingLabelText="Event URL"
             name="eventURL"
             type="text"
-            placeholder="Link to Event Homepage"
-            initialValue="http://rcrsv.com"
+            hintText="Link to Event Homepage"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Description:"
+            component={TextField}
+            floatingLabelText="Description"
             name="eventDesc"
             type="text"
-            placeholder="Event Description"
-            initialValue="Super epic ride all over"
+            hintText="Event Description"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Route:"
+            component={TextField}
+            floatingLabelText="Route"
             name="eventRouteURL"
             type="text"
-            placeholder="Type the Strava route link"
-            initialValue="https://www.strava.com/routes/4966998"
+            hintText="Type the Strava route link"
           />
-        </fieldset>
-        <fieldset className="form-group">
+        </div>
+        <div>
           <Field
-            component={Input}
-            label="Type:"
+            component={TextField}
+            floatingLabelText="Type"
             name="eventType"
             type="text"
-            placeholder="Type"
-            initialValue="Cycling - Road"
+            floatingLabelText="Type"
           />
-        </fieldset>
+        </div>
         { this.renderAlert() }
         <div>
-          <button type="submit" className="btn btn-primary" disabled={pristine || submitting}>Submit</button>
-          <button type="button" className="btn btn-secondary" disabled={pristine || submitting} onClick={reset}>Clear Values</button>
+          <RaisedButton type="submit" label="Submit" primary={true} style={style} disabled={pristine || submitting} />
+          <FlatButton type="button" label="Clear Values" style={style} disabled={pristine || submitting} onClick={reset} />
         </div>
       </form>
     );

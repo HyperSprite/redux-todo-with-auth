@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import { DatePicker } from 'redux-form-material-ui';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -28,15 +28,16 @@ const renderDatePicker = ({
     >
       {label}
     </label>
-    <DateTimePicker
+    <DatePicker
       {...input}
       value={input.value && new Date(input.value) || null}
-      onBlur={input.onBlur}
-      time={time}
-      calendar={calendar}
-      format={'MMMM D YYYY'}
-      editFormat={'MM/DD/YYYY'}
-      parse={['M/D/YYYY', 'M/D/YY']}
+      onChange={(event, value) => { console.log(value); input.onChange(value); }}
+      // onBlur={input.onBlur}
+      // time={time}
+      // calendar={calendar}
+      // format={'MMMM D YYYY'}
+      // editFormat={'MM/DD/YYYY'}
+      // parse={['M/D/YYYY', 'M/D/YY']}
     />
     {touched && (
       (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
