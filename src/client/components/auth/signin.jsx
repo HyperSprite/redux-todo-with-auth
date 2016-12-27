@@ -8,7 +8,7 @@ import Alert from './../form/alert';
 
 import ConnectWithStrava from '../../assets/btn_strava_connectwith_light.svg';
 
-const style = { marginTop: 4 }
+import { signin as style } from '../../styles/style';
 
 const propTypes = {
   errorMessage: PropTypes.string,

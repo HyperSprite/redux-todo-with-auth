@@ -11,20 +11,22 @@ const hlpr = require('../lib/helpers');
 const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 
+const indexHTML = `
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>A Race Athlete</title>
+    </head>
+    <body>
+      <div id='root'></div>
+      <script src='/assets/bundle.js'></script>
+    </body>
+  </html>
+`;
+
 router.get('/', (req, res) => {
-  res.send(`
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>A Race Athlete</title>
-      </head>
-      <body>
-        <div id='root'></div>
-        <script src='assets/bundle.js'></script>
-      </body>
-    </html>
-`);
+  res.send(indexHTML);
 });
 
 router.get('/secret', requireAuth, (req, res) => {
@@ -34,6 +36,10 @@ router.get('/secret', requireAuth, (req, res) => {
 });
 
 router.use('/auth', authRoutes);
-router.use('/events', eventsRoutes);
+router.use('/apiv1/events', eventsRoutes);
+
+router.get('*', (req, res) => {
+  res.send(indexHTML);
+});
 
 module.exports = router;

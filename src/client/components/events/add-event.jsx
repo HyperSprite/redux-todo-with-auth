@@ -19,7 +19,7 @@ const propTypes = {
 
 };
 
-const relURL = 'events/addevent';
+const relURL = 'apiv1/events/addevent';
 
 let AddEvent = class AddEvent extends Component {
   handleFormSubmit(formProps) {
