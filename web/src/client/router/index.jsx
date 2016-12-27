@@ -21,7 +21,7 @@ const router = (
     {/* <Match pattern="/events" component={Events} /> */}
     {/* <Match pattern="/event" component={ViewEvent} /> */}
     <MatchAuthorized pattern="/about" component={About} />
-    <MatchAuthorized pattern="/addevent" component={AddEvent} />
+    <MatchAuthorized pattern="/events/addevent" component={AddEvent} />
     <MatchAuthorized pattern="/todos" component={Todos} />
   </div>
 );

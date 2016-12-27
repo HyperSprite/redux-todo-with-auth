@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Footer from './footer';
+import Filter from './todos-filter';
 import AddTodo from '../containers/add-todos';
 import VisibleTodoList from '../containers/visible-todo-list';
 
@@ -8,7 +8,7 @@ const Todos = () => (
   <div>
     <h1>Todos</h1>
     <AddTodo />
-    <Footer />
+    <Filter />
     <VisibleTodoList />
   </div>
 );
