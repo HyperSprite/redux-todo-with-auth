@@ -73,7 +73,7 @@ exports.stravaSignin = (req, res, next) => {
 };
 
 exports.user = (req, res, next) => {
-  User.findOne({ stravaId: req.user.stravaId },{ password: 0 }, (err, user) => {
+  User.findOne({ stravaId: req.user.stravaId }, { password: 0 }, (err, user) => {
     if (err) { return next(err); }
     if (user) {
       hlpr.consLog(['auth-user', 'AUTH USER: User found', user.email]);

@@ -5,10 +5,10 @@ import promise from 'redux-promise-middleware';
 import logger from 'redux-logger';
 
 import { loadState, saveState } from './localstorage';
-import { TYPES } from '../actions';
+import { TYPES, fetchData } from '../actions';
 import reducers from '../reducers';
 
-const persitedState = loadState();
+const persistentState = loadState();
 const token = localStorage.getItem('token');
 
 const prodMiddleware = [
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-const store = createStore(reducers, persitedState, middlewareOptions);
+const store = createStore(reducers, persistentState, middlewareOptions);
 
 store.subscribe(() => {
   saveState({
@@ -43,6 +43,7 @@ store.subscribe(() => {
 
 if (token) {
   store.dispatch({ type: TYPES.AUTH_USER });
+  store.dispatch(fetchData('auth/user'));
 }
 
 export default store;

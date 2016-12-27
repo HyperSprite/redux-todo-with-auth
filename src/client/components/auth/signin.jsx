@@ -6,6 +6,10 @@ import { FlatButton } from 'material-ui';
 import { signinUser, ifToken } from '../../actions';
 import Alert from './../form/alert';
 
+import ConnectWithStrava from '../../assets/btn_strava_connectwith_light.svg';
+
+const style = { marginTop: 4 }
+
 const propTypes = {
   errorMessage: PropTypes.string,
   authenticated: PropTypes.bool,
@@ -38,7 +42,9 @@ let Signin = class Signin extends Component {
       );
     }
     return (
-      <FlatButton onClick={this.stravaClick} label="Signin with Strava" />
+      <FlatButton onClick={this.stravaClick} style={style}>
+        <img src={ConnectWithStrava} alt="Signin with Strava" />
+      </FlatButton>
     );
   }
 };
