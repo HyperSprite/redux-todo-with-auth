@@ -26,6 +26,8 @@ const propTypes = {
 };
 
 class About extends Component {
+  // this is here to allow users to refresh their strava user data
+  // without signing out, this should already be loded in state.
   componentDidMount() {
     this.props.fetchData('auth/user');
   }

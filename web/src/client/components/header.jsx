@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actions from './../actions';
 import { Link } from 'react-router';
-import { AppBar, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
+import { AppBar, Avatar, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
 
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 import router from './../router';
 import Signin from './auth/signin';
+
+
+const style = {
+  IconButton: { padding: 0 },
+  Signin: { padding: 5 },
+};
 
 class Header extends Component {
   constructor(props) {
@@ -21,8 +28,10 @@ class Header extends Component {
   renderRightMenu() {
     return this.props.authenticated ? (
       <IconMenu
+
         iconButtonElement={
-          <IconButton><MoreVertIcon /></IconButton>
+          <IconButton style={style.IconButton} ><Avatar src={this.props.profile_medium} size={48} /></IconButton>
+
         }
         targetOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
@@ -32,7 +41,9 @@ class Header extends Component {
         <MenuItem primaryText="Sign out" containerElement={<Link to="/signout">Sign out</Link>} />
       </IconMenu>
     ) : (
+
       <Signin />
+
     );
   }
 
@@ -60,7 +71,9 @@ class Header extends Component {
         showMenuIconButton={this.props.authenticated}
         iconElementRight={this.renderRightMenu()}
       >
+
         {this.renderLeftMenu()}
+
       </AppBar>
     );
   }
@@ -69,9 +82,9 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
+    profile_medium: state.auth.user.profile_medium,
+    firstname: state.auth.user.firstname,
   };
 }
 
-export default connect(
-  mapStateToProps,
-)(Header);
+export default connect(mapStateToProps, actions)(Header);
