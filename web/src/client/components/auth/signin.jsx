@@ -8,7 +8,7 @@ import Alert from './../form/alert';
 
 import ConnectWithStrava from '../../assets/btn_strava_connectwith_light.svg';
 
-import { signin as style } from '../../styles/style';
+import style from '../../styles/style';
 
 const propTypes = {
   errorMessage: PropTypes.string,
@@ -42,7 +42,7 @@ let Signin = class Signin extends Component {
       );
     }
     return (
-      <FlatButton onClick={this.stravaClick} style={style}>
+      <FlatButton onClick={this.stravaClick} style={style.signin}>
         <img src={ConnectWithStrava} alt="Signin with Strava" />
       </FlatButton>
     );
