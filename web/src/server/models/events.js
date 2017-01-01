@@ -7,19 +7,30 @@ const hlpr = require('../lib/helpers');
 const Schema = mongoose.Schema;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
-const eventSchema = new Schema({
-  eventTitle: String,
-  eventCreator: String,
-  eventDate: String,
-  eventLocCity: String,
-  eventLocState: String,
-  eventLocCountry: String,
-  eventStartElevation: Number,
-  eventURL: { type: String, lower: true },
-  eventDesc: String,
-  eventRouteURL: { type: String, lower: true },
-  eventType: String, // run ride, gravel, trail, etc.
-});
+const eventRoutesSchema = new Schema(
+  {
+    eventRouteURL: { type: String, lower: true },
+  });
+
+const eventSchema = new Schema(
+  {
+    eventId: String,
+    eventTitle: String,
+    eventCreator: String,
+    eventDate: String,
+    eventLocCity: String,
+    eventLocState: String,
+    eventLocCountry: String,
+    eventStartElevation: Number,
+    eventURL: { type: String, lower: true },
+    eventDesc: String,
+    eventType: String, // run ride, gravel, trail, etc.
+    eventDeleted: Boolean,
+    eventRoutes: [eventRoutesSchema],
+  },
+  {
+    timestamps: true,
+  });
 
 // saving this for later
 // eventSchema.pre('save', function eventSchemaPre(next) {

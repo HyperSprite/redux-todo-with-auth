@@ -10,24 +10,36 @@ const tssGoalSchema = new Schema({
   tssGoal: Number, // User enters number.
   weekFTP: Number, // get this number from User FTP when created,
   trainingLog: String, // how did this week go?
-});
+},
+  {
+    timestamps: true,
+  });
 
 const eventGoalSchema = new Schema({
   eventId: ObjectId,
   importance: String, // a race, b race, c race,
   calendarLink: String, // URL to personal calendar
   notes: String,
-});
+},
+  {
+    timestamps: true,
+  });
 
 const weightHitorySchema = Schema({
   weight: Number,
   date: String,
-});
+},
+  {
+    timestamps: true,
+  });
 
 const ftpHistorySchema = Schema({
   ftp: Number,
   date: String,
-});
+},
+  {
+    timestamps: true,
+  });
 
 const userSchema = new Schema({
   email: { type: String, lowercase: true },
@@ -50,11 +62,14 @@ const userSchema = new Schema({
   date_preference: String,
   measurement_preference: String,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
-  ftpHistory: ftpHistorySchema,
-  weightHitory: weightHitorySchema,
-  tssGoals: tssGoalSchema,
-  eventGoals: eventGoalSchema,
-});
+  ftpHistory: [ftpHistorySchema],
+  weightHitory: [weightHitorySchema],
+  tssGoals: [tssGoalSchema],
+  eventGoals: [eventGoalSchema],
+},
+  {
+    timestamps: true,
+  });
 
 userSchema.pre('save', function userSchemaPre(next) {
   const user = this;

@@ -12,7 +12,7 @@ export default function (state = { user: {} }, action) {
       return { ...state, error: action.payload };
     case TYPES.FETCH_DATA:
       return { ...state, message: action.payload };
-    case TYPES.FETCH_JSON:
+    case TYPES.FETCH_USER:
       return { ...state, user: action.payload };
     default:
       return state;
