@@ -41,6 +41,7 @@ store.subscribe(() => {
   });
 });
 
+// actions/index.js fetchData(relURL)
 if (token) {
   store.dispatch({ type: TYPES.AUTH_USER });
   store.dispatch(fetchData('auth/user'));

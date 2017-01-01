@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { FlatButton, Paper, RaisedButton } from 'material-ui';
+import { Field, FieldArray, reduxForm } from 'redux-form';
+import { FlatButton, IconButton, List, ListItem, Paper, RaisedButton, Subheader } from 'material-ui';
+import DeleteForever from 'material-ui/svg-icons/action/delete-forever';
 import { DatePicker, TextField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -18,6 +19,56 @@ const propTypes = {
 
 const relURL = 'apiv1/events/addevent';
 
+const renderEventRoutes = ({ fields }) => (
+  <List style={style.list}>
+    {fields.map((eventRoutes, index) =>
+      <ListItem
+        key={index}
+        disableTouchRipple
+        hoverColor="#fffefe"
+        style={style.listItem}
+      >
+        <Subheader
+          style={style.subheader}
+        >
+          Route {index + 1}
+          <IconButton
+            type="button"
+            tooltip="Remove Route"
+            style={style.iconButton}
+            onClick={() => fields.remove(index)}
+          >
+            <DeleteForever
+              style={style.iconStyles}
+            />
+          </IconButton>
+        </Subheader>
+        <div>
+          <Field
+            name={`${eventRoutes}.eventRouteURL`}
+            type="text"
+            component={TextField}
+            floatingLabelText="Route URL"
+          />
+        </div>
+      </ListItem>,
+    )}
+    <ListItem
+      disableTouchRipple={true}
+      hoverColor="#fffefe"
+    >
+      <RaisedButton
+        type="button"
+        label="Add Route"
+        primary={true}
+        style={style.button}
+        onClick={() => fields.push({})}
+      />
+    </ListItem>
+  </List>
+);
+
+
 let AddEvent = class AddEvent extends Component {
   handleFormSubmit(formProps) {
     this.props.postForm(formProps, relURL);
@@ -32,7 +83,7 @@ let AddEvent = class AddEvent extends Component {
   }
 
   render() {
-    const { handleSubmit, authenticated, pristine, reset, submitting } = this.props;
+    const { array: { push }, handleSubmit, authenticated, pristine, reset, submitting, fields } = this.props;
     const newDate = new Date();
     if (!authenticated) {
       return (
@@ -132,20 +183,15 @@ let AddEvent = class AddEvent extends Component {
             <Field
               component={TextField}
               style={style.formelement}
-              floatingLabelText="Route"
-              name="eventRouteURL"
-              type="text"
-              hintText="Type the Strava route link"
-            />
-          </div>
-          <div>
-            <Field
-              component={TextField}
-              style={style.formelement}
               floatingLabelText="Type"
               name="eventType"
               type="text"
-              floatingLabelText="Type"
+            />
+          </div>
+          <div>
+            <FieldArray
+              name="eventRoutes"
+              component={renderEventRoutes}
             />
           </div>
           { this.renderAlert() }

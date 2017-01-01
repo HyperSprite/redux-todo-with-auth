@@ -19,8 +19,12 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   AUTH_USER: 'AUTH_USER',
   UNAUTH_USER: 'UNAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
+  FETCH_USER: 'FETCH_USER',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
+  POST_EVENT: 'POST_EVENT',
+  FETCH_EVENT: 'FETCH_EVENT',
+  FETCH_EVENTS: 'FETCH_EVENTS',
 };
 
 // handle error mesages
@@ -74,12 +78,14 @@ export function postForm(formProps, relURL) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
+  const formData = formProps;
+  formData.eventId = formData.eventID || v4();
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/${relURL}`, formProps, axiosConfig)
+    axios.post(`${ROOT_URL}/${relURL}`, formData, axiosConfig)
       .then((response) => {
         dispatch({
-          type: TYPES.FETCH_DATA,
-          payload: response.data.secret,
+          type: TYPES.POST_EVENT,
+          payload: response.data,
         });
       })
       .catch((error) => {
@@ -114,13 +120,14 @@ export function fetchMessage() {
 }
 
 export function fetchData(relURL) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
   return (dispatch) => {
-    axios.get(`${ROOT_URL}/${relURL}`, {
-      headers: { authorization: localStorage.getItem('token') },
-    })
+    axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
       .then((response) => {
         dispatch({
-          type: TYPES.FETCH_JSON,
+          type: TYPES.FETCH_USER,
           payload: response.data.user,
         });
       })

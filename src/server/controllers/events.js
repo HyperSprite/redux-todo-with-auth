@@ -23,7 +23,7 @@ exports.addEvent = (req, res) => {
   Events.create( toSave, (err, event) => {
     hlpr.consLog(['event', err, event]);
     if (!err) {
-      hlpr.consLog(['Event saved']);
+      hlpr.consLog(['Event saved', event]);
     } else {
       hlpr.consLog(['Event error', err]);
     }
