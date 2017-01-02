@@ -1,8 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+
 // import {  } from 'material-ui';
 
 import Static from './../form/static';
+
+import style from '../../styles/style';
 
 const propTypes = {
   content: PropTypes.any,

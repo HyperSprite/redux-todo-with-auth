@@ -32,7 +32,7 @@ const stringDate = newDate.toString();
 
 exports.getEvents = (req, res) => {
   // const query = req.params.query;
-  const query = { eventDate: { $gt: stringDate } };
+  const query = { eventDate: { $gt: stringDate }, eventDeleted: false };
 
   Events.find(query, null, { sort: { eventDate: 1 } }, (err, events) => {
     if (!err) {
@@ -41,5 +41,21 @@ exports.getEvents = (req, res) => {
       hlpr.consLog(['getEvents error', err]);
     }
     res.send(events);
+  });
+};
+
+exports.delEvent = (req, res) => {
+  Events.findOne({eventId: req.body.eventId}, (err, event) => {
+    if (event.eventCreator === req.user.userId || req.user.adminMember) {
+      Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
+        if (!err) {
+          hlpr.consLog(['delEvent', deletedEvent]);
+        } else {
+          hlpr.consLog(['delEvent', err]);
+        }
+        hlpr.consLog(['delEvent', deletedEvent.eventId]);
+        res.send(deletedEvent.eventId);
+      });
+    }
   });
 };

@@ -20,6 +20,7 @@ export type ActionStrings = (
   'SET_USER' |
   'POST_EVENT' |
   'CLEAR_EVENT' |
+  'DELET_EVENT' |
   'FETCH_EVENT' |
   'FETCH_EVENTS' |
   'SET_TSS_GOAL'
