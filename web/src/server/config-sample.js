@@ -16,4 +16,10 @@ module.exports = {
     code: 'YOUR_STRAVA_CLIENT_CODE',
     redirectURI: 'auth/strava',
   },
+  stravaModClub: {
+    id: 9999999999, // DANGER: Strava club ID that will have Mod access
+  },
+  stravaClub: {
+    id: 1234567890,  // Strava Club ID that can create events
+  },
 };
