@@ -1,3 +1,4 @@
+import theme from './theme';
 
 export default {
   button: {
@@ -25,6 +26,15 @@ export default {
     padding: 0,
   },
 
+  floatingActionButton: {
+    margin: 0,
+    top: 'auto',
+    right: 20,
+    bottom: 20,
+    left: 'auto',
+    position: 'fixed',
+  },
+
   list: {
     cursor: 'default',
   },
@@ -34,11 +44,24 @@ export default {
   },
 
   paper1: {
-    margin: 10,
   },
 
   signin: {
     marginTop: 4,
+  },
+
+  static: {
+    divMain: {
+      marginLeft: 5,
+      marginTop: 10,
+    },
+    divSub: {
+      marginLeft: 5,
+    },
+    label: {
+      color: theme.palette.accent3Color,
+      // fontSize: 14,
+    },
   },
 
   subheader: {

@@ -1,4 +1,5 @@
 const strava = require('strava-v3');
+const moment = require('moment');
 
 const User = require('../models/user');
 const Events = require('../models/events');
@@ -12,16 +13,11 @@ exports.addEvent = (req, res) => {
 
   hlpr.consLog([
     'events.addEvent',
-    'req.user:',
-    req.user,
-    'req.body:',
-    req.body,
     'toSave',
     toSave,
   ]);
 
-  Events.create( toSave, (err, event) => {
-    hlpr.consLog(['event', err, event]);
+  Events.create(toSave, (err, event) => {
     if (!err) {
       hlpr.consLog(['Event saved', event]);
     } else {
@@ -31,12 +27,19 @@ exports.addEvent = (req, res) => {
   });
 };
 
-exports.user = (req, res) => {
-  User.findOne({ stravaId: req.user.stravaId },{ password: 0 }, (err, user) => {
-    if (err) { return next(err); }
-    if (user) {
-      hlpr.consLog(['auth-user', 'AUTH USER: User found', user.email]);
-      return res.json({ user: user });
+const newDate = moment().add(-1, 'days').format();
+const stringDate = newDate.toString();
+
+exports.getEvents = (req, res) => {
+  // const query = req.params.query;
+  const query = { eventDate: { $gt: stringDate } };
+
+  Events.find(query, null, { sort: { eventDate: 1 } }, (err, events) => {
+    if (!err) {
+      hlpr.consLog(['getEvents', events, stringDate, req.params]);
+    } else {
+      hlpr.consLog(['getEvents error', err]);
     }
+    res.send(events);
   });
 };

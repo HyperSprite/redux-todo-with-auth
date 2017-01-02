@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { Redirect } from 'react-router';
+import { reset } from 'redux-form';
 import { v4 } from 'uuid';
 
 import config from '../../server/config';
@@ -23,6 +24,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT: 'POST_EVENT',
+  CLEAR_EVENT: 'CLEAR_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
 };
@@ -85,6 +87,36 @@ export function postForm(formProps, relURL) {
       .then((response) => {
         dispatch({
           type: TYPES.POST_EVENT,
+          payload: response.data,
+        });
+        dispatch(reset('addevent'));
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function clearEvent() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.CLEAR_EVENT,
+    });
+  };
+}
+
+export function fetchEvents(relURL) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_EVENTS,
           payload: response.data,
         });
       })

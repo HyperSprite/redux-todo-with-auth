@@ -25,6 +25,7 @@ exports.stravaSignin = (req, res, next) => {
     'req.query:',
     req.query,
   ]);
+
   strava.oauth.getToken(req.query.code, (err, tokenPayload) => {
     hlpr.consLog([
       'authentication.getToken',
@@ -34,6 +35,17 @@ exports.stravaSignin = (req, res, next) => {
       'getToken err: ',
       err,
     ]);
+
+    let admin = false;
+    admin = tokenPayload.athlete.clubs.some((c) => {
+      return c.id === config.stravaModClub.id;
+    });
+
+    let club = false;
+    club = tokenPayload.athlete.clubs.some((c) => {
+      return c.id === config.stravaClub.id;
+    });
+
     User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
       $set: {
         email: tokenPayload.athlete.email,
@@ -51,6 +63,8 @@ exports.stravaSignin = (req, res, next) => {
         updated_at: tokenPayload.athlete.updated_at,
         date_preference: tokenPayload.athlete.date_preference,
         measurement_preference: tokenPayload.athlete.measurement_preference,
+        adminMember: admin,
+        clubMember: club,
       },
     }, { new: true }, (err, user) => {
       hlpr.consLog(['User', err, user]);

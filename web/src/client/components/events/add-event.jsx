@@ -9,8 +9,7 @@ import { Redirect } from 'react-router';
 import * as actions from '../../actions';
 import validate from './../form/validate';
 import Alert from './../form/alert';
-// import DatePicker from './../form/datepicker';
-import Input from './../form/input';
+import EventRoutes from './event-routes';
 import style from '../../styles/style';
 
 const propTypes = {
@@ -18,56 +17,6 @@ const propTypes = {
 };
 
 const relURL = 'apiv1/events/addevent';
-
-const renderEventRoutes = ({ fields }) => (
-  <List style={style.list}>
-    {fields.map((eventRoutes, index) =>
-      <ListItem
-        key={index}
-        disableTouchRipple
-        hoverColor="#fffefe"
-        style={style.listItem}
-      >
-        <Subheader
-          style={style.subheader}
-        >
-          Route {index + 1}
-          <IconButton
-            type="button"
-            tooltip="Remove Route"
-            style={style.iconButton}
-            onClick={() => fields.remove(index)}
-          >
-            <DeleteForever
-              style={style.iconStyles}
-            />
-          </IconButton>
-        </Subheader>
-        <div>
-          <Field
-            name={`${eventRoutes}.eventRouteURL`}
-            type="text"
-            component={TextField}
-            floatingLabelText="Route URL"
-          />
-        </div>
-      </ListItem>,
-    )}
-    <ListItem
-      disableTouchRipple={true}
-      hoverColor="#fffefe"
-    >
-      <RaisedButton
-        type="button"
-        label="Add Route"
-        primary={true}
-        style={style.button}
-        onClick={() => fields.push({})}
-      />
-    </ListItem>
-  </List>
-);
-
 
 let AddEvent = class AddEvent extends Component {
   handleFormSubmit(formProps) {
@@ -83,11 +32,16 @@ let AddEvent = class AddEvent extends Component {
   }
 
   render() {
-    const { array: { push }, handleSubmit, authenticated, pristine, reset, submitting, fields } = this.props;
-    const newDate = new Date();
+    const { array: { push }, clearEvent, handleSubmit, authenticated, postSuccess, pristine, reset, submitting, fields } = this.props;
     if (!authenticated) {
       return (
         <Redirect to="/signin" />
+      );
+    }
+    if (postSuccess) {
+      clearEvent()
+      return (
+        <Redirect to="/events" />
       );
     }
     return (
@@ -191,7 +145,7 @@ let AddEvent = class AddEvent extends Component {
           <div>
             <FieldArray
               name="eventRoutes"
-              component={renderEventRoutes}
+              component={EventRoutes}
             />
           </div>
           { this.renderAlert() }
@@ -224,6 +178,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     errorMessage: state.auth.error,
+    postSuccess: state.events.event.createdAt,
   };
 }
 

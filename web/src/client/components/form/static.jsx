@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import './styles.css';
+import style from '../../styles/style';
 
 const propTypes = {
   content: PropTypes.any,
@@ -10,9 +10,16 @@ const propTypes = {
 };
 
 const renderStatic = ({ contentLabel, content, contentType, contentAlt }) => (
-  <div className="control-group">
-    <label htmlFor={content} className="control-label">{contentLabel}:</label>
-    {(contentType === 'img') ? <img src={content} alt={contentAlt} /> : content }
+  <div style={style.static.divMain}>
+    <label
+      htmlFor={content}
+      style={style.static.label}
+    >
+      {contentLabel}
+    </label>
+    <div style={style.static.divSub}>
+      {(contentType === 'img') ? <img src={content} alt={contentAlt} /> : content }
+    </div>
   </div>
 );
 
