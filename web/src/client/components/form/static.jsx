@@ -9,7 +9,18 @@ const propTypes = {
   contentAlt: PropTypes.string,
 };
 
-const renderStatic = ({ contentLabel, content, contentType, contentAlt }) => (
+const renderContent = (content, contentType, contentAlt, baseURL) => {
+  switch (contentType) {
+    case 'img':
+      return <img src={content} alt={contentAlt} />;
+    case 'url':
+      return <a href={`${baseURL}${content}`} target="new" style={style.static.url}>{content}</a>;
+    default:
+      return content;
+  }
+};
+
+const renderStatic = ({ baseURL, contentLabel, content, contentType, contentAlt }) => (
   <div style={style.static.divMain}>
     <label
       htmlFor={content}
@@ -18,7 +29,7 @@ const renderStatic = ({ contentLabel, content, contentType, contentAlt }) => (
       {contentLabel}
     </label>
     <div style={style.static.divSub}>
-      {(contentType === 'img') ? <img src={content} alt={contentAlt} /> : content }
+      {renderContent(content, contentType, contentAlt, baseURL)}
     </div>
   </div>
 );

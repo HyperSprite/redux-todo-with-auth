@@ -9,7 +9,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const eventRoutesSchema = new Schema(
   {
-    eventRouteURL: { type: String, lower: true },
+    eventRouteURL: Number,
   });
 
 const eventSchema = new Schema(

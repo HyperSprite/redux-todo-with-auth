@@ -19,6 +19,7 @@ const query = '{eventDate:{$gt:stringDate}}';
 const ListEvent = class ListEvent extends Component {
   componentDidMount() {
     this.props.fetchEvents(relURL, query);
+    this.props.clearEvent();
   }
 
   deleteThisEvent = this.deleteThisEvent.bind(this);
@@ -26,6 +27,11 @@ const ListEvent = class ListEvent extends Component {
   deleteThisEvent(eventId) {
     console.log('eventId', eventId);
     this.props.deleteEvent(eventId, `${relURL}/delete`);
+  }
+
+  editThisEvent(eventId) {
+    console.log('Edit eventId', eventId);
+    this.props.editEvent(eventId, `${relURL}/${eventId}/edit`);
   }
 
   renderActionButton() {
@@ -68,25 +74,15 @@ const ListEvent = class ListEvent extends Component {
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY'
           );
+
           return (
             <div key={i} >
               <ViewEvent
                 weeksToGo={weeksToGo}
                 niceEventDate={niceEventDate}
+                editClick={() => this.editThisEvent(event.eventId)}
+                deleteClick={() => this.deleteThisEvent(event.eventId)}
                 {...event}
-              />
-              <FlatButton
-                label="Edit"
-                secondary
-                style={style.button}
-                icon={<ContentCreate />}
-              />
-              <FlatButton
-                label="Delete"
-                secondary
-                style={style.button}
-                icon={<ActionDeleteForever />}
-                onClick={() => this.deleteThisEvent(event.eventId)}
               />
             </div>
           );
