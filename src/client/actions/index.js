@@ -114,7 +114,6 @@ export function postForm(formProps, relURL) {
           type: TYPES.POST_EVENT,
           payload: response.data,
         });
-        dispatch(reset('addevent'));
       })
       .catch((error) => {
         dispatch({
@@ -133,7 +132,6 @@ export function clearEvent() {
     });
   };
 }
-
 
 // Posts a delete to the server and removes the item from the list
 export function deleteEvent(eventId, relURL) {

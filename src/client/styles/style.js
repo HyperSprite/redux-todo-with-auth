@@ -5,6 +5,10 @@ export default {
     margin: 12,
   },
 
+  card: {
+    marginTop: 8,
+  },
+
   formelement: {
     marginLeft: 5,
   },
@@ -44,6 +48,7 @@ export default {
   },
 
   paper1: {
+    padding: 8,
   },
 
   signin: {
@@ -60,7 +65,9 @@ export default {
     },
     label: {
       color: theme.palette.accent3Color,
-      // fontSize: 14,
+    },
+    url: {
+      cursor: 'pointer',
     },
   },
 

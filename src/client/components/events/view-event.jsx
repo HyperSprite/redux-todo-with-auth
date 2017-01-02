@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import { Paper, FloatingActionButton, FlatButton } from 'material-ui';
+import { ActionDeleteForever, ContentAdd, ContentCreate } from 'material-ui/svg-icons';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
 // import {  } from 'material-ui';
@@ -14,8 +16,10 @@ const propTypes = {
   contentAlt: PropTypes.string,
 };
 
-const renderViewEvent = ({ ...event, weeksToGo, niceEventDate, contentLabel, content, contentType, contentAlt }) => (
-  <Card>
+const renderViewEvent = ({ ...event, deleteClick, editClick, weeksToGo, niceEventDate, contentLabel, content, contentType, contentAlt }) => (
+  <Card
+    style={style.card}
+  >
     <CardHeader
       title={event.eventTitle}
       subtitle={`${weeksToGo} weeks to go`}
@@ -42,6 +46,7 @@ const renderViewEvent = ({ ...event, weeksToGo, niceEventDate, contentLabel, con
         contentLabel="Event Link"
         content={event.eventURL}
         contentType="url"
+        baseURL=""
       />
       <Static
         contentLabel="Description"
@@ -55,9 +60,24 @@ const renderViewEvent = ({ ...event, weeksToGo, niceEventDate, contentLabel, con
             contentLabel="Route Link"
             content={route.eventRouteURL}
             contentType="url"
+            baseURL="https://www.strava.com/routes/"
           />
         );
       })}
+      <FlatButton
+        label="Edit"
+        secondary
+        style={style.button}
+        icon={<ContentCreate />}
+        onClick={editClick}
+      />
+      <FlatButton
+        label="Delete"
+        secondary
+        style={style.button}
+        icon={<ActionDeleteForever />}
+        onClick={deleteClick}
+      />
     </CardText>
   </Card>
 );

@@ -19,6 +19,11 @@ const propTypes = {
 const relURL = 'apiv1/events/addevent';
 
 let AddEvent = class AddEvent extends Component {
+  constructor() {
+    super();
+
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+  }
   handleFormSubmit(formProps) {
     this.props.postForm(formProps, relURL);
   }
@@ -32,14 +37,13 @@ let AddEvent = class AddEvent extends Component {
   }
 
   render() {
-    const { array: { push }, clearEvent, handleSubmit, authenticated, postSuccess, pristine, reset, submitting, fields } = this.props;
+    const { array: { push }, handleSubmit, authenticated, postSuccess, pristine, reset, submitting, fields } = this.props;
     if (!authenticated) {
       return (
         <Redirect to="/signin" />
       );
     }
     if (postSuccess) {
-      clearEvent()
       return (
         <Redirect to="/events" />
       );
@@ -49,7 +53,7 @@ let AddEvent = class AddEvent extends Component {
         style={style.paper1}
         zDepth={1}
       >
-        <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
+        <form onSubmit={handleSubmit(this.handleFormSubmit)}>
           <div>
             <Field
               component={TextField}
