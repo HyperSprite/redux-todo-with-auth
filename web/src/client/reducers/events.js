@@ -10,6 +10,13 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
       return { ...state, event: {} };
     case TYPES.FETCH_EVENT:
       return { ...state, event: action.payload };
+    case TYPES.DELET_EVENT:
+      return {
+        ...state,
+        events: [
+          ...state.events.filter(event => event.eventId !== action.payload),
+        ],
+      };
     case TYPES.FETCH_EVENTS:
       return { ...state, events: action.payload };
     default:

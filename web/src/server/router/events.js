@@ -16,5 +16,6 @@ router.get('/secret', requireAuth, (req, res) => {
 
 router.get('/', Events.getEvents);
 router.post('/addevent', requireAuth, Events.addEvent);
+router.post('/delete', requireAuth, Events.delEvent);
 
 module.exports = router;

@@ -25,7 +25,7 @@ const eventSchema = new Schema(
     eventURL: { type: String, lower: true },
     eventDesc: String,
     eventType: String, // run ride, gravel, trail, etc.
-    eventDeleted: Boolean,
+    eventDeleted: { type: Boolean, default: false },
     eventRoutes: [eventRoutesSchema],
   },
   {

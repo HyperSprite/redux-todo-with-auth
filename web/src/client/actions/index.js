@@ -25,6 +25,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT: 'POST_EVENT',
   CLEAR_EVENT: 'CLEAR_EVENT',
+  DELET_EVENT: 'DELET_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
 };
@@ -76,6 +77,30 @@ export function ifToken() {
 }
 
 // Events
+
+// Gets a list of Events
+export function fetchEvents(relURL) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_EVENTS,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+// Posts new Event to server
 export function postForm(formProps, relURL) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
@@ -100,6 +125,7 @@ export function postForm(formProps, relURL) {
   };
 }
 
+// Removes previous Event from store
 export function clearEvent() {
   return (dispatch) => {
     dispatch({
@@ -108,16 +134,20 @@ export function clearEvent() {
   };
 }
 
-export function fetchEvents(relURL) {
+
+// Posts a delete to the server and removes the item from the list
+export function deleteEvent(eventId, relURL) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
+  const formData = {};
+  formData.eventId = eventId;
   return (dispatch) => {
-    axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
-      .then((response) => {
+    axios.post(`${ROOT_URL}/${relURL}`, formData, axiosConfig)
+      .then(() => {
         dispatch({
-          type: TYPES.FETCH_EVENTS,
-          payload: response.data,
+          type: TYPES.DELET_EVENT,
+          payload: eventId,
         });
       })
       .catch((error) => {
