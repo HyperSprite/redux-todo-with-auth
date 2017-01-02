@@ -61,6 +61,8 @@ const userSchema = new Schema({
   athlete_type: Number,
   date_preference: String,
   measurement_preference: String,
+  adminMember: Boolean,
+  clubMember: Boolean,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
   ftpHistory: [ftpHistorySchema],
   weightHitory: [weightHitorySchema],

@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react';
+import { Paper, Subheader } from 'material-ui';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
-import * as actions from './../actions';
 
+import * as actions from './../actions';
 import Static from './form/static';
+
+import style from './../styles/style';
 
 const propTypes = {
   fetchData: PropTypes.func,
@@ -25,7 +29,7 @@ const propTypes = {
   }),
 };
 
-class About extends Component {
+class Athlete extends Component {
   // this is here to allow users to refresh their strava user data
   // without signing out, this should already be loded in state.
   // actions/index.js fetchData(relURL)
@@ -51,9 +55,12 @@ class About extends Component {
       measurement_preference,
     } = this.props.user;
     return (
-
-      <div>
-        <h1><a href={`https://www.strava.com/athletes/${stravaId}`} target="blank">About You:</a></h1>
+      <Card>
+        <a href={`https://www.strava.com/athletes/${stravaId}`} >
+          <CardHeader
+            title="Athlete Profile"
+          />
+        </a>
         <Static
           contentLabel="Email"
           content={email}
@@ -119,12 +126,12 @@ class About extends Component {
           content={measurement_preference}
           contentType="text"
         />
-      </div>
+      </Card>
     );
   }
 }
 
-About.propTypes = propTypes;
+Athlete.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
@@ -132,4 +139,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(About);
+export default connect(mapStateToProps, actions)(Athlete);

@@ -5,11 +5,13 @@ import { reducer as form } from 'redux-form';
 
 import { TYPES } from '../actions';
 import auth from './auth';
+import events from './events';
 import todos from './todos';
 import visibilityFilter from './visibility-filter';
 
 const appReducer = combineReducers({
   auth,
+  events,
   form,
   todos,
   visibilityFilter,

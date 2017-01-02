@@ -30,21 +30,6 @@ class Header extends Component {
       >
         <MenuItem
           onTouchTap={this.handleClose}
-          primaryText="Home"
-          containerElement={<Link to="/">Home</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Todos"
-          containerElement={<Link to="/todos">Todos</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Add Event"
-          containerElement={<Link to="/events/addevent">Add Event</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
           primaryText="Events"
           containerElement={<Link to="/events">Events</Link>}
         />
@@ -68,8 +53,8 @@ class Header extends Component {
         anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
         <MenuItem
-          primaryText="User"
-          containerElement={<Link to="/about">User</Link>}
+          primaryText="Athlete"
+          containerElement={<Link to="/athlete">Athlete</Link>}
         />
         <MenuItem
           primaryText="Help"

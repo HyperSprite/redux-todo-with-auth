@@ -14,6 +14,7 @@ router.get('/secret', requireAuth, (req, res) => {
   res.send(JSON.stringify({ secret: 'Authorized' }));
 });
 
+router.get('/', Events.getEvents);
 router.post('/addevent', requireAuth, Events.addEvent);
 
 module.exports = router;
