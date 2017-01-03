@@ -7,6 +7,7 @@ import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns'
 
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
+import AddEvent from './add-event';
 
 import style from '../../styles/style';
 
@@ -29,9 +30,9 @@ const ListEvent = class ListEvent extends Component {
     this.props.deleteEvent(eventId, `${relURL}/delete`);
   }
 
-  editThisEvent(eventId) {
-    console.log('Edit eventId', eventId);
-    this.props.editEvent(eventId, `${relURL}/${eventId}/edit`);
+  editThisEvent(eventId, i) {
+    console.log(i, 'Edit eventId >>>>>>>>>>>>>>>>>', eventId);
+    this.props.editEvent(eventId, relURL);
   }
 
   renderActionButton() {
@@ -58,7 +59,7 @@ const ListEvent = class ListEvent extends Component {
   }
 
   render() {
-    const { events, authenticated, stravaId, adminMember, clubMember } = this.props;
+    const { events, forEdit, authenticated, stravaId, adminMember, clubMember } = this.props;
     return (
       <Paper
         style={style.paper1}
@@ -79,12 +80,17 @@ const ListEvent = class ListEvent extends Component {
 
           const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
+          if (forEdit.eventId === event.eventId) {
+            return (
+              <AddEvent key={i} />
+            );
+          }
           return (
             <div key={i} >
               <ViewEvent
                 weeksToGo={weeksToGo}
                 niceEventDate={niceEventDate}
-                editClick={() => this.editThisEvent(event.eventId)}
+                editClick={() => this.editThisEvent(event.eventId, i)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
                 canEdit={canEdit(event.eventCreator, stravaId, adminMember)}
                 {...event}
@@ -108,6 +114,7 @@ function mapStateToProps(state) {
     clubMember: state.auth.user.clubMember,
     adminMember: state.auth.user.adminMember,
     events: state.events.events,
+    forEdit: state.events.event,
   };
 }
 

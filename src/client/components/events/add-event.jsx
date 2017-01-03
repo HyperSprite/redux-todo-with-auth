@@ -24,9 +24,18 @@ let AddEvent = class AddEvent extends Component {
     super();
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.cancelFormEdit = this.cancelFormEdit.bind(this);
   }
   handleFormSubmit(formProps) {
     this.props.postForm(formProps, relURL);
+  }
+
+  cancelFormEdit() {
+    if (this.props.initialValues.eventId) {
+      this.props.clearEvent();
+    } else {
+      this.props.cancelEdit();
+    }
   }
 
   renderAlert() {
@@ -38,7 +47,8 @@ let AddEvent = class AddEvent extends Component {
   }
 
   render() {
-    const { array: { push }, handleSubmit, authenticated, postSuccess, pristine, reset, submitting, fields } = this.props;
+    const { array: { push }, event, cancelFormEdit, handleSubmit, authenticated, postSuccess, pristine, reset, submitting, fields } = this.props;
+    console.log('event', event);
     if (!authenticated) {
       return (
         <Redirect to="/signin" />
@@ -72,9 +82,9 @@ let AddEvent = class AddEvent extends Component {
               floatingLabelText="Event Date"
               name="eventDate"
               format={null}
-              onChange={(value) => {
-                console.log('date changed ', value) // eslint-disable-line no-console
-              }}
+              // onChange={(value) => {
+              //   console.log('date changed ', value) // eslint-disable-line no-console
+              // }}
               hintText="Event Day?"
             />
           </div>
@@ -169,6 +179,12 @@ let AddEvent = class AddEvent extends Component {
               disabled={pristine || submitting}
               onClick={reset}
             />
+            <FlatButton
+              type="button"
+              label="Cancel"
+              style={style.button}
+              onClick={this.cancelFormEdit}
+            />
           </div>
         </form>
       </Card>
@@ -185,6 +201,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     errorMessage: state.auth.error,
     postSuccess: state.events.event.postSuccess,
+    initialValues: state.events.event,
   };
 }
 
