@@ -17,7 +17,8 @@ const propTypes = {
 
 };
 
-const relURL = 'apiv1/events/addevent';
+const relURLAdd = 'apiv1/events/addevent';
+const relURLEdit = 'apiv1/events';
 
 let AddEvent = class AddEvent extends Component {
   constructor() {
@@ -27,7 +28,11 @@ let AddEvent = class AddEvent extends Component {
     this.cancelFormEdit = this.cancelFormEdit.bind(this);
   }
   handleFormSubmit(formProps) {
-    this.props.postForm(formProps, relURL);
+    if (this.props.initialValues.eventId) {
+      this.props.postForm(formProps, `${relURLEdit}/${this.props.initialValues.eventId}`, this.props.index);
+    } else {
+      this.props.postForm(formProps, relURLAdd);
+    }
   }
 
   cancelFormEdit() {
@@ -82,9 +87,9 @@ let AddEvent = class AddEvent extends Component {
               floatingLabelText="Event Date"
               name="eventDate"
               format={null}
-              // onChange={(value) => {
-              //   console.log('date changed ', value) // eslint-disable-line no-console
-              // }}
+              onChange={(value) => {
+                console.log('date changed ', value); // eslint-disable-line no-console
+              }}
               hintText="Event Day?"
             />
           </div>
@@ -145,6 +150,7 @@ let AddEvent = class AddEvent extends Component {
               floatingLabelText="Description"
               name="eventDesc"
               type="text"
+              multiLine
               hintText="Event Description"
             />
           </div>

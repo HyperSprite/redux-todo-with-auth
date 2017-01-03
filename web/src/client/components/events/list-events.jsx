@@ -66,7 +66,6 @@ const ListEvent = class ListEvent extends Component {
         zDepth={1}
       >
         {events.map((event, i) => {
-          console.log(event.eventTitle);
 
           const weeksToGo = diffInCalWeeks(
             new Date(event.eventDate),
@@ -82,7 +81,7 @@ const ListEvent = class ListEvent extends Component {
 
           if (forEdit.eventId === event.eventId) {
             return (
-              <AddEvent key={i} />
+              <AddEvent key={i} index={i} />
             );
           }
           return (
@@ -93,6 +92,7 @@ const ListEvent = class ListEvent extends Component {
                 editClick={() => this.editThisEvent(event.eventId, i)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
                 canEdit={canEdit(event.eventCreator, stravaId, adminMember)}
+                index={i}
                 {...event}
               />
             </div>
