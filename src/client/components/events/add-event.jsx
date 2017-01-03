@@ -50,7 +50,7 @@ let AddEvent = class AddEvent extends Component {
       );
     }
     return (
-      
+
         <Card
           style={style.card}
         >
@@ -184,7 +184,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     errorMessage: state.auth.error,
-    postSuccess: state.events.event.createdAt,
+    postSuccess: state.events.event.postSuccess,
   };
 }
 
