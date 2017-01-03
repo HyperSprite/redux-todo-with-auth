@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { FlatButton, IconButton, List, ListItem, Paper, RaisedButton, Subheader } from 'material-ui';
-import DeleteForever from 'material-ui/svg-icons/action/delete-forever';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { ActionDeleteForever } from 'material-ui/svg-icons';
 import { DatePicker, TextField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -49,10 +50,10 @@ let AddEvent = class AddEvent extends Component {
       );
     }
     return (
-      <Paper
-        style={style.paper1}
-        zDepth={1}
-      >
+      
+        <Card
+          style={style.card}
+        >
         <form onSubmit={handleSubmit(this.handleFormSubmit)}>
           <div>
             <Field
@@ -170,7 +171,8 @@ let AddEvent = class AddEvent extends Component {
             />
           </div>
         </form>
-      </Paper>
+      </Card>
+
 
     );
   }

@@ -44,18 +44,33 @@ exports.getEvents = (req, res) => {
   });
 };
 
+exports.getEvent = (req, res) => {
+  // const query = req.params.query;
+  const query = { eventId: req.params.eventId };
+
+  Events.findOne(query, (err, event) => {
+    if (!err) {
+      hlpr.consLog(['getEvent', event, req.params]);
+    } else {
+      hlpr.consLog(['getEvent error', err]);
+    }
+    res.send(event);
+  });
+};
+
 exports.delEvent = (req, res) => {
   Events.findOne({eventId: req.body.eventId}, (err, event) => {
-    if (event.eventCreator === req.user.userId || req.user.adminMember) {
+    if (event.eventCreator === req.user.stravaId || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
         if (!err) {
-          hlpr.consLog(['delEvent', deletedEvent]);
         } else {
           hlpr.consLog(['delEvent', err]);
         }
         hlpr.consLog(['delEvent', deletedEvent.eventId]);
         res.send(deletedEvent.eventId);
       });
+    } else {
+      res.send('No Access');
     }
   });
 };

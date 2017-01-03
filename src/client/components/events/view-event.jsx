@@ -16,7 +16,7 @@ const propTypes = {
   contentAlt: PropTypes.string,
 };
 
-const renderViewEvent = ({ ...event, deleteClick, editClick, weeksToGo, niceEventDate, contentLabel, content, contentType, contentAlt }) => (
+const renderViewEvent = ({ ...event, canEdit, deleteClick, editClick, weeksToGo, niceEventDate, contentLabel, content, contentType, contentAlt }) => (
   <Card
     style={style.card}
   >
@@ -64,20 +64,26 @@ const renderViewEvent = ({ ...event, deleteClick, editClick, weeksToGo, niceEven
           />
         );
       })}
-      <FlatButton
-        label="Edit"
-        secondary
-        style={style.button}
-        icon={<ContentCreate />}
-        onClick={editClick}
-      />
-      <FlatButton
-        label="Delete"
-        secondary
-        style={style.button}
-        icon={<ActionDeleteForever />}
-        onClick={deleteClick}
-      />
+      {canEdit ? (
+        <div>
+          <FlatButton
+            label="Edit"
+            secondary
+            style={style.button}
+            icon={<ContentCreate />}
+            onClick={editClick}
+          />
+          <FlatButton
+            label="Delete"
+            secondary
+            style={style.button}
+            icon={<ActionDeleteForever />}
+            onClick={deleteClick}
+          />
+        </div>
+      ) : (
+        <span />
+      )}
     </CardText>
   </Card>
 );

@@ -16,7 +16,7 @@ const eventSchema = new Schema(
   {
     eventId: String,
     eventTitle: String,
-    eventCreator: String,
+    eventCreator: Number,
     eventDate: String,
     eventLocCity: String,
     eventLocState: String,
