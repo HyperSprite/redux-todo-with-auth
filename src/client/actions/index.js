@@ -24,6 +24,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT: 'POST_EVENT',
+  EDIT_EVENT: 'EDIT_EVENT',
   CLEAR_EVENT: 'CLEAR_EVENT',
   DELET_EVENT: 'DELET_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
@@ -101,7 +102,7 @@ export function fetchEvents(relURL) {
 }
 
 // Posts new Event to server
-export function postForm(formProps, relURL) {
+export function postForm(formProps, relURL, index) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
@@ -110,10 +111,20 @@ export function postForm(formProps, relURL) {
   return (dispatch) => {
     axios.post(`${ROOT_URL}/${relURL}`, formData, axiosConfig)
       .then((response) => {
-        dispatch({
-          type: TYPES.POST_EVENT,
-          payload: response.data,
-        });
+        const result = response.data;
+        if (typeof(index) === 'number') {
+          result.index = index;
+          console.log('reducer', result);
+          dispatch({
+            type: TYPES.EDIT_EVENT,
+            payload: result,
+          });
+        } else {
+          dispatch({
+            type: TYPES.POST_EVENT,
+            payload: result,
+          });
+        }
       })
       .catch((error) => {
         dispatch({
@@ -137,7 +148,7 @@ export function cancelEdit() {
   return (dispatch) => {
     dispatch({
       type: TYPES.POST_EVENT,
-      payload: { postSuccess: true },
+      payload: { event: { postSuccess: true } },
     });
   };
 }

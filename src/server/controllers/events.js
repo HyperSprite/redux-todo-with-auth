@@ -23,7 +23,7 @@ exports.addEvent = (req, res) => {
     } else {
       hlpr.consLog(['Event error', err]);
     }
-    const result = { postSuccess: true };
+    const result = { event: { postSuccess: true } };
     hlpr.consLog([result]);
     res.send(result);
   });
@@ -51,17 +51,31 @@ exports.getEvent = (req, res) => {
   const query = { eventId: req.params.eventId };
 
   Events.findOne(query, (err, event) => {
-    if (!err) {
-      hlpr.consLog(['getEvent', event, req.params]);
-    } else {
-      hlpr.consLog(['getEvent error', err]);
-    }
+    if (err) hlpr.consLog(['getEvent error', err]);
+    hlpr.consLog(['getEvent', event, req.params]);
     res.send(event);
   });
 };
 
+exports.editEvent = (req, res) => {
+  Events.findOne({ eventId: req.params.eventId }, (err, event) => {
+    hlpr.consLog(['editEvent', event, 'req.body', req.body]);
+    if (event.eventCreator === req.user.stravaId || req.user.adminMember) {
+      Events.findOneAndUpdate({ _id: event._id }, req.body, { new: true }, (err, eventEdit) => {
+        if (err) hlpr.consLog(['editEvent', err]);
+        hlpr.consLog(['editEvent', eventEdit.eventId]);
+        const result = { event: { postSuccess: true }, updated: eventEdit };
+        hlpr.consLog([result]);
+        res.send(result);
+      });
+    } else {
+      res.send('No Access');
+    }
+  });
+};
+
 exports.delEvent = (req, res) => {
-  Events.findOne({eventId: req.body.eventId}, (err, event) => {
+  Events.findOne({ eventId: req.body.eventId }, (err, event) => {
     if (event.eventCreator === req.user.stravaId || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
         if (!err) {

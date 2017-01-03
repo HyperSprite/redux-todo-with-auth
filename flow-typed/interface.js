@@ -19,6 +19,7 @@ export type ActionStrings = (
   'FETCH_JSON' |
   'SET_USER' |
   'POST_EVENT' |
+  'EDIT_EVENT' |
   'CLEAR_EVENT' |
   'DELET_EVENT' |
   'FETCH_EVENT' |
