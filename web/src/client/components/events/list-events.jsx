@@ -58,7 +58,7 @@ const ListEvent = class ListEvent extends Component {
   }
 
   render() {
-    const { events, authenticated, clubMember } = this.props;
+    const { events, authenticated, stravaId, adminMember, clubMember } = this.props;
     return (
       <Paper
         style={style.paper1}
@@ -66,14 +66,18 @@ const ListEvent = class ListEvent extends Component {
       >
         {events.map((event, i) => {
           console.log(event.eventTitle);
+
           const weeksToGo = diffInCalWeeks(
             new Date(event.eventDate),
             new Date(),
             { weekStartsOn: 1 },
           );
+
           const niceEventDate = format(
-            event.eventDate, 'MMM Do YYYY'
+            event.eventDate, 'MMM Do YYYY',
           );
+
+          const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
           return (
             <div key={i} >
@@ -82,6 +86,7 @@ const ListEvent = class ListEvent extends Component {
                 niceEventDate={niceEventDate}
                 editClick={() => this.editThisEvent(event.eventId)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
+                canEdit={canEdit(event.eventCreator, stravaId, adminMember)}
                 {...event}
               />
             </div>
@@ -99,6 +104,7 @@ ListEvent.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
+    stravaId: state.auth.user.stravaId,
     clubMember: state.auth.user.clubMember,
     adminMember: state.auth.user.adminMember,
     events: state.events.events,

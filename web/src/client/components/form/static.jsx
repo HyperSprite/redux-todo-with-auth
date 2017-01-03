@@ -20,19 +20,24 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
   }
 };
 
-const renderStatic = ({ baseURL, contentLabel, content, contentType, contentAlt }) => (
-  <div style={style.static.divMain}>
-    <label
-      htmlFor={content}
-      style={style.static.label}
-    >
-      {contentLabel}
-    </label>
-    <div style={style.static.divSub}>
-      {renderContent(content, contentType, contentAlt, baseURL)}
-    </div>
-  </div>
-);
+const renderStatic = ({ baseURL, contentLabel, content, contentType, contentAlt }) => {
+  if (content) {
+    return (
+      <div style={style.static.divMain}>
+        <label
+          htmlFor={content}
+          style={style.static.label}
+        >
+          {contentLabel}
+        </label>
+        <div style={style.static.divSub}>
+          {renderContent(content, contentType, contentAlt, baseURL)}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 renderStatic.propTypes = propTypes;
 

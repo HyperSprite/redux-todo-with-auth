@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'redux-form';
 import { FlatButton, IconButton, List, ListItem, Subheader } from 'material-ui';
-import DeleteForever from 'material-ui/svg-icons/action/delete-forever';
+import { ActionDeleteForever } from 'material-ui/svg-icons';
 import { TextField } from 'redux-form-material-ui';
 
 import style from '../../styles/style';
@@ -25,7 +25,7 @@ const renderEventRoutes = ({ fields }) => (
             style={style.iconButton}
             onClick={() => fields.remove(index)}
           >
-            <DeleteForever
+            <ActionDeleteForever
               style={style.iconStyles}
             />
           </IconButton>
