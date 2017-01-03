@@ -133,6 +133,15 @@ export function clearEvent() {
   };
 }
 
+export function cancelEdit() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.POST_EVENT,
+      payload: { postSuccess: true },
+    });
+  };
+}
+
 // Posts a delete to the server and removes the item from the list
 export function deleteEvent(eventId, relURL) {
   const axiosConfig = {
@@ -155,6 +164,27 @@ export function deleteEvent(eventId, relURL) {
         });
       });
   };
+}
+
+export function editEvent(eventId, relURL) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/${relURL}/${eventId}`, axiosConfig)
+    .then((response) => {
+      dispatch({
+        type: TYPES.FETCH_EVENT,
+        payload: response.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: TYPES.FETCH_DATA,
+        payload: error.data,
+      });
+    });
+  }
 }
 
 // end Events
