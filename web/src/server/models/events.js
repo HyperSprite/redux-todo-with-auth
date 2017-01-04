@@ -9,22 +9,32 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const eventRoutesSchema = new Schema(
   {
-    eventRouteURL: Number,
+    eventRouteURL: Number, // route/id
+    // from Strava routes/:route_id
+    eventRouteName: String, // name
+    eventType: Number, // type
+    evenSubType: Number, // sub_type
+    eventRouteAthlete: Number, // athlete.id
+    eventRouteDescription: String, // description
+    eventRouteDistacne: Number, // distance
+    eventRouteElevationGain: Number, // elevation_gain
+    eventRouteTimestamp: Number, // timestamp
   });
 
 const eventSchema = new Schema(
   {
     eventId: String,
     eventTitle: String,
-    eventCreator: Number,
+    eventCreator: Number, // stravaId of user that creates event
     eventDate: String,
     eventLocCity: String,
     eventLocState: String,
     eventLocCountry: String,
-    eventStartElevation: Number,
+    eventStartElevation: Number, // in meters
     eventURL: { type: String, lower: true },
     eventDesc: String,
-    eventType: String, // run ride, gravel, trail, etc.
+    eventAthleteType: Number, // 0-Cycling, 1-Running (match to strava/athlete_type)
+    eventType: String, // depreciated, moved to routes
     eventDeleted: { type: Boolean, default: false },
     eventRoutes: [eventRoutesSchema],
   },

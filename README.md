@@ -1,4 +1,3 @@
-
 #Redux Todo Example with Auth (with Node/Express/Mongo backend)
 
 This is taking a the React Todo example and putting Auth in front of it. It  uses all the latest stuff, as of time of committing, including React Router v4.
@@ -15,3 +14,28 @@ npm i
 npm run dev
 ```
 
+##Handy Links:
+
+[Strava v3 API](http://strava.github.io/api/)
+[Flow type](https://flowtype.org/) - [github](https://github.com/facebook/flow)
+###Modules:
+
+* axios - [github](https://github.com/mzabriskie/axios) - xhr (see client/actions/index)
+* [date-fns](https://date-fns.org) - like lodash for dates
+* flow-bin - [github](https://github.com/flowtype/flow-bin)
+* [material-ui site](http://www.material-ui.com/#/components) - [github](https://github.com/callemall/material-ui)
+* [momentjs](http://momentjs.com/) - time conversions
+* [mongoose](http://mongoosejs.com/) - [github](https://github.com/Automattic/mongoose) - ORM for Mongodb
+* [mongoose-findorcreate]() - [github]()
+* [nodemon](https://nodemon.io/) - [github](https://github.com/remy/nodemon) - run node on a watcher
+* [passport](http://passportjs.org/) - [github](https://github.com/jaredhanson/passport)
+* passport-jwt - [github](https://github.com/themikenicholson/passport-jwt)
+* passport-local - [github](https://github.com/jaredhanson/passport-local)
+* passport-strava-oauth2 - [github](https://github.com/millsy/passport-strava)
+* [react](https://facebook.github.io/react) - [github](https://github.com/facebook/react)
+* react-redux - [github](https://github.com/reactjs/react-redux) - react/redux bindings
+* [redux](http://redux.js.org/) - [github](https://github.com/reactjs/redux/)
+* [redux-form-material-ui](https://github.com/callemall/material-ui) - [github](https://github.com/erikras/redux-form-material-ui)
+* [redux-form](http://redux-form.com) - [github](https://github.com/erikras/redux-form)
+* [serialize-javascript](https://github.com/yahoo/serialize-javascript) - similar to JSON.stringify
+* uuid - [github](https://github.com/kelektiv/node-uuid) - generates UUIDs
