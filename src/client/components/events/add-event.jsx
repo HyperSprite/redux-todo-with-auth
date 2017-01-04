@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import { FlatButton, IconButton, List, ListItem, Paper, RaisedButton, Subheader } from 'material-ui';
+import { FlatButton, RaisedButton } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { ActionDeleteForever } from 'material-ui/svg-icons';
 import { DatePicker, TextField } from 'redux-form-material-ui';
@@ -10,6 +10,7 @@ import { Redirect } from 'react-router';
 import * as actions from '../../actions';
 import validate from './../form/validate';
 import Alert from './../form/alert';
+// import DatePicker from './../form/datepicker';
 import EventRoutes from './event-routes';
 import style from '../../styles/style';
 
@@ -203,11 +204,16 @@ let AddEvent = class AddEvent extends Component {
 AddEvent.propTypes = propTypes;
 
 function mapStateToProps(state) {
+  const initialValues = state.events.event;
+  if (state.events.event.eventDate) {
+    initialValues.eventDate = new Date(state.events.event.eventDate);
+  }
+
   return {
     authenticated: state.auth.authenticated,
     errorMessage: state.auth.error,
     postSuccess: state.events.event.postSuccess,
-    initialValues: state.events.event,
+    initialValues,
   };
 }
 
