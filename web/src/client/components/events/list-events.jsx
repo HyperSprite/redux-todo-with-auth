@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Paper, FloatingActionButton, FlatButton } from 'material-ui';
+import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
 import { ActionDeleteForever, ContentAdd, ContentCreate } from 'material-ui/svg-icons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -36,37 +37,43 @@ const ListEvent = class ListEvent extends Component {
   }
 
   renderActionButton() {
-    if (this.props.clubMember) {
-      return (
-        <Link to="/events/addevent">
+    switch (true) {
+      case (this.props.clubMember):
+        return (
+          <Link to="/events/addevent">
+            <FloatingActionButton
+              style={style.floatingActionButton}
+            >
+              <ContentAdd />
+            </FloatingActionButton>
+          </Link>
+        );
+      case (this.props.authenticated):
+        return (
           <FloatingActionButton
             style={style.floatingActionButton}
+            disabled
           >
             <ContentAdd />
           </FloatingActionButton>
-        </Link>
-      );
-    } else if (this.props.authenticated) {
-      return (
-        <FloatingActionButton
-          style={style.floatingActionButton}
-          disabled
-        >
-          <ContentAdd />
-        </FloatingActionButton>
-      );
+        );
     }
   }
 
   render() {
     const { events, forEdit, authenticated, stravaId, adminMember, clubMember } = this.props;
     return (
+
       <Paper
         style={style.paper1}
         zDepth={1}
       >
+        <Toolbar>
+          <ToolbarTitle
+            text="Events"
+          />
+        </Toolbar>
         {events.map((event, i) => {
-
           const weeksToGo = diffInCalWeeks(
             new Date(event.eventDate),
             new Date(),

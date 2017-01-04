@@ -1,12 +1,28 @@
 import theme from './theme';
 
 export default {
+
+  app: {
+    children: {
+      marginTop: 76,
+    },
+  },
+
+  appBar: {
+    position: 'fixed',
+    top: 0,
+  },
+
   button: {
     margin: 12,
   },
 
   card: {
     marginTop: 8,
+  },
+
+  cardHeader: {
+    backgroundColor: theme.palette.accent2Color,
   },
 
   formelement: {
@@ -49,6 +65,7 @@ export default {
 
   paper1: {
     padding: 8,
+    margin: 8,
   },
 
   signin: {

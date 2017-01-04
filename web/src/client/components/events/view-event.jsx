@@ -21,6 +21,7 @@ const renderViewEvent = ({ ...event, canEdit, deleteClick, editClick, weeksToGo,
     style={style.card}
   >
     <CardHeader
+      style={style.cardHeader}
       title={event.eventTitle}
       subtitle={`${weeksToGo} weeks to go`}
       actAsExpander

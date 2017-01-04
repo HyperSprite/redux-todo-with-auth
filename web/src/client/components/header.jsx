@@ -77,6 +77,8 @@ class Header extends Component {
         onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
         showMenuIconButton={this.props.authenticated}
         iconElementRight={this.renderRightMenu()}
+        zDepth={1}
+        style={style.appBar}
       >
         {this.renderLeftMenu()}
       </AppBar>
