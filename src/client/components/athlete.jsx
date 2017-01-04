@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Paper, Subheader } from 'material-ui';
+import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
 
@@ -55,78 +56,90 @@ class Athlete extends Component {
       measurement_preference,
     } = this.props.user;
     return (
-      <Card>
-        <a href={`https://www.strava.com/athletes/${stravaId}`} >
-          <CardHeader
-            title="Athlete Profile"
+      <Paper
+        style={style.paper1}
+        zDepth={1}
+      >
+        <Toolbar>
+          <ToolbarTitle
+            text="Athlete"
           />
-        </a>
-        <Static
-          contentLabel="Email"
-          content={email}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Strava ID"
-          content={stravaId}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Name"
-          content={`${firstname} ${lastname}`}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Profile IMG Med URL"
-          content={profile_medium}
-          contentType="img"
-        />
-        <Static
-          contentLabel="Profile IMG URL"
-          content={profile}
-          contentType="img"
-        />
-        <Static
-          contentLabel="City"
-          content={loc_city}
-          contentType="text"
-        />
-        <Static
-          contentLabel="State"
-          content={loc_state}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Country"
-          content={loc_country}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Sex"
-          content={sex}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Created On"
-          content={created_at}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Last Updated"
-          content={updated_at}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Date Pref."
-          content={date_preference}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Dist Pref."
-          content={measurement_preference}
-          contentType="text"
-        />
-      </Card>
+        </Toolbar>
+        <Card
+          style={style.card}
+        >
+          <a href={`https://www.strava.com/athletes/${stravaId}`} >
+            <CardHeader
+              title="Athlete Profile"
+            />
+          </a>
+          <Static
+            contentLabel="Email"
+            content={email}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Strava ID"
+            content={stravaId}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Name"
+            content={`${firstname} ${lastname}`}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Profile IMG Med URL"
+            content={profile_medium}
+            contentType="img"
+          />
+          <Static
+            contentLabel="Profile IMG URL"
+            content={profile}
+            contentType="img"
+          />
+          <Static
+            contentLabel="City"
+            content={loc_city}
+            contentType="text"
+          />
+          <Static
+            contentLabel="State"
+            content={loc_state}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Country"
+            content={loc_country}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Sex"
+            content={sex}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Created On"
+            content={created_at}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Last Updated"
+            content={updated_at}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Date Pref."
+            content={date_preference}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Dist Pref."
+            content={measurement_preference}
+            contentType="text"
+          />
+        </Card>
+      </Paper>
     );
   }
 }
