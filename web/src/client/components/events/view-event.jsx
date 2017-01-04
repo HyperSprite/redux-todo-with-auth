@@ -1,22 +1,29 @@
 import React, { PropTypes } from 'react';
-import { Paper, FloatingActionButton, FlatButton } from 'material-ui';
-import { ActionDeleteForever, ContentAdd, ContentCreate } from 'material-ui/svg-icons';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-
-// import {  } from 'material-ui';
+import { FlatButton } from 'material-ui';
+import { Card, CardHeader, CardText } from 'material-ui/Card';
+import { ActionDeleteForever, ContentCreate } from 'material-ui/svg-icons';
 
 import Static from './../form/static';
 
 import style from '../../styles/style';
 
 const propTypes = {
-  content: PropTypes.any,
-  contentLabel: PropTypes.string,
-  contentType: PropTypes.string,
-  contentAlt: PropTypes.string,
+  canEdit: PropTypes.bool,
+  deleteClick: PropTypes.func,
+  editClick: PropTypes.func,
+  weeksToGo: PropTypes.number,
+  niceEventDate: PropTypes.string,
 };
 
-const renderViewEvent = ({ ...event, canEdit, deleteClick, editClick, weeksToGo, niceEventDate, contentLabel, content, contentType, contentAlt }) => (
+// props are passed in from component/list-events
+const renderViewEvent = ({
+  ...event,
+  canEdit,
+  deleteClick,
+  editClick,
+  niceEventDate,
+  weeksToGo,
+}) => (
   <Card
     style={style.card}
   >
@@ -96,4 +103,4 @@ export default renderViewEvent;
 // eventId: String,
 // eventCreator: String,
 // eventDeleted: Boolean,
-// eventRoutes:
+// eventRoutes: []

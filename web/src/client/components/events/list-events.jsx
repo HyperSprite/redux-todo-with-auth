@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Paper, FloatingActionButton, FlatButton } from 'material-ui';
-import { Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
-import { ActionDeleteForever, ContentAdd, ContentCreate } from 'material-ui/svg-icons';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns'
+import { Paper, FloatingActionButton } from 'material-ui';
+import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
+import { ContentAdd } from 'material-ui/svg-icons';
+import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns';
 
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
@@ -13,12 +13,22 @@ import AddEvent from './add-event';
 import style from '../../styles/style';
 
 const propTypes = {
-
+  adminMember: PropTypes.bool,
+  authenticated: PropTypes.bool,
+  clearEvent: PropTypes.func,
+  clubMember: PropTypes.bool,
+  deleteEvent: PropTypes.func,
+  editEvent: PropTypes.func,
+  events: PropTypes.array,
+  fetchEvents: PropTypes.func,
+  forEdit: PropTypes.object,
+  stravaId: PropTypes.number,
 };
+
 const relURL = 'apiv1/events';
 const query = '{eventDate:{$gt:stringDate}}';
 
-const ListEvent = class ListEvent extends Component {
+class ListEvent extends Component {
   componentDidMount() {
     this.props.fetchEvents(relURL, query);
     this.props.clearEvent();
@@ -27,12 +37,10 @@ const ListEvent = class ListEvent extends Component {
   deleteThisEvent = this.deleteThisEvent.bind(this);
 
   deleteThisEvent(eventId) {
-    console.log('eventId', eventId);
     this.props.deleteEvent(eventId, `${relURL}/delete`);
   }
 
-  editThisEvent(eventId, i) {
-    console.log(i, 'Edit eventId >>>>>>>>>>>>>>>>>', eventId);
+  editThisEvent(eventId) {
     this.props.editEvent(eventId, relURL);
   }
 
@@ -57,11 +65,13 @@ const ListEvent = class ListEvent extends Component {
             <ContentAdd />
           </FloatingActionButton>
         );
+      default:
+        return null;
     }
   }
 
   render() {
-    const { events, forEdit, authenticated, stravaId, adminMember, clubMember } = this.props;
+    const { events, forEdit, stravaId, adminMember } = this.props;
     return (
 
       <Paper
@@ -110,7 +120,7 @@ const ListEvent = class ListEvent extends Component {
 
     );
   }
-};
+}
 
 ListEvent.propTypes = propTypes;
 
