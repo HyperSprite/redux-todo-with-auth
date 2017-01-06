@@ -26,6 +26,7 @@ const propTypes = {
   index: PropTypes.number,
   clearEvent: PropTypes.func,
   cancelEdit: PropTypes.func,
+  fetchStravaRoutes: PropTypes.func,
   errorMessage: PropTypes.string,
 };
 
@@ -38,6 +39,7 @@ let AddEvent = class AddEvent extends Component {
 
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.cancelFormEdit = this.cancelFormEdit.bind(this);
+    this.fetchStravaRoutes = this.fetchStravaRoutes.bind(this);
   }
 
   handleFormSubmit(formProps) {
@@ -54,6 +56,17 @@ let AddEvent = class AddEvent extends Component {
     } else {
       this.props.cancelEdit();
     }
+  }
+
+// TODO This is not finished, need to get the value out of the form.
+  fetchStravaRoutes(index) {
+    console.log(index);
+    console.log(this.props);
+    this.props.fetchStrava(
+      'routes',
+      index,
+      this.props.stravaToken,
+    );
   }
 
   renderAlert() {
@@ -73,6 +86,7 @@ let AddEvent = class AddEvent extends Component {
       pristine,
       reset,
       submitting,
+      fetchStravaRoutes,
     } = this.props;
 
     if (!authenticated) {
@@ -183,6 +197,7 @@ let AddEvent = class AddEvent extends Component {
           <FieldArray
             name="eventRoutes"
             component={EventRoutes}
+            fetchStravaRoutes={this.fetchStravaRoutes}
           />
         </div>
         { this.renderAlert() }
@@ -255,6 +270,7 @@ function mapStateToProps(state) {
 
   return {
     authenticated: state.auth.authenticated,
+    stravaToken: state.auth.user.access_token,
     errorMessage: state.auth.error,
     postSuccess: state.events.event.postSuccess,
     initialValues,

@@ -10,6 +10,7 @@ const hlpr = require('../lib/helpers');
 
 const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
+const stravaRoutes = require('./strava');
 
 const indexHTML = `
   <!doctype html>
@@ -37,6 +38,7 @@ router.get('/secret', requireAuth, (req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/apiv1/events', eventsRoutes);
+router.use('/apiv1/strava', stravaRoutes);
 
 router.get('*', (req, res) => {
   res.send(indexHTML);

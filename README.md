@@ -16,14 +16,17 @@ npm run dev
 
 ##Handy Links:
 
-[Strava v3 API](http://strava.github.io/api/)
-[Flow type](https://flowtype.org/) - [github](https://github.com/facebook/flow)
+* [Strava v3 API](http://strava.github.io/api/)
+* [Flow type](https://flowtype.org/) - [github](https://github.com/facebook/flow)
+* [Node.js](https://nodejs.org) - [github](https://github.com/nodejs/node) - [docs](https://nodejs.org/en/docs/)
+* [Experss](http://expressjs.com/) - [github](https://github.com/expressjs/express) - [docs](http://expressjs.com/en/4x/api.html)
+
 ###Modules:
 
 * axios - [github](https://github.com/mzabriskie/axios) - xhr (see client/actions/index)
 * [date-fns](https://date-fns.org) - like lodash for dates
 * flow-bin - [github](https://github.com/flowtype/flow-bin)
-* [material-ui site](http://www.material-ui.com/#/components) - [github](https://github.com/callemall/material-ui)
+* [material-ui](http://www.material-ui.com/#/components) - [github](https://github.com/callemall/material-ui)
 * [momentjs](http://momentjs.com/) - time conversions
 * [mongoose](http://mongoosejs.com/) - [github](https://github.com/Automattic/mongoose) - ORM for Mongodb
 * [mongoose-findorcreate]() - [github]()
@@ -34,8 +37,10 @@ npm run dev
 * passport-strava-oauth2 - [github](https://github.com/millsy/passport-strava)
 * [react](https://facebook.github.io/react) - [github](https://github.com/facebook/react)
 * react-redux - [github](https://github.com/reactjs/react-redux) - react/redux bindings
+* [react-router v4](https://react-router.now.sh/) - [github](https://github.com/ReactTraining/react-router/tree/v4)
 * [redux](http://redux.js.org/) - [github](https://github.com/reactjs/redux/)
-* [redux-form-material-ui](https://github.com/callemall/material-ui) - [github](https://github.com/erikras/redux-form-material-ui)
+* redux-form-material-ui - [github](https://github.com/erikras/redux-form-material-ui)
 * [redux-form](http://redux-form.com) - [github](https://github.com/erikras/redux-form)
 * [serialize-javascript](https://github.com/yahoo/serialize-javascript) - similar to JSON.stringify
+* node-strava-v3 - [github](https://github.com/UnbounDev/node-strava-v3)
 * uuid - [github](https://github.com/kelektiv/node-uuid) - generates UUIDs
