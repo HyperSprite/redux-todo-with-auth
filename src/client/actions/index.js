@@ -29,6 +29,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   DELET_EVENT: 'DELET_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
+  FETCH_STRAVA_ROUTES: 'FETCH_STRAVA_ROUTES',
 };
 
 // handle error mesages
@@ -199,6 +200,37 @@ export function editEvent(eventId, relURL) {
 }
 
 // end Events
+
+// Strava api
+const relURLStrava = 'apiv1/strava';
+// FETCH_STRAVA_ROUTES
+// fetchStravaRoutes
+export function fetchStrava(path, id, stravatoken) {
+  const axiosConfig = {
+    headers: {
+      authorization: localStorage.getItem('token'),
+      stravatoken,
+    },
+  };
+  return (dispatch) => {
+    axios.get(`${relURLStrava}/${path}/${id}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_STRAVA_ROUTES,
+          payload: response,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+
+// end Strava
 
 export function fetchMessage() {
   return (dispatch) => {

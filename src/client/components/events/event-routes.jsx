@@ -10,7 +10,7 @@ const propTypes = {
   fields: PropTypes.object,
 };
 
-const renderEventRoutes = ({ fields }) => (
+const renderEventRoutes = ({ fields, fetchStravaRoutes }) => (
   <List style={style.list}>
     {fields.map((eventRoutes, index) =>
       <ListItem
@@ -41,6 +41,7 @@ const renderEventRoutes = ({ fields }) => (
             component={TextField}
             floatingLabelText="Strava Route ID"
             hintText="1201587"
+            onBlur={() => fetchStravaRoutes(index)} // TODO this is not right yet
           />
         </div>
       </ListItem>,
