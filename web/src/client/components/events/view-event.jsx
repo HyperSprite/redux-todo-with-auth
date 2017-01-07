@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { ActionDeleteForever, ContentCreate } from 'material-ui/svg-icons';
+import { ActionDeleteForever, ActionFavoriteBorder, ActionFavorite, ContentCreate } from 'material-ui/svg-icons';
 
 import Static from './../form/static';
 
@@ -11,8 +11,11 @@ const propTypes = {
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
+  favClick: PropTypes.func,
   weeksToGo: PropTypes.number,
   niceEventDate: PropTypes.string,
+  fav: PropTypes.bool,
+  favCount: PropTypes.number,
 };
 
 // props are passed in from component/list-events
@@ -21,8 +24,11 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
+  favClick,
   niceEventDate,
   weeksToGo,
+  fav,
+  favCount,
 }) => (
   <Card
     style={style.card}
@@ -34,6 +40,24 @@ const renderViewEvent = ({
       actAsExpander
       showExpandableButton
     />
+    {fav ? (
+      <FlatButton
+        label="Fav"
+        secondary
+        style={style.button}
+        icon={<ActionFavorite />}
+        onClick={favClick}
+      />
+    ) : (
+      <FlatButton
+        label="Fav"
+        secondary
+        style={style.button}
+        icon={<ActionFavoriteBorder />}
+        onClick={favClick}
+      />
+    )}
+
     <CardText expandable>
       <Static
         contentLabel="Event Date"
@@ -101,6 +125,6 @@ renderViewEvent.propTypes = propTypes;
 export default renderViewEvent;
 
 // eventId: String,
-// eventCreator: String,
+// eventOwner: String,
 // eventDeleted: Boolean,
 // eventRoutes: []

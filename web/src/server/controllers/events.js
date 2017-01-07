@@ -1,5 +1,6 @@
 const strava = require('strava-v3');
 const moment = require('moment');
+const _ = require('lodash');
 
 const User = require('../models/user');
 const Events = require('../models/events');
@@ -9,7 +10,7 @@ const hlpr = require('../lib/helpers');
 exports.addEvent = (req, res) => {
   const toSave = req.body;
 
-  toSave.eventCreator = req.user.stravaId;
+  toSave.eventOwner = req.user.stravaId;
 
   hlpr.consLog([
     'events.addEvent',
@@ -31,6 +32,10 @@ exports.addEvent = (req, res) => {
 
 const newDate = moment().add(-1, 'days').format();
 const stringDate = newDate.toString();
+
+function favHelper() {
+
+}
 
 exports.getEvents = (req, res) => {
   // const query = req.params.query;
@@ -59,8 +64,8 @@ exports.getEvent = (req, res) => {
 
 exports.editEvent = (req, res) => {
   Events.findOne({ eventId: req.params.eventId }, (err, event) => {
-    hlpr.consLog(['editEvent', event, 'req.body', req.body]);
-    if (event.eventCreator === req.user.stravaId || req.user.adminMember) {
+    if (!event) res.status(404).send(`Event: ${req.params.eventId} not found`);
+    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, req.body, { new: true }, (err, eventEdit) => {
         if (err) hlpr.consLog(['editEvent', err]);
         hlpr.consLog(['editEvent', eventEdit.eventId]);
@@ -69,24 +74,47 @@ exports.editEvent = (req, res) => {
         res.send(result);
       });
     } else {
-      res.send('No Access');
+      res.status(401).send('No Access');
     }
   });
 };
 
 exports.delEvent = (req, res) => {
   Events.findOne({ eventId: req.body.eventId }, (err, event) => {
-    if (event.eventCreator === req.user.stravaId || req.user.adminMember) {
+    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
-        if (!err) {
-        } else {
+        if (err) {
           hlpr.consLog(['delEvent', err]);
+          res.status(404).send('Event not found');
         }
         hlpr.consLog(['delEvent', deletedEvent.eventId]);
         res.send(deletedEvent.eventId);
       });
     } else {
-      res.send('No Access');
+      res.status(401).send('No Access');
     }
+  });
+};
+
+
+
+exports.favEvent = (req, res) => {
+  Events.findOne({ eventId: req.params.eventId }, (err, event) => {
+    hlpr.consLog([{ eventId: req.params.eventId }, req.user.stravaId]);
+    if (err || !event) {
+      hlpr.consLog(['favEvent err', err]);
+      res.status(404).send({ favEventUpdated: 'Event not found' });
+    }
+    const options = { new: true };
+    const action = (event.eventFavorites.indexOf(req.user.stravaId) === -1) ? (
+      { $push: { eventFavorites: req.user.stravaId } }
+    ) : (
+      { $pull: { eventFavorites: req.user.stravaId }}
+    );
+    Events.findByIdAndUpdate(event._id, action, options, (err, upEvent) => {
+      if (err) hlpr.consLog(['favEvent err', err]);
+      hlpr.consLog(['favEvent', { favEventUpdated: upEvent.eventFavorites }]);
+      res.send({ eventId: upEvent.eventId, eventFavorites: upEvent.eventFavorites });
+    });
   });
 };

@@ -29,6 +29,15 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
       };
     case TYPES.FETCH_EVENTS:
       return { ...state, events: action.payload };
+    case TYPES.SET_FAV_EVENT:
+      return {
+        ...state,
+        events: state.events.map((event) => event.eventId === action.payload.eventId ? (
+          { ...event, eventFavorites: action.payload.eventFavorites }
+        ) : (
+          event
+        ),
+      ) };
     default:
       return state;
   }

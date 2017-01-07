@@ -25,7 +25,7 @@ const eventSchema = new Schema(
   {
     eventId: String,
     eventTitle: String,
-    eventCreator: Number, // stravaId of user that creates event
+    eventOwner: Number, // stravaId of user that creates event
     eventDate: String,
     eventLocCity: String,
     eventLocState: String,
@@ -37,6 +37,7 @@ const eventSchema = new Schema(
     eventType: String, // depreciated, moved to routes
     eventDeleted: { type: Boolean, default: false },
     eventRoutes: [eventRoutesSchema],
+    eventFavorites: [Number],
   },
   {
     timestamps: true,
@@ -46,7 +47,7 @@ const eventSchema = new Schema(
 // eventSchema.pre('save', function eventSchemaPre(next) {
 //   const event = this;
 //   event.eventTitle = event.eventTitle;
-//   event.eventCreator = event.eventCreator;
+//   event.eventOwner = event.eventOwner;
 //   event.eventDate = event.eventDate;
 //   event.eventLocCity = event.eventLocCity;
 //   event.eventLocState = event.eventLocState;

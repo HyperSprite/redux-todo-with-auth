@@ -19,6 +19,7 @@ const propTypes = {
   clubMember: PropTypes.bool,
   deleteEvent: PropTypes.func,
   editEvent: PropTypes.func,
+  favEvent: PropTypes.func,
   events: PropTypes.array,
   fetchEvents: PropTypes.func,
   forEdit: PropTypes.object,
@@ -26,11 +27,10 @@ const propTypes = {
 };
 
 const relURL = 'apiv1/events';
-const query = '{eventDate:{$gt:stringDate}}';
 
 class ListEvent extends Component {
   componentDidMount() {
-    this.props.fetchEvents(relURL, query);
+    this.props.fetchEvents(relURL, this.props.stravaId);
     this.props.clearEvent();
   }
 
@@ -42,6 +42,10 @@ class ListEvent extends Component {
 
   editThisEvent(eventId) {
     this.props.editEvent(eventId, relURL);
+  }
+
+  favThisEvent(eventId) {
+    this.props.favEvent(eventId, relURL);
   }
 
   renderActionButton() {
@@ -94,6 +98,10 @@ class ListEvent extends Component {
             event.eventDate, 'MMM Do YYYY',
           );
 
+          const fav = event.eventFavorites.indexOf(stravaId) !== -1;
+
+          const favCount = event.eventFavorites.length + 1;
+
           const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
           if (forEdit.eventId === event.eventId) {
@@ -108,7 +116,10 @@ class ListEvent extends Component {
                 niceEventDate={niceEventDate}
                 editClick={() => this.editThisEvent(event.eventId, i)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
-                canEdit={canEdit(event.eventCreator, stravaId, adminMember)}
+                favClick={() => this.favThisEvent(event.eventId)}
+                canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
+                fav={fav}
+                favCount={favCount}
                 index={i}
                 {...event}
               />
