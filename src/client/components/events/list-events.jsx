@@ -100,7 +100,7 @@ class ListEvent extends Component {
 
           const fav = event.eventFavorites.indexOf(stravaId) !== -1;
 
-          const favCount = event.eventFavorites.length + 1;
+          const favCount = event.eventFavorites.length;
 
           const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
