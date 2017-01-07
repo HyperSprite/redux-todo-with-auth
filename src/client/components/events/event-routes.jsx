@@ -41,7 +41,7 @@ const renderEventRoutes = ({ fields, fetchStravaRoutes }) => (
             component={TextField}
             floatingLabelText="Strava Route ID"
             hintText="1201587"
-            onBlur={() => fetchStravaRoutes(index)} // TODO this is not right yet
+            // onBlur={() => fetchStravaRoutes(index)} // TODO this is not right yet
           />
         </div>
       </ListItem>,

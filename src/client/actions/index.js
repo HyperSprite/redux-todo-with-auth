@@ -29,6 +29,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   DELET_EVENT: 'DELET_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
+  SET_FAV_EVENT: 'SET_FAV_EVENT',
   FETCH_STRAVA_ROUTES: 'FETCH_STRAVA_ROUTES',
 };
 
@@ -81,9 +82,12 @@ export function ifToken() {
 // Events
 
 // Gets a list of Events
-export function fetchEvents(relURL) {
+export function fetchEvents(relURL, stravaId) {
   const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
+    headers: {
+      authorization: localStorage.getItem('token'),
+      stravaId,
+    },
   };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
@@ -102,7 +106,7 @@ export function fetchEvents(relURL) {
   };
 }
 
-// Posts new Event to server
+// Posts new or updated Event to server
 export function postForm(formProps, relURL, index) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
@@ -115,7 +119,6 @@ export function postForm(formProps, relURL, index) {
         const result = response.data;
         if (typeof(index) === 'number') {
           result.index = index;
-          console.log('reducer', result);
           dispatch({
             type: TYPES.EDIT_EVENT,
             payload: result,
@@ -196,7 +199,28 @@ export function editEvent(eventId, relURL) {
         payload: error.data,
       });
     });
-  }
+  };
+}
+
+export function favEvent(eventId, relURL) {
+  const axiosConfig = {
+    headers: { authorization: localStorage.getItem('token') },
+  };
+  return (dispatch) => {
+    axios.get(`${ROOT_URL}/${relURL}/${eventId}/fav`, axiosConfig)
+    .then((response) => {
+      dispatch({
+        type: TYPES.SET_FAV_EVENT,
+        payload: response.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: TYPES.FETCH_DATA,
+        payload: error.data,
+      });
+    });
+  };
 }
 
 // end Events

@@ -24,6 +24,7 @@ export type ActionStrings = (
   'DELET_EVENT' |
   'FETCH_EVENT' |
   'FETCH_EVENTS' |
+  'SET_FAV_EVENT' |
   'FETCH_STRAVA_ROUTES' |
   'SET_TSS_GOAL'
   )

@@ -16,8 +16,10 @@ router.get('/secret', requireAuth, (req, res) => {
 
 router.get('/', Events.getEvents);
 router.get('/:eventId', Events.getEvent);
+router.get('/:eventId/fav', requireAuth, Events.favEvent);
 router.post('/addevent', requireAuth, Events.addEvent);
 router.post('/delete', requireAuth, Events.delEvent);
 router.post('/:eventId', requireAuth, Events.editEvent);
+
 
 module.exports = router;
