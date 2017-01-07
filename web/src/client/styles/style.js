@@ -29,6 +29,17 @@ export default {
     marginLeft: 5,
   },
 
+  favButton: {
+    color: theme.palette.primary1Color,
+  },
+
+  favBadge: {
+    color: theme.palette.primary3Color,
+    padding: 10,
+    top: 4,
+    right: 4,
+  },
+
   header: {
     IconButton: {
       padding: 0,

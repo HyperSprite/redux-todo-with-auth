@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { FlatButton } from 'material-ui';
+import { Badge, FlatButton, FloatingActionButton, IconButton } from 'material-ui';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { ActionDeleteForever, ActionFavoriteBorder, ActionFavorite, ContentCreate } from 'material-ui/svg-icons';
 
@@ -40,24 +40,29 @@ const renderViewEvent = ({
       actAsExpander
       showExpandableButton
     />
-    {fav ? (
-      <FlatButton
-        label="Fav"
-        secondary
-        style={style.button}
-        icon={<ActionFavorite />}
-        onClick={favClick}
-      />
-    ) : (
-      <FlatButton
-        label="Fav"
-        secondary
-        style={style.button}
-        icon={<ActionFavoriteBorder />}
-        onClick={favClick}
-      />
-    )}
-
+    <Badge
+      badgeContent={favCount}
+      style={style.favBadge}
+      secondary
+    >
+      {fav ? (
+        <FloatingActionButton
+          mini
+          style={style.favButton}
+          onClick={favClick}
+        >
+          <ActionFavoriteBorder />
+        </FloatingActionButton>
+      ) : (
+        <FloatingActionButton
+          mini
+          style={style.favButton}
+          onClick={favClick}
+        >
+          <ActionFavorite />
+        </FloatingActionButton>
+      )}
+    </Badge>
     <CardText expandable>
       <Static
         contentLabel="Event Date"
