@@ -15,19 +15,20 @@ import EventRoutes from './event-routes';
 import style from '../../styles/style';
 
 const propTypes = {
-  handleSubmit: PropTypes.func,
-  initialValues: PropTypes.object,
   authenticated: PropTypes.bool,
-  postSuccess: PropTypes.bool,
-  pristine: PropTypes.bool,
-  reset: PropTypes.func,
-  submitting: PropTypes.bool,
-  postForm: PropTypes.func,
-  index: PropTypes.number,
-  clearEvent: PropTypes.func,
   cancelEdit: PropTypes.func,
-  fetchStravaRoutes: PropTypes.func,
+  clearEvent: PropTypes.func,
   errorMessage: PropTypes.string,
+  fetchStravaRoutes: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  index: PropTypes.number,
+  initialValues: PropTypes.object,
+  pristine: PropTypes.bool,
+  postForm: PropTypes.func,
+  postSuccess: PropTypes.bool,
+  reset: PropTypes.func,
+  routeId: PropTypes.string,
+  submitting: PropTypes.bool,
 };
 
 const relURLAdd = 'apiv1/events/addevent';
@@ -85,6 +86,7 @@ let AddEvent = class AddEvent extends Component {
       postSuccess,
       pristine,
       reset,
+      routeId,
       submitting,
       fetchStravaRoutes,
     } = this.props;
@@ -97,7 +99,7 @@ let AddEvent = class AddEvent extends Component {
 
     if (postSuccess) {
       return (
-        <Redirect to="/events" />
+        <Redirect to={`/events#${routeId}`} />
       );
     }
 
@@ -267,13 +269,17 @@ function mapStateToProps(state) {
   if (state.events.event.eventDate) {
     initialValues.eventDate = new Date(state.events.event.eventDate);
   }
-
+  let routeId = null;
+  if (state.events.event.updated && state.events.event.updated.eventId) {
+    routeId = state.events.event.updated.eventId;
+  }
   return {
     authenticated: state.auth.authenticated,
     stravaToken: state.auth.user.access_token,
     errorMessage: state.auth.error,
     postSuccess: state.events.event.postSuccess,
     initialValues,
+    routeId,
   };
 }
 

@@ -5,7 +5,7 @@ import { TYPES } from '../actions';
 export default function (state = { events: [], event: { eventRoutes: [] } }, action) {
   switch (action.type) {
     case TYPES.POST_EVENT:
-      return { ...state, event: action.payload.event };
+      return { ...state, event: action.payload.event, updated: action.payload.updated };
     case TYPES.EDIT_EVENT:
       return {
         ...state,

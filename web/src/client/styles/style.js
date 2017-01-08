@@ -31,6 +31,10 @@ export default {
 
   favButton: {
     color: theme.palette.primary1Color,
+    margin: 0,
+    padding: 0,
+    height: 32,
+    width: 32,
   },
 
   favBadge: {
