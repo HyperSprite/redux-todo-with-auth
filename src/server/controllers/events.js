@@ -24,18 +24,33 @@ exports.addEvent = (req, res) => {
     } else {
       hlpr.consLog(['Event error', err]);
     }
-    const result = { event: { postSuccess: true } };
+    const result = { event: { postSuccess: true }, updated: event };
     hlpr.consLog([result]);
     res.send(result);
   });
 };
 
+exports.editEvent = (req, res) => {
+  Events.findOne({ eventId: req.params.eventId }, (err, event) => {
+    if (!event) res.status(404).send(`Event: ${req.params.eventId} not found`);
+    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
+      const options = { new: true };
+      const action = req.body;
+      Events.findByIdAndUpdate(event._id, action, options, (err, eventEdit) => {
+        if (err) hlpr.consLog(['editEvent', err]);
+        hlpr.consLog(['editEvent', eventEdit.eventId]);
+        const result = { event: { postSuccess: true }, updated: eventEdit };
+        hlpr.consLog([result]);
+        res.send(result);
+      });
+    } else {
+      res.status(401).send('No Access');
+    }
+  });
+};
+
 const newDate = moment().add(-1, 'days').format();
 const stringDate = newDate.toString();
-
-function favHelper() {
-
-}
 
 exports.getEvents = (req, res) => {
   // const query = req.params.query;
@@ -62,23 +77,6 @@ exports.getEvent = (req, res) => {
   });
 };
 
-exports.editEvent = (req, res) => {
-  Events.findOne({ eventId: req.params.eventId }, (err, event) => {
-    if (!event) res.status(404).send(`Event: ${req.params.eventId} not found`);
-    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
-      Events.findOneAndUpdate({ _id: event._id }, req.body, { new: true }, (err, eventEdit) => {
-        if (err) hlpr.consLog(['editEvent', err]);
-        hlpr.consLog(['editEvent', eventEdit.eventId]);
-        const result = { event: { postSuccess: true }, updated: eventEdit };
-        hlpr.consLog([result]);
-        res.send(result);
-      });
-    } else {
-      res.status(401).send('No Access');
-    }
-  });
-};
-
 exports.delEvent = (req, res) => {
   Events.findOne({ eventId: req.body.eventId }, (err, event) => {
     if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
@@ -95,8 +93,6 @@ exports.delEvent = (req, res) => {
     }
   });
 };
-
-
 
 exports.favEvent = (req, res) => {
   Events.findOne({ eventId: req.params.eventId }, (err, event) => {

@@ -75,7 +75,7 @@ class ListEvent extends Component {
   }
 
   render() {
-    const { events, forEdit, stravaId, adminMember } = this.props;
+    const { authenticated, events, forEdit, stravaId, adminMember } = this.props;
     return (
 
       <Paper
@@ -110,7 +110,7 @@ class ListEvent extends Component {
             );
           }
           return (
-            <div key={i} >
+            <div key={i} id={event.eventId} >
               <ViewEvent
                 weeksToGo={weeksToGo}
                 niceEventDate={niceEventDate}
@@ -121,6 +121,7 @@ class ListEvent extends Component {
                 fav={fav}
                 favCount={favCount}
                 index={i}
+                authenticated={authenticated}
                 {...event}
               />
             </div>

@@ -1,13 +1,16 @@
 import React, { PropTypes } from 'react';
-import { Badge, FlatButton, FloatingActionButton, IconButton } from 'material-ui';
+import { FlatButton, IconButton } from 'material-ui';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { ActionDeleteForever, ActionFavoriteBorder, ActionFavorite, ContentCreate } from 'material-ui/svg-icons';
 
+import favIconButton from './../form/fav-icon-button';
 import Static from './../form/static';
+
 
 import style from '../../styles/style';
 
 const propTypes = {
+  authenticated: PropTypes.bool,
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
@@ -21,6 +24,7 @@ const propTypes = {
 // props are passed in from component/list-events
 const renderViewEvent = ({
   ...event,
+  authenticated,
   canEdit,
   deleteClick,
   editClick,
@@ -37,32 +41,10 @@ const renderViewEvent = ({
       style={style.cardHeader}
       title={event.eventTitle}
       subtitle={`${weeksToGo} weeks to go`}
-      actAsExpander
+      avatar={favIconButton(authenticated, fav, favCount, favClick)}
+      actAsExpander={false}
       showExpandableButton
     />
-    <Badge
-      badgeContent={favCount}
-      style={style.favBadge}
-      secondary
-    >
-      {fav ? (
-        <FloatingActionButton
-          mini
-          style={style.favButton}
-          onClick={favClick}
-        >
-          <ActionFavoriteBorder />
-        </FloatingActionButton>
-      ) : (
-        <FloatingActionButton
-          mini
-          style={style.favButton}
-          onClick={favClick}
-        >
-          <ActionFavorite />
-        </FloatingActionButton>
-      )}
-    </Badge>
     <CardText expandable>
       <Static
         contentLabel="Event Date"
