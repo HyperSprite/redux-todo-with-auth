@@ -43,10 +43,8 @@ if (isSSL) {
 
 // Webpack dev server setup
 if (!hlpr.isProd()) {
-  mongoose.connect(config.mongoconnect.dev);
   hlpr.consLog(['**** Using Webpack Dev Middleware']);
   const test = process.argv[2] || false;
-
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -56,11 +54,14 @@ if (!hlpr.isProd()) {
     publicPath: webpackConfig.output.publicPath,
   }));
   app.use(webpackHotMiddleware(compiler));
-  app.use(morgan('combined'));
+  // app.use(morgan('combined'));
+}
+
+if (!hlpr.isProd()) {
+  mongoose.connect(config.mongoconnect.dev);
 } else {
   mongoose.connect(config.mongoconnect.prod);
 }
-
 // Express Middleware
 app.use(cors());
 // parses everything that comes in as JSON

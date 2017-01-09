@@ -7,6 +7,7 @@ import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { DatePicker, TextField } from 'redux-form-material-ui';
 
+import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import validate from './../form/validate';
 import Alert from './../form/alert';
@@ -250,6 +251,10 @@ let AddEvent = class AddEvent extends Component {
 
     return (
       <div>
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
         {(initialValues.eventTitle) ? (
           <Card
             style={style.card}
@@ -291,7 +296,7 @@ function mapStateToProps(state) {
   }
   let routeId = null;
   if (state.events.event.updated && state.events.event.updated.eventId) {
-    routeId = state.events.event.updated.eventId;
+    routeId = `id${state.events.event.updated.eventId}`;
   }
   return {
     authenticated: state.auth.authenticated,

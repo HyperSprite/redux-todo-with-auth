@@ -5,6 +5,8 @@ import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import { ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
 import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns';
+// import ScrollIntoView from 'scroll-component';
+import ScrollIntoView from '../../containers/scroll-into-view';
 
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
@@ -115,6 +117,10 @@ class ListEvent extends Component {
         style={style.paper1}
         zDepth={1}
       >
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
         <Toolbar>
           <ToolbarGroup>
             <ToolbarTitle
@@ -124,6 +130,7 @@ class ListEvent extends Component {
           </ToolbarGroup>
           {this.renderToolbarFilter()}
         </Toolbar>
+
         {events.map((event, i) => {
 
           const weeksToGo = diffInCalWeeks(
@@ -150,8 +157,9 @@ class ListEvent extends Component {
               <AddEvent key={i} index={i} />
             );
           }
+
           return (
-            <div key={i} id={event.eventId} >
+            <div key={i} id={`id${event.eventId}`} >
               <ViewEvent
                 authenticated={authenticated}
                 canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
