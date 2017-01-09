@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import * as actions from './../actions';
 import Static from './form/static';
+import ScrollIntoView from '../containers/scroll-into-view';
 
 import style from './../styles/style';
 
@@ -60,6 +61,10 @@ class Athlete extends Component {
         style={style.paper1}
         zDepth={1}
       >
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
         <Toolbar>
           <ToolbarTitle
             text="Athlete"
