@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { Paper, FloatingActionButton } from 'material-ui';
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { ContentAdd } from 'material-ui/svg-icons';
+import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
+import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
+import { ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
 import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns';
 
 import * as actions from '../../actions';
@@ -74,6 +74,39 @@ class ListEvent extends Component {
     }
   }
 
+  renderToolbarFilter() {
+    switch (true) {
+      case (this.props.authenticated):
+        return (
+          <ToolbarGroup>
+            <FlatButton
+              style={style.toolbar.button}
+            >
+              <ToggleRadioButtonChecked
+                style={style.favButton}
+              />
+            </FlatButton>
+            <FlatButton
+              style={style.toolbar.button}
+            >
+              <ActionFavoriteBorder
+                style={style.favButton}
+              />
+            </FlatButton>
+            <FlatButton
+              style={style.toolbar.button}
+            >
+              <SocialPersonOutline
+                style={style.favButton}
+              />
+            </FlatButton>
+          </ToolbarGroup>
+        );
+      default:
+        return null;
+    }
+  }
+
   render() {
     const { authenticated, events, forEdit, stravaId, adminMember } = this.props;
     return (
@@ -83,9 +116,13 @@ class ListEvent extends Component {
         zDepth={1}
       >
         <Toolbar>
-          <ToolbarTitle
-            text="Events"
-          />
+          <ToolbarGroup>
+            <ToolbarTitle
+              text="Events"
+              style={style.toolbar.title}
+            />
+          </ToolbarGroup>
+          {this.renderToolbarFilter()}
         </Toolbar>
         {events.map((event, i) => {
 

@@ -30,18 +30,11 @@ export default {
   },
 
   favButton: {
-    color: theme.palette.primary1Color,
+    color: theme.palette.textColor,
     margin: 0,
     padding: 0,
     height: 32,
     width: 32,
-  },
-
-  favBadge: {
-    color: theme.palette.primary3Color,
-    padding: 10,
-    top: 4,
-    right: 4,
   },
 
   header: {
@@ -107,6 +100,15 @@ export default {
     margin: 12,
     fontSize: 20,
     cursor: 'default',
+  },
+
+  toolbar: {
+    title: {
+      color: theme.palette.textColor,
+    },
+    button: {
+      margin: 2,
+    },
   },
 
 };
