@@ -105,7 +105,7 @@ exports.favEvent = (req, res) => {
     const action = (event.eventFavorites.indexOf(req.user.stravaId) === -1) ? (
       { $push: { eventFavorites: req.user.stravaId } }
     ) : (
-      { $pull: { eventFavorites: req.user.stravaId }}
+      { $pull: { eventFavorites: req.user.stravaId } }
     );
     Events.findByIdAndUpdate(event._id, action, options, (err, upEvent) => {
       if (err) hlpr.consLog(['favEvent err', err]);
