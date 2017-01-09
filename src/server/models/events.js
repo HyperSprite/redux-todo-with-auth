@@ -27,6 +27,8 @@ const eventSchema = new Schema(
     eventTitle: String,
     eventOwner: Number, // stravaId of user that creates event
     eventDate: String,
+    eventOrg: String, // event organizer
+    eventSeries: String, // event series
     eventLocCity: String,
     eventLocState: String,
     eventLocCountry: String,

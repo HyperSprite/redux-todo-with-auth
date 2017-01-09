@@ -88,11 +88,15 @@ class ListEvent extends Component {
           />
         </Toolbar>
         {events.map((event, i) => {
+
           const weeksToGo = diffInCalWeeks(
             new Date(event.eventDate),
             new Date(),
             { weekStartsOn: 1 },
           );
+
+          let subTitleName = event.eventSeries || event.eventOrg;
+          subTitleName = subTitleName ? ` - ${subTitleName}` : '';
 
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY',
@@ -112,16 +116,17 @@ class ListEvent extends Component {
           return (
             <div key={i} id={event.eventId} >
               <ViewEvent
-                weeksToGo={weeksToGo}
-                niceEventDate={niceEventDate}
-                editClick={() => this.editThisEvent(event.eventId, i)}
-                deleteClick={() => this.deleteThisEvent(event.eventId)}
-                favClick={() => this.favThisEvent(event.eventId)}
+                authenticated={authenticated}
                 canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
+                deleteClick={() => this.deleteThisEvent(event.eventId)}
+                editClick={() => this.editThisEvent(event.eventId, i)}
                 fav={fav}
+                favClick={() => this.favThisEvent(event.eventId)}
                 favCount={favCount}
                 index={i}
-                authenticated={authenticated}
+                niceEventDate={niceEventDate}
+                subTitleName={subTitleName}
+                weeksToGo={weeksToGo}
                 {...event}
               />
             </div>

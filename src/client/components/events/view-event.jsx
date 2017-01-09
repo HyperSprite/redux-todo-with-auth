@@ -14,11 +14,12 @@ const propTypes = {
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
-  favClick: PropTypes.func,
-  weeksToGo: PropTypes.number,
-  niceEventDate: PropTypes.string,
   fav: PropTypes.bool,
+  favClick: PropTypes.func,
   favCount: PropTypes.number,
+  niceEventDate: PropTypes.string,
+  subTitleName: PropTypes.string,
+  weeksToGo: PropTypes.number,
 };
 
 // props are passed in from component/list-events
@@ -28,11 +29,12 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
-  favClick,
-  niceEventDate,
-  weeksToGo,
   fav,
+  favClick,
   favCount,
+  niceEventDate,
+  subTitleName,
+  weeksToGo,
 }) => (
   <Card
     style={style.card}
@@ -40,7 +42,7 @@ const renderViewEvent = ({
     <CardHeader
       style={style.cardHeader}
       title={event.eventTitle}
-      subtitle={`${weeksToGo} weeks to go`}
+      subtitle={`${weeksToGo} weeks to go ${subTitleName}`}
       avatar={favIconButton(authenticated, fav, favCount, favClick)}
       actAsExpander={false}
       showExpandableButton
@@ -54,6 +56,16 @@ const renderViewEvent = ({
       <Static
         contentLabel="Type"
         content={event.eventType}
+        contentType="text"
+      />
+      <Static
+        contentLabel="Series"
+        content={event.eventSeries}
+        contentType="text"
+      />
+      <Static
+        contentLabel="Organizer"
+        content={event.eventOrg}
         contentType="text"
       />
       <Static

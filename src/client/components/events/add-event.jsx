@@ -129,6 +129,26 @@ let AddEvent = class AddEvent extends Component {
           <Field
             component={TextField}
             style={style.formelement}
+            floatingLabelText="Series"
+            name="eventSeries"
+            type="text"
+            hintText="Example: Grasshopper Adventure Series"
+          />
+        </div>
+        <div>
+          <Field
+            component={TextField}
+            style={style.formelement}
+            floatingLabelText="Organizer"
+            name="eventOrg"
+            type="text"
+            hintText="Could be the same as Series"
+          />
+        </div>
+        <div>
+          <Field
+            component={TextField}
+            style={style.formelement}
             floatingLabelText="City"
             name="eventLocCity"
             type="text"
