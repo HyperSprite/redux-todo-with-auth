@@ -39,6 +39,7 @@ class ListEvent extends Component {
   deleteThisEvent = this.deleteThisEvent.bind(this);
 
   deleteThisEvent(eventId) {
+    window.location.hash = '';
     this.props.deleteEvent(eventId, `${relURL}/delete`);
   }
 
@@ -83,6 +84,7 @@ class ListEvent extends Component {
     }
   }
 
+  // not yet implemented
   renderToolbarFilter() {
     switch (true) {
       case (this.props.authenticated):
@@ -142,7 +144,7 @@ class ListEvent extends Component {
               style={style.toolbar.title}
             />
           </ToolbarGroup>
-          {this.renderToolbarFilter()}
+          {/* {this.renderToolbarFilter()} */}
         </Toolbar>
 
         {events.map((event, i) => {

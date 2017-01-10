@@ -1,13 +1,9 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
-import { FlatButton } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import { ActionDeleteForever, ContentCreate } from 'material-ui/svg-icons';
 
 import ToggleIconButton from './../form/toggle-icon-button';
 
 import Static from './../form/static';
-
 
 import style from '../../styles/style';
 
@@ -58,25 +54,14 @@ const renderViewEvent = ({
       showExpandableButton
     />
     <CardActions>
-      debugger;
+      {/* ToggleIconButton(buttonType: mui icon, authenticated: bool, toggle: bool, toggleClick: func, toggleCount: number) */}
+      {/* ToggleFlatButton(buttonType: mui icon, secondary: bool, label: string, authenticated: bool, toggle: bool, toggleClick: func) */}
       {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
-      {ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, favCount)}
+      {ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, null)}
       {canEdit ? (
         <span>
-          <FlatButton
-            label="Edit"
-            secondary
-            style={style.button}
-            icon={<ContentCreate />}
-            onClick={editClick}
-          />
-          <FlatButton
-            label="Delete"
-            secondary
-            style={style.button}
-            icon={<ActionDeleteForever />}
-            onClick={deleteClick}
-          />
+          {ToggleIconButton('ContentCreate', authenticated, true, editClick, null)}
+          {ToggleIconButton('ActionDelete', authenticated, true, deleteClick, null)}
         </span>
       ) : (
         <span />
