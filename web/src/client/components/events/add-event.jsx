@@ -296,7 +296,7 @@ function mapStateToProps(state) {
   }
   let routeId = null;
   if (state.events.event.updated && state.events.event.updated.eventId) {
-    routeId = `id${state.events.event.updated.eventId}`;
+    routeId = `${state.events.event.updated.eventId}`;
   }
   return {
     authenticated: state.auth.authenticated,

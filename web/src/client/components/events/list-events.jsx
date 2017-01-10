@@ -43,6 +43,7 @@ class ListEvent extends Component {
   }
 
   editThisEvent(eventId) {
+    window.location.hash = eventId;
     this.props.editEvent(eventId, relURL);
   }
 
@@ -145,6 +146,8 @@ class ListEvent extends Component {
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY',
           );
+          // Expends Card if hash matchs eventid
+          const expanded = (window.location.hash === `#${event.eventId}`);
 
           const fav = event.eventFavorites.indexOf(stravaId) !== -1;
 
@@ -158,13 +161,19 @@ class ListEvent extends Component {
             );
           }
 
+          const eventLink = (
+            <Link to={`/events#${event.eventId}`} style={style.eventLink}>{event.eventTitle}</Link>
+          );
+
           return (
-            <div key={i} id={`id${event.eventId}`} >
+            <div key={i} id={`${event.eventId}`} >
               <ViewEvent
                 authenticated={authenticated}
                 canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
                 editClick={() => this.editThisEvent(event.eventId, i)}
+                eventLink={eventLink}
+                expanded={expanded}
                 fav={fav}
                 favClick={() => this.favThisEvent(event.eventId)}
                 favCount={favCount}

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 import { FlatButton, IconButton } from 'material-ui';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
 import { ActionDeleteForever, ActionFavoriteBorder, ActionFavorite, ContentCreate } from 'material-ui/svg-icons';
@@ -14,6 +15,8 @@ const propTypes = {
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
+  expanded: PropTypes.bool,
+  eventLink: PropTypes.component,
   fav: PropTypes.bool,
   favClick: PropTypes.func,
   favCount: PropTypes.number,
@@ -29,6 +32,8 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
+  expanded,
+  eventLink,
   fav,
   favClick,
   favCount,
@@ -38,16 +43,19 @@ const renderViewEvent = ({
 }) => (
   <Card
     style={style.card}
+    initiallyExpanded={expanded}
   >
     <CardHeader
       style={style.cardHeader}
-      title={event.eventTitle}
+      title={eventLink}
       subtitle={`${weeksToGo} weeks to go ${subTitleName}`}
       avatar={favIconButton(authenticated, fav, favCount, favClick)}
       actAsExpander={false}
       showExpandableButton
     />
-    <CardText expandable>
+    <CardText
+      expandable
+    >
       <Static
         contentLabel="Event Date"
         content={niceEventDate}
