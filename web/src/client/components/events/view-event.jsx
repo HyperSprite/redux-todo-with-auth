@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { FlatButton, IconButton } from 'material-ui';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import { ActionDeleteForever, ActionFavoriteBorder, ActionFavorite, ContentCreate } from 'material-ui/svg-icons';
+import { FlatButton } from 'material-ui';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { ActionDeleteForever, ContentCreate } from 'material-ui/svg-icons';
 
-import favIconButton from './../form/fav-icon-button';
+import ToggleIconButton from './../form/toggle-icon-button';
+
 import Static from './../form/static';
 
 
@@ -16,10 +17,12 @@ const propTypes = {
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
   expanded: PropTypes.bool,
-  eventLink: PropTypes.component,
+  eventLink: PropTypes.object,
   fav: PropTypes.bool,
   favClick: PropTypes.func,
   favCount: PropTypes.number,
+  goal: PropTypes.bool,
+  goalClick: PropTypes.func,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
   weeksToGo: PropTypes.number,
@@ -33,10 +36,12 @@ const renderViewEvent = ({
   deleteClick,
   editClick,
   expanded,
-  eventLink,
   fav,
   favClick,
   favCount,
+  eventLink,
+  goal,
+  goalClick,
   niceEventDate,
   subTitleName,
   weeksToGo,
@@ -49,10 +54,34 @@ const renderViewEvent = ({
       style={style.cardHeader}
       title={eventLink}
       subtitle={`${weeksToGo} weeks to go ${subTitleName}`}
-      avatar={favIconButton(authenticated, fav, favCount, favClick)}
-      actAsExpander={false}
+      actAsExpander
       showExpandableButton
     />
+    <CardActions>
+      debugger;
+      {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
+      {ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, favCount)}
+      {canEdit ? (
+        <span>
+          <FlatButton
+            label="Edit"
+            secondary
+            style={style.button}
+            icon={<ContentCreate />}
+            onClick={editClick}
+          />
+          <FlatButton
+            label="Delete"
+            secondary
+            style={style.button}
+            icon={<ActionDeleteForever />}
+            onClick={deleteClick}
+          />
+        </span>
+      ) : (
+        <span />
+      )}
+    </CardActions>
     <CardText
       expandable
     >
@@ -103,26 +132,6 @@ const renderViewEvent = ({
           />
         );
       })}
-      {canEdit ? (
-        <div>
-          <FlatButton
-            label="Edit"
-            secondary
-            style={style.button}
-            icon={<ContentCreate />}
-            onClick={editClick}
-          />
-          <FlatButton
-            label="Delete"
-            secondary
-            style={style.button}
-            icon={<ActionDeleteForever />}
-            onClick={deleteClick}
-          />
-        </div>
-      ) : (
-        <span />
-      )}
     </CardText>
   </Card>
 );
