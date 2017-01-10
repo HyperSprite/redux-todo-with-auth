@@ -1,14 +1,11 @@
 // @flow
 
 import axios from 'axios';
-import { Redirect } from 'react-router';
-import { reset } from 'redux-form';
 import { v4 } from 'uuid';
 
 import config from '../../server/config';
 
 const ROOT_URL = config.rootURL;
-
 
 // If any of these have a flow error about
 // being incompatable with a string enum
@@ -111,10 +108,8 @@ export function postForm(formProps, relURL, index) {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
-  const formData = formProps;
-  formData.eventId = formData.eventID || v4();
   return (dispatch) => {
-    axios.post(`${ROOT_URL}/${relURL}`, formData, axiosConfig)
+    axios.post(`${ROOT_URL}/${relURL}`, formProps, axiosConfig)
       .then((response) => {
         const result = response.data;
         if (typeof(index) === 'number') {

@@ -25,6 +25,11 @@ export default {
     backgroundColor: theme.palette.accent2Color,
   },
 
+  eventLink: {
+    textDecoration: 'none',
+    color: theme.palette.textColor,
+  },
+
   formelement: {
     marginLeft: 5,
   },
@@ -35,6 +40,26 @@ export default {
     padding: 0,
     height: 32,
     width: 32,
+  },
+
+  footer: {
+    paper: {
+      backgroundColor: theme.palette.shadowColor,
+      paddingTop: 72,
+      paddingRight: 24,
+      paddingBottom: 72,
+      paddingLeft: 256,
+    },
+    stravaLogo: {
+      width: 200,
+    },
+    div1: {
+      width: 300,
+      textColor: theme.palette.grey100,
+    },
+    div2: {
+      width: 300,
+    },
   },
 
   header: {

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const serialize = require('serialize-javascript');
+const uuidv4 = require('uuid/v4');
 
 const hlpr = require('../lib/helpers');
 
@@ -9,6 +10,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const eventRoutesSchema = new Schema(
   {
+    eventRouteId: { type: String, default: `id-${uuidv4()}` },
     eventRouteURL: Number, // route/id
     // from Strava routes/:route_id
     eventRouteName: String, // name
@@ -23,7 +25,7 @@ const eventRoutesSchema = new Schema(
 
 const eventSchema = new Schema(
   {
-    eventId: String,
+    eventId: { type: String, default: `id-${uuidv4()}` },
     eventTitle: String,
     eventOwner: Number, // stravaId of user that creates event
     eventDate: String,
