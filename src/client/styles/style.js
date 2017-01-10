@@ -25,21 +25,13 @@ export default {
     backgroundColor: theme.palette.accent2Color,
   },
 
-  eventLink: {
+  cardHeaderTitleLink: {
     textDecoration: 'none',
     color: theme.palette.textColor,
   },
 
   formelement: {
     marginLeft: 5,
-  },
-
-  favButton: {
-    color: theme.palette.textColor,
-    margin: 0,
-    padding: 0,
-    height: 32,
-    width: 32,
   },
 
   footer: {
@@ -125,6 +117,14 @@ export default {
     margin: 12,
     fontSize: 20,
     cursor: 'default',
+  },
+
+  toggleIconButton: {
+    color: theme.palette.textColor,
+    margin: 0,
+    padding: 0,
+    height: 32,
+    width: 32,
   },
 
   toolbar: {

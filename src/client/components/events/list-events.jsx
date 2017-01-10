@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
-import { ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
+import { ActionBookmark, ActionBookmarkBorder, ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
 import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns';
 // import ScrollIntoView from 'scroll-component';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -48,7 +48,13 @@ class ListEvent extends Component {
   }
 
   favThisEvent(eventId) {
+    window.location.hash = eventId;
     this.props.favEvent(eventId, relURL);
+  }
+
+  goalThisEvent(eventId) {
+    window.location.hash = eventId;
+    console.log('goalThisEvent', eventId);
   }
 
   renderActionButton() {
@@ -86,6 +92,13 @@ class ListEvent extends Component {
               style={style.toolbar.button}
             >
               <ToggleRadioButtonChecked
+                style={style.favButton}
+              />
+            </FlatButton>
+            <FlatButton
+              style={style.toolbar.button}
+            >
+              <ActionBookmarkBorder
                 style={style.favButton}
               />
             </FlatButton>
@@ -146,12 +159,14 @@ class ListEvent extends Component {
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY',
           );
-          // Expends Card if hash matchs eventid
+          // Expends Card on render if hash matchs eventid
           const expanded = (window.location.hash === `#${event.eventId}`);
 
           const fav = event.eventFavorites.indexOf(stravaId) !== -1;
 
           const favCount = event.eventFavorites.length;
+
+          const goal = true;
 
           const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
@@ -162,7 +177,7 @@ class ListEvent extends Component {
           }
 
           const eventLink = (
-            <Link to={`/events#${event.eventId}`} style={style.eventLink}>{event.eventTitle}</Link>
+            <Link to={`/events#${event.eventId}`} style={style.cardHeaderTitleLink}>{event.eventTitle}</Link>
           );
 
           return (
@@ -177,6 +192,8 @@ class ListEvent extends Component {
                 fav={fav}
                 favClick={() => this.favThisEvent(event.eventId)}
                 favCount={favCount}
+                goal={goal}
+                goalClick={() => this.goalThisEvent(event.eventId)}
                 index={i}
                 niceEventDate={niceEventDate}
                 subTitleName={subTitleName}
