@@ -28,7 +28,7 @@ const propTypes = {
   postForm: PropTypes.func,
   postSuccess: PropTypes.bool,
   reset: PropTypes.func,
-  routeId: PropTypes.string,
+  hashId: PropTypes.string,
   submitting: PropTypes.bool,
 };
 
@@ -87,7 +87,7 @@ let AddEvent = class AddEvent extends Component {
       postSuccess,
       pristine,
       reset,
-      routeId,
+      hashId,
       submitting,
       fetchStravaRoutes,
     } = this.props;
@@ -100,7 +100,7 @@ let AddEvent = class AddEvent extends Component {
 
     if (postSuccess) {
       return (
-        <Redirect to={`/events#${routeId}`} />
+        <Redirect to={`/events${hashId}`} />
       );
     }
 
@@ -294,9 +294,9 @@ function mapStateToProps(state) {
   if (state.events.event.eventDate) {
     initialValues.eventDate = new Date(state.events.event.eventDate);
   }
-  let routeId = null;
+  let hashId = '';
   if (state.events.event.updated && state.events.event.updated.eventId) {
-    routeId = `${state.events.event.updated.eventId}`;
+    hashId = `#${state.events.event.updated.eventId}`;
   }
   return {
     authenticated: state.auth.authenticated,
@@ -304,7 +304,7 @@ function mapStateToProps(state) {
     errorMessage: state.auth.error,
     postSuccess: state.events.event.postSuccess,
     initialValues,
-    routeId,
+    hashId,
   };
 }
 
