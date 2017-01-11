@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const uuidNow = () => {
   const u = uuid();
-  let result = 'id' + u;
+  const result = `id${u}`;
   return result.replace(/-/g, '');
 };
 
