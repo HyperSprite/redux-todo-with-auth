@@ -1,10 +1,6 @@
-const strava = require('strava-v3');
 const moment = require('moment');
-const _ = require('lodash');
 
-const User = require('../models/user');
 const Events = require('../models/events');
-const config = require('../config');
 const hlpr = require('../lib/helpers');
 
 exports.addEvent = (req, res) => {
@@ -79,6 +75,7 @@ exports.getEvent = (req, res) => {
 
 exports.delEvent = (req, res) => {
   Events.findOne({ eventId: req.body.eventId }, (err, event) => {
+    if (!event || err) console.log(err);
     if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
         if (err) {

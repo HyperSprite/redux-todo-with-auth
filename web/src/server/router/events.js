@@ -21,5 +21,4 @@ router.post('/addevent', requireAuth, Events.addEvent);
 router.post('/delete', requireAuth, Events.delEvent);
 router.post('/:eventId', requireAuth, Events.editEvent);
 
-
 module.exports = router;

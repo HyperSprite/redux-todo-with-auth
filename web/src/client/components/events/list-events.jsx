@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link, Redirect } from 'react-router';
 import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import { ActionBookmark, ActionBookmarkBorder, ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
@@ -54,8 +54,8 @@ class ListEvent extends Component {
   }
 
   goalThisEvent(eventId) {
-    window.location.hash = eventId;
-    console.log('goalThisEvent', eventId);
+    console.log('goalThisEvent');
+    return (<Redirect to="/goals/addgoal" />);
   }
 
   renderActionButton() {
@@ -161,7 +161,7 @@ class ListEvent extends Component {
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY',
           );
-          // Expends Card on render if hash matchs eventid
+          // Expands Card on render if hash matchs eventid
           const expanded = (window.location.hash === `#${event.eventId}`);
 
           const fav = event.eventFavorites.indexOf(stravaId) !== -1;

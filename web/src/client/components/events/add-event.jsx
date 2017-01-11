@@ -62,8 +62,6 @@ let AddEvent = class AddEvent extends Component {
 
 // TODO This is not finished, need to get the value out of the form.
   fetchStravaRoutes(index) {
-    console.log(index);
-    console.log(this.props);
     this.props.fetchStrava(
       'routes',
       index,

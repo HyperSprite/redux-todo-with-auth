@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
-const serialize = require('serialize-javascript');
-const uuidv4 = require('uuid/v4');
-
-const hlpr = require('../lib/helpers');
+const uuid = require('uuid');
 
 const Schema = mongoose.Schema;
-const ObjectId = mongoose.Schema.Types.ObjectId;
+
+const uuidNow = () => {
+  const u = uuid();
+  let result = 'id' + u;
+  return result.replace(/-/g, '');
+};
 
 const eventRoutesSchema = new Schema(
   {
-    eventRouteId: { type: String, default: `id-${uuidv4()}` },
+    eventRouteId: { type: String, default: uuidNow },
     eventRouteURL: Number, // route/id
     // from Strava routes/:route_id
     eventRouteName: String, // name
@@ -25,7 +27,7 @@ const eventRoutesSchema = new Schema(
 
 const eventSchema = new Schema(
   {
-    eventId: { type: String, default: `id-${uuidv4()}` },
+    eventId: { type: String, default: uuidNow },
     eventTitle: String,
     eventOwner: Number, // stravaId of user that creates event
     eventDate: String,
@@ -51,16 +53,6 @@ const eventSchema = new Schema(
 // eventSchema.pre('save', function eventSchemaPre(next) {
 //   const event = this;
 //   event.eventTitle = event.eventTitle;
-//   event.eventOwner = event.eventOwner;
-//   event.eventDate = event.eventDate;
-//   event.eventLocCity = event.eventLocCity;
-//   event.eventLocState = event.eventLocState;
-//   event.eventLocCountry = event.eventLocCountry;
-//   event.eventStartElevation = event.eventStartElevation;
-//   event.eventURL = event.eventURL;
-//   event.eventDesc = event.eventDesc;
-//   event.eventRouteURL = event.eventRouteURL;
-//   event.eventType = event.eventType;
 //   next();
 // });
 
