@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import style from '../../styles/style';
 
 const propTypes = {
+  baseURL: PropTypes.string,
   content: PropTypes.any,
   contentLabel: PropTypes.string,
   contentType: PropTypes.string,
@@ -11,10 +12,17 @@ const propTypes = {
 
 const renderContent = (content, contentType, contentAlt, baseURL) => {
   switch (contentType) {
-    case 'img':
+    case 'img': {
       return <img src={content} alt={contentAlt} />;
-    case 'url':
+    }
+    case 'address': {
+      let place = content.filter(item => !!item);
+      place = place.join(', ');
+      return <a href={`${baseURL}${place}`} target="new" style={style.static.url}>{place}</a>;
+    }
+    case 'url': {
       return <a href={`${baseURL}${content}`} target="new" style={style.static.url}>{content}</a>;
+    }
     default:
       return content;
   }

@@ -148,6 +148,16 @@ let AddEvent = class AddEvent extends Component {
           <Field
             component={TextField}
             style={style.formelement}
+            floatingLabelText="Street"
+            name="eventLocStreet"
+            type="text"
+            hintText="123 Main St."
+          />
+        </div>
+        <div>
+          <Field
+            component={TextField}
+            style={style.formelement}
             floatingLabelText="City"
             name="eventLocCity"
             type="text"
@@ -172,6 +182,16 @@ let AddEvent = class AddEvent extends Component {
             name="eventLocCountry"
             type="text"
             hintText="Type the Country"
+          />
+        </div>
+        <div>
+          <Field
+            component={TextField}
+            style={style.formelement}
+            floatingLabelText="ZIP Code"
+            name="eventLocZip"
+            type="number"
+            hintText="Type the ZIP Code"
           />
         </div>
         <div>
