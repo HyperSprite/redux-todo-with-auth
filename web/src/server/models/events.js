@@ -33,9 +33,11 @@ const eventSchema = new Schema(
     eventDate: String,
     eventOrg: String, // event organizer
     eventSeries: String, // event series
+    eventLocStreet: String,
     eventLocCity: String,
     eventLocState: String,
     eventLocCountry: String,
+    eventLocZip: Number,
     eventStartElevation: Number, // in meters
     eventURL: { type: String, lower: true },
     eventDesc: String,
