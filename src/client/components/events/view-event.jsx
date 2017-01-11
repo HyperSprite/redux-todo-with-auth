@@ -8,6 +8,7 @@ import Static from './../form/static';
 import style from '../../styles/style';
 
 const propTypes = {
+  adminMember: PropTypes.bool,
   authenticated: PropTypes.bool,
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
@@ -27,6 +28,7 @@ const propTypes = {
 // props are passed in from component/list-events
 const renderViewEvent = ({
   ...event,
+  adminMember,
   authenticated,
   canEdit,
   deleteClick,
@@ -57,7 +59,11 @@ const renderViewEvent = ({
       {/* ToggleIconButton(buttonType: mui icon, authenticated: bool, toggle: bool, toggleClick: func, toggleCount: number) */}
       {/* ToggleFlatButton(buttonType: mui icon, secondary: bool, label: string, authenticated: bool, toggle: bool, toggleClick: func) */}
       {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
-      {ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, null)}
+      {adminMember ? (
+        <span>{ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, null)}</span>
+      ) : (
+        <span />
+      )}
       {canEdit ? (
         <span>
           {ToggleIconButton('ContentCreate', authenticated, true, editClick, null)}

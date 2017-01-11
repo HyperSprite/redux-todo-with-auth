@@ -185,6 +185,7 @@ class ListEvent extends Component {
           return (
             <div key={i} id={`${event.eventId}`} >
               <ViewEvent
+                adminMember={adminMember}
                 authenticated={authenticated}
                 canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
