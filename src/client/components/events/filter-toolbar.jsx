@@ -1,6 +1,6 @@
 import React from 'react';
 import { ToolbarGroup } from 'material-ui';
-import FilterLink from './event-filter-link';
+import FilterLink from './filter-toolbar-connect';
 
 const EventFilter = () => (
   <ToolbarGroup>

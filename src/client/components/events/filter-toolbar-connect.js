@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { setVisibilityFilter } from '../../actions';
-import EventTBLink from './event-toolbar-filter-links';
+import FilterTBLink from './filter-toolbar-link';
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -16,9 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-const EventFilterLink = connect(
+const FilterTBConnect = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EventTBLink);
+)(FilterTBLink);
 
-export default EventFilterLink;
+export default FilterTBConnect;
