@@ -2,7 +2,7 @@
 
 import { TYPES } from '../actions';
 
-function visibilityFilter(state: string = 'SHOW_ALL', action: ActionVisibilityFilterIF) {
+function visibilityFilter(state = 'EVENTS_SHOW_ALL', action) {
   switch (action.type) {
     case TYPES.SET_VISIBILITY_FILTER:
       return action.payload.filter;

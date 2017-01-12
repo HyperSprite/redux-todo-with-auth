@@ -292,6 +292,15 @@ export function fetchData(relURL) {
   };
 }
 
+export function setVisibilityFilter(filter: string) {
+  return {
+    type: TYPES.SET_VISIBILITY_FILTER,
+    payload: {
+      filter,
+    },
+  };
+}
+
 export function addTodo(text: string) {
   return {
     type: TYPES.ADD_TODO,
@@ -307,15 +316,6 @@ export function toggleTodo(id: number) {
     type: TYPES.TOGGLE_TODO,
     payload: {
       id,
-    },
-  };
-}
-
-export function setVisibilityFilter(filter: string) {
-  return {
-    type: TYPES.SET_VISIBILITY_FILTER,
-    payload: {
-      filter,
     },
   };
 }
