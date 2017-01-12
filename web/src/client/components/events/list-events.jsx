@@ -11,6 +11,9 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
 import AddEvent from './add-event';
+import EventFilter from './event-filter';
+// import EventFilter from './event-toolbar-filter-links';
+
 
 import style from '../../styles/style';
 
@@ -84,47 +87,6 @@ class ListEvent extends Component {
     }
   }
 
-  // not yet implemented
-  renderToolbarFilter() {
-    switch (true) {
-      case (this.props.authenticated):
-        return (
-          <ToolbarGroup>
-            <FlatButton
-              style={style.toolbar.button}
-            >
-              <ToggleRadioButtonChecked
-                style={style.favButton}
-              />
-            </FlatButton>
-            <FlatButton
-              style={style.toolbar.button}
-            >
-              <ActionBookmarkBorder
-                style={style.favButton}
-              />
-            </FlatButton>
-            <FlatButton
-              style={style.toolbar.button}
-            >
-              <ActionFavoriteBorder
-                style={style.favButton}
-              />
-            </FlatButton>
-            <FlatButton
-              style={style.toolbar.button}
-            >
-              <SocialPersonOutline
-                style={style.favButton}
-              />
-            </FlatButton>
-          </ToolbarGroup>
-        );
-      default:
-        return null;
-    }
-  }
-
   render() {
     const { authenticated, events, forEdit, stravaId, adminMember } = this.props;
     return (
@@ -144,6 +106,7 @@ class ListEvent extends Component {
               style={style.toolbar.title}
             />
           </ToolbarGroup>
+          {EventFilter()}
           {/* {this.renderToolbarFilter()} */}
         </Toolbar>
 
@@ -215,13 +178,30 @@ class ListEvent extends Component {
 
 ListEvent.propTypes = propTypes;
 
+const getVisibleEvents = (events, filter, stravaId) => {
+
+  switch (filter) {
+    case 'EVENTS_SHOW_ALL': {
+      return events;
+    }
+    case 'EVENTS_SHOW_FAVORITE': {
+      return events.filter(t => t.eventFavorites.indexOf(stravaId) !== -1);
+    }
+    case 'EVENTS_SHOW_OWNER': {
+      return events.filter(t => t.eventOwner === stravaId);
+    }
+    default:
+      return events;
+  }
+};
+
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     stravaId: state.auth.user.stravaId,
     clubMember: state.auth.user.clubMember,
     adminMember: state.auth.user.adminMember,
-    events: state.events.events,
+    events: getVisibleEvents(state.events.events, state.visibilityFilter, state.auth.user.stravaId),
     forEdit: state.events.event,
   };
 }
