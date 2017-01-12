@@ -11,8 +11,7 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
 import AddEvent from './add-event';
-import EventFilter from './event-filter';
-// import EventFilter from './event-toolbar-filter-links';
+import EventFilter from './filter-toolbar';
 
 
 import style from '../../styles/style';
