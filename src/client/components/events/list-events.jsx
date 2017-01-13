@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router';
 import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import { ActionBookmark, ActionBookmarkBorder, ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
-import { differenceInCalendarWeeks as diffInCalWeeks, format } from 'date-fns';
+import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
 // import ScrollIntoView from 'scroll-component';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
@@ -32,6 +32,7 @@ const propTypes = {
 
 const relURL = 'apiv1/events';
 
+
 class ListEvent extends Component {
   componentDidMount() {
     this.props.fetchEvents(relURL, this.props.stravaId);
@@ -51,12 +52,11 @@ class ListEvent extends Component {
   }
 
   favThisEvent(eventId) {
-    window.location.hash = eventId;
+    window.location.hash = '';
     this.props.favEvent(eventId, relURL);
   }
 
   goalThisEvent(eventId) {
-    console.log('goalThisEvent');
     return (<Redirect to="/goals/addgoal" />);
   }
 
@@ -106,19 +106,33 @@ class ListEvent extends Component {
             />
           </ToolbarGroup>
           {EventFilter()}
-          {/* {this.renderToolbarFilter()} */}
         </Toolbar>
 
         {events.map((event, i) => {
 
-          const weeksToGo = diffInCalWeeks(
-            new Date(event.eventDate),
-            new Date(),
-            { weekStartsOn: 1 },
-          );
+          let subTitleName = '';
+          if (event.eventSeries) {
+            subTitleName = `- ${event.eventSeries}`;
+          } else if (event.eventOrg) {
+            subTitleName = `- ${event.eventOrg}`;
+          }
 
-          let subTitleName = event.eventSeries || event.eventOrg;
-          subTitleName = subTitleName ? ` - ${subTitleName}` : '';
+          if (isValid(new Date(event.eventDate))) {
+            let timeToGo = differenceInCalendarWeeks(
+              new Date(event.eventDate),
+              new Date(),
+              { weekStartsOn: 1 },
+            );
+            if (timeToGo < 2) {
+              timeToGo = differenceInCalendarDays(
+                new Date(event.eventDate),
+                new Date(),
+              );
+              subTitleName = `${timeToGo} days to go ${subTitleName}`;
+            } else {
+              subTitleName = `${timeToGo} weeks to go ${subTitleName}`;
+            }
+          }
 
           const niceEventDate = format(
             event.eventDate, 'MMM Do YYYY',
@@ -136,7 +150,7 @@ class ListEvent extends Component {
 
           if (forEdit.eventId === event.eventId) {
             return (
-              <AddEvent key={i} index={i} />
+              <AddEvent key={`${event.eventId}-edit`} index={i} />
             );
           }
 
@@ -145,7 +159,7 @@ class ListEvent extends Component {
           );
 
           return (
-            <div key={i} id={`${event.eventId}`} >
+            <div key={event.eventId} id={`${event.eventId}`} >
               <ViewEvent
                 adminMember={adminMember}
                 authenticated={authenticated}
@@ -162,7 +176,6 @@ class ListEvent extends Component {
                 index={i}
                 niceEventDate={niceEventDate}
                 subTitleName={subTitleName}
-                weeksToGo={weeksToGo}
                 {...event}
               />
             </div>
@@ -178,7 +191,6 @@ class ListEvent extends Component {
 ListEvent.propTypes = propTypes;
 
 const getVisibleEvents = (events, filter, stravaId) => {
-
   switch (filter) {
     case 'EVENTS_SHOW_ALL': {
       return events;

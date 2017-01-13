@@ -19,13 +19,32 @@ export default class ScrollIntoView extends Component {
   }
 
   componentDidUpdate() {
-    this.scroll();
+    this.scrollUpdate();
   }
 
   scroll() {
     const { id, alignToTop, headerHeight } = this.props;
     if (!id) {
       window.scroll(0, 0);
+      return;
+    }
+
+    const element = document.querySelector(id);
+    if (element && element.scrollIntoView) {
+      setTimeout(() => {
+        element.scrollIntoView(alignToTop);
+        const scrolledY = window.scrollY;
+
+        if (scrolledY) {
+          window.scroll(0, scrolledY - headerHeight);
+        }
+      }, 0);
+    }
+  }
+
+  scrollUpdate() {
+    const { id, alignToTop, headerHeight } = this.props;
+    if (!id) {
       return;
     }
 

@@ -22,7 +22,6 @@ const propTypes = {
   goalClick: PropTypes.func,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
-  weeksToGo: PropTypes.number,
 };
 
 // props are passed in from component/list-events
@@ -42,7 +41,6 @@ const renderViewEvent = ({
   goalClick,
   niceEventDate,
   subTitleName,
-  weeksToGo,
 }) => (
   <Card
     style={style.card}
@@ -51,13 +49,11 @@ const renderViewEvent = ({
     <CardHeader
       style={style.cardHeader}
       title={eventLink}
-      subtitle={`${weeksToGo} weeks to go ${subTitleName}`}
+      subtitle={subTitleName}
       actAsExpander
       showExpandableButton
     />
     <CardActions>
-      {/* ToggleIconButton(buttonType: mui icon, authenticated: bool, toggle: bool, toggleClick: func, toggleCount: number) */}
-      {/* ToggleFlatButton(buttonType: mui icon, secondary: bool, label: string, authenticated: bool, toggle: bool, toggleClick: func) */}
       {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
       {adminMember ? (
         <span>{ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, null)}</span>
