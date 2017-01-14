@@ -10,6 +10,8 @@ const uuidNow = () => {
   return result.replace(/-/g, '');
 };
 
+const athleteType = ['Cycling', 'Running'];
+
 const eventRoutesSchema = new Schema(
   {
     eventRouteId: { type: String, default: uuidNow },
@@ -41,7 +43,7 @@ const eventSchema = new Schema(
     eventStartElevation: Number, // in meters
     eventURL: { type: String, lower: true },
     eventDesc: String,
-    eventAthleteType: Number, // 0-Cycling, 1-Running (match to strava/athlete_type)
+    eventAthleteType: { type: String, enum: athleteType, default: athleteType[0] },
     eventType: String, // depreciated, moved to routes
     eventDeleted: { type: Boolean, default: false },
     eventRoutes: [eventRoutesSchema],
@@ -52,11 +54,11 @@ const eventSchema = new Schema(
   });
 
 // saving this for later
-// eventSchema.pre('save', function eventSchemaPre(next) {
-//   const event = this;
-//   event.eventTitle = event.eventTitle;
-//   next();
-// });
+eventSchema.pre('save', function eventSchemaPre(next) {
+  const event = this;
+  event.eventAthleteType = athleteType[event.eventAthleteType];
+  next();
+});
 
 eventSchema.plugin(findOrCreate);
 

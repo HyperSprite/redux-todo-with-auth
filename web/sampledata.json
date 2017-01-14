@@ -1,0 +1,795 @@
+{
+	"_id" : ObjectId("586ae8e30bef6f49e9f1ae82"),
+	"updatedAt" : ISODate("2017-01-02T23:57:23.076Z"),
+	"createdAt" : ISODate("2017-01-02T23:57:23.076Z"),
+	"eventTitle" : "Epic title",
+	"eventId" : "idc5dc24a5de534ec99d19b4fd1ddebdd1",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740
+}
+{
+	"_id" : ObjectId("586ae84d0bef6f49e9f1ae81"),
+	"updatedAt" : ISODate("2017-01-12T22:47:44.083Z"),
+	"createdAt" : ISODate("2017-01-02T23:54:53.909Z"),
+	"eventTitle" : "Carla's Ride",
+	"eventDate" : "2017-03-10T08:00:00.000Z",
+	"eventType" : "Road Ride",
+	"eventLocCity" : "San Jose",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventId" : "id0ed4617e8cba462e834ea010826997b2",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventDesc" : "Ride around and see farm animals",
+	"eventURL" : "http://www.hypersprite.com",
+	"eventOwner" : 2468074,
+	"eventFavorites" : [
+		2468074
+	]
+}
+{
+	"_id" : ObjectId("586c04e518de313c0152fb1e"),
+	"updatedAt" : ISODate("2017-01-12T22:46:20.472Z"),
+	"createdAt" : ISODate("2017-01-03T20:09:09.322Z"),
+	"eventTitle" : "Lake Sonoma",
+	"eventDate" : "2017-03-18T07:00:00.000Z",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventLocCity" : "Lake Sonoma",
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/lake-sonoma-mtb/",
+	"eventType" : "MTB Bike",
+	"eventId" : "idd6e8799f22844557977d31b8e8001172",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("586c03b218de313c0152fb1c"),
+	"updatedAt" : ISODate("2017-01-12T23:50:41.129Z"),
+	"createdAt" : ISODate("2017-01-03T20:04:02.878Z"),
+	"eventTitle" : "Chileno Valley Classic",
+	"eventDate" : "2017-02-11T08:00:00.000Z",
+	"eventLocCity" : "Occidental",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/chileno-valley-hopper/",
+	"eventType" : "Road",
+	"eventId" : "id87efcf100da0431eac90ea877a39c828",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("586c060318de313c0152fb20"),
+	"updatedAt" : ISODate("2017-01-12T22:47:39.916Z"),
+	"createdAt" : ISODate("2017-01-03T20:13:55.184Z"),
+	"eventTitle" : "King Ridge Dirt Supreme",
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/king-ridge-dirt-supreme-hopper",
+	"eventType" : "Road/Cross Bike",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventLocCity" : "Duncan’s Mills",
+	"eventDate" : "2017-05-06T07:00:00.000Z",
+	"eventId" : "idcadc186323bf4299b7e3251cb172ef03",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("586ae7b30bef6f49e9f1ae7c"),
+	"updatedAt" : ISODate("2017-01-07T07:44:58.448Z"),
+	"createdAt" : ISODate("2017-01-02T23:52:19.896Z"),
+	"eventTitle" : "Vision Relay (aka: Rockwell Relay)",
+	"eventDate" : "2017-06-09T07:00:00.000Z",
+	"eventLocCity" : "Moab",
+	"eventLocState" : "UT",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://rockwellrelay.com/",
+	"eventDesc" : "A 535 mile four person relay race from Moab to St. George.",
+	"eventType" : "Road Race",
+	"eventId" : "id792a48804cb84c3ca0fb0ca2a4fa496d",
+	"eventRoutes" : [
+		{
+			"eventRouteURL" : 2345961,
+			"_id" : ObjectId("586ae7b30bef6f49e9f1ae7e")
+		},
+		{
+			"eventRouteURL" : 2346508,
+			"_id" : ObjectId("586ae7b30bef6f49e9f1ae7d")
+		}
+	],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	]
+}
+{
+	"_id" : ObjectId("586c06c318de313c0152fb21"),
+	"updatedAt" : ISODate("2017-01-12T22:29:33.835Z"),
+	"createdAt" : ISODate("2017-01-03T20:17:07.967Z"),
+	"eventTitle" : "Austin Rattler",
+	"eventDate" : "2017-04-08T07:00:00.000Z",
+	"eventLocCity" : "Austin",
+	"eventLocState" : "Texas",
+	"eventLocCountry" : "United States",
+	"eventURL" : "https://www.austinrattlermtb.com/mtb/",
+	"eventType" : "MTB",
+	"eventId" : "id26a445c04e9041098c8ad6e4a84e6aee",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Leadville Trail 100",
+	"eventDesc" : "Looks flat on the map, this is probably a lie."
+}
+{
+	"_id" : ObjectId("586c059218de313c0152fb1f"),
+	"updatedAt" : ISODate("2017-01-12T22:31:41.287Z"),
+	"createdAt" : ISODate("2017-01-03T20:12:02.148Z"),
+	"eventTitle" : "Skaggs",
+	"eventDate" : "2017-04-08T07:00:00.000Z",
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/skaggs-hopper/",
+	"eventLocCity" : "Lake Sonoma ",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventType" : "Cross/Gravel Bike",
+	"eventId" : "id662b9636506f4affac33a04d44281552",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("586ae81a0bef6f49e9f1ae7f"),
+	"updatedAt" : ISODate("2017-01-07T08:33:15.413Z"),
+	"createdAt" : ISODate("2017-01-02T23:54:02.700Z"),
+	"eventTitle" : "Leadville MTB Trail 100",
+	"eventDate" : "2017-08-12T07:00:00.000Z",
+	"eventLocCity" : "Leadville",
+	"eventLocState" : "CO",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://www.leadvilleraceseries.com/mtb/leadvilletrail100mtb/",
+	"eventDesc" : "Classic 100 mile bucket list mountain bike ride",
+	"eventType" : "MTB XC Race",
+	"eventId" : "id1016a6c13cd64da7835f42fc009430ba",
+	"eventRoutes" : [
+		{
+			"_id" : ObjectId("586ae81a0bef6f49e9f1ae80"),
+			"eventRouteURL" : 766022
+		}
+	],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Leadville Trail 100"
+}
+{
+	"_id" : ObjectId("586c081918de313c0152fb23"),
+	"updatedAt" : ISODate("2017-01-12T22:47:23.524Z"),
+	"createdAt" : ISODate("2017-01-03T20:22:49.826Z"),
+	"eventTitle" : "New Wente",
+	"eventDate" : "2017-06-02T07:00:00.000Z",
+	"eventLocCity" : "Willits",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "https://www.bikemonkey.net/wente",
+	"eventType" : "MTB",
+	"eventId" : "idb8fdf53f1084455984b1cb297895a96c",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventOrg" : "Bike Monkey",
+	"eventDesc" : "This is the Boggs replacement and shoud not be missed."
+}
+{
+	"_id" : ObjectId("586c094418de313c0152fb24"),
+	"updatedAt" : ISODate("2017-01-12T21:27:27.383Z"),
+	"createdAt" : ISODate("2017-01-03T20:27:48.591Z"),
+	"eventTitle" : "Tahoe Trail 100",
+	"eventDate" : "2017-07-15T07:00:00.000Z",
+	"eventLocCountry" : "United States",
+	"eventLocState" : "CA",
+	"eventLocCity" : "Northstar",
+	"eventURL" : "http://www.tahoetrailmtb.com/",
+	"eventType" : "MTB",
+	"eventId" : "id62f34cabb4044891a50d9e21b000c6c8",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Leadville Trail 100"
+}
+{
+	"_id" : ObjectId("586fe6e02175c03d47d865e4"),
+	"updatedAt" : ISODate("2017-01-12T22:44:54.378Z"),
+	"createdAt" : ISODate("2017-01-06T18:50:09.002Z"),
+	"eventTitle" : "Ride with Chris",
+	"eventDate" : "2017-02-12T08:00:00.000Z",
+	"eventLocCity" : "San Jose",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventStartElevation" : 40,
+	"eventId" : "id0a6ad1c0e0cb4cf1bcdb10b08ac68a50",
+	"eventOwner" : 2468074,
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"__v" : 0,
+	"eventFavorites" : [
+		2468074,
+		2088740
+	]
+}
+{
+	"_id" : ObjectId("586c079f18de313c0152fb22"),
+	"updatedAt" : ISODate("2017-01-12T22:47:46.564Z"),
+	"createdAt" : ISODate("2017-01-03T20:20:47.518Z"),
+	"eventTitle" : "Fish Rock",
+	"eventDate" : "2017-03-11T08:00:00.000Z",
+	"eventLocCountry" : "United States",
+	"eventLocCity" : "Booneville",
+	"eventLocState" : "CA",
+	"eventURL" : "https://www.bikemonkey.net/fishrock",
+	"eventDesc" : "You ride for 200ft then go up a wall. and climb. About 20 miles of fire road with lots of climbing.",
+	"eventType" : "Cross/Gravel Bike",
+	"eventId" : "id37049240af314b94aa0a94d6f0fc87d7",
+	"eventRoutes" : [
+		{
+			"_id" : ObjectId("586c7d7b44cbc37b21f6bbbd"),
+			"eventRouteURL" : 7281898
+		}
+	],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2468074
+	],
+	"eventOrg" : "Bike Monkey"
+}
+{
+	"_id" : ObjectId("586c02c418de313c0152fb1b"),
+	"updatedAt" : ISODate("2017-01-12T07:44:21.458Z"),
+	"createdAt" : ISODate("2017-01-03T20:00:05.006Z"),
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/old-caz-hopper/",
+	"eventTitle" : "Old Caz Hopper",
+	"eventDate" : "2017-01-28T08:00:00.000Z",
+	"eventLocCity" : "Occidental",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventType" : "Cross/Gravel Bike",
+	"eventId" : "id0420ce3e8e1447199fce09e320821187",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series",
+	"eventDesc" : "Sounds hard! Real hard!"
+}
+{
+	"_id" : ObjectId("586d37360588bd18a5dc8e2a"),
+	"updatedAt" : ISODate("2017-01-04T17:56:06.625Z"),
+	"createdAt" : ISODate("2017-01-04T17:56:06.625Z"),
+	"eventURL" : "https://thejensiegranfondo.com/",
+	"eventTitle" : "The Jensie Gran Fondo of Marin",
+	"eventDate" : "2017-10-07T07:00:00.000Z",
+	"eventLocCity" : "Novato",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventDesc" : "A ride in support of MCBC. Sort of like the Marin Century",
+	"eventType" : "Road",
+	"eventId" : "idc8a202e97afa40f9ad78eb861d81cdbe",
+	"eventRoutes" : [
+		{
+			"_id" : ObjectId("586d37360588bd18a5dc8e2b"),
+			"eventRouteURL" : 6901650
+		},
+		{
+			"eventRouteURL" : 5524175,
+			"_id" : ObjectId("586d37870588bd18a5dc8e2c")
+		}
+	],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventOrg" : "MCBC"
+}
+{
+	"_id" : ObjectId("586c042a18de313c0152fb1d"),
+	"updatedAt" : ISODate("2017-01-08T01:01:09.046Z"),
+	"createdAt" : ISODate("2017-01-03T20:06:02.083Z"),
+	"eventTitle" : "Super Sweetwater",
+	"eventDate" : "2017-03-04T08:00:00.000Z",
+	"eventLocCity" : "Occidental",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://www.grasshopperadventureseries.com/grasshopper-2017/super-sweetwater-hopper/",
+	"eventType" : "Road Bike",
+	"eventId" : "id27c6259cc47e4b43a7f61ebc4db59f6f",
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("586d33a80588bd18a5dc8e1e"),
+	"updatedAt" : ISODate("2017-01-07T07:45:06.878Z"),
+	"createdAt" : ISODate("2017-01-04T17:40:56.438Z"),
+	"eventTitle" : "Levi's King Ridge GranFondo",
+	"eventDate" : "2017-09-30T07:00:00.000Z",
+	"eventLocCity" : "Santa Rosa",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventStartElevation" : 34,
+	"eventURL" : "https://www.levisgranfondo.com",
+	"eventDesc" : "California's premiere Gran Fondo. It is not just a ride but an all day cycling party.",
+	"eventType" : "Road",
+	"eventId" : "id0e5acec655b041ae9343853fa38ec760",
+	"eventRoutes" : [
+		{
+			"eventRouteURL" : 3899484,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e29")
+		},
+		{
+			"eventRouteURL" : 969258,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e28")
+		},
+		{
+			"eventRouteURL" : 969244,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e27")
+		},
+		{
+			"eventRouteURL" : 969233,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e26")
+		},
+		{
+			"eventRouteURL" : 969224,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e25")
+		},
+		{
+			"eventRouteURL" : 969131,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e24")
+		},
+		{
+			"eventRouteURL" : 969118,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e23")
+		},
+		{
+			"eventRouteURL" : 1005842,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e22")
+		},
+		{
+			"eventRouteURL" : 1005844,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e21")
+		},
+		{
+			"eventRouteURL" : 1201587,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e20")
+		},
+		{
+			"eventRouteURL" : 1201589,
+			"_id" : ObjectId("586d33a80588bd18a5dc8e1f")
+		}
+	],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventOrg" : "Bike Monkey"
+}
+{
+	"_id" : ObjectId("5871aeb74f142f539e0fb944"),
+	"updatedAt" : ISODate("2017-01-12T23:50:51.899Z"),
+	"createdAt" : ISODate("2017-01-08T03:15:03.948Z"),
+	"eventTitle" : " Tierra Bella Bicycle Tour",
+	"eventDate" : "2017-04-01T07:00:00.000Z",
+	"eventLocCity" : "Gilroy",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventStartElevation" : 18,
+	"eventURL" : "https://www.tierrabella.org/",
+	"eventDesc" : "40th annual Almaden Cycle Touring Club Century. People love this thing!",
+	"eventType" : "Road",
+	"eventId" : "idff0ae578d18b4ad996f36f56a053ecb4",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOrg" : "Almaden Cycle Touring Club"
+}
+{
+	"_id" : ObjectId("5871b8a1936e6a56d8ab8c26"),
+	"updatedAt" : ISODate("2017-01-12T22:36:15.604Z"),
+	"createdAt" : ISODate("2017-01-08T03:57:21.341Z"),
+	"eventTitle" : "Primavera Century",
+	"eventDate" : "2017-04-23T07:00:00.000Z",
+	"eventLocCity" : "Fremont",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventStartElevation" : 15,
+	"eventURL" : "http://ffbc.org/primavera/",
+	"eventDesc" : "It's a big century all over the lower east bay",
+	"eventType" : "Road",
+	"eventId" : "id509d316e328245279dfd1aa370836f11",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOrg" : "Fremont Freewheelers Bicycle Club"
+}
+{
+	"_id" : ObjectId("5871bbca936e6a56d8ab8c27"),
+	"updatedAt" : ISODate("2017-01-08T04:10:50.538Z"),
+	"createdAt" : ISODate("2017-01-08T04:10:50.538Z"),
+	"eventTitle" : "SLO Gran Fondo",
+	"eventDate" : "2017-10-28T07:00:00.000Z",
+	"eventLocCity" : "San Luis Obispo",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventStartElevation" : 3,
+	"eventURL" : "http://www.slogranfondo.com/",
+	"eventType" : "Road",
+	"eventId" : "iddec49723cc914094b71a536439cc3cb1",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"__v" : 0,
+	"eventOrg" : "Race SLO"
+}
+Type "it" for more
+> it
+{
+	"_id" : ObjectId("587556cac6366f3434bdf3ba"),
+	"updatedAt" : ISODate("2017-01-12T22:46:29.931Z"),
+	"createdAt" : ISODate("2017-01-10T21:48:58.872Z"),
+	"eventTitle" : "This is a test",
+	"eventDate" : "2017-01-12T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id0ad405989f744d1295780ae6603268d7",
+	"__v" : 0,
+	"eventLocCity" : "San Jose",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States"
+}
+{
+	"_id" : ObjectId("58758f33c6366f3434bdf3bb"),
+	"updatedAt" : ISODate("2017-01-11T01:49:39.343Z"),
+	"createdAt" : ISODate("2017-01-11T01:49:39.343Z"),
+	"eventTitle" : "Sea Otter Classic",
+	"eventDate" : "2017-04-20T07:00:00.000Z",
+	"eventSeries" : "Sea Otter Classic",
+	"eventLocCity" : "Monterey",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://www.seaotterclassic.com/",
+	"eventDesc" : "All Things MTB!",
+	"eventType" : "MTB",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"eventId" : "id0ad405989f744d1295780ae6603268d7",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875ebdf2873547b64ea581e"),
+	"updatedAt" : ISODate("2017-01-11T16:12:00.564Z"),
+	"createdAt" : ISODate("2017-01-11T08:25:03.218Z"),
+	"eventTitle" : "A",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id482f318f7bb6440da8ad5aadad6872da",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875ebed2873547b64ea581f"),
+	"updatedAt" : ISODate("2017-01-11T16:12:02.738Z"),
+	"createdAt" : ISODate("2017-01-11T08:25:17.098Z"),
+	"eventTitle" : "AA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id5968ea6be7e04e1f82f5d1c65e444996",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f675235cf5088521bcc6"),
+	"updatedAt" : ISODate("2017-01-11T16:12:04.232Z"),
+	"createdAt" : ISODate("2017-01-11T09:10:13.297Z"),
+	"eventTitle" : "AAAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id55e118332d5e49a683b13326962cde76",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f684235cf5088521bcc7"),
+	"updatedAt" : ISODate("2017-01-11T16:12:05.629Z"),
+	"createdAt" : ISODate("2017-01-11T09:10:28.024Z"),
+	"eventTitle" : "AAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id33c7aebe775a4ec5baf0778cf5cb7173",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f726e85510098acebfa5"),
+	"updatedAt" : ISODate("2017-01-11T16:12:06.907Z"),
+	"createdAt" : ISODate("2017-01-11T09:13:10.952Z"),
+	"eventTitle" : "AAAAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "ida8255622daf84df786f71b33bb51df78",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f739e85510098acebfa6"),
+	"updatedAt" : ISODate("2017-01-11T16:12:08.121Z"),
+	"createdAt" : ISODate("2017-01-11T09:13:29.274Z"),
+	"eventTitle" : "AAAAAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "idf2daf7827ecf4e0ba8665c9e4f53c044",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f7909192e10a3c19f290"),
+	"updatedAt" : ISODate("2017-01-11T16:12:09.351Z"),
+	"createdAt" : ISODate("2017-01-11T09:14:56.202Z"),
+	"eventTitle" : "AAAAAAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id1cb3eac6b4ec47afa0acfa8b5d1b5ca7",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5875f79e9192e10a3c19f291"),
+	"updatedAt" : ISODate("2017-01-11T16:12:12.737Z"),
+	"createdAt" : ISODate("2017-01-11T09:15:10.639Z"),
+	"eventTitle" : "AAAAAAAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "ida6397494d14c47c4b2716b6aa88db94f",
+	"__v" : 0,
+	"eventSeries" : "Grasshopper Adventure Series"
+}
+{
+	"_id" : ObjectId("5876594a9192e10a3c19f292"),
+	"updatedAt" : ISODate("2017-01-12T23:50:37.129Z"),
+	"createdAt" : ISODate("2017-01-11T16:11:54.988Z"),
+	"eventTitle" : "InGamba Palo Alto Ride with Ted King",
+	"eventDate" : "2017-01-22T08:00:00.000Z",
+	"eventOrg" : "InGamba",
+	"eventLocCity" : "Palo Alto",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "https://www.facebook.com/events/1046793458779625/",
+	"eventDesc" : "From Site: \"The big man is returning to “The Land of the Free and Home of the Brave.\" That’s right, Eros “the Magnificient” Poli is back in the states to do a little Mangia, Beve and Bici.\n\nIf you are not joining Eros on The Coast Ride, then join him in Palo Alto on January 22 for a little bike ride and a lot of inGamba hospitality. \n\nSpecial guest Ted King will have coffee, juice and bagels ready for you at 9 a.m. and the group will roll out at 10.\n\nWe have a couple of beautiful routes planned, including both a long and a short loop.\n\nOur friends from Terun are providing the post-ride eats, while post-ride tall tales will be told by Ted and Eros. \n\nThe ride will be fully supported by the inGamba Crew, so please join us. \"",
+	"eventType" : "Road",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventRoutes" : [
+		{
+			"_id" : ObjectId("5876594a9192e10a3c19f294"),
+			"eventRouteURL" : 7359151,
+			"eventRouteId" : "idb33949482cb84adc8e4800b93263ef59"
+		},
+		{
+			"_id" : ObjectId("5876594a9192e10a3c19f293"),
+			"eventRouteURL" : 7359139,
+			"eventRouteId" : "id96b54f766cca442fbde4d9e71fa62480"
+		}
+	],
+	"eventDeleted" : false,
+	"eventId" : "id6e740365aa4b44c6b5582b6d1c22833d",
+	"__v" : 0,
+	"eventLocStreet" : "345 S. California Ave",
+	"eventLocZip" : 94306
+}
+{
+	"_id" : ObjectId("58765b96390c07190a80af8c"),
+	"updatedAt" : ISODate("2017-01-11T16:41:11.068Z"),
+	"createdAt" : ISODate("2017-01-11T16:21:42.796Z"),
+	"eventTitle" : "AA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "idd34860b42d9143b68df574049f2440d4",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("58765be0390c07190a80af8d"),
+	"updatedAt" : ISODate("2017-01-11T16:41:09.838Z"),
+	"createdAt" : ISODate("2017-01-11T16:22:56.715Z"),
+	"eventTitle" : "AAA",
+	"eventDate" : "2017-01-11T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "idf31925ba7be94e07a3e5e148ab3c7796",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("58765ccbb0fa4e1b9c6dcc28"),
+	"updatedAt" : ISODate("2017-01-11T16:41:08.475Z"),
+	"createdAt" : ISODate("2017-01-11T16:26:51.333Z"),
+	"eventTitle" : "AAAA",
+	"eventDate" : "2017-01-12T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "idb1e019413c0347fa95454d75bc8a8758",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("58765cdeb0fa4e1b9c6dcc29"),
+	"updatedAt" : ISODate("2017-01-11T16:41:06.114Z"),
+	"createdAt" : ISODate("2017-01-11T16:27:10.441Z"),
+	"eventTitle" : "AAAAA",
+	"eventDate" : "2017-01-12T08:00:00.000Z",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [ ],
+	"eventDeleted" : true,
+	"eventId" : "id02f42b281d3d476ea0e1dcf7beca02b2",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5877a845497b8c33666493d7"),
+	"updatedAt" : ISODate("2017-01-13T05:18:32.223Z"),
+	"createdAt" : ISODate("2017-01-12T16:01:09.474Z"),
+	"eventTitle" : "The Coast Ride",
+	"eventDate" : "2017-01-14T08:00:00.000Z",
+	"eventOrg" : "Scott Wittoff",
+	"eventLocZip" : 94129,
+	"eventLocStreet" : "610 Old Mason St",
+	"eventLocCity" : "San Francisco",
+	"eventLocState" : "CA",
+	"eventLocCountry" : "United States",
+	"eventURL" : "www.thecoastride.org",
+	"eventDesc" : "3 day ride down the coast",
+	"eventType" : "Road",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [ ],
+	"eventRoutes" : [
+		{
+			"eventRouteURL" : 1237204,
+			"_id" : ObjectId("5877a845497b8c33666493d9"),
+			"eventRouteId" : "id19dfdb2d2b694606ba9db795ec9086ca"
+		},
+		{
+			"eventRouteURL" : 1239367,
+			"_id" : ObjectId("5877a845497b8c33666493d8"),
+			"eventRouteId" : "id01d5150ce3694721a6a1ed41cc289def"
+		}
+	],
+	"eventDeleted" : false,
+	"eventId" : "idfe3cc595dda5497daf065721cf60cc31",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5877eefd497b8c33666493da"),
+	"updatedAt" : ISODate("2017-01-12T22:46:58.457Z"),
+	"createdAt" : ISODate("2017-01-12T21:02:53.536Z"),
+	"eventTitle" : "L'Etape California 2017",
+	"eventDate" : "2017-04-30T07:00:00.000Z",
+	"eventOrg" : "L'Etape California",
+	"eventURL" : "https://www.facebook.com/events/1672133563100149",
+	"eventDesc" : "Looks like Mt. Baldy",
+	"eventType" : "Road",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"eventId" : "id9b44040bb283415a9ff66eaaea2b4b63",
+	"__v" : 0
+}
+{
+	"_id" : ObjectId("5877f497497b8c33666493db"),
+	"updatedAt" : ISODate("2017-01-12T21:27:16.126Z"),
+	"createdAt" : ISODate("2017-01-12T21:26:47.796Z"),
+	"eventTitle" : "Leadville Camp of Champions",
+	"eventDate" : "2017-06-29T07:00:00.000Z",
+	"eventSeries" : "Leadville MTB 100",
+	"eventLocCity" : "Leadville",
+	"eventLocState" : "CO",
+	"eventLocCountry" : "United States",
+	"eventURL" : "http://www.leadvilleraceseries.com/camps/100-mtb-camp/",
+	"eventDesc" : "Training camp for Leadville",
+	"eventType" : "MTB",
+	"eventOwner" : 2088740,
+	"eventFavorites" : [
+		2088740
+	],
+	"eventRoutes" : [ ],
+	"eventDeleted" : false,
+	"eventId" : "idcee7e7cef396415484efc1ccb80c7fe7",
+	"__v" : 0
+}

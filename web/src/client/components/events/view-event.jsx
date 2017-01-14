@@ -78,6 +78,11 @@ const renderViewEvent = ({
         contentType="text"
       />
       <Static
+        contentLabel="Activity Type"
+        content={event.eventAthleteType}
+        contentType="text"
+      />
+      <Static
         contentLabel="Type"
         content={event.eventType}
         contentType="text"

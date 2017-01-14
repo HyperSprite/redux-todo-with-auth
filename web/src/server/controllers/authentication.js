@@ -1,9 +1,12 @@
 const jwt = require('jwt-simple');
 const strava = require('strava-v3');
+const moment = require('moment');
 
 const User = require('../models/user');
 const config = require('../config');
 const hlpr = require('../lib/helpers');
+
+const dateNow = moment().format();
 
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
@@ -48,6 +51,7 @@ exports.stravaSignin = (req, res, next) => {
 
     User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
       $set: {
+        athlete_type: tokenPayload.athlete.athlete_type,
         email: tokenPayload.athlete.email,
         access_token: tokenPayload.access_token,
         firstname: tokenPayload.athlete.firstname,
@@ -65,6 +69,7 @@ exports.stravaSignin = (req, res, next) => {
         measurement_preference: tokenPayload.athlete.measurement_preference,
         adminMember: admin,
         clubMember: club,
+        ftpHistory: { ftp: tokenPayload.athlete.ftp, date: dateNow },
       },
     }, { new: true }, (err, user) => {
       hlpr.consLog(['User', err, user]);
