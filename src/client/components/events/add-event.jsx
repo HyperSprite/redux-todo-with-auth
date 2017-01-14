@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import { FlatButton, Paper, RaisedButton } from 'material-ui';
+import { FlatButton, Paper, RaisedButton, RadioButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { DatePicker, TextField } from 'redux-form-material-ui';
+import { DatePicker, TextField, RadioButtonGroup } from 'redux-form-material-ui';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
@@ -226,6 +226,10 @@ let AddEvent = class AddEvent extends Component {
           />
         </div>
         <div>
+          <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
+            <RadioButton value="0" label="Cycling" />
+            <RadioButton value="1" label="Running" />
+          </Field>
           <Field
             component={TextField}
             style={style.formelement}
