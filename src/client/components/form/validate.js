@@ -1,5 +1,5 @@
 
-const validate = (formProps) => {
+export const validate = (formProps) => {
   const errors = {};
   // Emil
   if (!formProps.email) {
@@ -41,12 +41,18 @@ const validate = (formProps) => {
   }
   // eventLocCity
   if (!formProps.eventLocCity) {
-    errors.eventTitle = 'Required';
+    errors.eventLocCity = 'Required';
   } else if (/[^\w .,!'-]/g.test(formProps.eventLocCity)) {
     errors.eventLocCity = 'Only letters, numbers and \',._- permitted';
   }
   // eventLocState
+  if (!formProps.eventLocState) {
+    errors.eventLocState = 'Required';
+  }
   // eventLocCountry
+  if (!formProps.eventLocCountry) {
+    errors.eventLocCountry = 'Required';
+  }
   // eventLocZip
   if (/[^\w .,!'-]/g.test(formProps.eventLocStreet)) {
     errors.eventLocStreet = 'Only letters, numbers and \',._- permitted';
@@ -54,9 +60,25 @@ const validate = (formProps) => {
   // eventStartElevation
   // eventURL
   // eventDesc
+  if (!formProps.eventDesc) {
+    errors.eventDesc = 'Required';
+  } else if (formProps.eventDesc.length < 10) {
+    errors.eventDesc = 'Must be longer than 10 charaters';
+  }
+  // eventAthleteType
+  if (!formProps.eventAthleteType) {
+    errors.eventAthleteType = 'Required';
+  }
   // eventType
   // eventRoutes
   return errors;
 };
 
-export default validate;
+export const warn = (formProps) => {
+  const warnings = {};
+
+  if (!formProps.eventLocZip) {
+    warnings.eventLocZip = 'Not required, but helpful';
+  }
+  return warnings;
+};

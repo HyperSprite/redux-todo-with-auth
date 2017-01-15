@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 
 import * as actions from '../../actions';
-import validate from './../form/validate';
+import { validate } from './../form/validate';
 import Input from './../form/input';
 import Alert from './../form/alert';
 

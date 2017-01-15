@@ -6,6 +6,8 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
   switch (action.type) {
     case TYPES.POST_EVENT:
       return { ...state, event: action.payload.event, updated: action.payload.updated };
+    case TYPES.POST_EVENT_ERROR:
+      return { ...state, error: action.payload };
     case TYPES.EDIT_EVENT:
       return {
         ...state,

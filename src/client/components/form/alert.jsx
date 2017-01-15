@@ -5,8 +5,8 @@ const propTypes = {
   errorMessage: PropTypes.string,
 };
 
-const renderAlert = (errorHeadline, errorMessage) => (
-  <div className="alert alert-danger">
+const renderAlert = (key, errorHeadline, errorMessage) => (
+  <div key={key} className="alert alert-danger">
     <strong>{ errorHeadline }!</strong>
     <p>{ errorMessage }</p>
   </div>
