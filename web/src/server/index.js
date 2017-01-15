@@ -9,13 +9,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const config = require('./config');
 const router = require('./router');
+const hlpr = require('./lib/helpers');
 
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
 const rootDir = `${__dirname}/${config.public}/`;
 const port = process.env.PORT || config.port;
 const portS = (port * 1) + 363;
-const hlpr = require('./lib/helpers');
 let httpServer;
 
 const localMongoURI = !hlpr.isProd() ?
