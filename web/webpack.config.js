@@ -13,7 +13,6 @@ module.exports = {
     filename: 'bundle.js',
   },
   resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [
       '',
       '.webpack.js',
