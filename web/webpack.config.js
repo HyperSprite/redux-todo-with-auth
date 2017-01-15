@@ -2,6 +2,8 @@ const webpack = require('webpack');
 
 const isProd = (process.env.NODE_ENV === 'production');
 
+console.log(isProd, process.env.NODE_ENV)
+
 function getPlugins() {
   const plugins = [];
   plugins.push(new webpack.DefinePlugin({
@@ -61,17 +63,13 @@ function getLoaders() {
     loaders.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loader: 'babel',
-      query: {
-        plugins: ['transform-flow-strip-types', 'transform-runtime'],
-        presets: ['es2015', 'stage-0', 'react'],
-      },
+      loaders: ['babel?plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
     });
   } else {
     loaders.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loaders: ['react-hot-loader/webpack', 'babel'],
+      loaders: ['babel?plugins[]=react-hot-loader/babel,plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
     });
   }
   // common loaders
