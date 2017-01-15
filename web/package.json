@@ -4,7 +4,7 @@
   "description": "araceathlete is a training goal tracker",
   "main": "main.js",
   "engines": {
-    "node": "6.3.0"
+    "node": "7.2.0"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,7 @@
     "test-postinstall": "webpack --progress",
     "dev": "node_modules/.bin/nodemon src/server/index.js",
     "postinstall": "NODE_ENV=production webpack -p --progress",
-    "start": "NODE_ENV=production node src/server/index.js"
+    "start": "node src/server/index.js"
   },
   "author": "Chris Dunavan",
   "license": "Apache-2.0",
