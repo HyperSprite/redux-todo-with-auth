@@ -18,10 +18,15 @@ const portS = (port * 1) + 363;
 const hlpr = require('./lib/helpers');
 let httpServer;
 
+const localMongoURI = !hlpr.isProd() ?
+  config.mongoconnect.dev :
+  config.mongoconnect.prod;
+
 process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
 process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.stravaLogin.clientID;
 process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.stravaLogin.clientSecret;
 process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.stravaLogin.redirectURI;
+const mongoURI = process.env.MONGODB_URI || localMongoURI;
 
 hlpr.isProd();
 
@@ -57,11 +62,7 @@ if (!hlpr.isProd()) {
   // app.use(morgan('combined'));
 }
 
-if (!hlpr.isProd()) {
-  mongoose.connect(config.mongoconnect.dev);
-} else {
-  mongoose.connect(config.mongoconnect.prod);
-}
+mongoose.connect(mongoURI);
 // Express Middleware
 app.use(cors());
 // parses everything that comes in as JSON
