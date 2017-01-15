@@ -9,7 +9,7 @@ import { DatePicker, TextField, RadioButtonGroup } from 'redux-form-material-ui'
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
-import validate from './../form/validate';
+import { validate, warn } from './../form/validate';
 import Alert from './../form/alert';
 import EventRoutes from './event-routes';
 
@@ -19,7 +19,7 @@ const propTypes = {
   authenticated: PropTypes.bool,
   cancelEdit: PropTypes.func,
   clearEvent: PropTypes.func,
-  errorMessage: PropTypes.string,
+  errorMessage: PropTypes.object,
   fetchStravaRoutes: PropTypes.func,
   handleSubmit: PropTypes.func,
   index: PropTypes.number,
@@ -70,8 +70,11 @@ let AddEvent = class AddEvent extends Component {
   }
 
   renderAlert() {
-    return (this.props.errorMessage) ? (
-      Alert('Opps', this.props.errorMessage)
+    const { errorMessage } = this.props;
+    return (errorMessage) ? (
+      Object.keys(errorMessage).map(key => errorMessage[key]).map((eM) => {
+        return Alert(eM.path, 'Opps', eM.message);
+      })
     ) : (
       null
     );
@@ -113,8 +116,6 @@ let AddEvent = class AddEvent extends Component {
             type="text"
             hintText="Event Title"
           />
-        </div>
-        <div>
           <Field
             component={DatePicker}
             style={style.formelement}
@@ -125,23 +126,28 @@ let AddEvent = class AddEvent extends Component {
           />
         </div>
         <div>
+          <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
+            <RadioButton value="Cycling" label="Cycling" default />
+            <RadioButton value="Running" label="Running" />
+            <RadioButton value="Triathlon" label="Triathlon" />
+          </Field>
+        </div>
+        <div>
           <Field
             component={TextField}
             style={style.formelement}
             floatingLabelText="Series"
             name="eventSeries"
             type="text"
-            hintText="Example: Grasshopper Adventure Series"
+            hintText="(optional)"
           />
-        </div>
-        <div>
           <Field
             component={TextField}
             style={style.formelement}
             floatingLabelText="Organizer"
             name="eventOrg"
             type="text"
-            hintText="Could be the same as Series"
+            hintText="(optional)"
           />
         </div>
         <div>
@@ -151,7 +157,7 @@ let AddEvent = class AddEvent extends Component {
             floatingLabelText="Street"
             name="eventLocStreet"
             type="text"
-            hintText="123 Main St."
+            hintText="(optional)"
           />
         </div>
         <div>
@@ -163,15 +169,12 @@ let AddEvent = class AddEvent extends Component {
             type="text"
             hintText="Type the City"
           />
-        </div>
-        <div>
           <Field
             component={TextField}
             style={style.formelement}
             floatingLabelText="State"
             name="eventLocState"
             type="text"
-            hintText="Type the State"
           />
         </div>
         <div>
@@ -181,37 +184,24 @@ let AddEvent = class AddEvent extends Component {
             floatingLabelText="Country"
             name="eventLocCountry"
             type="text"
-            hintText="Type the Country"
           />
-        </div>
-        <div>
           <Field
             component={TextField}
             style={style.formelement}
             floatingLabelText="ZIP Code"
             name="eventLocZip"
             type="number"
-            hintText="Type the ZIP Code"
+            hintText="(optional)"
           />
         </div>
         <div>
           <Field
             component={TextField}
             style={style.formelement}
-            floatingLabelText="Starting Elevation"
-            name="eventStartElevation"
-            type="number"
-            hintText="Meters"
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Event URL"
+            floatingLabelText="Event Homepage URL"
             name="eventURL"
             type="text"
-            hintText="Link to Event Homepage"
+            hintText="(optional)"
           />
         </div>
         <div>
@@ -223,19 +213,6 @@ let AddEvent = class AddEvent extends Component {
             type="text"
             multiLine
             hintText="Event Description"
-          />
-        </div>
-        <div>
-          <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
-            <RadioButton value="0" label="Cycling" />
-            <RadioButton value="1" label="Running" />
-          </Field>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Type"
-            name="eventType"
-            type="text"
           />
         </div>
         <div>
@@ -313,8 +290,10 @@ AddEvent.propTypes = propTypes;
 
 function mapStateToProps(state) {
   const initialValues = state.events.event;
-  if (state.events.event.eventDate) {
+  if (state.events.event && state.events.event.eventDate) {
     initialValues.eventDate = new Date(state.events.event.eventDate);
+  } else {
+    initialValues.eventAthleteType = 'Cycling';
   }
   let hashId = '';
   if (state.events.event.updated && state.events.event.updated.eventId) {
@@ -323,7 +302,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     stravaToken: state.auth.user.access_token,
-    errorMessage: state.auth.error,
+    errorMessage: state.events.error,
     postSuccess: state.events.event.postSuccess,
     initialValues,
     hashId,
@@ -333,6 +312,7 @@ function mapStateToProps(state) {
 AddEvent = reduxForm({
   form: 'addevent',
   validate,
+  warn,
 })(AddEvent);
 
 

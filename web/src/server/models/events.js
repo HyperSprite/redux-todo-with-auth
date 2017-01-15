@@ -10,7 +10,7 @@ const uuidNow = () => {
   return result.replace(/-/g, '');
 };
 
-const athleteType = ['Cycling', 'Running'];
+const athleteType = ['Cycling', 'Running', 'Triathlon'];
 
 const eventRoutesSchema = new Schema(
   {
@@ -52,13 +52,6 @@ const eventSchema = new Schema(
   {
     timestamps: true,
   });
-
-// saving this for later
-eventSchema.pre('save', function eventSchemaPre(next) {
-  const event = this;
-  event.eventAthleteType = athleteType[event.eventAthleteType];
-  next();
-});
 
 eventSchema.plugin(findOrCreate);
 

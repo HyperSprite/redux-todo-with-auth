@@ -17,18 +17,19 @@ exports.addEvent = (req, res) => {
   Events.create(toSave, (err, event) => {
     if (!err) {
       hlpr.consLog(['Event saved']);
+      const result = { event: { postSuccess: true }, updated: event };
+      hlpr.consLog([result]);
+      res.send(result);
     } else {
       hlpr.consLog(['Event error', err]);
+      return res.status(400).send(err);
     }
-    const result = { event: { postSuccess: true }, updated: event };
-    hlpr.consLog([result]);
-    res.send(result);
   });
 };
 
 exports.editEvent = (req, res) => {
   Events.findOne({ eventId: req.params.eventId }, (err, event) => {
-    if (!event) res.status(404).send(`Event: ${req.params.eventId} not found`);
+    if (!event) return res.status(404).send(`Event: ${req.params.eventId} not found`);
     if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       const options = { new: true };
       const action = req.body;
@@ -54,7 +55,7 @@ exports.getEvents = (req, res) => {
 
   Events.find(query, null, { sort: { eventDate: 1 } }, (err, events) => {
     if (!err) {
-      hlpr.consLog(['getEvents', events, stringDate, req.params]);
+      // hlpr.consLog(['getEvents', events, stringDate, req.params]);
     } else {
       hlpr.consLog(['getEvents error', err]);
     }
@@ -80,7 +81,7 @@ exports.delEvent = (req, res) => {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
         if (err) {
           hlpr.consLog(['delEvent', err]);
-          res.status(404).send('Event not found');
+          return res.status(404).send('Event not found');
         }
         hlpr.consLog(['delEvent', deletedEvent.eventId]);
         res.send(deletedEvent.eventId);

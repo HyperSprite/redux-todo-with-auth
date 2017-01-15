@@ -20,6 +20,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_USER: 'FETCH_USER',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
+  POST_EVENT_ERROR: 'POST_EVENT_ERROR',
   POST_EVENT: 'POST_EVENT',
   EDIT_EVENT: 'EDIT_EVENT',
   CLEAR_EVENT: 'CLEAR_EVENT',
@@ -127,8 +128,8 @@ export function postForm(formProps, relURL, index) {
       })
       .catch((error) => {
         dispatch({
-          type: TYPES.FETCH_DATA,
-          payload: error.data,
+          type: TYPES.POST_EVENT_ERROR,
+          payload: error.response.data.errors,
         });
       });
   };
