@@ -14,7 +14,7 @@
     "test": "node_modules/.bin/nodemon src/server/index.js test=true",
     "test-postinstall": "webpack --progress",
     "dev": "node_modules/.bin/nodemon src/server/index.js",
-    "postinstall": "webpack -p --progress",
+    "postinstall": "NODE_ENV=production webpack -p --progress",
     "start": "NODE_ENV=production node src/server/index.js"
   },
   "author": "Chris Dunavan",
