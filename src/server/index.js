@@ -26,7 +26,9 @@ process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
 process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.stravaLogin.clientID;
 process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.stravaLogin.clientSecret;
 process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.stravaLogin.redirectURI;
-const mongoURI = process.env.MONGODB_URI || localMongoURI;
+process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.stravaModClub.id;
+process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.stravaClub.id;
+process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
 
 hlpr.isProd();
 
@@ -62,7 +64,7 @@ if (!hlpr.isProd()) {
   // app.use(morgan('combined'));
 }
 
-mongoose.connect(mongoURI);
+mongoose.connect(process.env.MONGODB_URI);
 // Express Middleware
 app.use(cors());
 // parses everything that comes in as JSON

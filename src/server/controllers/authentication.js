@@ -41,12 +41,12 @@ exports.stravaSignin = (req, res, next) => {
 
     let admin = false;
     admin = tokenPayload.athlete.clubs.some((c) => {
-      return c.id === config.stravaModClub.id;
+      return c.id === process.env.STRAVA_MOD_CLUB;
     });
 
     let club = false;
     club = tokenPayload.athlete.clubs.some((c) => {
-      return c.id === config.stravaClub.id;
+      return c.id === process.env.STRAVA_CLUB;
     });
 
     User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
