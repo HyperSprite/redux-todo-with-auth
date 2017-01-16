@@ -25,27 +25,23 @@ let httpServer;
 
 hlpr.consLog(['process.env', process.env]);
 
-hlpr.isProd();
-
 isSSL ?
   console.log('**** Using local SSL certs') :
   console.log('**** No local SSL certs');
   console.log(`**** CERT = ${process.env.CERT}`);
 
 // redirect if insecure and SSL
-if (isSSL || process.env.CERT === 'true') {
-  app.all(
-    '*', (req, res, next) => {
-      if (req.secure) {
-        return next();
-      }
-      const host = process.env.CERT === 'true' ?
-        `https://${req.hostname}` :
-        `https://${req.hostname}:${portS}`;
-      res.redirect(`${host}${req.url}`);
+const secureHost = (req, res, next) => {
+  if (!req.secure) {
+    if (isSSL) {
+      res.redirect(`https://${req.hostname}:${portS}${req.url}`);
+    } else if (process.env.CERT === 'true') {
+      res.redirect(`https://${req.get('host')}${req.url}`);
     }
-  );
-}
+    return next();
+  }
+  return next();
+};
 
 // Webpack dev server setup
 if (!hlpr.isProd()) {
@@ -64,6 +60,7 @@ if (!hlpr.isProd()) {
 
 mongoose.connect(process.env.MONGODB_URI);
 // Express Middleware
+app.use(secureHost);
 app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
