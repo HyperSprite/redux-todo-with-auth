@@ -11,24 +11,31 @@ const config = require('./config');
 const router = require('./router');
 const hlpr = require('./lib/helpers');
 
-const app = express();
-const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
-const rootDir = `${__dirname}/${config.public}/`;
-const port = process.env.PORT || config.port;
-const portS = (port * 1) + 363;
-let httpServer;
+process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
+process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.STRAVA_CLIENT_ID;
+process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.STRAVA_CLIENT_SECRET;
+process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.STRAVA_REDIRECT_URI;
+process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.STRAVA_MOD_CLUB;
+process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.STRAVA_CLUB;
+process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
+process.env.AUTH_SECRET = process.env.AUTH_SECRET || config.AUTH_SECRET;
+process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
+process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
+process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
+process.env.PORT = process.env.PORT || config.PORT;
 
 const localMongoURI = !hlpr.isProd() ?
   config.mongoconnect.dev :
   config.mongoconnect.prod;
 
-process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
-process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.stravaLogin.clientID;
-process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.stravaLogin.clientSecret;
-process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.stravaLogin.redirectURI;
-process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.stravaModClub.id;
-process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.stravaClub.id;
 process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
+
+const app = express();
+const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
+const rootDir = `${__dirname}/${process.env.SITE_PUBLIC}/`;
+const port = process.env.PORT;
+const portS = (port * 1) + 363;
+let httpServer;
 
 hlpr.isProd();
 

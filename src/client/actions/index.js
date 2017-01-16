@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 
 import config from '../../server/config';
 
-const ROOT_URL = config.rootURL;
+const ROOT_URL = process.env.ROOT_URL || '';
 
 // If any of these have a flow error about
 // being incompatable with a string enum

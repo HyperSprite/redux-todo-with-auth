@@ -3,14 +3,13 @@ const strava = require('strava-v3');
 const moment = require('moment');
 
 const User = require('../models/user');
-const config = require('../config');
 const hlpr = require('../lib/helpers');
 
 const dateNow = moment().format();
 
 function tokenForUser(user) {
   const timestamp = new Date().getTime();
-  const newJWT = jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
+  const newJWT = jwt.encode({ sub: user.id, iat: timestamp }, process.env.AUTH_SECRET);
   hlpr.consLog(['tokenForUser', newJWT]);
   return newJWT;
 }
