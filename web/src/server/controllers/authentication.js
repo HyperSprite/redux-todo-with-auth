@@ -15,7 +15,7 @@ function tokenForUser(user) {
 }
 
 exports.signinError = (err, req, res, next) => {
-  hlpr.consLog(['signin', `AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`]);
+  console.log('signin', `AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`, err);
   return res.status(422).send({ error: 'Signin failed: Bad Email or Password.' });
 };
 
