@@ -34,9 +34,9 @@ isSSL ?
 const secureHost = (req, res, next) => {
   if (!req.secure) {
     if (isSSL) {
-      res.redirect(`https://${req.hostname}:${portS}${req.url}`);
+      return res.redirect(`https://${req.hostname}:${portS}${req.url}`);
     } else if (process.env.CERT === 'true') {
-      res.redirect(`https://${req.get('host')}${req.url}`);
+      return res.redirect(`https://${req.get('host')}${req.url}`);
     }
     return next();
   }
