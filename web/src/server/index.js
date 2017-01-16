@@ -20,6 +20,7 @@ const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
 const rootDir = `${__dirname}/${process.env.SITE_PUBLIC}/`;
 const port = process.env.PORT;
 const portS = (port * 1) + 363;
+
 let httpServer;
 
 hlpr.consLog(['process.env', process.env]);
@@ -27,17 +28,21 @@ hlpr.consLog(['process.env', process.env]);
 hlpr.isProd();
 
 isSSL ?
-  console.log('**** Using SSL certs') :
-  console.log('**** No SSL certs');
+  console.log('**** Using local SSL certs') :
+  console.log('**** No local SSL certs');
+  console.log(`**** CERT = ${process.env.CERT}`);
 
 // redirect if insecure and SSL
-if (isSSL) {
+if (isSSL || process.env.CERT === 'true') {
   app.all(
     '*', (req, res, next) => {
       if (req.secure) {
         return next();
       }
-      res.redirect(`https://${req.hostname}:${portS}${req.url}`);
+      const host = process.env.CERT === 'true' ?
+        `https://${req.hostname}` :
+        `https://${req.hostname}:${portS}`;
+      res.redirect(`${host}${req.url}`);
     }
   );
 }
@@ -45,7 +50,6 @@ if (isSSL) {
 // Webpack dev server setup
 if (!hlpr.isProd()) {
   hlpr.consLog(['**** Using Webpack Dev Middleware']);
-  const test = process.argv[2] || false;
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
