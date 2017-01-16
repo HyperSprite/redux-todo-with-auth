@@ -6,7 +6,6 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const path = require('path');
 
 const User = require('../models/user');
-const config = require('../config');
 const hlpr = require('../lib/helpers');
 
 const localOptions = { usernameField: 'email' };
@@ -25,9 +24,9 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 });
 
 const stravaLogin = new StravaStrategy({
-  clientID: config.stravaLogin.clientID,
-  clientSecret: config.stravaLogin.clientSecret,
-  callbackURL: `${config.siteURL}/auth/strava`,
+  clientID: process.env.STRAVA_CLIENT_ID,
+  clientSecret: process.env.STRAVA_CLIENT_SECRET,
+  callbackURL: `${process.env.SITE_URL}/auth/strava`,
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOrCreate({ stravaId: profile.id }, (err, user) => {
@@ -38,7 +37,7 @@ const stravaLogin = new StravaStrategy({
 
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'),
-  secretOrKey: config.secret,
+  secretOrKey: process.env.AUTH_SECRET,
 };
 
 // { sub: user.id, iat: timestamp } from authentication.js is the payload here
