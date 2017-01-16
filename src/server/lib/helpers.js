@@ -11,7 +11,7 @@ exports.isProd = () => {
 // For every element of the array,
 // a console.log message is generated.
 exports.consLog = (arr) => {
-  if (!exports.isProd()) {
+  if (process.env.LOGGING || !exports.isProd()) {
     [].slice.call(arr).forEach((arg) => {
       console.log('>> ', arg);
     });
