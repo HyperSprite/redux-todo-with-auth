@@ -2,7 +2,6 @@
 const strava = require('strava-v3');
 
 const User = require('../models/user');
-const config = require('../config');
 const hlpr = require('../lib/helpers');
 
 
