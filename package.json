@@ -15,7 +15,7 @@
     "test-postinstall": "webpack --progress",
     "dev": "node_modules/.bin/nodemon src/server/index.js",
     "postinstall": "NODE_ENV=production webpack -p --progress",
-    "start": "node src/server/index.js"
+    "start": "NODE_ENV=production node src/server/index.js"
   },
   "author": "Chris Dunavan",
   "license": "Apache-2.0",
