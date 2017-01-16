@@ -1,16 +1,4 @@
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
-const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
-const cors = require('cors');
 const config = require('./config');
-const router = require('./router');
-const hlpr = require('./lib/helpers');
-
 process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
 process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.STRAVA_CLIENT_ID;
 process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.STRAVA_CLIENT_SECRET;
@@ -23,6 +11,18 @@ process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
 process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
 process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
 process.env.PORT = process.env.PORT || config.PORT;
+
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const router = require('./router');
+const hlpr = require('./lib/helpers');
 
 const localMongoURI = !hlpr.isProd() ?
   config.mongoconnect.dev :
