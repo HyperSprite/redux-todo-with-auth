@@ -3,7 +3,6 @@ const moment = require('moment');
 
 const User = require('../models/user');
 const Events = require('../models/events');
-const config = require('../config');
 const hlpr = require('../lib/helpers');
 
 
