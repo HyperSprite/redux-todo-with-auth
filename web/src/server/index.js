@@ -22,6 +22,8 @@ const port = process.env.PORT;
 const portS = (port * 1) + 363;
 let httpServer;
 
+hlpr.consLog(['process.env', process.env]);
+
 hlpr.isProd();
 
 isSSL ?
