@@ -30,7 +30,7 @@ const stravaLogin = new StravaStrategy({
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOrCreate({ stravaId: profile.id }, (err, user) => {
-    hlpr.consLog(['passport.stravaLogin', 'err', err, 'user', user]);
+    hlpr.consLog(['passport.stravaLogin', 'err', err, 'user', user, 'accessToken', accessToken, 'profile', profile]);
     return done(err, user);
   });
 });
