@@ -35,7 +35,7 @@ const secureHost = (req, res, next) => {
   if (!req.secure) {
     if (isSSL) {
       return res.redirect(`https://${req.hostname}:${portS}${req.url}`);
-    } else if (process.env.CERT === 'true') {
+    } else if (process.env.CERT === 'true' && req.get('x-forwarded-proto') !== 'https') {
       return res.redirect(`https://${req.get('host')}${req.url}`);
     }
     return next();
