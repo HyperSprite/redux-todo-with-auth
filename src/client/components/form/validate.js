@@ -20,7 +20,7 @@ export const validate = (formProps) => {
     errors.eventTitle = 'Required';
   } else if (/[^\w .,!'-]/g.test(formProps.eventTitle)) {
     errors.eventTitle = 'Only letters, numbers and \',._- permitted';
-  } else if (formProps.eventTitle.length < 10) {
+  } else if (formProps.eventTitle.length < 6) {
     errors.eventTitle = 'Must be longer than 10 charaters';
   }
   // eventDate
