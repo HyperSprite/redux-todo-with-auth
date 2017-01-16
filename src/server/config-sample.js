@@ -2,20 +2,22 @@
 const hlpr = require('./lib/helpers');
 
 const config = {
-  STRAVA_CLIENT_ID: '', // from strava
-  STRAVA_CLIENT_SECRET: '', // from strava
-  STRAVA_REDIRECT_URI: 'auth/strava',
-  STRAVA_MOD_CLUB: , //number
-  STRAVA_CLUB: , //number
-  ROOT_URL: 'http://localhost:3080',
-  SITE_URL: '',
-  SITE_PUBLIC: 'public',
-  PORT: 3080,
-  AUTH_SECRET: 'SOME_LONG_STRING',
+  AUTH_SECRET: 'YOUR_AUTH_STRING_HERE',  // Needed for bcrypt
+  CERT: 'false', // string - For production certs example, Heroku CERT = true
   mongoconnect: {
     dev: 'mongodb://localhost/araceathlete-dev',
-    prod: 'mongodb://localhost/araceathlete-dev', // for local test of prod build
+    prod: 'mongodb://localhost/araceathlete-dev',
   },
+  LOGGING: 'true', // string - turns on hlpr.consLog can be used in prod if needed.
+  PORT: 3080,
+  ROOT_URL: 'http://localhost:3080',
+  SITE_PUBLIC: 'public', // static resources
+  SITE_URL: '',
+  STRAVA_CLIENT_ID: 'YOUR_KEY', // Strava API Key holders ID
+  STRAVA_CLIENT_SECRET: 'YOUR_STRAVA_SECRET',
+  STRAVA_CLUB: 'number', //  Regular Users club
+  STRAVA_MOD_CLUB: 'number',  // Admin Users club (can edit and delete others items)
+  STRAVA_REDIRECT_URI: 'auth/strava', // for Strava Auth
 };
 
 const localMongoURI = !hlpr.isProd() ?
@@ -23,16 +25,18 @@ const localMongoURI = !hlpr.isProd() ?
   config.mongoconnect.prod;
 
 exports.loadConfig = () => {
+  process.env.AUTH_SECRET = process.env.AUTH_SECRET || config.AUTH_SECRET;
+  process.env.CERT = process.env.CERT || config.CERT;
+  process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
+  process.env.LOGGING = process.env.LOGGING || config.LOGGING;
+  process.env.PORT = process.env.PORT || config.PORT;
+  process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
+  process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
+  process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
   process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
   process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.STRAVA_CLIENT_ID;
   process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.STRAVA_CLIENT_SECRET;
-  process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.STRAVA_REDIRECT_URI;
-  process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.STRAVA_MOD_CLUB;
   process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.STRAVA_CLUB;
-  process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
-  process.env.AUTH_SECRET = process.env.AUTH_SECRET || config.AUTH_SECRET;
-  process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
-  process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
-  process.env.PORT = process.env.PORT || config.PORT;
-  process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
+  process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.STRAVA_MOD_CLUB;
+  process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.STRAVA_REDIRECT_URI;
 };
