@@ -26,7 +26,7 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 const stravaLogin = new StravaStrategy({
   clientID: process.env.STRAVA_CLIENT_ID,
   clientSecret: process.env.STRAVA_CLIENT_SECRET,
-  callbackURL: `${process.env.SITE_URL}/auth/strava`,
+  callbackURL: `${process.env.SITE_URL}/${process.env.STRAVA_REDIRECT_URI}`,
 },
 (accessToken, refreshToken, profile, done) => {
   User.findOrCreate({ stravaId: profile.id }, (err, user) => {
