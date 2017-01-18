@@ -37,7 +37,7 @@ const store = createStore(reducers, persistentState, middlewareOptions);
 
 store.subscribe(() => {
   saveState({
-    todos: store.getState().todos,
+    events: store.getState().events,
   });
 });
 
