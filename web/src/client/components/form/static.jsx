@@ -21,7 +21,11 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
       return <a href={`${baseURL}${place}`} target="new" style={style.static.url}>{place}</a>;
     }
     case 'url': {
-      return <a href={`${baseURL}${content}`} target="new" style={style.static.url}>{content}</a>;
+      return (
+        <div className="ellipsis">
+          <a href={`${baseURL}${content}`} target="new" style={style.static.url}>{content}</a>
+        </div>
+      );
     }
     default:
       return content;

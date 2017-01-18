@@ -89,6 +89,12 @@ body {
   display: inline-block;
 }
 
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 @media all and (max-width: 640px) {
   .flex-container {
     flex-direction: column;
