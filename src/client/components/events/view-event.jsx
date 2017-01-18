@@ -99,7 +99,7 @@ const renderViewEvent = ({
       />
       <Static
         contentLabel="Location"
-        content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocCountry, event.eventLocZip]}
+        content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
         contentType="address"
         baseURL="http://maps.google.com/?q="
       />
