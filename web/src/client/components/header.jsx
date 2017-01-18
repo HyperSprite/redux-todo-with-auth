@@ -30,6 +30,11 @@ class Header extends Component {
       >
         <MenuItem
           onTouchTap={this.handleClose}
+          primaryText="Home"
+          containerElement={<Link to="/">Home</Link>}
+        />
+        <MenuItem
+          onTouchTap={this.handleClose}
           primaryText="Events"
           containerElement={<Link to="/events">Events</Link>}
         />
@@ -72,16 +77,18 @@ class Header extends Component {
 
   render() {
     return (
-      <AppBar
-        title="A Race Athlete"
-        onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
-        showMenuIconButton={this.props.authenticated}
-        iconElementRight={this.renderRightMenu()}
-        zDepth={1}
-        style={style.appBar}
-      >
-        {this.renderLeftMenu()}
-      </AppBar>
+      <div className="site-header" >
+        <AppBar
+          title="A Race Athlete"
+          onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
+          showMenuIconButton={this.props.authenticated}
+          iconElementRight={this.renderRightMenu()}
+          zDepth={1}
+          style={style.appBar}
+        >
+          {this.renderLeftMenu()}
+        </AppBar>
+      </div>
     );
   }
 }

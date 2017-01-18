@@ -10,14 +10,14 @@ import '../styles/main.css';
 export default class App extends Component {
   render() {
     return (
-      <div>
+      <div >
         <Header />
-        <div
-          style={style.app.children}
-        >
-          {this.props.children}
+        <div className="site" >
+          <div className="site-main" >
+            {this.props.children}
+          </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     );
   }
