@@ -40,7 +40,22 @@ class Header extends Component {
         />
       </Drawer>
     ) : (
-      <span />
+      <Drawer
+        docked={false}
+        open={this.state.open}
+        onRequestChange={open => this.setState({ open })}
+      >
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Home"
+          containerElement={<Link to="/">Home</Link>}
+        />
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Events"
+          containerElement={<Link to="/events">Events</Link>}
+        />
+      </Drawer>
     );
   }
 

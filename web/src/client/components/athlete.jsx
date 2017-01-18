@@ -73,9 +73,9 @@ class Athlete extends Component {
         <Card
           style={style.card}
         >
-          <a href={`https://www.strava.com/athletes/${stravaId}`} >
+          <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
             <CardHeader
-              title="Athlete Profile"
+              title="Athlete Profile on Strava"
             />
           </a>
           <Static
@@ -119,6 +119,8 @@ class Athlete extends Component {
             contentType="text"
           />
         </Card>
+        <p>The information above is supplied by the Strava connection.</p>
+        <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
       </Paper>
     );
   }

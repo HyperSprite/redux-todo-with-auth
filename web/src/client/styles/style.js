@@ -19,6 +19,7 @@ export default {
 
   card: {
     marginTop: 8,
+    paddingBottom: 8,
   },
 
   cardHeader: {
@@ -89,6 +90,7 @@ export default {
   },
 
   paper1: {
+    paddingTop: 42,
     padding: 8,
     margin: 8,
   },
