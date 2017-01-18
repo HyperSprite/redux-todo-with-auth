@@ -1,16 +1,21 @@
 import React from 'react';
-import { LevelUp } from 'react-icons/lib/fa/level-up';
+
+import LevelUp from 'react-icons/lib/fa/level-up';
 
 export default function Home() {
   return (
     <div>
       <div className="home-jumbotron">
+        <div className="side-lite left-pane" />
+        <div className="brand">
+          <LevelUp size={200} color="#FAFAFA" />
+        </div>
+        <div className="side-lite right-pane" />
       </div>
       <div className="main-flex-container" >
         <div className="side-lite left-pane" />
         <div className="main" >
           <div>
-            {/* {React.createElement(LevelUp, null)} */}
             <h1 className="welcome"><span className="wrap-here">Welcome to</span>{' '}<span className="wrap-here">A Race Athlete</span><div className="sub-header">It{"'"}s time to level up</div></h1>
           </div>
           <p>ARaceAthlete is a place so share and track events, primarily your <strong>A Race</strong> for the year. What is an <strong>A Race</strong> you ask? While you may have other important events, an <strong>A Race</strong> is that event you plan all year for. It is the pinnacle of your season. The point of hours of preparation and training.</p>

@@ -1,8 +1,13 @@
 import {
-  red700, red900,
-  blueGrey400,
-  grey100, grey300, grey400, grey500,
-  white, darkBlack, fullBlack,
+  red700, // #D32F2F
+  red900, // #B71C1C
+  blueGrey400, // #78909C
+  grey50, // #FAFAFA
+  grey100, // #F5F5F5
+  grey300, // #E0E0E0
+  grey400, // #BDBDBD
+  grey500, // #9E9E9E
+  grey900, // #212121
 } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
@@ -18,12 +23,12 @@ export default {
     accent2Color: grey100,
     accent3Color: grey500,
     textColor: '#770000',
-    alternateTextColor: white,
-    canvasColor: white,
+    alternateTextColor: grey50,
+    canvasColor: grey50,
     borderColor: grey300,
-    disabledColor: fade(darkBlack, 0.3),
+    disabledColor: fade(grey900, 0.3),
     pickerHeaderColor: red900,
-    clockCircleColor: fade(darkBlack, 0.07),
-    shadowColor: fullBlack,
+    clockCircleColor: fade(grey900, 0.07),
+    shadowColor: grey900,
   },
 };
