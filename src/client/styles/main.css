@@ -6,6 +6,22 @@ font-family: 'Roboto', sans-serif;
   background-color: #fefefe;
 }
 
+.home-jumbotron {
+  background-image: url('../assets/background-large.jpg');
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position: bottom center;
+}
+
+@media all and (max-width: 768px) {
+  .home-jumbotron {
+    background-image: url('../assets/background-small.jpg');
+    background-size:cover;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+  }
+}
+
 .footer-flex-container {
   background-color: #330101;
 }

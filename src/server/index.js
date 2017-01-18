@@ -58,7 +58,15 @@ if (!hlpr.isProd()) {
   // app.use(morgan('combined'));
 }
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, {
+  server: {
+    socketOptions: {
+      socketTimeoutMS: 300000,
+      connectionTimeout: 300000,
+    },
+  },
+});
+
 // Express Middleware
 app.use(secureHost);
 app.use(cors());

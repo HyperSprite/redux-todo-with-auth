@@ -27,15 +27,14 @@ body {
 .site-main::before {
   content: '\00a0';
   display: block;
-  margin-top: 74px;
-  height: 0px;
+  margin-top: 40px;
   visibility: hidden;
 }
 
 .site-main::after {
   content: '\00a0';
   display: block;
-  margin-top: 50px;
+  margin-top: 10vh;
   height: 0px;
   visibility: hidden;
 }
@@ -46,7 +45,6 @@ body {
 
 .main-flex-container {
   min-height: 20vh;
-  margin-top: 76px;
   margin: 0px;
   padding: 0px;
   display: flex;
@@ -62,6 +60,11 @@ body {
   justify-content: flex-end;
   display: flex;
   flex-direction: column;
+}
+
+.home-jumbotron {
+  height: 80vh;
+  content: '\00a0';
 }
 
 .side-lite {
@@ -80,6 +83,10 @@ body {
   min-height: 28vh;
   display: flex;
   flex-flow: row;
+}
+
+.wrap-here {
+  display: inline-block;
 }
 
 @media all and (max-width: 640px) {

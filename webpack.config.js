@@ -93,6 +93,10 @@ function getLoaders() {
     test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     loader: 'file-loader?name=[name].[ext]',
   });
+  loaders.push({
+    test: /\.(jpe?g|png|gif)$/i,
+    loader: 'url?limit=10000!img?progressive=true',
+  });
 
   return loaders;
 }

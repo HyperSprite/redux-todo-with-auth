@@ -105,7 +105,7 @@ class ListEvent extends Component {
               style={style.toolbar.title}
             />
           </ToolbarGroup>
-          {EventFilter()}
+          {authenticated ? EventFilter() : null}
         </Toolbar>
 
         {events.map((event, i) => {
