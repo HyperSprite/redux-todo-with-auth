@@ -2,8 +2,9 @@
 @import url('./layout.css');
 
 body {
-font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
   background-color: #fefefe;
+  color: #770000;
 }
 
 .home-jumbotron {
