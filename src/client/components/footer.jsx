@@ -5,16 +5,27 @@ import style from '../styles/style';
 import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
 
 const Footer = () => (
-  <Paper
-    style={style.footer.paper}
-  >
-    <div style={style.footer.div1} >
-      <p>This app came about because I wanted to use it. It is a labor of love and suffering, much like cycling.</p>
+  <div className="site-footer" >
+    <div className="footer-flex-container" >
+      <div className="side-lite left-pane"></div>
+      <div className="main" >
+        <div className="footer-text" >
+          <p>This app came about because I wanted to use it. It is a labor of love and suffering, much like cycling.</p>
+        </div>
+        <div>
+          <a href="https://www.strava.com" target="new">
+            <img src={PoweredByStrava} alt="Powered By Strava" style={style.footer.stravaLogo} />
+          </a>
+        </div>
+        <div>
+          <blockquote className="footer-text" >
+            <p>> Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
+          </blockquote>
+        </div>
+      </div>
+      <div className="side-lite right-pane"></div>
     </div>
-    <div style={style.footer.div2} >
-      <img src={PoweredByStrava} alt="Powered By Strava" style={style.footer.stravaLogo} />
-    </div>
-  </Paper>
+  </div>
 );
 
 export default Footer;

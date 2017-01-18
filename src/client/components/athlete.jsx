@@ -79,11 +79,6 @@ class Athlete extends Component {
             />
           </a>
           <Static
-            contentLabel="Email"
-            content={email}
-            contentType="text"
-          />
-          <Static
             contentLabel="Strava ID"
             content={stravaId}
             contentType="text"
@@ -92,16 +87,6 @@ class Athlete extends Component {
             contentLabel="Name"
             content={`${firstname} ${lastname}`}
             contentType="text"
-          />
-          <Static
-            contentLabel="Profile IMG Med URL"
-            content={profile_medium}
-            contentType="img"
-          />
-          <Static
-            contentLabel="Profile IMG URL"
-            content={profile}
-            contentType="img"
           />
           <Static
             contentLabel="City"
@@ -119,11 +104,6 @@ class Athlete extends Component {
             contentType="text"
           />
           <Static
-            contentLabel="Sex"
-            content={sex}
-            contentType="text"
-          />
-          <Static
             contentLabel="Created On"
             content={created_at}
             contentType="text"
@@ -136,11 +116,6 @@ class Athlete extends Component {
           <Static
             contentLabel="Date Pref."
             content={date_preference}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Dist Pref."
-            content={measurement_preference}
             contentType="text"
           />
         </Card>

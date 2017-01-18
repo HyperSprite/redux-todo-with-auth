@@ -1,0 +1,102 @@
+
+html, #root, #root>div, body {
+  height: 100vh;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.site {
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.site-header {
+  box-sizing: border-box;
+}
+
+.site-main {
+  box-sizing: border-box;
+}
+
+.site-main::before {
+  content: '\00a0';
+  display: block;
+  margin-top: 74px;
+  height: 0px;
+  visibility: hidden;
+}
+
+.site-main::after {
+  content: '\00a0';
+  display: block;
+  margin-top: 50px;
+  height: 0px;
+  visibility: hidden;
+}
+
+.site-footer {
+  box-sizing: border-box;
+}
+
+.main-flex-container {
+  min-height: 20vh;
+  margin-top: 76px;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  flex-flow: row;
+  flex: 1;
+}
+
+.main {
+  margin: 4px;
+  padding: 5px;
+  flex: 4 1 60%;
+  order: 2;
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-lite {
+  flex: 2 6 auto;
+}
+
+.left-pane {
+  order: 1;
+}
+
+.right-pane {
+  order: 3;
+}
+
+.footer-flex-container {
+  min-height: 28vh;
+  display: flex;
+  flex-flow: row;
+}
+
+@media all and (max-width: 640px) {
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .footer-flex-container {
+    flex-direction: column;
+  }
+
+  .side-lite, .footer {
+    min-height: 20px;
+    max-height: 20px;
+    flex: 1 6 3%;
+  }
+  blockquote {
+    border-left: .2em solid;
+  }
+}

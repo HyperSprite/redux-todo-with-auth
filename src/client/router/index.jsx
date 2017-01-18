@@ -14,7 +14,7 @@ import AddGoal from './../components/goals/add-goal';
 
 const router = (
   <div>
-    <Match exactly pattern="/" component={Events} />
+    <Match exactly pattern="/" component={Home} />
     <MatchAuthorized pattern="/athlete" component={Athlete} />
     <MatchAuthorized pattern="/events/addevent" component={AddEvent} />
     <Match exactly pattern="/events" component={Events} />

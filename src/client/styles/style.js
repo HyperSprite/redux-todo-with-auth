@@ -36,21 +36,21 @@ export default {
 
   footer: {
     paper: {
-      backgroundColor: theme.palette.shadowColor,
-      paddingTop: 72,
-      paddingRight: 24,
-      paddingBottom: 72,
-      paddingLeft: 256,
+      // backgroundColor: theme.palette.shadowColor,
+      // paddingTop: 72,
+      // paddingRight: 24,
+      // paddingBottom: 72,
+      // paddingLeft: 256,
     },
     stravaLogo: {
       width: 200,
     },
     div1: {
-      width: 300,
-      textColor: theme.palette.grey100,
+      // width: 300,
+      // textColor: theme.palette.grey100,
     },
     div2: {
-      width: 300,
+      // width: 300,
     },
   },
 
