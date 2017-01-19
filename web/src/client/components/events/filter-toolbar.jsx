@@ -5,13 +5,13 @@ import FilterLink from './filter-toolbar-connect';
 const EventFilter = () => (
   <ToolbarGroup>
     <FilterLink filter="EVENTS_SHOW_ALL" >
-      All
+      A
     </FilterLink>
     <FilterLink filter="EVENTS_SHOW_FAVORITE" >
-      Bookmarked
+      M
     </FilterLink>
     <FilterLink filter="EVENTS_SHOW_OWNER" >
-      Yours
+      Y
     </FilterLink>
   </ToolbarGroup>
 );

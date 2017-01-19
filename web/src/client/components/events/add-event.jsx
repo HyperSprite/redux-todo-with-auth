@@ -267,7 +267,7 @@ let AddEvent = class AddEvent extends Component {
           </Card>
         ) : (
           <Paper
-            style={style.paper1}
+            className="paper"
           >
             <Card
               style={style.card}

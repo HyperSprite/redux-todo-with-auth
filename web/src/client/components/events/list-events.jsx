@@ -89,101 +89,106 @@ class ListEvent extends Component {
   render() {
     const { authenticated, events, forEdit, stravaId, adminMember } = this.props;
     return (
-
-      <Paper
-        style={style.paper1}
-        zDepth={1}
-      >
-        <ScrollIntoView
-          id={location.hash}
-          headerHeight={70}
-        />
-        <Toolbar>
-          <ToolbarGroup>
-            <ToolbarTitle
-              text="Events"
-              style={style.toolbar.title}
+      <div className="main-flex-container" >
+        <div className="side-lite left-pane" />
+        <div className="main" >
+          <Paper
+            className="paper"
+            style={style.paper1}
+            zDepth={1}
+          >
+            <ScrollIntoView
+              id={location.hash}
+              headerHeight={70}
             />
-          </ToolbarGroup>
-          {authenticated ? EventFilter() : null}
-        </Toolbar>
+            <Toolbar>
+              <ToolbarGroup>
+                <ToolbarTitle
+                  text="Events"
+                  style={style.toolbar.title}
+                />
+              </ToolbarGroup>
+              {authenticated ? EventFilter() : null}
+            </Toolbar>
 
-        {events.map((event, i) => {
+            {events.map((event, i) => {
 
-          let subTitleName = '';
-          if (event.eventSeries) {
-            subTitleName = `- ${event.eventSeries}`;
-          } else if (event.eventOrg) {
-            subTitleName = `- ${event.eventOrg}`;
-          }
+              let subTitleName = '';
+              if (event.eventSeries) {
+                subTitleName = `- ${event.eventSeries}`;
+              } else if (event.eventOrg) {
+                subTitleName = `- ${event.eventOrg}`;
+              }
 
-          if (isValid(new Date(event.eventDate))) {
-            let timeToGo = differenceInCalendarWeeks(
-              new Date(event.eventDate),
-              new Date(),
-              { weekStartsOn: 1 },
-            );
-            if (timeToGo < 2) {
-              timeToGo = differenceInCalendarDays(
-                new Date(event.eventDate),
-                new Date(),
+              if (isValid(new Date(event.eventDate))) {
+                let timeToGo = differenceInCalendarWeeks(
+                  new Date(event.eventDate),
+                  new Date(),
+                  { weekStartsOn: 1 },
+                );
+                if (timeToGo < 2) {
+                  timeToGo = differenceInCalendarDays(
+                    new Date(event.eventDate),
+                    new Date(),
+                  );
+                  subTitleName = `${timeToGo} days to go ${subTitleName}`;
+                } else {
+                  subTitleName = `${timeToGo} weeks to go ${subTitleName}`;
+                }
+              }
+
+              const niceEventDate = format(
+                event.eventDate, 'MMM Do YYYY',
               );
-              subTitleName = `${timeToGo} days to go ${subTitleName}`;
-            } else {
-              subTitleName = `${timeToGo} weeks to go ${subTitleName}`;
-            }
-          }
+              // Expands Card on render if hash matchs eventid
+              const expanded = (window.location.hash === `#${event.eventId}`);
 
-          const niceEventDate = format(
-            event.eventDate, 'MMM Do YYYY',
-          );
-          // Expands Card on render if hash matchs eventid
-          const expanded = (window.location.hash === `#${event.eventId}`);
+              const fav = event.eventFavorites.indexOf(stravaId) !== -1;
 
-          const fav = event.eventFavorites.indexOf(stravaId) !== -1;
+              const favCount = event.eventFavorites.length;
 
-          const favCount = event.eventFavorites.length;
+              const goal = true;
 
-          const goal = true;
+              const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
 
-          const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
+              if (forEdit.eventId === event.eventId) {
+                return (
+                  <AddEvent key={`${event.eventId}-edit`} index={i} />
+                );
+              }
 
-          if (forEdit.eventId === event.eventId) {
-            return (
-              <AddEvent key={`${event.eventId}-edit`} index={i} />
-            );
-          }
+              const eventLink = (
+                <Link to={`/events#${event.eventId}`} style={style.cardHeaderTitleLink}>{event.eventTitle}</Link>
+              );
 
-          const eventLink = (
-            <Link to={`/events#${event.eventId}`} style={style.cardHeaderTitleLink}>{event.eventTitle}</Link>
-          );
-
-          return (
-            <div key={event.eventId} id={`${event.eventId}`} >
-              <ViewEvent
-                adminMember={adminMember}
-                authenticated={authenticated}
-                canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
-                deleteClick={() => this.deleteThisEvent(event.eventId)}
-                editClick={() => this.editThisEvent(event.eventId, i)}
-                eventLink={eventLink}
-                expanded={expanded}
-                fav={fav}
-                favClick={() => this.favThisEvent(event.eventId)}
-                favCount={favCount}
-                goal={goal}
-                goalClick={() => this.goalThisEvent(event.eventId)}
-                index={i}
-                niceEventDate={niceEventDate}
-                subTitleName={subTitleName}
-                {...event}
-              />
-            </div>
-          );
-        })}
-        { this.renderActionButton() }
-      </Paper>
-
+              return (
+                <div key={event.eventId} id={`${event.eventId}`} >
+                  <ViewEvent
+                    adminMember={adminMember}
+                    authenticated={authenticated}
+                    canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
+                    deleteClick={() => this.deleteThisEvent(event.eventId)}
+                    editClick={() => this.editThisEvent(event.eventId, i)}
+                    eventLink={eventLink}
+                    expanded={expanded}
+                    fav={fav}
+                    favClick={() => this.favThisEvent(event.eventId)}
+                    favCount={favCount}
+                    goal={goal}
+                    goalClick={() => this.goalThisEvent(event.eventId)}
+                    index={i}
+                    niceEventDate={niceEventDate}
+                    subTitleName={subTitleName}
+                    {...event}
+                  />
+                </div>
+              );
+            })}
+            { this.renderActionButton() }
+          </Paper>
+        </div>
+        <div className="side-lite right-pane" />
+      </div>
     );
   }
 }

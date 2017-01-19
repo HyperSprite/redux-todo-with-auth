@@ -19,7 +19,7 @@ const Footer = () => (
         </div>
         <div>
           <blockquote className="footer-text" >
-            <p>> Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
+            <p>Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
           </blockquote>
         </div>
       </div>
