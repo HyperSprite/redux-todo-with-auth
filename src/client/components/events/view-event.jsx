@@ -102,6 +102,7 @@ const renderViewEvent = ({
         content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
         contentType="address"
         baseURL="http://maps.google.com/?q="
+        contentAlt={event.eventGeoFormattedAddress}
       />
       <Static
         contentLabel="Event Link"

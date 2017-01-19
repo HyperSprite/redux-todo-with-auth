@@ -16,6 +16,9 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
       return <img src={content} alt={contentAlt} />;
     }
     case 'address': {
+      if (contentAlt) {
+        return <a href={`${baseURL}${contentAlt}`} target="new" style={style.static.url}>{contentAlt}</a>;
+      }
       let place = content.filter(item => !!item);
       place = place.join(', ');
       return <a href={`${baseURL}${place}`} target="new" style={style.static.url}>{place}</a>;

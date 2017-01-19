@@ -40,9 +40,22 @@ const eventSchema = new Schema(
     eventLocState: String,
     eventLocCountry: String,
     eventLocZip: Number,
+    eventGeoFormattedAddress: String,
+    eventGeoLatitude: Number,
+    eventGeoLongitude: Number,
+    eventGeoLevel1Long: String,
+    eventGeoLevel2Long: String,
+    eventGeoStreetNumber: String,
+    eventGeoStreetName: String,
+    eventGeoCity: String,
+    eventGeoCountry: String,
+    eventGeoCountryCode: String,
+    eventGeoZipCode: String,
+    eventGeoProvider: String,
     eventStartElevation: Number, // in meters
     eventURL: { type: String, lower: true },
-    eventDesc: String,
+    eventDesc: String, // for MarkDown
+    eventDescHTML: String, // for display
     eventAthleteType: { type: String, enum: athleteType, default: athleteType[0] },
     eventType: String, // depreciated, moved to routes
     eventDeleted: { type: Boolean, default: false },
