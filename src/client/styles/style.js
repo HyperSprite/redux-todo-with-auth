@@ -11,6 +11,7 @@ export default {
   appBar: {
     position: 'fixed',
     top: 0,
+    width: '100%',
   },
 
   button: {
@@ -18,7 +19,7 @@ export default {
   },
 
   card: {
-    marginTop: 8,
+    margin: 8,
     paddingBottom: 8,
   },
 
@@ -56,6 +57,7 @@ export default {
   },
 
   header: {
+    margin: 0,
     IconButton: {
       padding: 0,
     },
@@ -87,12 +89,6 @@ export default {
 
   listItem: {
     cursor: 'default',
-  },
-
-  paper1: {
-    paddingTop: 42,
-    padding: 8,
-    margin: 8,
   },
 
   signin: {

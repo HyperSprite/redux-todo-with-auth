@@ -13,14 +13,14 @@ const propTypes = {
 const EventTBLink = ({ active, children, onClick }) => {
   if (active) {
     return (
-      <FlatButton  style={style.button} >
+      <FlatButton >
         &#9679;&#032;{children}
       </FlatButton>
     )
   }
 
   return (
-    <FlatButton secondary style={style.button}
+    <FlatButton secondary
       onClick={(e) => {
         e.preventDefault();
         onClick();
