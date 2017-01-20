@@ -7,15 +7,15 @@ const hlpr = require('../lib/helpers');
 // GEOCODER --------------------------------------------------------------------
 const geoOptions = {
   provider: 'google',
-
-  // Optional depending on the providers
-  httpAdapter: 'https', // Default
-  apiKey: process.env.GEOCODER_API_KEY, // for Mapquest, OpenCage, Google Premier
-  formatter: null,         // 'gpx', 'string', ...
+  apiKey: process.env.GEOCODER_API_KEY, // see Config file
+  formatter: null,
 };
 
 const geocoder = NodeGeocoder(geoOptions);
 
+// callGeoCoder shuffles in the Geocode info from Google
+// for new events, (req.body, {}, cb)
+// for edit events, (req.body, event from db, cb)
 const callGeoCoder = (toSave, event, res) => {
   const result = toSave;
   const geoQuery = `${toSave.eventLocStreet || event.eventLocStreet || ''},

@@ -39,7 +39,7 @@ const eventSchema = new Schema(
     eventLocCity: String,
     eventLocState: String,
     eventLocCountry: String,
-    eventLocZip: Number,
+    eventLocZip: String,
     eventGeoFormattedAddress: String,
     eventGeoLatitude: Number,
     eventGeoLongitude: Number,
