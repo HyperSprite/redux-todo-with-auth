@@ -2,9 +2,15 @@ import React from 'react';
 
 import LevelUp from 'react-icons/lib/fa/level-up';
 
+import ScrollIntoView from './../containers/scroll-into-view';
+
 export default function Home() {
   return (
     <div>
+      <ScrollIntoView
+        id=""
+        headerHeight={70}
+      />
       <div className="home-jumbotron">
         <div className="side-lite left-pane" />
         <div className="brand">
