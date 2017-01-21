@@ -216,7 +216,6 @@ function mapStateToProps(state) {
     adminMember: state.auth.user.adminMember,
     events: getVisibleEvents(state.events.events, state.visibilityFilter, state.auth.user.stravaId),
     forEdit: state.events.event,
-    pageName: 'Events',
   };
 }
 

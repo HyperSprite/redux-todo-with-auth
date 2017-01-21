@@ -1,98 +1,87 @@
 import React, { PropTypes } from 'react';
 import { FlatButton } from 'material-ui';
-import { ActionBookmark, ActionBookmarkOutline, ActionHighlightOff, SocialPerson, SocialPersonOutline } from 'material-ui/svg-icons';
+
+import MdPerson from 'react-icons/lib/md/person';
+import MdPersonO from 'react-icons/lib/md/person-outline';
+import FaSquare from 'react-icons/lib/fa/square';
+import FaSquareO from 'react-icons/lib/fa/square-o';
+import FaStar from 'react-icons/lib/fa/star';
+import FaStarO from 'react-icons/lib/fa/star-o';
 
 import style from '../../styles/style';
 
 const propTypes = {
   active: PropTypes.bool.isRequired,
-  children: PropTypes.node.isRequired,
+  filter: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const EventTBLink = ({ active, children, onClick }) => {
+const EventTBLink = ({ active, filter, onClick }) => {
   if (active) {
-    return (
-      <FlatButton >
-        &#9679;&#032;{children}
-      </FlatButton>
-    )
+    switch (filter) {
+      case 'EVENTS_SHOW_ALL': {
+        return (<FlatButton icon={<FaSquare size={24} />} />);
+      }
+      case 'EVENTS_SHOW_FAVORITE': {
+        return (<FlatButton icon={<FaStar size={24} />} />);
+      }
+      case 'EVENTS_SHOW_OWNER': {
+        return (<FlatButton icon={<MdPerson size={24} />} />);
+      }
+    }
   }
+  switch (filter) {
+    case 'EVENTS_SHOW_ALL': {
+      return (
+        <FlatButton
+          secondary
+          icon={
+            <FaSquareO
+              size={24}
 
-  return (
-    <FlatButton secondary
-      onClick={(e) => {
-        e.preventDefault();
-        onClick();
-      }}
-    >
-      &#9675;&#032;{children}
-    </FlatButton>
-  );
+            />
+          }
+          onClick={(e) => {
+            e.preventDefault();
+            onClick();
+          }}
+        />
+      );
+    }
+    case 'EVENTS_SHOW_FAVORITE': {
+      return (
+        <FlatButton
+          secondary
+          icon={
+            <FaStarO
+              size={24}
+            />
+          }
+          onClick={(e) => {
+            e.preventDefault();
+            onClick();
+          }}
+        />
+      );
+    }
+    case 'EVENTS_SHOW_OWNER': {
+      return (
+        <FlatButton
+          secondary
+          icon={
+            <MdPersonO
+              size={24}
+            />
+          }
+          onClick={(e) => {
+            e.preventDefault();
+            onClick();
+          }}
+        />
+      );
+    }
+  }
 };
-
-// const EventTBLink = ({ active, children, onClick, filter }) => {
-//   if (active) {
-//     switch (filter) {
-//       case 'EVENTS_SHOW_ALL': {
-//         return (<span />);
-//       }
-//       case 'EVENTS_SHOW_FAVORITE': {
-//         return (
-//           <FlatButton style={style.toolbar.button} >
-//             <ActionBookmark style={style.favButton} />
-//           </FlatButton>
-//         );
-//       }
-//       case 'EVENTS_SHOW_OWNER': {
-//         return (
-//           <FlatButton style={style.toolbar.button} >
-//             <SocialPerson style={style.favButton} />
-//           </FlatButton>
-//         )
-//       }
-//     }
-//   }
-//   switch (filter) {
-//     case 'EVENTS_SHOW_ALL': {
-//       return (
-//         <FlatButton
-//           onClick={(e) => {
-//             e.preventDefault();
-//             onClick();
-//           }}
-//           style={style.toolbar.button} >
-//           <ActionHighlightOff style={style.favButton} />
-//         </FlatButton>
-//       );
-//     }
-//     case 'EVENTS_SHOW_FAVORITE': {
-//       return (
-//         <FlatButton
-//           onClick={(e) => {
-//             e.preventDefault();
-//             onClick();
-//           }}
-//           style={style.toolbar.button} >
-//           <ActionBookmarkOutline style={style.favButton} />
-//         </FlatButton>
-//       );
-//     }
-//     case 'EVENTS_SHOW_OWNER': {
-//       return (
-//         <FlatButton
-//           onClick={(e) => {
-//             e.preventDefault();
-//             onClick();
-//           }}
-//         style={style.toolbar.button}
-//         >
-//           <SocialPersonOutline style={style.favButton} />
-//         </FlatButton>
-//       )
-//     }
-//   }
-// };
 
 EventTBLink.propTypes = propTypes;
 
