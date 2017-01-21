@@ -6,14 +6,14 @@ import { reducer as form } from 'redux-form';
 import { TYPES } from '../actions';
 import auth from './auth';
 import events from './events';
-import todos from './todos';
+import page from './page';
 import visibilityFilter from './visibility-filter';
 
 const appReducer = combineReducers({
   auth,
   events,
+  page,
   form,
-  todos,
   visibilityFilter,
 });
 

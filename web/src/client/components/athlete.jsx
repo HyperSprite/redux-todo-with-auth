@@ -10,6 +10,7 @@ import ScrollIntoView from '../containers/scroll-into-view';
 
 const propTypes = {
   fetchData: PropTypes.func,
+  setPageName: PropTypes.func,
   user: PropTypes.shape({
     email: PropTypes.string,
     stravaId: PropTypes.number,
@@ -35,6 +36,7 @@ class Athlete extends Component {
   // actions/index.js fetchData(relURL)
   componentDidMount() {
     this.props.fetchData('auth/user');
+    this.props.setPageName('Athlete');
   }
 
   render() {
@@ -55,71 +57,74 @@ class Athlete extends Component {
       measurement_preference,
     } = this.props.user;
     return (
-      <Paper
-        className="paper"
-        zDepth={1}
-      >
-        <ScrollIntoView
-          id={location.hash}
-          headerHeight={70}
-        />
-        <Toolbar>
-          <ToolbarTitle
-            text="Athlete"
-          />
-        </Toolbar>
-        <Card
-          className="card"
-        >
-          <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
-            <CardHeader
-              title="Athlete Profile on Strava"
+      <div className="main-flex-container" >
+        <div className="side-lite left-pane" />
+        <div className="main" >
+          <Paper
+            className="paper"
+            zDepth={1}
+          >
+            <ScrollIntoView
+              id={location.hash}
+              headerHeight={70}
             />
-          </a>
-          <Static
-            contentLabel="Strava ID"
-            content={stravaId}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Name"
-            content={`${firstname} ${lastname}`}
-            contentType="text"
-          />
-          <Static
-            contentLabel="City"
-            content={loc_city}
-            contentType="text"
-          />
-          <Static
-            contentLabel="State"
-            content={loc_state}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Country"
-            content={loc_country}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Created On"
-            content={created_at}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Last Updated"
-            content={updated_at}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Date Pref."
-            content={date_preference}
-            contentType="text"
-          />
-        </Card>
-        <p>The information above is supplied by the Strava connection.</p>
-        <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
-      </Paper>
+            <Card
+              className="card"
+            >
+              <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
+                <CardHeader
+                  title="Athlete Profile on Strava"
+                />
+              </a>
+              <Static
+                contentLabel="Strava ID"
+                content={stravaId}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Name"
+                content={`${firstname} ${lastname}`}
+                contentType="text"
+              />
+              <Static
+                contentLabel="City"
+                content={loc_city}
+                contentType="text"
+              />
+              <Static
+                contentLabel="State"
+                content={loc_state}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Country"
+                content={loc_country}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Created On"
+                content={created_at}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Last Updated"
+                content={updated_at}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Date Pref."
+                content={date_preference}
+                contentType="text"
+              />
+              <div className="quote-box">
+                <p>The information above is supplied by the Strava connection.</p>
+                <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
+              </div>
+            </Card>
+          </Paper>
+        </div>
+        <div className="side-lite right-pane" />
+      </div>
     );
   }
 }
