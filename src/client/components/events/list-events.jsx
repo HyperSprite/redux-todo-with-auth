@@ -104,12 +104,7 @@ class ListEvent extends Component {
               id={location.hash}
               headerHeight={70}
             />
-            <Toolbar>
-              {authenticated ? EventFilter() : null}
-            </Toolbar>
-
             {events.map((event, i) => {
-
               let subTitleName = '';
               if (event.eventSeries) {
                 subTitleName = `- ${event.eventSeries}`;

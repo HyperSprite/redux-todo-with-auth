@@ -8,7 +8,10 @@ import FaSquareO from 'react-icons/lib/fa/square-o';
 import FaStar from 'react-icons/lib/fa/star';
 import FaStarO from 'react-icons/lib/fa/star-o';
 
-import style from '../../styles/style';
+import {
+  grey50, // #FAFAFA
+  grey100, // #F5F5F5
+} from 'material-ui/styles/colors';
 
 const propTypes = {
   active: PropTypes.bool.isRequired,
@@ -20,14 +23,16 @@ const EventTBLink = ({ active, filter, onClick }) => {
   if (active) {
     switch (filter) {
       case 'EVENTS_SHOW_ALL': {
-        return (<FlatButton icon={<FaSquare size={24} />} />);
+        return (<FlatButton icon={<FaSquare size={28} color={grey50} />} />);
       }
       case 'EVENTS_SHOW_FAVORITE': {
-        return (<FlatButton icon={<FaStar size={24} />} />);
+        return (<FlatButton icon={<FaStar size={28} color={grey50} />} />);
       }
       case 'EVENTS_SHOW_OWNER': {
-        return (<FlatButton icon={<MdPerson size={24} />} />);
+        return (<FlatButton icon={<MdPerson size={28} color={grey50} />} />);
       }
+      default:
+        return null;
     }
   }
   switch (filter) {
@@ -35,12 +40,7 @@ const EventTBLink = ({ active, filter, onClick }) => {
       return (
         <FlatButton
           secondary
-          icon={
-            <FaSquareO
-              size={24}
-
-            />
-          }
+          icon={<FaSquareO size={28} color={grey100} />}
           onClick={(e) => {
             e.preventDefault();
             onClick();
@@ -52,11 +52,7 @@ const EventTBLink = ({ active, filter, onClick }) => {
       return (
         <FlatButton
           secondary
-          icon={
-            <FaStarO
-              size={24}
-            />
-          }
+          icon={<FaStarO size={28} color={grey100} />}
           onClick={(e) => {
             e.preventDefault();
             onClick();
@@ -68,11 +64,7 @@ const EventTBLink = ({ active, filter, onClick }) => {
       return (
         <FlatButton
           secondary
-          icon={
-            <MdPersonO
-              size={24}
-            />
-          }
+          icon={<MdPersonO size={28} color={grey100} />}
           onClick={(e) => {
             e.preventDefault();
             onClick();
@@ -80,6 +72,8 @@ const EventTBLink = ({ active, filter, onClick }) => {
         />
       );
     }
+    default:
+      return null;
   }
 };
 

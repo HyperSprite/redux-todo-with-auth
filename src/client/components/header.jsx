@@ -8,6 +8,7 @@ import * as actions from './../actions';
 
 import router from './../router';
 import Signin from './auth/signin';
+import EventFilter from './events/filter-toolbar';
 
 import style from '../styles/style';
 
@@ -75,8 +76,18 @@ class Header extends Component {
   }
 
   renderRightMenu() {
+    let rightMenu;
+    switch (this.props.page.name) {
+      case 'Events':
+        rightMenu = EventFilter();
+        break;
+      default:
+        rightMenu = null;
+        break;
+    }
+    
     return this.props.authenticated ? (
-      null
+      <span>{rightMenu}</span>
     ) : (
       <Signin />
     );
