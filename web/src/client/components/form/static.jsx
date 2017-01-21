@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 
-import style from '../../styles/style';
-
 const propTypes = {
   baseURL: PropTypes.string,
   content: PropTypes.any,
@@ -17,16 +15,16 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
     }
     case 'address': {
       if (contentAlt) {
-        return <a href={`${baseURL}${contentAlt}`} target="new" style={style.static.url}>{contentAlt}</a>;
+        return <a href={`${baseURL}${contentAlt}`} target="new" className="url">{contentAlt}</a>;
       }
       let place = content.filter(item => !!item);
       place = place.join(', ');
-      return <a href={`${baseURL}${place}`} target="new" style={style.static.url}>{place}</a>;
+      return <a href={`${baseURL}${place}`} target="new" className="url">{place}</a>;
     }
     case 'url': {
       return (
         <div className="ellipsis">
-          <a href={`${baseURL}${content}`} target="new" style={style.static.url}>{content}</a>
+          <a href={`${baseURL}${content}`} target="new" className="url" >{content}</a>
         </div>
       );
     }
@@ -38,14 +36,18 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
 const renderStatic = ({ baseURL, contentLabel, content, contentType, contentAlt }) => {
   if (content) {
     return (
-      <div style={style.static.divMain}>
+      <div
+        className="static"
+      >
         <label
           htmlFor={content}
-          style={style.static.label}
+          className="static-label"
         >
           {contentLabel}
         </label>
-        <div style={style.static.divSub}>
+        <div
+          className="static-sub-div"
+        >
           {renderContent(content, contentType, contentAlt, baseURL)}
         </div>
       </div>

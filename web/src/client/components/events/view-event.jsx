@@ -43,11 +43,11 @@ const renderViewEvent = ({
   subTitleName,
 }) => (
   <Card
-    style={style.card}
+    className="card"
     initiallyExpanded={expanded}
   >
     <CardHeader
-      style={style.cardHeader}
+      className="card-header"
       title={eventLink}
       subtitle={subTitleName}
       actAsExpander
@@ -56,13 +56,13 @@ const renderViewEvent = ({
     <CardActions>
       {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
       {adminMember ? (
-        <span>{ToggleIconButton('ToggleRadioButtonChecked', authenticated, goal, goalClick, null)}</span>
+        <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
       ) : (
         <span />
       )}
       {canEdit ? (
         <span>
-          {ToggleIconButton('ContentCreate', authenticated, true, editClick, null)}
+          {ToggleIconButton('ActionEdit', authenticated, true, editClick, null)}
           {ToggleIconButton('ActionDelete', authenticated, true, deleteClick, null)}
         </span>
       ) : (

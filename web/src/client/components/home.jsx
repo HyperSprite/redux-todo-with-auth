@@ -1,8 +1,8 @@
 import React from 'react';
 
-import LevelUp from 'react-icons/lib/fa/level-up';
-
 import ScrollIntoView from './../containers/scroll-into-view';
+
+import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 
 export default function Home() {
   return (
@@ -14,7 +14,9 @@ export default function Home() {
       <div className="home-jumbotron">
         <div className="side-lite left-pane" />
         <div className="brand">
-          <LevelUp size={200} color="#FAFAFA" />
+          <div>
+            <img src={ARaceAthleteSVG} alt="A Race Athlete logo" />
+          </div>
         </div>
         <div className="side-lite right-pane" />
       </div>

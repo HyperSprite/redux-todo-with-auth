@@ -1,18 +1,18 @@
 import React, { PropTypes } from 'react';
 import { IconButton } from 'material-ui';
-import {
-  ActionBookmark,
-  ActionBookmarkBorder,
-  ActionDelete,
-  ActionDeleteForever,
-  ActionFavorite,
-  ActionFavoriteBorder,
-  ContentCreate,
-  ToggleRadioButtonChecked,
-  ToggleRadioButtonUnchecked,
-  SocialPerson,
-  SocialPersonOutline,
-} from 'material-ui/svg-icons';
+
+import MdModeEdit from 'react-icons/lib/md/mode-edit';
+import MdPlaylistAdd from 'react-icons/lib/md/playlist-add';
+import MdPlaylistAddCheck from 'react-icons/lib/md/playlist-add-check';
+import FaQuestion from 'react-icons/lib/fa/question';
+import FaSquare from 'react-icons/lib/fa/square';
+import FaSquareO from 'react-icons/lib/fa/square-o';
+import FaStar from 'react-icons/lib/fa/star';
+import FaStarO from 'react-icons/lib/fa/star-o';
+import MdDelete from 'react-icons/lib/md/delete';
+import MdDeleteForever from 'react-icons/lib/md/delete-forever';
+import FaUser from 'react-icons/lib/fa/user';
+// import FaUserO from 'react-icons/lib/fa/user-o'; // not in react-icon set
 
 import style from '../../styles/style';
 
@@ -31,36 +31,42 @@ const toggleIconButton = (buttonType, authenticated, toggle, toggleClick, toggle
 
   switch (buttonType) {
     case 'ActionBookmark':
-      buttonOn = (<ActionBookmark />);
-      buttonOff = (<ActionBookmarkBorder />);
+      buttonOn = (<FaStar size={24} />);
+      buttonOff = (<FaStarO size={24} />);
       tooltipOn = toggleCount ? (`You + ${toggleCount - 1}`) : null;
       tooltipOff = toggleCount ? (`${toggleCount}`) : null;
       break;
     case 'ActionDelete':
-      buttonOn = (<ActionDelete />);
-      buttonOff = (<ActionDeleteForever />);
+      buttonOn = (<MdDelete size={24} />);
+      buttonOff = (<MdDeleteForever size={24} />);
       tooltipOn = 'Delete?';
       tooltipOff = 'Delete?';
       break;
-    case 'ContentCreate':
-      buttonOn = (<ContentCreate />);
+    case 'ActionAddGoal':
+      buttonOn = (<MdPlaylistAddCheck size={24} />);
+      buttonOff = (<MdPlaylistAdd size={24} />);
+      tooltipOn = 'You\'ve set this as a Goal!';
+      tooltipOff = 'Set this as a Goal?';
+      break;
+    case 'ActionEdit':
+      buttonOn = (<MdModeEdit size={24} />);
       buttonOff = (null);
       tooltipOn = 'Edit?';
       tooltipOff = 'Edit?';
       break;
     case 'ToggleRadioButtonChecked':
-      buttonOn = (<ToggleRadioButtonChecked />);
-      buttonOff = (<ToggleRadioButtonUnchecked />);
+      buttonOn = (<FaSquare size={24} />);
+      buttonOff = (<FaSquareO size={24} />);
       tooltipOn = 'You\'ve set this as a Goal!';
       tooltipOff = 'Set this as a Goal?';
       break;
     case 'SocialPerson':
-      buttonOn = (<SocialPerson />);
-      buttonOff = (<SocialPersonOutline />);
+      buttonOn = (<FaUser size={24} />);
+      buttonOff = (null);
       break;
     default:
-      buttonOn = (<ActionFavorite />);
-      buttonOff = (<ActionFavoriteBorder />);
+      buttonOn = (<FaQuestion size={24} />);
+      buttonOff = (<FaQuestion size={24} />);
       break;
   }
 
@@ -69,6 +75,7 @@ const toggleIconButton = (buttonType, authenticated, toggle, toggleClick, toggle
       <IconButton
         tooltip={tooltipOn}
         tooltipPosition="top-right"
+        className="icon-on"
         style={style.toggleIconButton}
         onClick={toggleClick}
       >

@@ -8,8 +8,6 @@ import * as actions from './../actions';
 import Static from './form/static';
 import ScrollIntoView from '../containers/scroll-into-view';
 
-import style from './../styles/style';
-
 const propTypes = {
   fetchData: PropTypes.func,
   user: PropTypes.shape({
@@ -58,7 +56,7 @@ class Athlete extends Component {
     } = this.props.user;
     return (
       <Paper
-        style={style.paper1}
+        className="paper"
         zDepth={1}
       >
         <ScrollIntoView
@@ -71,7 +69,7 @@ class Athlete extends Component {
           />
         </Toolbar>
         <Card
-          style={style.card}
+          className="card"
         >
           <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
             <CardHeader
