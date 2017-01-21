@@ -24,18 +24,20 @@ export default function Home() {
         <div className="side-lite left-pane" />
         <div className="main" >
           <div>
-            <h1 className="welcome"><span className="wrap-here">Welcome to</span>{' '}<span className="wrap-here">A Race Athlete</span><div className="sub-header">It{"'"}s time to level up</div></h1>
+            <h1 className="welcome"><span className="wrap-here">Welcome to</span>{' '}<span className="wrap-here">A Race Athlete</span><div className="sub-header">It{"'"}s time to level up!</div></h1>
           </div>
-          <p>ARaceAthlete is a place so share and track events, primarily your <strong>A Race</strong> for the year. What is an <strong>A Race</strong> you ask? While you may have other important events, an <strong>A Race</strong> is that event you plan all year for. It is the pinnacle of your season. The point of hours of preparation and training.</p>
-          <p>What you see here today is just the tip of the iceberg for what is planned for this site (and future phone apps). Check back often for new events and features.</p>
+          <p>ARaceAthlete is a place to share and track events, primarily your <strong>A Race</strong> for the year. What is an <strong>A Race</strong> you ask? While you may have other important events, an  <strong>A Race</strong> is that event you plan all year for. It is the pinnacle of your season. The point of hours of preparation and training.</p>
+          <ul>
+            <li>Guest athletes can view existing event information, just click on the ARaceAthlete icon on the top left and pick <em>Events</em>.</li>
+            <li>Strava connected athletes can also <em>favorite</em> events, making it easy to see your whole season at a glance using the favorite filter.</li>
+            <li><a href="https://www.strava.com/clubs/araceathlete">ARaceAthlete club members</a> can also add new events.<br /><em>Currently club level access is restricted to private beta. If you would like to be notified when we go live, request access now and we will let you know when we are ready.</em></li>
+          </ul>
           <blockquote>
-            <p>Notice: Anyone can view the events. However, the app is in private beta for user access to Add, Edit and Bookmark events. To join the private beta, please request access to the <a href="https://www.strava.com/clubs/araceathlete">ARaceAthlete</a> Strava Club. </p>
+            <p>Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
           </blockquote>
-          <hr />
         </div>
         <div className="side-lite right-pane" />
       </div>
     </div>
-
   );
 }

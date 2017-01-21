@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { AppBar, Avatar, Divider, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
+import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 
 import * as actions from './../actions';
 
@@ -95,6 +96,7 @@ class Header extends Component {
           title="A Race Athlete"
           onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
           showMenuIconButton={this.props.authenticated}
+          iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" width="48px" height="auto" />}
           iconElementRight={this.renderRightMenu()}
           zDepth={1}
           style={style.appBar}

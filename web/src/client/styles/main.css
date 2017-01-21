@@ -7,6 +7,11 @@ body {
   color: #770000;
 }
 
+a {
+  cursor: pointer;
+  color: #B71C1C;
+}
+
 .home-jumbotron {
   background-image: url('../assets/background-large.jpg');
   background-size:cover;
@@ -81,5 +86,5 @@ blockquote {
   margin-bottom: 1em;
   margin-left: 2em;
   padding-left: 1.5em;
-  border-left: .3em solid #999;
+  border-left: .3em solid #B71C1C;
 }
