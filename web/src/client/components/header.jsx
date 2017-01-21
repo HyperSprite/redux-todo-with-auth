@@ -96,7 +96,7 @@ class Header extends Component {
           title="A Race Athlete"
           onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
           showMenuIconButton={this.props.authenticated}
-          iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" width="48px" height="auto" />}
+          iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}
           iconElementRight={this.renderRightMenu()}
           zDepth={1}
           style={style.appBar}

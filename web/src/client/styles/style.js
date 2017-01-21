@@ -12,6 +12,11 @@ export default {
     position: 'fixed',
     top: 0,
     width: '100%',
+    iconLeft: {
+      cursor: 'pointer',
+      width: 46,
+      height: 'auto',
+    },
   },
 
   button: {

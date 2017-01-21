@@ -81,6 +81,10 @@ a {
   color: #B71C1C;
 }
 
+header-icon-left {
+  cursor: pointer;
+}
+
 blockquote {
   margin-top: 1em;
   margin-bottom: 1em;
