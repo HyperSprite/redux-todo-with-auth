@@ -38,6 +38,7 @@ const store = createStore(reducers, persistentState, middlewareOptions);
 store.subscribe(() => {
   saveState({
     events: store.getState().events,
+    visibilityFilter: store.getState().visibilityFilter,
   });
 });
 
