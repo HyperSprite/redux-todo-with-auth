@@ -18,20 +18,6 @@ export default {
     margin: 12,
   },
 
-  card: {
-    margin: 8,
-    paddingBottom: 8,
-  },
-
-  cardHeader: {
-    backgroundColor: theme.palette.accent2Color,
-  },
-
-  cardHeaderTitleLink: {
-    textDecoration: 'none',
-    color: theme.palette.textColor,
-  },
-
   formelement: {
     marginLeft: 5,
   },
@@ -93,22 +79,6 @@ export default {
 
   signin: {
     marginTop: 4,
-  },
-
-  static: {
-    divMain: {
-      marginLeft: 5,
-      marginTop: 10,
-    },
-    divSub: {
-      marginLeft: 5,
-    },
-    label: {
-      color: theme.palette.accent3Color,
-    },
-    url: {
-      cursor: 'pointer',
-    },
   },
 
   subheader: {

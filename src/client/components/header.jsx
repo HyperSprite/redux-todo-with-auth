@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from './../actions';
 import { Link } from 'react-router';
-import { AppBar, Avatar, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
+import { AppBar, Avatar, Divider, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
 
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import * as actions from './../actions';
 
 import router from './../router';
 import Signin from './auth/signin';
@@ -79,6 +77,7 @@ class Header extends Component {
         <MenuItem
           primaryText="Help"
         />
+        <Divider />
         <MenuItem
           primaryText="Sign out"
           containerElement={<Link to="/signout">Sign out</Link>}
@@ -88,7 +87,6 @@ class Header extends Component {
       <Signin />
     );
   }
-
 
   render() {
     return (

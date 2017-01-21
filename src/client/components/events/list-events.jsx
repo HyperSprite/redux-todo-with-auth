@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router';
 import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
 import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
 import { ActionBookmark, ActionBookmarkBorder, ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
+
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
 // import ScrollIntoView from 'scroll-component';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -158,7 +159,7 @@ class ListEvent extends Component {
               }
 
               const eventLink = (
-                <Link to={`/events#${event.eventId}`} style={style.cardHeaderTitleLink}>{event.eventTitle}</Link>
+                <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
               );
 
               return (

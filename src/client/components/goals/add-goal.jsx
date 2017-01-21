@@ -178,10 +178,10 @@ let AddGoal = class AddGoal extends Component {
         />
         {(initialValues.eventTitle) ? (
           <Card
-            style={style.card}
+            className="card"
           >
             <CardHeader
-              style={style.cardHeader}
+              className="card-header"
               title={initialValues.eventTitle}
               subtitle="Open for Editing..."
             />
@@ -192,7 +192,7 @@ let AddGoal = class AddGoal extends Component {
             style={style.paper1}
           >
             <Card
-              style={style.card}
+              className="card"
             >
               <Toolbar>
                 <ToolbarTitle

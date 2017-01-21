@@ -23,6 +23,19 @@ body {
   }
 }
 
+.card {
+  background-color: #fefefe;
+}
+
+.card-header {
+  background-color: #F5F5F5
+}
+
+.card-header-title-link {
+  text-decoration: none;
+  color: #770000;
+}
+
 .footer-flex-container {
   background-color: #330101;
 }
@@ -31,10 +44,36 @@ body {
   color: #fefefe;
 }
 
+.icon-star {
+  fill: #770000;
+}
+
+.icon-off {
+  fill: #E0E0E0;
+
+}
+
+.paper {
+  background-color: #fefefe;
+}
+
 .sub-header {
   font-style: italic;
   font-size: .8em;
   margin-left: 1em;
+}
+
+.static-sub-div {
+  font-weight: 500;
+}
+
+.static-label {
+  color: #9E9E9E;
+}
+
+.url {
+  cursor: pointer;
+  color: #B71C1C;
 }
 
 blockquote {

@@ -3,12 +3,12 @@ import { Link } from 'react-router';
 
 const propTypes = {
   linkTo: PropTypes.string,
-  lable: PropTypes.string,
+  label: PropTypes.string,
   style: PropTypes.object,
 };
 
-const cardHeaderLink = (linkTo, lable, style) => (
-  <Link to={`/events#${event.eventId}`} style={style}>{lable}</Link>
+const cardHeaderLink = (linkTo, label, style) => (
+  <Link to={`/events#${event.eventId}`} style={style}>{label}</Link>
 );
 
 cardHeaderLink.propTypes = propTypes;
