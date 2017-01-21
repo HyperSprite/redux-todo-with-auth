@@ -81,8 +81,14 @@ a {
   color: #B71C1C;
 }
 
-header-icon-left {
-  cursor: pointer;
+.plus-h1 {
+  font-size: 1.1em;
+}
+
+.quote-box {
+  max-width: 40em;
+  margin: 1em;
+  padding-bottom: 1em;
 }
 
 blockquote {

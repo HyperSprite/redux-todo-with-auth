@@ -27,6 +27,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_EVENTS: 'FETCH_EVENTS',
   SET_FAV_EVENT: 'SET_FAV_EVENT',
   FETCH_STRAVA_ROUTES: 'FETCH_STRAVA_ROUTES',
+  SET_PAGE_NAME: 'SET_PAGE_NAME',
 };
 
 // handle error mesages
@@ -318,3 +319,14 @@ export function toggleTodo(id: number) {
     },
   };
 }
+
+// page
+
+export function setPageName(name: string) {
+  return {
+    type: TYPES.SET_PAGE_NAME,
+    payload: name,
+  };
+}
+
+// /page

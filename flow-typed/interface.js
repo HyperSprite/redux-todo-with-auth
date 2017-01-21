@@ -27,5 +27,6 @@ export type ActionStrings = (
   'FETCH_EVENTS' |
   'SET_FAV_EVENT' |
   'FETCH_STRAVA_ROUTES' |
+  'SET_PAGE_NAME' |
   'SET_TSS_GOAL'
   )

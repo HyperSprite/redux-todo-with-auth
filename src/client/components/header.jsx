@@ -37,6 +37,22 @@ class Header extends Component {
           primaryText="Events"
           containerElement={<Link to="/events">Events</Link>}
         />
+        <Divider />
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Athlete"
+          containerElement={<Link to="/athlete">Athlete</Link>}
+        />
+        {/* <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Help"
+        /> */}
+        <Divider />
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Sign out"
+          containerElement={<Link to="/signout">Sign out</Link>}
+        />
       </Drawer>
     ) : (
       <Drawer
@@ -60,30 +76,7 @@ class Header extends Component {
 
   renderRightMenu() {
     return this.props.authenticated ? (
-      <IconMenu
-        iconButtonElement={
-          <IconButton
-            style={style.header.IconButton}
-          >
-            <Avatar src={this.props.profile_medium} size={48} />
-          </IconButton>
-        }
-        targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-      >
-        <MenuItem
-          primaryText="Athlete"
-          containerElement={<Link to="/athlete">Athlete</Link>}
-        />
-        <MenuItem
-          primaryText="Help"
-        />
-        <Divider />
-        <MenuItem
-          primaryText="Sign out"
-          containerElement={<Link to="/signout">Sign out</Link>}
-        />
-      </IconMenu>
+      null
     ) : (
       <Signin />
     );
@@ -93,7 +86,7 @@ class Header extends Component {
     return (
       <div className="site-header" >
         <AppBar
-          title="A Race Athlete"
+          title={this.props.page.name}
           onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
           showMenuIconButton={this.props.authenticated}
           iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}
@@ -113,6 +106,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     profile_medium: state.auth.user.profile_medium,
     firstname: state.auth.user.firstname,
+    page: state.page,
   };
 }
 

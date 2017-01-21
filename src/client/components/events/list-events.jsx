@@ -29,15 +29,17 @@ const propTypes = {
   fetchEvents: PropTypes.func,
   forEdit: PropTypes.object,
   stravaId: PropTypes.number,
+  setPageName: PropTypes.func,
 };
 
 const relURL = 'apiv1/events';
 
-
 class ListEvent extends Component {
+
   componentDidMount() {
     this.props.fetchEvents(relURL, this.props.stravaId);
     this.props.clearEvent();
+    this.props.setPageName('Events');
   }
 
   deleteThisEvent = this.deleteThisEvent.bind(this);
@@ -103,12 +105,6 @@ class ListEvent extends Component {
               headerHeight={70}
             />
             <Toolbar>
-              <ToolbarGroup>
-                <ToolbarTitle
-                  text="Events"
-                  style={style.toolbar.title}
-                />
-              </ToolbarGroup>
               {authenticated ? EventFilter() : null}
             </Toolbar>
 
@@ -220,6 +216,7 @@ function mapStateToProps(state) {
     adminMember: state.auth.user.adminMember,
     events: getVisibleEvents(state.events.events, state.visibilityFilter, state.auth.user.stravaId),
     forEdit: state.events.event,
+    pageName: 'Events',
   };
 }
 
