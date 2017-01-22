@@ -35,7 +35,7 @@ const propTypes = {
 const relURLAdd = 'apiv1/events/addevent';
 const relURLEdit = 'apiv1/events';
 
-let AddEvent = class AddEvent extends Component {
+let EditEvent = class EditEvent extends Component {
   constructor() {
     super();
 
@@ -286,7 +286,7 @@ let AddEvent = class AddEvent extends Component {
   }
 };
 
-AddEvent.propTypes = propTypes;
+EditEvent.propTypes = propTypes;
 
 function mapStateToProps(state) {
   const initialValues = state.events.event;
@@ -309,11 +309,11 @@ function mapStateToProps(state) {
   };
 }
 
-AddEvent = reduxForm({
-  form: 'addevent',
+EditEvent = reduxForm({
+  form: 'editevent',
   validate,
   warn,
-})(AddEvent);
+})(EditEvent);
 
 
-export default connect(mapStateToProps, actions)(AddEvent);
+export default connect(mapStateToProps, actions)(EditEvent);

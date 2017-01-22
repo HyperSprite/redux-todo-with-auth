@@ -8,7 +8,7 @@ import Signin from './../components/auth/signin';
 import Signout from './../components/auth/signout';
 import Athlete from './../components/athlete';
 import Events from './../components/events/list-events';
-import AddEvent from './../components/events/add-event';
+import EditEvent from './../components/events/edit-event';
 import Goals from './../components/goals/list-goals';
 import AddGoal from './../components/goals/add-goal';
 
@@ -16,7 +16,7 @@ const router = (
   <div>
     <Match exactly pattern="/" component={Home} />
     <MatchAuthorized pattern="/athlete" component={Athlete} />
-    <MatchAuthorized pattern="/events/addevent" component={AddEvent} />
+    <MatchAuthorized pattern="/events/addevent" component={EditEvent} />
     <Match exactly pattern="/events" component={Events} />
     <MatchAuthorized pattern="/goals/addgoal" component={AddGoal} />
     <MatchAuthorized exactly pattern="/goals" component={Goals} />
