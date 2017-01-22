@@ -32,9 +32,27 @@ const userSchema = new Schema({
   lastname: String,
   profile_medium: String,
   profile: String,
-  loc_city: String,
-  loc_state: String,
-  loc_country: String,
+  loc_city: String,  // from Strava
+  loc_state: String,  // from Strava
+  loc_country: String,  // from Strava
+  userLocStreet: String,  // from user input
+  userLocCity: String,  // from user input
+  userLocState: String,  // from user input
+  userLocCountry: String,  // from user input
+  userLocZip: String,  // from user input
+  userGeoFormattedAddress: String,
+  userGeoLatitude: Number,
+  userGeoLongitude: Number,
+  userGeoLevel1Long: String,
+  userGeoLevel2Long: String,
+  userGeoStreetNumber: String,
+  userGeoStreetName: String,
+  userGeoCity: String,
+  userGeoCountry: String,
+  userGeoCountryCode: String,
+  userGeoZipCode: String,
+  userGeoProvider: String,
+  userLocationPref: { type: String, enum: ['Strava', 'Manual', 'Magic'], default: 'Strava' },
   sex: String,
   premium: Boolean,
   created_at: String,

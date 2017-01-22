@@ -11,7 +11,7 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
-import AddEvent from './add-event';
+import EditEvent from './edit-event';
 import EventFilter from './filter-toolbar';
 
 
@@ -145,7 +145,7 @@ class ListEvent extends Component {
 
               if (forEdit.eventId === event.eventId) {
                 return (
-                  <AddEvent key={`${event.eventId}-edit`} index={i} />
+                  <EditEvent key={`${event.eventId}-edit`} index={i} />
                 );
               }
 

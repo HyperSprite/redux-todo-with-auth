@@ -56,6 +56,7 @@ exports.addEvent = (req, res) => {
   callGeoCoder(req.body, {}, (err, toSave) => {
     toSave.eventOwner = req.user.stravaId;
     hlpr.consLog(['events.addEvent', 'toSave', toSave]);
+    toSave.eventFavorites = [toSave.eventOwner];
     Events.create(toSave, (err, event) => {
       if (!err) {
         hlpr.consLog(['Event saved']);
