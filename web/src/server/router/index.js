@@ -48,6 +48,7 @@ router.use('/auth', authRoutes);
 router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/strava', stravaRoutes);
 
+// for letsencrypt setup
 router.get('/.well-known/acme-challenge/:acmeToken', (req, res, next) => {
   const acmeToken = req.params.acmeToken;
   let acmeKey;
