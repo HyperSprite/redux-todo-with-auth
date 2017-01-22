@@ -4,6 +4,7 @@ const moment = require('moment');
 
 const User = require('../models/user');
 const hlpr = require('../lib/helpers');
+const geocoder = require('../lib/geocoder');
 
 const dateNow = moment().format();
 
@@ -48,8 +49,9 @@ exports.stravaSignin = (req, res, next) => {
       return c.id === process.env.STRAVA_CLUB * 1;
     });
 
-    User.findOneAndUpdate({ stravaId: req.user.stravaId }, {
-      $set: {
+    User.findOne({ stravaId: req.user.stravaId }, (err, user) => {
+      if (!user || err) return res.status(404).send(`User: ${req.user.stravaId} not found`);
+      const athlete = {
         athlete_type: tokenPayload.athlete.athlete_type,
         email: tokenPayload.athlete.email,
         access_token: tokenPayload.access_token,
@@ -69,25 +71,30 @@ exports.stravaSignin = (req, res, next) => {
         adminMember: admin,
         clubMember: club,
         ftpHistory: { ftp: tokenPayload.athlete.ftp, date: dateNow },
-      },
-    }, { new: true }, (err, user) => {
-      hlpr.consLog(['User', err, user]);
-      strava.athlete.get({ access_token: user.access_token }, (err, payload) => {
-        if (!err) {
-          hlpr.consLog(['strava query code:', req.query.code, 'strava payload:', payload]);
-        } else {
-          hlpr.consLog(['strava query code:', req.query.code, 'strava err:', err]);
-        }
+      };
+
+      geocoder.userGeocoder(athlete, user, (err, toSave) => {
+        hlpr.consLog(['callGeoCoder', err, toSave]);
+        const options = { new: true };
+        User.findOneAndUpdate(req.user.stravaId, toSave, options, (err, editUser) => {
+          hlpr.consLog(['User', err, editUser]);
+          strava.athlete.get({ access_token: editUser.access_token }, (err, payload) => {
+            if (!err) {
+              hlpr.consLog(['strava query code:', req.query.code, 'strava payload:', payload]);
+            } else {
+              hlpr.consLog(['strava query code:', req.query.code, 'strava err:', err]);
+            }
+          });
+        });
       });
     });
-  });
-  const result = `
+    const result = `
       <script>
         localStorage.setItem('token', '${tokenForUser(req.user)}');
         window.location='/';
       </script>`;
-
-  res.send(result);
+    res.send(result);
+  });
 };
 
 exports.user = (req, res, next) => {

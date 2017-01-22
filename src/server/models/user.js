@@ -41,8 +41,9 @@ const userSchema = new Schema({
   userLocCountry: String,  // from user input
   userLocZip: String,  // from user input
   userGeoFormattedAddress: String,
-  userGeoLatitude: Number,
+  userGeoCoordinates: { type: [Number], index: '2dsphere' }, // type: [lon,lat]
   userGeoLongitude: Number,
+  userGeoLatitude: Number,
   userGeoLevel1Long: String,
   userGeoLevel2Long: String,
   userGeoStreetNumber: String,

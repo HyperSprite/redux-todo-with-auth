@@ -41,8 +41,9 @@ const eventSchema = new Schema(
     eventLocCountry: String,
     eventLocZip: String,
     eventGeoFormattedAddress: String,
-    eventGeoLatitude: Number,
+    eventGeoCoordinates: { type: [Number], index: '2dsphere' }, // type: [lon,lat]
     eventGeoLongitude: Number,
+    eventGeoLatitude: Number,
     eventGeoLevel1Long: String,
     eventGeoLevel2Long: String,
     eventGeoStreetNumber: String,
