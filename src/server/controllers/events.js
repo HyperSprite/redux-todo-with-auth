@@ -4,20 +4,31 @@ const Events = require('../models/events');
 const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 
+const hashtagger = (postedHashtags, result) => {
+  let cleanHashtags = postedHashtags.split(/[ ,.]+/);
+  cleanHashtags = cleanHashtags.map((cleanTag) => {
+    return cleanTag.indexOf('#') !== -1 ? cleanTag : `#${cleanTag}`;
+  });
+  return result(cleanHashtags);
+};
+
 exports.addEvent = (req, res) => {
   geocoder.eventGeocoder(req.body, {}, (err, toSave) => {
     toSave.eventOwner = req.user.stravaId;
     hlpr.consLog(['events.addEvent', 'toSave', toSave]);
     toSave.eventFavorites = [toSave.eventOwner];
-    Events.create(toSave, (err, event) => {
-      if (!err) {
-        hlpr.consLog(['Event saved']);
-        const result = { event: { postSuccess: true }, updated: event };
-        hlpr.consLog([result]);
-        return res.send(result);
-      }
-      hlpr.consLog(['Event error', err]);
-      return res.status(400).send(err);
+    hashtagger(toSave.eventHashtags, (cleanHashtags) => {
+      toSave.eventHashtags = cleanHashtags;
+      Events.create(toSave, (err, event) => {
+        if (!err) {
+          hlpr.consLog(['Event saved']);
+          const result = { event: { postSuccess: true }, updated: event };
+          hlpr.consLog([result]);
+          return res.send(result);
+        }
+        hlpr.consLog(['Event error', err]);
+        return res.status(400).send(err);
+      });
     });
   });
 };
@@ -28,13 +39,16 @@ exports.editEvent = (req, res) => {
     if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       geocoder.eventGeocoder(req.body, event, (err, toSave) => {
         hlpr.consLog(['callGeoCoder', err, toSave]);
-        const options = { new: true };
-        Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
-          if (err) hlpr.consLog(['editEvent', err]);
-          hlpr.consLog(['editEvent', eventEdit.eventId]);
-          const result = { event: { postSuccess: true }, updated: eventEdit };
-          hlpr.consLog([result]);
-          res.send(result);
+        hashtagger(toSave.eventHashtags, (cleanHashtags) => {
+          toSave.eventHashtags = cleanHashtags;
+          const options = { new: true };
+          Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
+            if (err) hlpr.consLog(['editEvent', err]);
+            hlpr.consLog(['editEvent', eventEdit.eventId]);
+            const result = { event: { postSuccess: true }, updated: eventEdit };
+            hlpr.consLog([result]);
+            res.send(result);
+          });
         });
       });
     } else {
@@ -71,11 +85,15 @@ exports.getEvents = (req, res) => {
   //   dbQuery.and.push({ eventSeries: { $regex: rQ.eventSeries, $options: 'i' } });
   // }
 
+  dbQuery.eventDate = { $gt: stringDate };
+  dbQuery.eventDeleted = false;
+
   Events.find(dbQuery, dbOptions, { sort: { eventDate: 1 } }, (err, events) => {
     if (err) {
       hlpr.consLog(['getEvents error', err]);
       return res.status(404).send(['getEvent Error 404']);
     }
+    events.eventHashtags = events.eventHashtags ? events.eventHashtags.join(' ') : null;
     hlpr.consLog(['getEvents', events, stringDate, req.params, rQ]);
     return res.send(events);
   });
@@ -88,6 +106,7 @@ exports.getEvent = (req, res) => {
   Events.findOne(query, (err, event) => {
     if (err) hlpr.consLog(['getEvent error', err]);
     hlpr.consLog(['getEvent', event, req.params]);
+    event.eventHashtags = event.eventHashtags ? event.eventHashtags.join(' ') : null;
     res.send(event);
   });
 };

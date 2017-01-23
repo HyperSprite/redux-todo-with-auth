@@ -62,6 +62,7 @@ const eventSchema = new Schema(
     eventDeleted: { type: Boolean, default: false },
     eventRoutes: [eventRoutesSchema],
     eventFavorites: [Number],
+    eventHashtags: [String],
   },
   {
     timestamps: true,

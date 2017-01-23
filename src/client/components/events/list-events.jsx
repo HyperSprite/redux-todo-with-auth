@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router';
-import { Paper, FlatButton, FloatingActionButton } from 'material-ui';
-import { Toolbar, ToolbarTitle, ToolbarGroup } from 'material-ui/Toolbar';
-import { ActionBookmark, ActionBookmarkBorder, ActionFavoriteBorder, ContentAdd, SocialPersonOutline, ToggleRadioButtonChecked } from 'material-ui/svg-icons';
+import { Paper, FloatingActionButton } from 'material-ui';
+import { ContentAdd } from 'material-ui/svg-icons';
 
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
 // import ScrollIntoView from 'scroll-component';
@@ -12,7 +11,6 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
 import EditEvent from './edit-event';
-import EventFilter from './filter-toolbar';
 
 
 import style from '../../styles/style';
