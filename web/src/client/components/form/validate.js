@@ -71,6 +71,9 @@ export const validate = (formProps) => {
   }
   // eventType
   // eventRoutes
+  if (!formProps.eventOwner < 5) {
+    errors.eventOwner = 'Caution, you could lose ownership of this Event!';
+  }
   return errors;
 };
 
@@ -79,6 +82,10 @@ export const warn = (formProps) => {
 
   if (!formProps.eventLocZip) {
     warnings.eventLocZip = 'Not required, but helpful';
+  }
+
+  if (formProps.eventOwner < 5) {
+    warnings.eventOwner = 'Caution, you could lose ownership of this Event!';
   }
   return warnings;
 };

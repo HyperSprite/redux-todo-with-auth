@@ -107,7 +107,6 @@ let EditEvent = class EditEvent extends Component {
 
     const renderForm = (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-        <div>
           <Field
             component={TextField}
             style={style.formelement}
@@ -117,14 +116,23 @@ let EditEvent = class EditEvent extends Component {
             hintText="Event Title"
           />
           <Field
+            component={TextField}
+            style={style.formelement}
+            floatingLabelText="#Hashtags"
+            name="eventHashtags"
+            type="text"
+            hintText="(optional)"
+          />
+          <Field
             component={DatePicker}
             style={style.formelement}
             floatingLabelText="Event Date"
             name="eventDate"
             format={null}
             hintText="Event Day?"
+            container="inline"
+            mode="landscape"
           />
-        </div>
         <div>
           <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
             <RadioButton value="Cycling" label="Cycling" default />
@@ -202,6 +210,7 @@ let EditEvent = class EditEvent extends Component {
             name="eventURL"
             type="text"
             hintText="(optional)"
+            fullWidth
           />
         </div>
         <div>
@@ -213,6 +222,7 @@ let EditEvent = class EditEvent extends Component {
             type="text"
             multiLine
             hintText="Event Description"
+            fullWidth
           />
         </div>
         <div>
@@ -222,6 +232,13 @@ let EditEvent = class EditEvent extends Component {
             fetchStravaRoutes={this.fetchStravaRoutes}
           />
         </div>
+        <Field
+          component={TextField}
+          style={style.formelement}
+          floatingLabelText="Owner"
+          name="eventOwner"
+          type="number"
+        />
         { this.renderAlert() }
         <div>
           <RaisedButton

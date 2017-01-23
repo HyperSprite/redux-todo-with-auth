@@ -79,6 +79,16 @@ body {
 
 }
 
+.div-flexwrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.chip {
+  margin: 4px;
+  padding-left: 10px;
+}
+
 .side-lite {
   flex: 2 6 auto;
 }

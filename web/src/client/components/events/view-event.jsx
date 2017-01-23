@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react';
+import { ShareButtons, ShareCounts, generateShareIcon } from 'react-share';
+import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
 import ToggleIconButton from './../form/toggle-icon-button';
 
 import Static from './../form/static';
 
-import style from '../../styles/style';
+const { FacebookShareButton, TwitterShareButton } = ShareButtons;
 
 const propTypes = {
   adminMember: PropTypes.bool,
@@ -54,24 +56,35 @@ const renderViewEvent = ({
       showExpandableButton
     />
     <CardActions>
+
       {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
-      {adminMember ? (
+      {adminMember ? ( // hiding unitl this works
         <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
-      ) : (
-        <span />
-      )}
+      ) : (null)}
       {canEdit ? (
         <span>
           {ToggleIconButton('ActionEdit', authenticated, true, editClick, null)}
-          {ToggleIconButton('ActionDelete', authenticated, true, deleteClick, null)}
+          {event.eventFavorites.length < 2 || adminMember ? (
+            <span>{ToggleIconButton('ActionDelete', authenticated, true, deleteClick, null)}</span>
+          ) : (null)}
         </span>
-      ) : (
-        <span />
-      )}
+      ) : (null)}
+
     </CardActions>
     <CardText
       expandable
     >
+      <div className="div-flexwrap" >
+        {event.eventHashtags.map((hashtag) => {
+          return (
+            <span className="chip">
+              <Chip key={hashtag} className="chip" >
+                {hashtag}
+              </Chip>
+            </span>
+          );
+        })}
+      </div>
       <Static
         contentLabel="Event Date"
         content={niceEventDate}
@@ -113,6 +126,11 @@ const renderViewEvent = ({
       <Static
         contentLabel="Description"
         content={event.eventDesc}
+        contentType="text"
+      />
+      <Static
+        contentLabel="#Hashtags"
+        conten={event.eventHashtags}
         contentType="text"
       />
       {event.eventRoutes.map((route) => {
