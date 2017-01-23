@@ -47,41 +47,39 @@ const newDate = moment().add(-1, 'days').format();
 const stringDate = newDate.toString();
 
 exports.getEvents = (req, res) => {
-  // const query = req.params.query;
-  const query = { eventDate: { $gt: stringDate }, eventDeleted: false };
+  const rQ = req.query;
+  const dbQuery = {};
+  const dbOptions = {};
 
-  Events.find(query, null, { sort: { eventDate: 1 } }, (err, events) => {
-    if (!err) {
-      hlpr.consLog(['getEvents', events, stringDate, req.params, req.query]);
-    } else {
+  // example Event "eventGeoCoordinates": [ -122.1439698, 37.426941 ],
+  // ?userLoc='-122.1439698,37.426941'
+  if (Object.keys(rQ).indexOf('userLoc') !== -1) {
+    dbQuery.eventGeoCoordinates = {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates: rQ.userLoc.split(',').map(Number),
+        },
+        $maxDistance: rQ.maxDist * 1 || 321869, // 200 miles in meters
+      },
+    };
+  }
+
+  // Working on this later, may move to aggregation framework
+  // if (Object.keys(rQ).indexOf('eventSeries') !== -1) {
+  //   if (Object.keys(dbQuery).indexOf('and') === -1) dbQuery.and = [];
+  //   dbQuery.and.push({ eventSeries: { $regex: rQ.eventSeries, $options: 'i' } });
+  // }
+
+  Events.find(dbQuery, dbOptions, { sort: { eventDate: 1 } }, (err, events) => {
+    if (err) {
       hlpr.consLog(['getEvents error', err]);
+      return res.status(404).send(['getEvent Error 404']);
     }
-    res.send(events);
+    hlpr.consLog(['getEvents', events, stringDate, req.params, rQ]);
+    return res.send(events);
   });
 };
-
-// exports.getEvents = (req, res) => {
-//   // const userLoc = JSON.parse(req.query);
-//
-//
-//   const conditions = {
-//     type: 'Point',
-//     coordinates: [-121.8863286, 37.3382082],
-//   };
-//
-//   const options = {
-//     spherical: true,
-//   };
-//   hlpr.consLog([' - - getGeoEvents', conditions, options]);
-//   Events.geoSearch(conditions, options, (err, events) => {
-//     if (err) {
-//       hlpr.consLog(['getEvents error', err]);
-//       return res.send([0]);
-//     }
-//     hlpr.consLog(['getEvents', events, stringDate, req.params]);
-//     return res.send(events);
-//   });
-// };
 
 exports.getEvent = (req, res) => {
   // const query = req.params.query;
