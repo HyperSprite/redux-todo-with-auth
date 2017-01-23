@@ -5,11 +5,11 @@ const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 
 const hashtagger = (postedHashtags, result) => {
-  let cleanHashtags = postedHashtags.split(/[ ,.]+/);
-  cleanHashtags = cleanHashtags.filter((cleanTag) => {
-    return cleanTag.indexOf('#') !== -1 ? cleanTag : `#${cleanTag}`;
-  });
-  return result(cleanHashtags);
+  if (!postedHashtags || postedHashtags[0] === '') return result([]);
+  const tmpHashtag = postedHashtags.trim().slice();
+  return result(tmpHashtag.replace(/[^a-z0-9 ,.]/gi, '').split(/[ ,.]+/).filter((tag, i, array) => {
+    return i === array.indexOf(tag);
+  }));
 };
 
 exports.addEvent = (req, res) => {
@@ -93,7 +93,6 @@ exports.getEvents = (req, res) => {
       hlpr.consLog(['getEvents error', err]);
       return res.status(404).send(['getEvent Error 404']);
     }
-    events.eventHashtags = events.eventHashtags ? events.eventHashtags.join(' ') : null;
     hlpr.consLog(['getEvents', events, stringDate, req.params, rQ]);
     return res.send(events);
   });
@@ -106,8 +105,9 @@ exports.getEvent = (req, res) => {
   Events.findOne(query, (err, event) => {
     if (err) hlpr.consLog(['getEvent error', err]);
     hlpr.consLog(['getEvent', event, req.params]);
-    event.eventHashtags = event.eventHashtags ? event.eventHashtags.join(' ') : null;
-    res.send(event);
+    const result = event;
+    result.eventHashtags = event.eventHashtags.join(' ');
+    res.send(result);
   });
 };
 

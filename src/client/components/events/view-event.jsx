@@ -52,13 +52,13 @@ const renderViewEvent = ({
       className="card-header"
       title={eventLink}
       subtitle={subTitleName}
-      actAsExpander
       showExpandableButton
+      avatar={ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
     />
-    <CardActions>
-
-      {ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
-      {adminMember ? ( // hiding unitl this works
+    <CardText
+      expandable
+    >
+      {adminMember ? ( // hiding for adminMember only unitl this works
         <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
       ) : (null)}
       {canEdit ? (
@@ -69,17 +69,12 @@ const renderViewEvent = ({
           ) : (null)}
         </span>
       ) : (null)}
-
-    </CardActions>
-    <CardText
-      expandable
-    >
       <div className="div-flexwrap" >
         {event.eventHashtags.map((hashtag) => {
           return (
-            <span className="chip">
-              <Chip key={hashtag} className="chip" >
-                {hashtag}
+            <span key={`${event.eventId}${hashtag}`} className="chip">
+              <Chip className="chip" >
+                {`#${hashtag}`}
               </Chip>
             </span>
           );
@@ -136,7 +131,7 @@ const renderViewEvent = ({
       {event.eventRoutes.map((route) => {
         return (
           <Static
-            key={route.eventRouteURL}
+            key={`${event.eventId}${route.eventRouteURL}`}
             contentLabel="Route Link"
             content={route.eventRouteURL}
             contentType="url"
