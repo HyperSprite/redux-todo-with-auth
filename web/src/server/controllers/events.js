@@ -6,7 +6,7 @@ const geocoder = require('../lib/geocoder');
 
 const hashtagger = (postedHashtags, result) => {
   let cleanHashtags = postedHashtags.split(/[ ,.]+/);
-  cleanHashtags = cleanHashtags.map((cleanTag) => {
+  cleanHashtags = cleanHashtags.filter((cleanTag) => {
     return cleanTag.indexOf('#') !== -1 ? cleanTag : `#${cleanTag}`;
   });
   return result(cleanHashtags);
