@@ -10,7 +10,7 @@ const MatchAuthorized = ({ authenticated, component: Component, ...rest }) => {
           <Component {...props} />
         ) : (
           <Redirect
-            to={{ pathname: '/', state: { from: props.location } }}
+            to={{ pathname: '/home', state: { from: props.location } }}
           />
         )
       )}

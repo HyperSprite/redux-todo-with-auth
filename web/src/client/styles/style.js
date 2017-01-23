@@ -25,6 +25,7 @@ export default {
 
   formelement: {
     marginLeft: 5,
+    maxWidth: '95%',
   },
 
   footer: {

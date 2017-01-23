@@ -74,6 +74,7 @@ export const validate = (formProps) => {
   if (!formProps.eventOwner) {
     errors.eventOwner = 'Required - Caution, you could lose ownership of this Event!';
   }
+  // eventHashtags
   return errors;
 };
 

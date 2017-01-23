@@ -211,6 +211,7 @@ let EditEvent = class EditEvent extends Component {
             type="text"
             hintText="(optional)"
             fullWidth
+            multiLine
           />
         </div>
         <div>
@@ -220,9 +221,9 @@ let EditEvent = class EditEvent extends Component {
             floatingLabelText="Description"
             name="eventDesc"
             type="text"
-            multiLine
             hintText="Event Description"
             fullWidth
+            multiLine
           />
         </div>
         <div>
@@ -232,13 +233,15 @@ let EditEvent = class EditEvent extends Component {
             fetchStravaRoutes={this.fetchStravaRoutes}
           />
         </div>
-        <Field
-          component={TextField}
-          style={style.formelement}
-          floatingLabelText="Owner"
-          name="eventOwner"
-          type="number"
-        />
+        {initialValues.eventOwner ? (
+          <Field
+            component={TextField}
+            style={style.formelement}
+            floatingLabelText="Owner"
+            name="eventOwner"
+            type="number"
+          />
+        ) : (null)}
         { this.renderAlert() }
         <div>
           <RaisedButton
@@ -283,20 +286,16 @@ let EditEvent = class EditEvent extends Component {
             {renderForm}
           </Card>
         ) : (
-          <Paper
-            className="paper"
+          <Card
+            className="card"
           >
-            <Card
-              className="card"
-            >
-              <Toolbar>
-                <ToolbarTitle
-                  text="Add Event"
-                />
-              </Toolbar>
-              {renderForm}
-            </Card>
-          </Paper>
+            <Toolbar>
+              <ToolbarTitle
+                text="Add Event"
+              />
+            </Toolbar>
+            {renderForm}
+          </Card>
         )}
       </div>
     );

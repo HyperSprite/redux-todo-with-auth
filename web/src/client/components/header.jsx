@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { AppBar, Avatar, Divider, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
+import MdSettingsApplication from 'react-icons/lib/md/settings-applications';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 
 import * as actions from './../actions';
@@ -31,14 +32,13 @@ class Header extends Component {
         <MenuItem
           onTouchTap={this.handleClose}
           primaryText="Home"
-          containerElement={<Link to="/">Home</Link>}
+          containerElement={<Link to="/home">Home</Link>}
         />
         <MenuItem
           onTouchTap={this.handleClose}
           primaryText="Events"
           containerElement={<Link to="/events">Events</Link>}
         />
-        <Divider />
         <MenuItem
           onTouchTap={this.handleClose}
           primaryText="Athlete"
@@ -85,7 +85,7 @@ class Header extends Component {
         rightMenu = null;
         break;
     }
-    
+
     return this.props.authenticated ? (
       <span>{rightMenu}</span>
     ) : (
