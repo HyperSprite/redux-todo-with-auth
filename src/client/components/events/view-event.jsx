@@ -1,13 +1,12 @@
 import React, { PropTypes } from 'react';
-import { ShareButtons, ShareCounts, generateShareIcon } from 'react-share';
 import { Chip } from 'material-ui';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardHeader, CardText, CardTitle } from 'material-ui/Card';
 
+import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
 
+import style from '../../styles/style';
 import Static from './../form/static';
-
-const { FacebookShareButton, TwitterShareButton } = ShareButtons;
 
 const propTypes = {
   adminMember: PropTypes.bool,
@@ -16,6 +15,7 @@ const propTypes = {
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
   expanded: PropTypes.bool,
+  eventFullURL: PropTypes.string,
   eventLink: PropTypes.object,
   fav: PropTypes.bool,
   favClick: PropTypes.func,
@@ -34,11 +34,11 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
+  eventLink,
   expanded,
   fav,
   favClick,
   favCount,
-  eventLink,
   goal,
   goalClick,
   niceEventDate,
@@ -50,16 +50,24 @@ const renderViewEvent = ({
   >
     <CardHeader
       className="card-header"
-      title={eventLink}
-      subtitle={subTitleName}
       showExpandableButton
       avatar={ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
+      title={eventLink}
+      subtitle={subTitleName}
     />
     <CardText
       expandable
     >
+      <ShareButtons
+        hashtags={event.eventHashtags.concat('ARaceathlete')}
+        title={event.eventTitle}
+        urlHash={event.eventId}
+        urlPath="events"
+        urlRoot="https://www.araceathlete.com"
+      />
       {adminMember ? ( // hiding for adminMember only unitl this works
         <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
+
       ) : (null)}
       {canEdit ? (
         <span>

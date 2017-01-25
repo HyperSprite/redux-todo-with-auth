@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { FlatButton } from 'material-ui';
+import { FlatButton, IconButton } from 'material-ui';
 
 import MdPerson from 'react-icons/lib/md/person';
 import MdPersonO from 'react-icons/lib/md/person-outline';
@@ -23,13 +23,30 @@ const EventTBLink = ({ active, filter, onClick }) => {
   if (active) {
     switch (filter) {
       case 'EVENTS_SHOW_ALL': {
-        return (<FlatButton icon={<FaSquare size={28} color={grey50} />} />);
+        return (
+          <IconButton
+            touch
+          >
+            {<FaSquare size={28} color={grey50} />}
+          </IconButton>
+        );
       }
       case 'EVENTS_SHOW_FAVORITE': {
-        return (<FlatButton icon={<FaStar size={28} color={grey50} />} />);
+        return (
+          <IconButton
+            touch
+          >
+            {<FaStar size={28} color={grey50} />}
+          </IconButton>
+        );
       }
       case 'EVENTS_SHOW_OWNER': {
-        return (<FlatButton icon={<MdPerson size={28} color={grey50} />} />);
+        return (<IconButton
+          touch
+        >
+          icon={<MdPerson size={28} color={grey50} />}
+        </IconButton>
+        );
       }
       default:
         return null;
@@ -38,38 +55,41 @@ const EventTBLink = ({ active, filter, onClick }) => {
   switch (filter) {
     case 'EVENTS_SHOW_ALL': {
       return (
-        <FlatButton
-          secondary
-          icon={<FaSquareO size={28} color={grey100} />}
+        <IconButton
+          touch
           onClick={(e) => {
             e.preventDefault();
             onClick();
           }}
-        />
+        >
+          {<FaSquareO size={28} color={grey100} />}
+        </IconButton>
       );
     }
     case 'EVENTS_SHOW_FAVORITE': {
       return (
-        <FlatButton
-          secondary
-          icon={<FaStarO size={28} color={grey100} />}
+        <IconButton
+          touch
           onClick={(e) => {
             e.preventDefault();
             onClick();
           }}
-        />
+        >
+          {<FaStarO size={28} color={grey100} />}
+        </IconButton>
       );
     }
     case 'EVENTS_SHOW_OWNER': {
       return (
-        <FlatButton
-          secondary
-          icon={<MdPersonO size={28} color={grey100} />}
+        <IconButton
+          touch
           onClick={(e) => {
             e.preventDefault();
             onClick();
           }}
-        />
+        >
+          {<MdPersonO size={28} color={grey100} />}
+        </IconButton>
       );
     }
     default:

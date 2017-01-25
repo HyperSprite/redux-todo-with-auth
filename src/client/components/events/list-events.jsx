@@ -1,17 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router';
-import { Paper, FloatingActionButton } from 'material-ui';
+import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/svg-icons';
 
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
-// import ScrollIntoView from 'scroll-component';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
 import EditEvent from './edit-event';
-
 
 import style from '../../styles/style';
 
@@ -141,6 +139,8 @@ class ListEvent extends Component {
                 <EditEvent key={`${event.eventId}-edit`} index={i} />
               );
             }
+            // ${window.location.href}
+            const eventFullURL = `https://www.araceathlete/events#${event.eventId}`;
 
             const eventLink = (
               <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
@@ -154,6 +154,7 @@ class ListEvent extends Component {
                   canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
                   deleteClick={() => this.deleteThisEvent(event.eventId)}
                   editClick={() => this.editThisEvent(event.eventId, i)}
+                  eventFullURL={eventFullURL}
                   eventLink={eventLink}
                   expanded={expanded}
                   fav={fav}
