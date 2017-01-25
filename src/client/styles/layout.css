@@ -69,10 +69,6 @@ body {
   justify-content: space-between;
 }
 
-.app-bar:nth-child(2) {
-  margin-right: 0;                          /* give right menu breathing room */
-}
-
 .brand {
   flex: 4 1 60%;
   order: 2;
