@@ -104,6 +104,7 @@ class Header extends Component {
           iconElementRight={this.renderRightMenu()}
           zDepth={1}
           style={style.appBar}
+          className="app-bar" 
         >
           {this.renderLeftMenu()}
         </AppBar>

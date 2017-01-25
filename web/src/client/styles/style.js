@@ -11,7 +11,7 @@ export default {
   appBar: {
     position: 'fixed',
     top: 0,
-    width: '100%',
+    width: '100vw',
     iconLeft: {
       cursor: 'pointer',
       width: 46,
@@ -69,8 +69,8 @@ export default {
   floatingActionButton: {
     margin: 0,
     top: 'auto',
-    right: 20,
-    bottom: 20,
+    right: '1em',
+    bottom: '1em',
     left: 'auto',
     position: 'fixed',
   },
@@ -95,6 +95,22 @@ export default {
 
   toggleIconButton: {
     color: theme.palette.textColor,
+    margin: 0,
+    padding: 0,
+    height: 32,
+    width: 32,
+  },
+
+  toggleToolbarButtonOn: {
+    color: theme.palette.grey50,
+    margin: 0,
+    padding: 0,
+    height: 32,
+    width: 32,
+  },
+
+  toggleToolbarButtonOff: {
+    color: theme.palette.grey100,
     margin: 0,
     padding: 0,
     height: 32,
