@@ -23,7 +23,7 @@ const portS = (port * 1) + 363;
 
 let httpServer;
 
-hlpr.consLog(['process.env', process.env]);
+// hlpr.consLog(['process.env', process.env]);
 
 isSSL ?
   console.log('**** Using local SSL certs') :
