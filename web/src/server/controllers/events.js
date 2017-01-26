@@ -63,6 +63,7 @@ const stringDate = newDate.toString();
 exports.getEvents = (req, res) => {
   const rQ = req.query;
   const dbQuery = {};
+  let andQuery = [];
   const dbOptions = {};
 
   // example Event "eventGeoCoordinates": [ -122.1439698, 37.426941 ],
@@ -79,21 +80,37 @@ exports.getEvents = (req, res) => {
     };
   }
 
-  // Working on this later, may move to aggregation framework
-  // if (Object.keys(rQ).indexOf('eventSeries') !== -1) {
-  //   if (Object.keys(dbQuery).indexOf('and') === -1) dbQuery.and = [];
-  //   dbQuery.and.push({ eventSeries: { $regex: rQ.eventSeries, $options: 'i' } });
-  // }
 
+  const querySetup = {
+    // /apiv1/events?fav={stravaId}
+    fav: { eventFavorites: rQ.fav },
+    // /apiv1/events?series={eventSeries (contains)}
+    series: { eventSeries: { $regex: rQ.series, $options: 'i' } },
+    // /apiv1/events?series={eventOrganization (contains)}
+    org: { eventOrganization: { $regex: rQ.org, $options: 'i' } },
+  };
+
+  Object.getOwnPropertyNames(rQ).forEach((q) => {
+    if (q !== 'userLoc') {
+      hlpr.consLog(['q', q, rQ[q], querySetup[q]]);
+      andQuery.push(querySetup[q]);
+    }
+  });
+  hlpr.consLog(['andQuery', andQuery]);
+
+
+  if (andQuery.length > 0) {
+    dbQuery.$and = andQuery;
+  }
   dbQuery.eventDate = { $gt: stringDate };
   dbQuery.eventDeleted = false;
 
   Events.find(dbQuery, dbOptions, { sort: { eventDate: 1 } }, (err, events) => {
     if (err) {
       hlpr.consLog(['getEvents error', err]);
-      return res.status(404).send(['getEvent Error 404']);
+      return res.status(404).send([{ error: 'Error: events not found' }]);
     }
-    hlpr.consLog(['getEvents', events, stringDate, req.params, rQ]);
+    hlpr.consLog(['getEvents', stringDate, req.params, rQ]);
     return res.send(events);
   });
 };
