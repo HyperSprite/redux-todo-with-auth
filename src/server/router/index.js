@@ -10,6 +10,7 @@ const hlpr = require('../lib/helpers');
 const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
+const resourceRoutes = require('./resources');
 
 const indexHTML = `
   <!doctype html>
@@ -47,6 +48,7 @@ router.get('/secret', requireAuth, (req, res) => {
 router.use('/auth', authRoutes);
 router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/strava', stravaRoutes);
+router.use('/apiv1/resource', resourceRoutes);
 
 // for letsencrypt setup
 router.get('/.well-known/acme-challenge/:acmeToken', (req, res, next) => {

@@ -53,6 +53,12 @@ const eventSchema = new Schema(
     eventGeoCountryCode: String,
     eventGeoZipCode: String,
     eventGeoProvider: String,
+    eventGeoConfidence: Number,
+    eventGeoElevation: Number,
+    eventGeoTzId: String,
+    eventGeoTzName: String,
+    eventGeoTzRawOffset: Number,
+    eventGeoTzDSTOffset: Number,
     eventStartElevation: Number, // in meters
     eventURL: { type: String, lower: true },
     eventDesc: String, // for MarkDown

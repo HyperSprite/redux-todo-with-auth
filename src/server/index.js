@@ -44,7 +44,7 @@ const secureHost = (req, res, next) => {
 };
 
 // Webpack dev server setup
-if (!hlpr.isProd()) {
+if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
   hlpr.consLog(['**** Using Webpack Dev Middleware']);
   const webpack = require('webpack');
   const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -69,7 +69,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Express Middleware
 app.use(secureHost);
-app.use(cors());
+// app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
 app.use(express.static(rootDir));
