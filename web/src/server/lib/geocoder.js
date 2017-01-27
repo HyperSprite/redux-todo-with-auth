@@ -3,7 +3,7 @@ const hlpr = require('./helpers');
 
 const geoOptions = {
   provider: 'google',
-  apiKey: process.env.GEOCODER_API_KEY, // see Config file
+  apiKey: process.env.GOOGLE_MAPS, // see Config file
   formatter: null,
 };
 

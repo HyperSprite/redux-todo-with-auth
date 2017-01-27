@@ -5,8 +5,10 @@ const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 
 const hashtagger = (postedHashtags, result) => {
-  if (!postedHashtags || postedHashtags[0] === '') return result([]);
-  const tmpHashtag = postedHashtags.trim().slice();
+  hlpr.consLog(['events.hashtagger', 'postedHashtags', postedHashtags]);
+  if (!postedHashtags || postedHashtags[0] === '') return result([]); // empty
+  if (Array.isArray(postedHashtags)) return result(postedHashtags); // form untuched
+  const tmpHashtag = postedHashtags.trim().slice(); // form tuched
   return result(tmpHashtag.replace(/[^a-z0-9 ,.]/gi, '').split(/[ ,.]+/).filter((tag, i, array) => {
     return i === array.indexOf(tag);
   }));
@@ -27,7 +29,7 @@ exports.addEvent = (req, res) => {
           return res.send(result);
         }
         hlpr.consLog(['Event error', err]);
-        return res.status(400).send(err);
+        return res.status(400).send({ error: 'Error adding new event' });
       });
     });
   });
@@ -43,7 +45,10 @@ exports.editEvent = (req, res) => {
           toSave.eventHashtags = cleanHashtags;
           const options = { new: true };
           Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
-            if (err) hlpr.consLog(['editEvent', err]);
+            if (err) {
+              hlpr.consLog(['editEvent', err]);
+              return res.status(400).send({ error: 'Error updating event' });
+            }
             hlpr.consLog(['editEvent', eventEdit.eventId]);
             const result = { event: { postSuccess: true }, updated: eventEdit };
             hlpr.consLog([result]);
@@ -67,7 +72,7 @@ exports.getEvents = (req, res) => {
   const dbOptions = {};
 
   // example Event "eventGeoCoordinates": [ -122.1439698, 37.426941 ],
-  // ?userLoc='-122.1439698,37.426941'
+  // /apiv1/events?userLoc=-122.1439698,37.426941
   if (Object.keys(rQ).indexOf('userLoc') !== -1) {
     dbQuery.eventGeoCoordinates = {
       $near: {
