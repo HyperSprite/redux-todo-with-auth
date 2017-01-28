@@ -12,6 +12,7 @@ import * as actions from '../../actions';
 import { validate, warn } from './../form/validate';
 import Alert from './../form/alert';
 import EventRoutes from './event-routes';
+import EventHashtags from './event-hashtags';
 
 import style from '../../styles/style';
 
@@ -115,14 +116,20 @@ let EditEvent = class EditEvent extends Component {
             type="text"
             hintText="Event Title"
           />
-          <Field
+          {/* <Field
             component={TextField}
             style={style.formelement}
             floatingLabelText="#Hashtags"
             name="eventHashtags"
             type="text"
             hintText="(optional)"
-          />
+          /> */}
+          <div>
+            <FieldArray
+              name="eventHashtags"
+              component={EventHashtags}
+            />
+          </div>
           <Field
             component={DatePicker}
             style={style.formelement}

@@ -1,4 +1,5 @@
 const moment = require('moment');
+const form = require('express-form');
 
 const Events = require('../models/events');
 const hlpr = require('../lib/helpers');
@@ -14,23 +15,26 @@ const hashtagger = (postedHashtags, result) => {
   }));
 };
 
+exports.eventForm = form(
+  form.field('eventHashtags').array().custom(value => value.replace(/[^a-z0-9]/gi, '')) /* eslint comma-dangle: ["error", "never"] */
+);
+
 exports.addEvent = (req, res) => {
+  hlpr.consLog(['addEvent', req]);
   geocoder.eventGeocoder(req.body, {}, (err, toSave) => {
     toSave.eventOwner = req.user.stravaId;
     hlpr.consLog(['events.addEvent', 'toSave', toSave]);
     toSave.eventFavorites = [toSave.eventOwner];
-    hashtagger(toSave.eventHashtags, (cleanHashtags) => {
-      toSave.eventHashtags = cleanHashtags;
-      Events.create(toSave, (err, event) => {
-        if (!err) {
-          hlpr.consLog(['Event saved']);
-          const result = { event: { postSuccess: true }, updated: event };
-          hlpr.consLog([result]);
-          return res.send(result);
-        }
-        hlpr.consLog(['Event error', err]);
-        return res.status(400).send({ error: 'Error adding new event' });
-      });
+    toSave.eventHashtags = req.form.eventHashtags;
+    Events.create(toSave, (err, event) => {
+      if (!err) {
+        hlpr.consLog(['Event saved']);
+        const result = { event: { postSuccess: true }, updated: event };
+        hlpr.consLog([result]);
+        return res.send(result);
+      }
+      hlpr.consLog(['Event error', err]);
+      return res.status(400).send({ error: 'Error adding new event' });
     });
   });
 };
@@ -41,19 +45,17 @@ exports.editEvent = (req, res) => {
     if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
       geocoder.eventGeocoder(req.body, event, (err, toSave) => {
         hlpr.consLog(['callGeoCoder', err, toSave]);
-        hashtagger(toSave.eventHashtags, (cleanHashtags) => {
-          toSave.eventHashtags = cleanHashtags;
-          const options = { new: true };
-          Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
-            if (err) {
-              hlpr.consLog(['editEvent', err]);
-              return res.status(400).send({ error: 'Error updating event' });
-            }
-            hlpr.consLog(['editEvent', eventEdit.eventId]);
-            const result = { event: { postSuccess: true }, updated: eventEdit };
-            hlpr.consLog([result]);
-            res.send(result);
-          });
+        toSave.eventHashtags = req.form.eventHashtags;
+        const options = { new: true };
+        Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
+          if (err) {
+            hlpr.consLog(['editEvent', err]);
+            return res.status(400).send({ error: 'Error updating event' });
+          }
+          hlpr.consLog(['editEvent', eventEdit.eventId]);
+          const result = { event: { postSuccess: true }, updated: eventEdit };
+          hlpr.consLog([result]);
+          res.send(result);
         });
       });
     } else {
@@ -125,11 +127,11 @@ exports.getEvent = (req, res) => {
   const query = { eventId: req.params.eventId };
 
   Events.findOne(query, (err, event) => {
-    if (err) hlpr.consLog(['getEvent error', err]);
-    hlpr.consLog(['getEvent', event, req.params]);
-    const result = event;
-    result.eventHashtags = event.eventHashtags.join(' ');
-    res.send(result);
+    if (err) {
+      hlpr.consLog(['getEvent error', err]);
+      res.status(400).send({ error: 'getEvent error' });
+    }
+    res.send(event);
   });
 };
 
