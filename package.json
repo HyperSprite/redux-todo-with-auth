@@ -86,15 +86,15 @@
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "uuid": "^3.0.1",
-    "webpack": "^1.14.0"
-  },
-  "devDependencies": {
+    "webpack": "^1.14.0",
     "babel-cli": "^6.18.0",
-    "flow-bin": "^0.33.0",
-    "nodemon": "^1.11.0",
     "react-hot-loader": "^3.0.0-beta.6",
     "source-map-loader": "^0.1.5",
     "webpack-dev-middleware": "^1.8.4",
     "webpack-hot-middleware": "^2.13.2"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.33.0",
+    "nodemon": "^1.11.0"
   }
 }
