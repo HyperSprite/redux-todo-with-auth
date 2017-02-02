@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Match, Redirect } from 'react-router';
+import { Route, Redirect } from 'react-router-dom';
 
-const MatchAuthorized = ({ authenticated, component: Component, ...rest }) => {
+const RouteAuthorized = ({ authenticated, component: Component, ...rest }) => {
   return (
-    <Match
+    <Route
       {...rest} render={props => (
         authenticated ? (
           <Component {...props} />
@@ -26,4 +26,4 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-)(MatchAuthorized);
+)(RouteAuthorized);

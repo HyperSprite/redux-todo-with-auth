@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { FlatButton, Paper, RaisedButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';

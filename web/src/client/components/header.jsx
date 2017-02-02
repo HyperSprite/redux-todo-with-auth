@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { AppBar, Avatar, Divider, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
 import MdSettingsApplication from 'react-icons/lib/md/settings-applications';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
@@ -104,7 +104,7 @@ class Header extends Component {
           iconElementRight={this.renderRightMenu()}
           zDepth={1}
           style={style.appBar}
-          className="app-bar" 
+          className="app-bar"
         >
           {this.renderLeftMenu()}
         </AppBar>
