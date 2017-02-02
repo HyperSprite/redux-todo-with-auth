@@ -4,6 +4,7 @@ if (fs.existsSync(`${__dirname}/config.js`)) {
   const config = require('./config');
   config.loadConfig();
 }
+process.env.STRAVA_ACCESS_TOKEN = undefined;
 
 const http = require('http');
 const https = require('https');
