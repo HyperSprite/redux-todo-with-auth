@@ -59,11 +59,17 @@ exports.stravaSignin = (req, res, next) => {
       hlpr.consLog(['auth.callGeoCoder', 'req.user', req.user, err, toSave]);
       const options = { new: true };
       User.findByIdAndUpdate(req.user._id, toSave, options, (err, editUser) => {
-        if (athlete.ftp && athlete.ftp !== req.user.ftpHistory[req.user.ftpHistory.length - 1].ftp) {
-          const ftpHistory = { ftp: tokenPayload.athlete.ftp, date: getDate(result => result) };
-          User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
-            if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
-          });
+        if (athlete.ftp) {
+          const ftpHistory = { ftp: athlete.ftp, date: getDate(result => result) };
+          if (req.user.ftpHistory.length === 0) {
+            User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
+              if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
+            });
+          } else if (req.user.ftpHistory.length > 0 && athlete.ftp !== req.user.ftpHistory[req.user.ftpHistory.length - 1].ftp) {
+            User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
+              if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
+            });
+          }
         }
         // hlpr.consLog(['auth.User.fOAU', err, editUser]);
         const result = `
