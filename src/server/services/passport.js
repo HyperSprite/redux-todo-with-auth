@@ -43,11 +43,11 @@ const jwtOptions = {
 // { sub: user.id, iat: timestamp } from authentication.js is the payload here
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   User.findById(payload.sub, (err, user) => {
-    hlpr.consLog(['jwtLogin', err, user]);
     if (err) {
-      hlpr.consLog(['jwtLogin', err]);
+      hlpr.consLog(['passport.jwtLogin err', err]);
       return done(err, false);
     }
+    hlpr.consLog(['passport.jwtLogin user', user]);
     return user ? done(null, user) : done(null, false);
   });
 });

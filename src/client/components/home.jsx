@@ -31,7 +31,7 @@ class Home extends Component {
           <div className="side-lite left-pane" />
           <div className="main" >
             <div>
-              <h1 className="welcome"><span className="wrap-here">Welcome to</span>{' '}<span className="wrap-here"><span className="plus-h1">A Race</span> Athlete</span><div className="sub-header">It{"'"}s time to level up!</div></h1>
+              <h1 className="welcome"><span className="wrap-here">Welcome to</span>{' '}<span className="wrap-here"><span className="plus-h1">A Race</span> athlete</span><div className="sub-header">It{"'"}s time to level up!</div></h1>
             </div>
             <div className="quote-box">
               <p>ARaceAthlete is a place to share and track events, primarily your <strong>A Race</strong> for the year. What is an <strong>A Race</strong> you ask? While you may have other important events, an    <strong>A Race</strong> is that event you plan all year for. It is the pinnacle of your season. The point of hours of preparation and training.</p>

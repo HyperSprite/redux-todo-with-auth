@@ -5,6 +5,12 @@ const Events = require('../models/events');
 const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 
+const getDate = (result) => {
+  const newDate = moment().add(-1, 'days').format();
+  newDate.toString();
+  return result(newDate);
+};
+
 const hashtagger = (postedHashtags, result) => {
   hlpr.consLog(['events.hashtagger', 'postedHashtags', postedHashtags]);
   if (!postedHashtags || postedHashtags[0] === '') return result([]); // empty
@@ -64,9 +70,6 @@ exports.editEvent = (req, res) => {
   });
 };
 
-const newDate = moment().add(-1, 'days').format();
-const stringDate = newDate.toString();
-
 exports.getEvents = (req, res) => {
   const rQ = req.query;
   const dbQuery = {};
@@ -105,19 +108,19 @@ exports.getEvents = (req, res) => {
   });
   hlpr.consLog(['andQuery', andQuery]);
 
-
   if (andQuery.length > 0) {
     dbQuery.$and = andQuery;
   }
-  dbQuery.eventDate = { $gt: stringDate };
+  dbQuery.eventDate = { $gt: getDate(result => result) };
   dbQuery.eventDeleted = false;
+  hlpr.consLog(['dbQuery.eventDate', dbQuery.eventDate]);
 
   Events.find(dbQuery, dbOptions, { sort: { eventDate: 1 } }, (err, events) => {
     if (err) {
       hlpr.consLog(['getEvents error', err]);
       return res.status(404).send([{ error: 'Error: events not found' }]);
     }
-    hlpr.consLog(['getEvents', stringDate, req.params, rQ]);
+    hlpr.consLog(['getEvents', dbQuery.eventDate, req.params, rQ]);
     return res.send(events);
   });
 };
