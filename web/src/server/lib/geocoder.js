@@ -20,7 +20,7 @@ exports.eventGeocoder = (toSave, event, res) => {
   ${toSave.eventLocState || event.eventLocState || ''},
   ${toSave.eventLocCountry || event.eventLocCountry || ''},
   ${toSave.eventLocZip || event.eventLocZip || ''},`;
-  hlpr.consLog([geoQuery]);
+  hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
     if (geoRes.length === 0 || err) return res(err, toSave);
@@ -52,15 +52,18 @@ exports.eventGeocoder = (toSave, event, res) => {
 
 exports.userGeocoder = (toSave, user, res) => {
   const result = toSave;
-  const geoQuery = `${toSave.userLocStreet || user.userLocStreet || ''},
-  ${toSave.userLocCity || user.userLocCity || user.loc_city || ''},
-  ${toSave.userLocState || user.userLocState || user.loc_state || ''},
-  ${toSave.userLocCountry || user.userLocCountry || user.loc_country || ''},
-  ${toSave.userLocZip || user.userLocZip || ''},`;
-  hlpr.consLog([geoQuery]);
+  const geoQuery = `${user.userLocStreet || ''},
+  ${toSave.loc_city || user.userLocCity || ''},
+  ${toSave.loc_state || user.userLocState || ''},
+  ${toSave.loc_country || user.userLocCountry || ''},
+  ${user.userLocZip || ''},`;
+  hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
-    if (geoRes.length === 0 || err) return res(err, toSave);
+    if (geoRes.length === 0 || err) {
+      hlpr.consLog(['callGeoCoder err', 'toSave', toSave, 'user', user, 'err', err]);
+      return res(err, toSave);
+    }
     hlpr.consLog(['callGeoCoder', 'geoRes', geoRes, 'err', err]);
     if (geoRes[0] && geoRes[0].extra.confidence >= 0.9) {
       result.userGeoFormattedAddress = geoRes[0].formattedAddress;
@@ -81,6 +84,7 @@ exports.userGeocoder = (toSave, user, res) => {
     result.userGeoCountryCode = geoRes[0].countryCode;
     result.userGeoZipCode = geoRes[0].zipcode;
     result.userGeoProvider = geoRes[0].provider;
+    hlpr.consLog(['callGeoCoder', 'result', result]);
     return res(err, result);
   });
 };
