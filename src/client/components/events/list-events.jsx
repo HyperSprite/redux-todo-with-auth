@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router';
+import { Link, Redirect } from 'react-router-dom';
 import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/svg-icons';
 

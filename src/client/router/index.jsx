@@ -1,7 +1,7 @@
 import React from 'react';
-import { Match } from 'react-router';
+import { Route, Switch } from 'react-router-dom';
 
-import MatchAuthorized from './matchauth';
+import RouteAuthorized from './matchauth';
 
 import Home from './../components/home';
 import Signin from './../components/auth/signin';
@@ -13,17 +13,17 @@ import Goals from './../components/goals/list-goals';
 import AddGoal from './../components/goals/add-goal';
 
 const router = (
-  <div>
-    <MatchAuthorized exactly pattern="/" component={Events} />
-    <MatchAuthorized pattern="/athlete" component={Athlete} />
-    <MatchAuthorized pattern="/events/addevent" component={EditEvent} />
-    <Match exactly pattern="/events" component={Events} />
-    <MatchAuthorized pattern="/goals/addgoal" component={AddGoal} />
-    <MatchAuthorized exactly pattern="/goals" component={Goals} />
-    <Match pattern="/home" component={Home} />
-    <Match pattern="/signin" component={Signin} />
-    <Match pattern="/signout" component={Signout} />
-  </div>
+  <Switch>
+    <RouteAuthorized exact path="/" component={Home} />
+    <RouteAuthorized path="/athlete" component={Athlete} />
+    <RouteAuthorized path="/events/addevent" component={EditEvent} />
+    <Route exact path="/events" component={Events} />
+    <RouteAuthorized path="/goals/addgoal" component={AddGoal} />
+    <RouteAuthorized exact path="/goals" component={Goals} />
+    <Route path="/home" component={Home} />
+    <Route path="/signin" component={Signin} />
+    <Route path="/signout" component={Signout} />
+  </Switch>
 );
 
 export default router;

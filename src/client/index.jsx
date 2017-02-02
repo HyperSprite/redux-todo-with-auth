@@ -3,7 +3,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { getMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -17,11 +17,11 @@ injectTapEventPlugin();
 
 render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
       <MuiThemeProvider muiTheme={getMuiTheme(Theme)}>
         <App >{ routes }</App>
       </MuiThemeProvider>
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById('root'),
 );

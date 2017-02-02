@@ -2,8 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 
 const isProd = (process.env.NODE_ENV === 'production');
+const isLogging = (process.env.LOGGING === 'true');
 
-console.log(isProd, process.env.NODE_ENV);
+console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging);
 
 function getPlugins() {
   const plugins = [];
@@ -49,7 +50,7 @@ function getOutput() {
 function getPreLoaders() {
   const preLoaders = [];
 
-  if (!isProd) {
+  if (isLogging) {
     preLoaders.push({
       test: /\.js$/,
       loader: 'source-map-loader',
@@ -103,7 +104,7 @@ function getLoaders() {
 }
 
 function getDevtool() {
-  const devtool = isProd ? null : 'source-map';
+  const devtool = isLogging ? 'source-map' : null;
   return devtool;
 }
 
