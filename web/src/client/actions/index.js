@@ -28,6 +28,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   SET_FAV_EVENT: 'SET_FAV_EVENT',
   FETCH_STRAVA_ROUTES: 'FETCH_STRAVA_ROUTES',
   SET_PAGE_NAME: 'SET_PAGE_NAME',
+  SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
 };
 
 // handle error mesages
@@ -326,6 +327,13 @@ export function setPageName(name: string) {
   return {
     type: TYPES.SET_PAGE_NAME,
     payload: name,
+  };
+}
+
+export function setDrawer(drawer: boolean) {
+  return {
+    type: TYPES.SET_PAGE_DRAWER,
+    payload: drawer,
   };
 }
 

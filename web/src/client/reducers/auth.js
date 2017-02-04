@@ -2,7 +2,11 @@
 
 import { TYPES } from '../actions';
 
-export default function (state = { user: {} }, action) {
+export default function (state = {
+  user: {
+    authenticated: false,
+  },
+}, action) {
   switch (action.type) {
     case TYPES.AUTH_USER:
       return { ...state, error: '', authenticated: true };

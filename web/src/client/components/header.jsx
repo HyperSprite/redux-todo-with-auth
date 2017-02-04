@@ -1,79 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { AppBar, Avatar, Divider, Drawer, IconButton, IconMenu, MenuItem } from 'material-ui';
-import MdSettingsApplication from 'react-icons/lib/md/settings-applications';
+import { AppBar } from 'material-ui';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 
 import * as actions from './../actions';
 
-import router from './../router';
 import Signin from './auth/signin';
 import EventFilter from './events/filter-toolbar';
 
 import style from '../styles/style';
 
+const propTypes = {
+  authenticated: PropTypes.bool.isRequired,
+  page: PropTypes.object.isRequired,
+  setDrawer: PropTypes.func.isRequired,
+};
+
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
 
-  handleToggle = () => this.setState({ open: !this.state.open });
-  handleClose = () => this.setState({ open: false });
-
-  renderLeftMenu() {
-    return this.props.authenticated ? (
-      <Drawer
-        docked={false}
-        open={this.state.open}
-        onRequestChange={open => this.setState({ open })}
-      >
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Home"
-          containerElement={<Link to="/home">Home</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Events"
-          containerElement={<Link to="/events">Events</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Athlete"
-          containerElement={<Link to="/athlete">Athlete</Link>}
-        />
-        {/* <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Help"
-        /> */}
-        <Divider />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Sign out"
-          containerElement={<Link to="/signout">Sign out</Link>}
-        />
-      </Drawer>
-    ) : (
-      <Drawer
-        docked={false}
-        open={this.state.open}
-        onRequestChange={open => this.setState({ open })}
-      >
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Home"
-          containerElement={<Link to="/">Home</Link>}
-        />
-        <MenuItem
-          onTouchTap={this.handleClose}
-          primaryText="Events"
-          containerElement={<Link to="/events">Events</Link>}
-        />
-      </Drawer>
-    );
-  }
+  handleToggle = () => this.props.setDrawer({ drawer: !this.props.page.drawer });
 
   renderRightMenu() {
     let rightMenu;
@@ -105,9 +50,7 @@ class Header extends Component {
           zDepth={1}
           style={style.appBar}
           className="app-bar"
-        >
-          {this.renderLeftMenu()}
-        </AppBar>
+        />
       </div>
     );
   }
@@ -116,10 +59,10 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
-    profile_medium: state.auth.user.profile_medium,
-    firstname: state.auth.user.firstname,
     page: state.page,
   };
 }
+
+Header.propTypes = propTypes;
 
 export default connect(mapStateToProps, actions)(Header);
