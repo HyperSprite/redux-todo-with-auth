@@ -19,7 +19,7 @@ a {
   background-position: bottom center;
 }
 
-@media all and (max-width: 768px) {
+@media all and (max-width: 700px) {
   .home-jumbotron {
     background-image: url('../assets/background-small.jpg');
     background-size:cover;

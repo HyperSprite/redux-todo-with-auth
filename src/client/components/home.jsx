@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import * as actions from './../actions';
 import ScrollIntoView from './../containers/scroll-into-view';
 
-import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
+// import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
+
+const propTypes = {
+  setPageName: PropTypes.func.isRequired,
+};
 
 class Home extends Component {
   componentDidMount() {
@@ -22,7 +26,7 @@ class Home extends Component {
           <div className="side-lite left-pane" />
           <div className="brand">
             <div>
-              <img src={ARaceAthleteSVG} alt="A Race Athlete logo" />
+              {/* <img src={ARaceAthleteSVG} alt="A Race Athlete logo" /> */}
             </div>
           </div>
           <div className="side-lite right-pane" />
@@ -51,5 +55,7 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = propTypes;
 
 export default connect(null, actions)(Home);
