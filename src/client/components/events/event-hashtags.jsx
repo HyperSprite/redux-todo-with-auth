@@ -19,9 +19,13 @@ const renderEventHashtags = ({ fields }) => (
         hoverColor="#fffefe"
         style={style.listItem}
       >
-        <Subheader
-          style={style.subheader}
-        >
+        <div>
+          <Field
+            name={hashtag}
+            type="text"
+            component={TextField}
+            floatingLabelText="Add a hashtag"
+          />
           <IconButton
             type="button"
             tooltip="Remove Hashtag"
@@ -32,14 +36,6 @@ const renderEventHashtags = ({ fields }) => (
               style={style.iconStyles}
             />
           </IconButton>
-        </Subheader>
-        <div>
-          <Field
-            name={hashtag}
-            type="text"
-            component={TextField}
-            floatingLabelText="Add a hashtag"
-          />
         </div>
       </ListItem>,
     )}

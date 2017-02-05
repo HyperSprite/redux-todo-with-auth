@@ -23,7 +23,7 @@ exports.eventGeocoder = (toSave, event, res) => {
   hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
-    if (geoRes.length === 0 || err) return res(err, toSave);
+    if (err || geoRes.length === 0) return res(err, toSave);
     hlpr.consLog(['callGeoCoder', 'geoRes', geoRes, 'err', err]);
     if (geoRes[0] && geoRes[0].extra.confidence >= 0.9) {
       result.eventGeoFormattedAddress = geoRes[0].formattedAddress;
@@ -60,7 +60,7 @@ exports.userGeocoder = (toSave, user, res) => {
   hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
-    if (geoRes.length === 0 || err) {
+    if (err || geoRes.length === 0) {
       hlpr.consLog(['callGeoCoder err', 'toSave', toSave, 'user', user, 'err', err]);
       return res(err, toSave);
     }
