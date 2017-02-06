@@ -49,6 +49,7 @@ exports.stravaSignin = (req, res, next) => {
       return c.id === process.env.STRAVA_CLUB * 1;
     });
     const athlete = tokenPayload.athlete;
+    athlete.access_token = tokenPayload.access_token;
     athlete.loc_city = tokenPayload.athlete.city;
     athlete.loc_state = tokenPayload.athlete.state;
     athlete.loc_country = tokenPayload.athlete.country;

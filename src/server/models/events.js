@@ -25,6 +25,8 @@ const eventRoutesSchema = new Schema(
     eventRouteDistacne: Number, // distance
     eventRouteElevationGain: Number, // elevation_gain
     eventRouteTimestamp: Number, // timestamp
+    eventRouteSummaryPolyline: String,
+    eventRouteSegments: [],
   });
 
 const eventSchema = new Schema(
