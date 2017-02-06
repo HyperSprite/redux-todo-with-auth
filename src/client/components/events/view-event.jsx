@@ -128,8 +128,8 @@ const renderViewEvent = ({
       />
       <Static
         contentLabel="Description"
-        content={event.eventDesc}
-        contentType="text"
+        content={event.eventDescHTML}
+        contentType="html"
       />
       <Static
         contentLabel="#Hashtags"

@@ -10,6 +10,9 @@ const propTypes = {
 
 const renderContent = (content, contentType, contentAlt, baseURL) => {
   switch (contentType) {
+    case 'html': {
+      return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    }
     case 'img': {
       return <img src={content} alt={contentAlt} />;
     }
