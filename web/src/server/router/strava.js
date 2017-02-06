@@ -5,6 +5,6 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 const Strava = require('./../controllers/strava');
 
-router.get('/routes/:id', Strava.getRoute);
+router.get('/routes/:id', requireAuth, Strava.getRoute);
 
 module.exports = router;

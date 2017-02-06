@@ -10,7 +10,18 @@ const propTypes = {
   fields: PropTypes.object,
 };
 
-const renderEventRoutes = ({ fields, fetchStravaRoutes }) => (
+const defaultValues = {
+  eventSelector: [
+    {
+      eventRouteName: '',
+      eventRouteDescription: '',
+      eventRouteDistacne: '',
+      eventRouteElevationGain: '',
+    },
+  ],
+};
+
+const renderEventRoutes = ({ fields, fetchStravaRoutes, eventSelector }) => (
   <List style={style.list}>
     {fields.map((eventRoutes, index) =>
       <ListItem
@@ -41,7 +52,7 @@ const renderEventRoutes = ({ fields, fetchStravaRoutes }) => (
             component={TextField}
             floatingLabelText="Strava Route ID"
             hintText="1201587"
-            // onBlur={() => fetchStravaRoutes(index)} // TODO this is not right yet
+            onBlur={() => fetchStravaRoutes(eventSelector[index].eventRouteURL, index)} // TODO this is not right yet
           />
         </div>
       </ListItem>,
@@ -62,5 +73,6 @@ const renderEventRoutes = ({ fields, fetchStravaRoutes }) => (
 );
 
 renderEventRoutes.propTypes = propTypes;
+renderEventRoutes.defaultValues = defaultValues;
 
 export default renderEventRoutes;

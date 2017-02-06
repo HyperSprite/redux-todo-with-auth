@@ -64,11 +64,13 @@ let EditEvent = class EditEvent extends Component {
   }
 
 // TODO This is not finished, need to get the value out of the form.
-  fetchStravaRoutes(index) {
+  fetchStravaRoutes(routeId, index) {
     this.props.fetchStrava(
       'routes',
+      routeId,
       index,
       this.props.stravaToken,
+      'eventRoute',
     );
   }
 
@@ -237,6 +239,7 @@ let EditEvent = class EditEvent extends Component {
             name="eventRoutes"
             component={EventRoutes}
             fetchStravaRoutes={this.fetchStravaRoutes}
+            eventSelector={eventSelector.eventRoutes}
           />
         </div>
         {initialValues.eventOwner ? (

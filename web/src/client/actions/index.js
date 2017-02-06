@@ -26,7 +26,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
   SET_FAV_EVENT: 'SET_FAV_EVENT',
-  FETCH_STRAVA_ROUTES: 'FETCH_STRAVA_ROUTES',
+  FETCH_EVENT_STRAVA_ROUTE: 'FETCH_EVENT_STRAVA_ROUTE',
   SET_PAGE_NAME: 'SET_PAGE_NAME',
   SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
 };
@@ -225,25 +225,48 @@ export function favEvent(eventId, relURL) {
 const relURLStrava = 'apiv1/strava';
 // FETCH_STRAVA_ROUTES
 // fetchStravaRoutes
-export function fetchStrava(path, id, stravatoken) {
+export function fetchStrava(path, id, index, stravatoken, context) {
   const axiosConfig = {
     headers: {
       authorization: localStorage.getItem('token'),
-      stravatoken,
+      access_token: stravatoken,
     },
   };
   return (dispatch) => {
     axios.get(`${relURLStrava}/${path}/${id}`, axiosConfig)
       .then((response) => {
-        dispatch({
-          type: TYPES.FETCH_STRAVA_ROUTES,
-          payload: response,
-        });
+        const result = {
+          data: {},
+        };
+        switch (context) {
+          case 'eventRoute':
+            result.index = index;
+            result.data.eventRouteURL = response.data.id;
+            result.data.eventRouteName = response.data.name;
+            result.data.eventType = response.data.type;
+            result.data.evenSubType = response.data.sub_type;
+            result.data.eventRouteAthlete = response.data.athlete.id;
+            result.data.eventRouteDescription = response.data.description;
+            result.data.eventRouteDistacne = response.data.distance;
+            result.data.eventRouteElevationGain = response.data.elevation_gain;
+            result.data.eventRouteTimestamp = response.data.timestamp;
+            result.data.eventRouteSummaryPolyline = response.data.map.summary_polyline;
+            result.data.eventRouteSegments = response.data.segments;
+            dispatch({
+              type: TYPES.FETCH_EVENT_STRAVA_ROUTE,
+              payload: result,
+            });
+            break;
+        }
+        // dispatch({
+        //   type: TYPES.FETCH_STRAVA_ROUTES,
+        //   payload: result,
+        // });
       })
       .catch((error) => {
         dispatch({
           type: TYPES.FETCH_DATA,
-          payload: error.data,
+          payload: error,
         });
       });
   };

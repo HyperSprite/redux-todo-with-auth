@@ -22,6 +22,14 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
       return { ...state, event: {} };
     case TYPES.FETCH_EVENT:
       return { ...state, event: action.payload };
+    case TYPES.FETCH_EVENT_STRAVA_ROUTE:
+      return {
+        ...state,
+        event: {
+          ...state.event,
+          ...state.event.eventRoutes[action.payload.index] = action.payload.data,
+        }
+      };
     case TYPES.DELET_EVENT:
       return {
         ...state,
