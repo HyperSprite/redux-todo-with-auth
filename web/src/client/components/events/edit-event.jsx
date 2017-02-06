@@ -1,16 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Field, FieldArray, reduxForm } from 'redux-form';
-import { FlatButton, Paper, RaisedButton, RadioButton } from 'material-ui';
+import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
+import { FlatButton, RaisedButton, RadioButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { DatePicker, TextField, RadioButtonGroup } from 'redux-form-material-ui';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
-import { validate, warn } from './../form/validate';
 import Alert from './../form/alert';
+import Static from './../form/static';
+import StaticMD from './../form/static-markdown';
+import { validate, warn } from './../form/validate';
 import EventRoutes from './event-routes';
 import EventHashtags from './event-hashtags';
 
@@ -92,6 +94,7 @@ let EditEvent = class EditEvent extends Component {
       hashId,
       submitting,
       fetchStravaRoutes,
+      eventSelector,
     } = this.props;
 
     if (!authenticated) {
@@ -108,38 +111,30 @@ let EditEvent = class EditEvent extends Component {
 
     const renderForm = (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Title"
-            name="eventTitle"
-            type="text"
-            hintText="Event Title"
-          />
-          {/* <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="#Hashtags"
+        <Field
+          component={TextField}
+          style={style.formelement}
+          floatingLabelText="Title"
+          name="eventTitle"
+          type="text"
+          hintText="Event Title"
+        />
+        <div>
+          <FieldArray
             name="eventHashtags"
-            type="text"
-            hintText="(optional)"
-          /> */}
-          <div>
-            <FieldArray
-              name="eventHashtags"
-              component={EventHashtags}
-            />
-          </div>
-          <Field
-            component={DatePicker}
-            style={style.formelement}
-            floatingLabelText="Event Date"
-            name="eventDate"
-            format={null}
-            hintText="Event Day?"
-            container="inline"
-            mode="landscape"
+            component={EventHashtags}
           />
+        </div>
+        <Field
+          component={DatePicker}
+          style={style.formelement}
+          floatingLabelText="Event Date"
+          name="eventDate"
+          format={null}
+          hintText="Event Day?"
+          container="inline"
+          mode="landscape"
+        />
         <div>
           <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
             <RadioButton value="Cycling" label="Cycling" default />
@@ -225,7 +220,7 @@ let EditEvent = class EditEvent extends Component {
           <Field
             component={TextField}
             style={style.formelement}
-            floatingLabelText="Description"
+            floatingLabelText="Description (Markdown)"
             name="eventDesc"
             type="text"
             hintText="Event Description"
@@ -233,6 +228,10 @@ let EditEvent = class EditEvent extends Component {
             multiLine
           />
         </div>
+        <StaticMD
+          contentLabel="Formatted"
+          content={eventSelector.eventDesc}
+        />
         <div>
           <FieldArray
             name="eventRoutes"
@@ -311,6 +310,8 @@ let EditEvent = class EditEvent extends Component {
 
 EditEvent.propTypes = propTypes;
 
+const selector = formValueSelector('editevent');
+
 function mapStateToProps(state) {
   const initialValues = state.events.event;
   if (state.events.event && state.events.event.eventDate) {
@@ -329,6 +330,7 @@ function mapStateToProps(state) {
     postSuccess: state.events.event.postSuccess,
     initialValues,
     hashId,
+    eventSelector: selector(state, 'eventDesc', 'eventRoutes'),
   };
 }
 
