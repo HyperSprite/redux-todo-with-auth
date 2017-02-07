@@ -71,9 +71,9 @@ export const validate = (formProps) => {
   }
   // eventType
   // eventRoutes
-  if (!formProps.eventOwner) {
-    errors.eventOwner = 'Required - Caution, you could lose ownership of this Event!';
-  }
+  // if (!formProps.eventOwners[0]) {
+  //   errors.eventOwner = 'Required - Caution, you could lose ownership of this Event!';
+  // }
 
   return errors;
 };
@@ -85,8 +85,8 @@ export const warn = (formProps) => {
     warnings.eventLocZip = 'Not required, but helpful';
   }
 
-  if (formProps.eventOwner < 5) {
-    warnings.eventOwner = 'Caution, you could lose ownership of this Event!';
-  }
+  // if (formProps.eventOwner[0] < 5) {
+  //   warnings.eventOwner = 'Caution, you could lose ownership of this Event!';
+  // }
   return warnings;
 };

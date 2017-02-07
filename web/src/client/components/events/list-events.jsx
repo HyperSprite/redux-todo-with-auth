@@ -132,7 +132,7 @@ class ListEvent extends Component {
 
             const goal = true;
 
-            const canEdit = (eCreator, sId, aMember) => (eCreator === sId || aMember);
+            const canEdit = (eCreator = [], sId, aMember) => (eCreator.some(e=> e === sId) || aMember);
 
             if (forEdit.eventId === event.eventId) {
               return (
@@ -151,7 +151,7 @@ class ListEvent extends Component {
                 <ViewEvent
                   adminMember={adminMember}
                   authenticated={authenticated}
-                  canEdit={canEdit(event.eventOwner, stravaId, adminMember)}
+                  canEdit={canEdit(event.eventOwners, stravaId, adminMember)}
                   deleteClick={() => this.deleteThisEvent(event.eventId)}
                   editClick={() => this.editThisEvent(event.eventId, i)}
                   eventFullURL={eventFullURL}
@@ -189,7 +189,7 @@ const getVisibleEvents = (events, filter, stravaId) => {
       return events.filter(t => t.eventFavorites.indexOf(stravaId) !== -1);
     }
     case 'EVENTS_SHOW_OWNER': {
-      return events.filter(t => t.eventOwner === stravaId);
+      return events.filter(t => t.eventOwners.some(e => e === stravaId));
     }
     default:
       return events;

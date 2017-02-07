@@ -1,34 +1,35 @@
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
-import { FlatButton, IconButton, List, ListItem, Subheader } from 'material-ui';
-import { ActionDeleteForever } from 'material-ui/svg-icons';
+import { FlatButton, IconButton, List, ListItem } from 'material-ui';
+import { ActionDeleteForever, ContentAddCircle } from 'material-ui/svg-icons';
 import { TextField } from 'redux-form-material-ui';
 
 import style from '../../styles/style';
 
 const propTypes = {
-  fields: PropTypes.object,
+  fields: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
 };
 
-const renderEventHashtags = ({ fields }) => (
+const singleFieldArray = ({ fields, label }) => (
   <List style={style.list}>
-    {fields.map((hashtag, index) =>
+    {fields.map((item, index) =>
       <ListItem
-        key={`${index}${hashtag}`}
+        key={`${index}${item}`}
         disableTouchRipple
         hoverColor="#fffefe"
         style={style.listItem}
       >
         <div>
           <Field
-            name={hashtag}
+            name={item}
             type="text"
             component={TextField}
-            floatingLabelText="Add a hashtag"
+            floatingLabelText={`Add ${label}`}
           />
           <IconButton
             type="button"
-            tooltip="Remove Hashtag"
+            tooltip={`Remove ${label}`}
             style={style.iconButton}
             onClick={() => fields.remove(index)}
           >
@@ -45,15 +46,16 @@ const renderEventHashtags = ({ fields }) => (
     >
       <FlatButton
         type="button"
-        label="Add hashtag"
+        label={`Add ${label}`}
         primary
         style={style.button}
+        icon={<ContentAddCircle />}
         onClick={() => fields.push()}
       />
     </ListItem>
   </List>
 );
 
-renderEventHashtags.propTypes = propTypes;
+singleFieldArray.propTypes = propTypes;
 
-export default renderEventHashtags;
+export default singleFieldArray;

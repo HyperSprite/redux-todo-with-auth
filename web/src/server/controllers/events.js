@@ -52,7 +52,7 @@ exports.addEvent = (req, res) => {
 exports.editEvent = (req, res) => {
   Events.findOne({ eventId: req.params.eventId }, (err, event) => {
     if (!event) return res.status(404).send(`Event: ${req.params.eventId} not found`);
-    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
+    if (event.eventOwners.some(e => e === req.user.stravaId) || req.user.adminMember) {
       geocoder.eventGeocoder(req.body, event, (err, toSave) => {
         hlpr.consLog(['callGeoCoder', err, toSave]);
         markdown.rend(toSave.eventDesc, (rendHTML) => {
@@ -148,7 +148,7 @@ exports.getEvent = (req, res) => {
 exports.delEvent = (req, res) => {
   Events.findOne({ eventId: req.body.eventId }, (err, event) => {
     if (!event || err) console.log(err);
-    if (event.eventOwner === req.user.stravaId || req.user.adminMember) {
+    if (event.eventOwners.some(e => e === req.user.stravaId) || req.user.adminMember) {
       Events.findOneAndUpdate({ _id: event._id }, { $set: { eventDeleted: true } }, (err, deletedEvent) => {
         if (err) {
           hlpr.consLog(['delEvent', err]);
