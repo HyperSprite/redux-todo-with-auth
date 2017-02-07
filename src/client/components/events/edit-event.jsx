@@ -14,7 +14,7 @@ import Static from './../form/static';
 import StaticMD from './../form/static-markdown';
 import { validate, warn } from './../form/validate';
 import EventRoutes from './event-routes';
-import EventHashtags from './event-hashtags';
+import singleFieldArray from '../form/single-field-array';
 
 import style from '../../styles/style';
 
@@ -124,7 +124,9 @@ let EditEvent = class EditEvent extends Component {
         <div>
           <FieldArray
             name="eventHashtags"
-            component={EventHashtags}
+            label="hashtag"
+            fieldName="hashtag"
+            component={singleFieldArray}
           />
         </div>
         <Field
@@ -242,15 +244,11 @@ let EditEvent = class EditEvent extends Component {
             eventSelector={eventSelector.eventRoutes}
           />
         </div>
-        {initialValues.eventOwner ? (
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Owner"
-            name="eventOwner"
-            type="number"
-          />
-        ) : (null)}
+        <FieldArray
+          name="eventOwners"
+          label="owner"
+          component={singleFieldArray}
+        />
         { this.renderAlert() }
         <div>
           <RaisedButton
@@ -321,6 +319,7 @@ function mapStateToProps(state) {
     initialValues.eventDate = new Date(state.events.event.eventDate);
   } else {
     initialValues.eventAthleteType = 'Cycling';
+    initialValues.eventOwners = [state.auth.user.stravaId];
   }
   let hashId = '';
   if (state.events.event.updated && state.events.event.updated.eventId) {

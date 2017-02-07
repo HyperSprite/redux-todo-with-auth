@@ -34,6 +34,7 @@ const eventSchema = new Schema(
     eventId: { type: String, default: uuidNow },
     eventTitle: String,
     eventOwner: Number, // stravaId of user that creates event
+    eventOwners: [Number], // stravaIds of users who can edit event
     eventDate: String,
     eventOrg: String, // event organizer
     eventSeries: String, // event series
