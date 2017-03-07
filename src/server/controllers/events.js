@@ -5,6 +5,7 @@ const Events = require('../models/events');
 const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 const markdown = require('../lib/markdown');
+const resources = require('../lib/resources');
 
 const getDate = (result) => {
   const newDate = moment().add(-1, 'days').format();
@@ -30,20 +31,39 @@ exports.addEvent = (req, res) => {
   hlpr.consLog(['addEvent', req]);
   geocoder.eventGeocoder(req.body, {}, (err, toSave) => {
     toSave.eventOwner = req.user.stravaId;
-    hlpr.consLog(['events.addEvent', 'toSave', toSave]);
-    markdown.rend(toSave.eventDesc, (rendHTML) => {
-      toSave.eventDescHTML = rendHTML;
-      toSave.eventFavorites = [toSave.eventOwner];
-      toSave.eventHashtags = req.form.eventHashtags;
-      Events.create(toSave, (err, event) => {
-        if (!err) {
-          hlpr.consLog(['Event saved']);
-          const result = { event: { postSuccess: true }, updated: event };
-          hlpr.consLog([result]);
-          return res.send(result);
+
+    const inputElevation = {
+      loc: `${toSave.eventGeoLongitude},${toSave.eventGeoLatitude}`,
+      timestamp: toSave.eventDate,
+    };
+    resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
+      hlpr.consLog(['geoElv', geoElv]);
+      toSave.eventGeoElevation = geoElv.elevation;
+
+      resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
+        hlpr.consLog(['geoTZ', geoTZ]);
+        if (geoTZ.timezone) {
+          toSave.eventGeoTzId = geoTZ.timezone.timeZoneId;
+          toSave.eventGeoTzName = geoTZ.timezone.timeZoneName;
+          toSave.eventGeoTzRawOffset = geoTZ.timezone.rawOffset;
+          toSave.eventGeoTzDSTOffset = geoTZ.timezone.dstOffset;
         }
-        hlpr.consLog(['Event error', err]);
-        return res.status(400).send({ error: 'Error adding new event' });
+        hlpr.consLog(['events.addEvent', 'toSave', toSave]);
+        markdown.rend(toSave.eventDesc, (rendHTML) => {
+          toSave.eventDescHTML = rendHTML;
+          toSave.eventFavorites = [toSave.eventOwner];
+          toSave.eventHashtags = req.form.eventHashtags;
+          Events.create(toSave, (err, event) => {
+            if (!err) {
+              hlpr.consLog(['Event saved']);
+              const result = { event: { postSuccess: true }, updated: event };
+              hlpr.consLog([result]);
+              return res.send(result);
+            }
+            hlpr.consLog(['Event error', err]);
+            return res.status(400).send({ error: 'Error adding new event' });
+          });
+        });
       });
     });
   });
@@ -55,19 +75,38 @@ exports.editEvent = (req, res) => {
     if (event.eventOwners.some(e => e === req.user.stravaId) || req.user.adminMember) {
       geocoder.eventGeocoder(req.body, event, (err, toSave) => {
         hlpr.consLog(['callGeoCoder', err, toSave]);
-        markdown.rend(toSave.eventDesc, (rendHTML) => {
-          toSave.eventDescHTML = rendHTML;
-          toSave.eventHashtags = req.form.eventHashtags;
-          const options = { new: true };
-          Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
-            if (err) {
-              hlpr.consLog(['editEvent', err]);
-              return res.status(400).send({ error: 'Error updating event' });
+        const inputElevation = {
+          loc: `${toSave.eventGeoLongitude},${toSave.eventGeoLatitude}`,
+          timestamp: toSave.eventDate,
+        };
+
+        resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
+          hlpr.consLog(['geoElv', geoElv]);
+          toSave.eventGeoElevation = geoElv.elevation;
+
+          resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
+            hlpr.consLog(['geoTZ', geoTZ]);
+            if (geoTZ.timezone) {
+              toSave.eventGeoTzId = geoTZ.timezone.timeZoneId;
+              toSave.eventGeoTzName = geoTZ.timezone.timeZoneName;
+              toSave.eventGeoTzRawOffset = geoTZ.timezone.rawOffset;
+              toSave.eventGeoTzDSTOffset = geoTZ.timezone.dstOffset;
             }
-            hlpr.consLog(['editEvent', eventEdit.eventId]);
-            const result = { event: { postSuccess: true }, updated: eventEdit };
-            hlpr.consLog([result]);
-            res.send(result);
+            markdown.rend(toSave.eventDesc, (rendHTML) => {
+              toSave.eventDescHTML = rendHTML;
+              toSave.eventHashtags = req.form.eventHashtags;
+              const options = { new: true };
+              Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
+                if (err) {
+                  hlpr.consLog(['editEvent', err]);
+                  return res.status(400).send({ error: 'Error updating event' });
+                }
+                hlpr.consLog(['editEvent', eventEdit.eventId]);
+                const result = { event: { postSuccess: true }, updated: eventEdit };
+                hlpr.consLog([result]);
+                res.send(result);
+              });
+            });
           });
         });
       });
@@ -80,7 +119,7 @@ exports.editEvent = (req, res) => {
 exports.getEvents = (req, res) => {
   const rQ = req.query;
   const dbQuery = {};
-  let andQuery = [];
+  const andQuery = [];
   const dbOptions = {};
 
   // example Event "eventGeoCoordinates": [ -122.1439698, 37.426941 ],

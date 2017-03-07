@@ -26,6 +26,7 @@ const propTypes = {
   forEdit: PropTypes.object,
   stravaId: PropTypes.number,
   setPageName: PropTypes.func,
+  user: PropTypes.object,
 };
 
 const relURL = 'apiv1/events';
@@ -86,7 +87,7 @@ class ListEvent extends Component {
   }
 
   render() {
-    const { authenticated, events, forEdit, stravaId, adminMember } = this.props;
+    const { authenticated, events, forEdit, stravaId, adminMember, user } = this.props;
     return (
       <div className="main-flex-container" >
         <div className="side-lite left-pane" />
@@ -117,6 +118,14 @@ class ListEvent extends Component {
                 subTitleName = `${timeToGo} days to go ${subTitleName}`;
               } else {
                 subTitleName = `${timeToGo} weeks to go ${subTitleName}`;
+              }
+            }
+            let elevation = '';
+            if (event.eventGeoElevation) {
+              if (user.measurement_preference === 'feet') {
+                elevation = `${Math.round(event.eventGeoElevation * 3.281)} feet`;
+              } else {
+                elevation = `${Math.round(event.eventGeoElevation)} meters`;
               }
             }
 
@@ -154,6 +163,7 @@ class ListEvent extends Component {
                   canEdit={canEdit(event.eventOwners, stravaId, adminMember)}
                   deleteClick={() => this.deleteThisEvent(event.eventId)}
                   editClick={() => this.editThisEvent(event.eventId, i)}
+                  elevation={elevation}
                   eventFullURL={eventFullURL}
                   eventLink={eventLink}
                   expanded={expanded}
@@ -202,6 +212,7 @@ function mapStateToProps(state) {
     stravaId: state.auth.user.stravaId,
     clubMember: state.auth.user.clubMember,
     adminMember: state.auth.user.adminMember,
+    user: state.auth.user,
     events: getVisibleEvents(state.events.events, state.visibilityFilter, state.auth.user.stravaId),
     forEdit: state.events.event,
   };

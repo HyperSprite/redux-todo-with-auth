@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { FlatButton, RaisedButton, RadioButton } from 'material-ui';
+import { Divider, FlatButton, LinearProgress, RaisedButton, RadioButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { DatePicker, TextField, RadioButtonGroup } from 'redux-form-material-ui';
@@ -97,6 +97,7 @@ let EditEvent = class EditEvent extends Component {
       submitting,
       fetchStravaRoutes,
       eventSelector,
+      submitSucceeded,
     } = this.props;
 
     if (!authenticated) {
@@ -250,28 +251,54 @@ let EditEvent = class EditEvent extends Component {
           component={singleFieldArray}
         />
         { this.renderAlert() }
-        <div>
-          <RaisedButton
-            type="submit"
-            label="Submit"
-            primary
-            style={style.button}
-            disabled={pristine || submitting}
-          />
-          <FlatButton
-            type="button"
-            label="Clear Values"
-            style={style.button}
-            disabled={pristine || submitting}
-            onClick={reset}
-          />
-          <FlatButton
-            type="button"
-            label="Cancel"
-            style={style.button}
-            onClick={this.cancelFormEdit}
-          />
-        </div>
+        {submitSucceeded ? (
+          <div>
+            <LinearProgress mode="indeterminate" />
+            <RaisedButton
+              type="button"
+              label="Submit"
+              primary
+              style={style.button}
+              disabled
+            />
+            <FlatButton
+              type="button"
+              label="Clear Values"
+              style={style.button}
+              disabled
+            />
+            <FlatButton
+              type="button"
+              label="Cancel"
+              style={style.button}
+              disabled
+            />
+          </div>
+        ) : (
+          <div>
+            <Divider style={{ height: 4 }} />
+            <RaisedButton
+              type="submit"
+              label="Submit"
+              primary
+              style={style.button}
+              disabled={pristine || submitting}
+            />
+            <FlatButton
+              type="button"
+              label="Clear Values"
+              style={style.button}
+              disabled={pristine || submitting}
+              onClick={reset}
+            />
+            <FlatButton
+              type="button"
+              label="Cancel"
+              style={style.button}
+              onClick={this.cancelFormEdit}
+            />
+          </div>
+        )}
       </form>
     );
 
@@ -333,6 +360,7 @@ function mapStateToProps(state) {
     initialValues,
     hashId,
     eventSelector: selector(state, 'eventDesc', 'eventRoutes'),
+    submitSucceeded: state.form.submitSucceeded,
   };
 }
 
