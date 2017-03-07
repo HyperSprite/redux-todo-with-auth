@@ -14,6 +14,7 @@ const propTypes = {
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
+  elevation: PropTypes.string,
   expanded: PropTypes.bool,
   eventFullURL: PropTypes.string,
   eventLink: PropTypes.object,
@@ -34,6 +35,7 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
+  elevation,
   eventLink,
   expanded,
   fav,
@@ -94,6 +96,11 @@ const renderViewEvent = ({
         contentType="text"
       />
       <Static
+        contentLabel="Time Zone"
+        content={event.eventGeoTzName}
+        contentType="text"
+      />
+      <Static
         contentLabel="Activity Type"
         content={event.eventAthleteType}
         contentType="text"
@@ -114,11 +121,9 @@ const renderViewEvent = ({
         contentType="text"
       />
       <Static
-        contentLabel="Location"
-        content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
-        contentType="address"
-        baseURL="http://www.google.com/maps/dir//"
-        contentAlt={event.eventGeoFormattedAddress}
+        contentLabel="Description"
+        content={event.eventDescHTML}
+        contentType="html"
       />
       <Static
         contentLabel="Event Link"
@@ -127,15 +132,18 @@ const renderViewEvent = ({
         baseURL=""
       />
       <Static
-        contentLabel="Description"
-        content={event.eventDescHTML}
-        contentType="html"
+        contentLabel="Location"
+        content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
+        contentType="address"
+        baseURL="http://www.google.com/maps/dir//"
+        contentAlt={event.eventGeoFormattedAddress}
       />
       <Static
-        contentLabel="#Hashtags"
-        conten={event.eventHashtags}
+        contentLabel="Starting Elevation"
+        content={elevation}
         contentType="text"
       />
+
       {event.eventRoutes.map((route) => {
         return (
           <Static

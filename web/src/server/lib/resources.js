@@ -1,19 +1,16 @@
 const requestify = require('requestify');
 const moment = require('moment');
-
 const hlpr = require('./helpers');
 
 const OwmAPIKey = process.env.OPEN_WEATHER_MAP;
-const gElevationAPIKey = process.env.GOOGLE_MAPS;
 const gMapsAPIKey = process.env.GOOGLE_MAPS;
-const gTimezone = process.env.GOOGLE_MAPS;
 
 // input.resTarget: 'weatherforcast', 'elevation', 'timezone'
 // input.loc: '-122.1439698,37.426941'
-exports.rLonLat = (input, output) => {
+exports.rLonLat = (input, target, output) => {
   const loc = input.loc.split(',');
   const time = input.timestamp || moment();
-  const timestamp = 1458000000;// input.timestamp || moment(time).format('X');
+  const timestamp = moment(time).format('X');
 
   const resourceMap = {
     weatherforcast: {
@@ -30,13 +27,37 @@ exports.rLonLat = (input, output) => {
     }, // body: { dstOffset: 3600, rawOffset: -28800, status: 'OK', timeZoneId : 'America/Los_Angeles;, timeZoneName: 'Pacific Daylight Time' }
   };
 
-  hlpr.consLog(['rLonLat', resourceMap[input.resTarget].url]);
-  requestify.request(resourceMap[input.resTarget].url, {
+  hlpr.consLog(['rLonLat', resourceMap[target].url]);
+  requestify.request(resourceMap[target].url, {
     method: 'GET',
+    cache: {
+      cache: true, // Will set caching to true for this request.
+      expires: 3.6e+6, // (1 hour = 3.6e+6) Time for cache to expire in milliseconds
+    },
   }).then((response) => {
-    return output(response);
-  }).catch((response) => {
+    hlpr.consLog(['lib.resources.then', response.getBody()]);
+    const result = {
+      output: {},
+    };
+    result.outputParsed = response.getBody();
+    if (target === 'weatherforcast' && result.outputParsed.cod === '200') {
+      result.output.weatherforcast = result.outputParsed.list;
+      return output(result.output);
+    }
+
+    if (result.outputParsed.status === 'OK') {
+      hlpr.consLog(['lib: result:', result]);
+      if (target === 'elevation') {
+        result.output.elevation = result.outputParsed.results[0].elevation;
+        hlpr.consLog(['result', result]);
+      } else if (target === 'timezone') {
+        result.output.timezone = result.outputParsed;
+      }
+      return output(result.output);
+    }
+    return output({ [target]: null });
+  }).fail((response) => {
     hlpr.consLog(['resources.rLonLat Error', response]);
-    return output({ error: 'Failed: resources.rLonLat request' });
+    return output({ [target]: null });
   });
 };
