@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 
 import * as actions from './../actions';
 import Static from './form/static';
+import OneDayWeather from './weather/one-day-weather';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 const propTypes = {
@@ -55,6 +56,9 @@ class Athlete extends Component {
       updated_at,
       date_preference,
       measurement_preference,
+      userGeoLongitude,
+      userGeoLatitude,
+      userGeoTzRawOffset,
     } = this.props.user;
     return (
       <div className="main-flex-container" >
@@ -112,6 +116,17 @@ class Athlete extends Component {
               content={date_preference}
               contentType="text"
             />
+            {userGeoTzRawOffset ? (
+              <OneDayWeather
+                geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                tzOffset={userGeoTzRawOffset}
+                date={+new Date()}
+              />
+            ) : (
+              <div>
+                Loading...
+              </div>
+            )}
             <div className="quote-box">
               <p>The information above is supplied by the Strava connection.</p>
               <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>

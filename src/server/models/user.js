@@ -53,6 +53,11 @@ const userSchema = new Schema({
   userGeoCountryCode: String,
   userGeoZipCode: String,
   userGeoProvider: String,
+  userGeoTzId: String,
+  userGeoTzName: String,
+  userGeoTzRawOffset: Number,
+  userGeoTzDSTOffset: Number,
+  userGeoElevation: Number, // in meters
   userLocationPref: { type: String, enum: ['Strava', 'Manual', 'Magic'], default: 'Strava' },
   sex: String,
   premium: Boolean,
