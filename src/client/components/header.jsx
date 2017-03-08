@@ -11,9 +11,13 @@ import EventFilter from './events/filter-toolbar';
 import style from '../styles/style';
 
 const propTypes = {
-  authenticated: PropTypes.bool.isRequired,
+  authenticated: PropTypes.bool,
   page: PropTypes.object.isRequired,
   setDrawer: PropTypes.func.isRequired,
+};
+
+const defaultProps = {
+  authenticated: false,
 };
 
 class Header extends Component {
@@ -64,5 +68,6 @@ function mapStateToProps(state) {
 }
 
 Header.propTypes = propTypes;
+Header.defaultProps = defaultProps;
 
 export default connect(mapStateToProps, actions)(Header);
