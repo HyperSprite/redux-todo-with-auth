@@ -41,6 +41,7 @@ exports.rLonLat = (input, target, output) => {
     };
     result.outputParsed = response.getBody();
     if (target === 'weatherforcast' && result.outputParsed.cod === '200') {
+      result.output.location = input.loc;
       result.output.weatherforcast = result.outputParsed.list;
       return output(result.output);
     }

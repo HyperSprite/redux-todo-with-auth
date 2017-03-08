@@ -5,6 +5,7 @@ const moment = require('moment');
 const User = require('../models/user');
 const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
+const resources = require('../lib/resources');
 
 const getDate = (result) => {
   const newDate = moment().utc().format();
@@ -58,20 +59,41 @@ exports.stravaSignin = (req, res, next) => {
 
     geocoder.userGeocoder(athlete, req.user, (err, toSave) => {
       hlpr.consLog(['auth.callGeoCoder', 'req.user', req.user, err, toSave]);
-      const options = { new: true };
-      User.findByIdAndUpdate(req.user._id, toSave, options, (err, editUser) => {
-        if (athlete.ftp) {
-          const ftpHistory = { ftp: athlete.ftp, date: getDate(result => result) };
-          if (req.user.ftpHistory.length === 0) {
-            User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
-              if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
-            });
-          } else if (req.user.ftpHistory.length > 0 && athlete.ftp !== req.user.ftpHistory[req.user.ftpHistory.length - 1].ftp) {
-            User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
-              if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
-            });
+      // get user elevation and timezone
+      const inputElevation = {
+        loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
+        timestamp: req.user.updatedAt,
+      };
+      hlpr.consLog(['inputElevation', inputElevation]);
+      resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
+        hlpr.consLog(['geoElv', geoElv]);
+        toSave.userGeoElevation = geoElv.elevation;
+
+        resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
+          hlpr.consLog(['geoTZ', geoTZ]);
+          if (geoTZ.timezone) {
+            toSave.userGeoTzId = geoTZ.timezone.timeZoneId;
+            toSave.userGeoTzName = geoTZ.timezone.timeZoneName;
+            toSave.userGeoTzRawOffset = geoTZ.timezone.rawOffset;
+            toSave.userGeoTzDSTOffset = geoTZ.timezone.dstOffset;
           }
-        }
+          const options = { new: true };
+          User.findByIdAndUpdate(req.user._id, toSave, options, (err, editUser) => {
+            if (athlete.ftp) {
+              const ftpHistory = { ftp: athlete.ftp, date: getDate(result => result) };
+              if (req.user.ftpHistory.length === 0) {
+                User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
+                  if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
+                });
+              } else if (req.user.ftpHistory.length > 0 && athlete.ftp !== req.user.ftpHistory[req.user.ftpHistory.length - 1].ftp) {
+                User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
+                  if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
+                });
+              }
+            }
+          });
+        });
+
         // hlpr.consLog(['auth.User.fOAU', err, editUser]);
         const result = `
           <script>
