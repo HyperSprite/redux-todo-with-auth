@@ -58,6 +58,7 @@ class Athlete extends Component {
       measurement_preference,
       userGeoLongitude,
       userGeoLatitude,
+      userGeoTzDSTOffset,
       userGeoTzRawOffset,
     } = this.props.user;
     return (
@@ -119,8 +120,10 @@ class Athlete extends Component {
             {userGeoTzRawOffset ? (
               <OneDayWeather
                 geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                dstOffset={userGeoTzDSTOffset}
                 tzOffset={userGeoTzRawOffset}
                 date={+new Date()}
+                measurementPref={measurement_preference}
               />
             ) : (
               <div>
