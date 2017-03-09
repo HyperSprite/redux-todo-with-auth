@@ -18,13 +18,18 @@ class OneDayWeather extends Component {
       clecius: true,
     };
     this.switchDisplay = this.switchDisplay.bind(this);
-  }
-
-  switchDisplay() {
-    this.setState({celsius: !this.state.celsius});
+    this.updateWeather = this.updateWeather.bind(this);
   }
 
   componentWillReceiveProps() {
+    this.getNewWeather();
+
+    if (this.props.measurementPref === 'feet') {
+      this.setState({ celsius: false });
+    }
+  }
+
+  getNewWeather = () => {
     axios.get(`/apiv1/resource/weatherforcast/?loc=${this.props.geoCoordinates}`)
       .then((response) => {
         if (response.status === 200) {
@@ -37,10 +42,14 @@ class OneDayWeather extends Component {
       }).catch((error) => {
         this.setState({ weatherforcast: [error] });
       });
+  }
 
-    if (this.props.measurementPref === 'feet') {
-      this.setState({ celsius: false });
-    }
+  updateWeather() {
+    this.getNewWeather();
+  }
+
+  switchDisplay() {
+    this.setState({ celsius: !this.state.celsius });
   }
 
   render() {
@@ -114,6 +123,7 @@ class OneDayWeather extends Component {
           </div>
         ))}
         <button onClick={this.switchDisplay}>Display</button>
+        <button onClick={this.updateWeather}>Update</button>
       </div>
     );
   }
