@@ -35,7 +35,7 @@ class OneDayWeather extends Component {
         if (response.status === 200) {
           return response.data;
         }
-        throw new Error('Server response wasn\'t ok');
+        throw new Error('Server fetch failed');
       })
       .then((responseData) => {
         this.setState({ weatherforcast: responseData.weatherforcast });
@@ -116,7 +116,7 @@ class OneDayWeather extends Component {
               temp {setMeasurementPref(eDWF.main.temp, celsius)}<br />
               humidity {eDWF.main.humidity}<br />
               pressure {eDWF.main.pressure}<br />
-              icon {eDWF.weather[0].icon}<br />
+              icon <img src={`https://openweathermap.org/img/w/${eDWF.weather[0].icon}.png`} /><br />
               wind {eDWF.wind.speed} and {eDWF.wind.deg}<br />
               time {localTime(eDWF.dt)}
             </p>

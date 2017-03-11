@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import * as actions from './../actions';
 import Static from './form/static';
 import OneDayWeather from './weather/one-day-weather';
+import Astrophases from './weather/astrophases';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 const propTypes = {
@@ -118,13 +119,21 @@ class Athlete extends Component {
               contentType="text"
             />
             {userGeoTzRawOffset ? (
-              <OneDayWeather
-                geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
-                dstOffset={userGeoTzDSTOffset}
-                tzOffset={userGeoTzRawOffset}
-                date={+new Date()}
-                measurementPref={measurement_preference}
-              />
+              <div>
+                <Astrophases
+                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                  dstOffset={userGeoTzDSTOffset}
+                  tzOffset={userGeoTzRawOffset}
+                  date={+new Date()}
+                />
+                <OneDayWeather
+                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                  dstOffset={userGeoTzDSTOffset}
+                  tzOffset={userGeoTzRawOffset}
+                  date={+new Date()}
+                  measurementPref={measurement_preference}
+                />
+              </div>
             ) : (
               <div>
                 Loading...
