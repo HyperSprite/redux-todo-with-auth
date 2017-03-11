@@ -5,26 +5,34 @@ const hlpr = require('./helpers');
 const OwmAPIKey = process.env.OPEN_WEATHER_MAP;
 const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
-// input.resTarget: 'weatherforcast', 'elevation', 'timezone'
+// target: 'weatherforcast', 'elevation', 'timezone', astrophases
 // input.loc: '-122.1439698,37.426941'
-exports.rLonLat = (input, target, output) => {
-  const loc = input.loc.split(',');
-  const time = input.timestamp || moment();
+exports.rLonLat = ({ loc, time, tzOffset = 0, dstOffset = 0 }, target, output) => {
+  const sLoc = loc.split(',');
   const timestamp = moment(time).format('X');
+  let timeOffset = 0;
+  if (tzOffset) {
+    timeOffset = ((tzOffset * 1) + (dstOffset * 1)) / 3600;
+  }
+
+  hlpr.consLog(['timeOffset', timeOffset, tzOffset, dstOffset]);
 
   const resourceMap = {
     weatherforcast: {
-      url: `http://api.openweathermap.org/data/2.5/forecast?lat=${loc[1]}&lon=${loc[0]}&APPID=${OwmAPIKey}`,
-    },
+      url: `http://api.openweathermap.org/data/2.5/forecast?lat=${sLoc[1]}&lon=${sLoc[0]}&APPID=${OwmAPIKey}`,
+    }, // body: { ...see this https://openweathermap.org/forecast5 }
     elevation: {
-      url: `https://maps.googleapis.com/maps/api/elevation/json?locations=${loc[1]},${loc[0]}&key=${gMapsAPIKey}`,
+      url: `https://maps.googleapis.com/maps/api/elevation/json?locations=${sLoc[1]},${sLoc[0]}&key=${gMapsAPIKey}`,
     }, // body: {results: [ { elevation: 10.85572719573975, location: { lat: 37.426941, lng: -122.1439698 }, resolution: 4.771975994110107 } ], status: OK }
     distance: {
-      url: `https://maps.googleapis.com/maps/api/${input.resType}/json?location=${input.loc}&key=${gMapsAPIKey}`,
+      url: `https://maps.googleapis.com/maps/api/distance/json?location=${loc}&key=${gMapsAPIKey}`,
     },
     timezone: {
-      url: `https://maps.googleapis.com/maps/api/timezone/json?location=${loc[1]},${loc[0]}&timestamp=${timestamp}&key=${gMapsAPIKey}`,
+      url: `https://maps.googleapis.com/maps/api/timezone/json?location=${sLoc[1]},${sLoc[0]}&timestamp=${timestamp}&key=${gMapsAPIKey}`,
     }, // body: { dstOffset: 3600, rawOffset: -28800, status: 'OK', timeZoneId : 'America/Los_Angeles;, timeZoneName: 'Pacific Daylight Time' }
+    astrophases: {
+      url: `http://api.usno.navy.mil/rstt/oneday?date=3/9/2017&coords=${sLoc[1]}N,${sLoc[0]}E&tz=${timeOffset}`,
+    }, // body: "astrophases": {  ...see this http://aa.usno.navy.mil/data/docs/api.php#phase }
   };
 
   hlpr.consLog(['rLonLat', resourceMap[target].url]);
@@ -41,8 +49,13 @@ exports.rLonLat = (input, target, output) => {
     };
     result.outputParsed = response.getBody();
     if (target === 'weatherforcast' && result.outputParsed.cod === '200') {
-      result.output.location = input.loc;
+      result.output.location = loc;
       result.output.weatherforcast = result.outputParsed.list;
+      return output(result.output);
+    }
+
+    if (target === 'astrophases' && !result.outputParsed.error) {
+      result.output.astrophases = result.outputParsed;
       return output(result.output);
     }
 
