@@ -1,5 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
+import moment from 'moment';
+
+function dateSetup(tDate, tzO) {
+  // Takes a date object and rounds to midnight,
+  // then offsets it with the local timezone for that location
+  // and returns the formated date
+  // console.log(tzO);
+  // tzO is tzOffset in sec, converted to min.
+  return moment(moment(tDate).startOf('day')).utcOffset(-(tzO / 3600)).format('MM/DD/YYYY');
+  // return moment(moment(tDate).startOf('day')).format('MM/DD/YYYY');
+}
 
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'
@@ -23,7 +34,7 @@ class Astrophases extends Component {
 
   getAstrophases = () => {
     const { geoCoordinates, date, tzOffset, dstOffset } = this.props;
-    axios.get(`/apiv1/resource/astrophases/?loc=${geoCoordinates}&date=${date}&tzOffset=${tzOffset + dstOffset}`)
+    axios.get(`/apiv1/resource/astrophases/?loc=${geoCoordinates}&date=${dateSetup(date, (tzOffset + dstOffset))}&tzOffset=${tzOffset + dstOffset}`)
       .then((response) => {
         if (response.status === 200) {
           return response.data;
@@ -44,7 +55,7 @@ class Astrophases extends Component {
   render() {
     const { astrophases } = this.state;
 
-    // something went wrong, no weatherforcast returned.
+    // something went wrong, no astro forcast returned.
     if (!astrophases.dayofweek) {
       return <div>Loading...</div>;
     }
@@ -57,8 +68,8 @@ class Astrophases extends Component {
       <div>
         <div>
           Day {astrophases.dayofweek}<br />
-          Date {`${astrophases.month}/${astrophases.day}/${astrophases.year}`}
-          Sun<br />
+          Date {`${astrophases.month}/${astrophases.day}/${astrophases.year}`}<br />
+          Sun Data<br />
           <ul>
             {astrophases.sundata.map(aSun => (
               <li key={aSun.time}>

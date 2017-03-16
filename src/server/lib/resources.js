@@ -7,16 +7,17 @@ const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
 // target: 'weatherforcast', 'elevation', 'timezone', astrophases
 // input.loc: '-122.1439698,37.426941'
-exports.rLonLat = ({ loc, time, tzOffset = 0, dstOffset = 0 }, target, output) => {
+exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
   const sLoc = loc.split(',');
-  const timestamp = moment(time).format('X');
+  const timestamp = moment(date).format('X');
   let timeOffset = 0;
   if (tzOffset) {
     timeOffset = ((tzOffset * 1) + (dstOffset * 1)) / 3600;
   }
 
-  hlpr.consLog(['timeOffset', timeOffset, tzOffset, dstOffset]);
 
+  hlpr.consLog(['input.date', date, 'timeOffset', timeOffset, 'tzOffset', tzOffset, 'dstOffset', dstOffset, 'timestamp', timestamp, 'datestamp']);
+  // TODO remove sample date from astrophases and set real date
   const resourceMap = {
     weatherforcast: {
       url: `http://api.openweathermap.org/data/2.5/forecast?lat=${sLoc[1]}&lon=${sLoc[0]}&APPID=${OwmAPIKey}`,
@@ -31,7 +32,7 @@ exports.rLonLat = ({ loc, time, tzOffset = 0, dstOffset = 0 }, target, output) =
       url: `https://maps.googleapis.com/maps/api/timezone/json?location=${sLoc[1]},${sLoc[0]}&timestamp=${timestamp}&key=${gMapsAPIKey}`,
     }, // body: { dstOffset: 3600, rawOffset: -28800, status: 'OK', timeZoneId : 'America/Los_Angeles;, timeZoneName: 'Pacific Daylight Time' }
     astrophases: {
-      url: `http://api.usno.navy.mil/rstt/oneday?date=3/9/2017&coords=${sLoc[1]}N,${sLoc[0]}E&tz=${timeOffset}`,
+      url: `http://api.usno.navy.mil/rstt/oneday?date=${date}&coords=${sLoc[1]}N,${sLoc[0]}E&tz=${timeOffset}`,
     }, // body: "astrophases": {  ...see this http://aa.usno.navy.mil/data/docs/api.php#phase }
   };
 

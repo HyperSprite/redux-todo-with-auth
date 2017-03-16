@@ -4,6 +4,8 @@ import { Paper } from 'material-ui';
 import style from '../styles/style';
 import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
 
+const today = new Date().getFullYear();
+
 const Footer = () => (
   <div className="site-footer" >
     <div className="footer-flex-container" >
@@ -21,6 +23,9 @@ const Footer = () => (
           <blockquote className="footer-text quote-box" >
             <p>Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
           </blockquote>
+          <p className="footer-text" >
+            &copy; {today} araceathlete.com
+          </p>
         </div>
       </div>
       <div className="side-lite right-pane"></div>
