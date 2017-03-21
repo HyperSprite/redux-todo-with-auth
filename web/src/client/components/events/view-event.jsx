@@ -17,7 +17,7 @@ const propTypes = {
   elevation: PropTypes.string,
   expanded: PropTypes.bool,
   eventFullURL: PropTypes.string,
-  eventLink: PropTypes.object,
+  eventLink: PropTypes.string,
   fav: PropTypes.bool,
   favClick: PropTypes.func,
   favCount: PropTypes.number,
@@ -53,6 +53,7 @@ const renderViewEvent = ({
     <CardHeader
       className="card-header"
       showExpandableButton
+      actAsExpander
       avatar={ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
       title={eventLink}
       subtitle={subTitleName}
@@ -61,6 +62,7 @@ const renderViewEvent = ({
       expandable
     >
       <ShareButtons
+        {...event}
         hashtags={event.eventHashtags.concat('ARaceathlete')}
         title={event.eventTitle}
         urlHash={event.eventId}

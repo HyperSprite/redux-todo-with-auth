@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import { IconButton } from 'material-ui';
 import FaFacebook from 'react-icons/lib/fa/facebook-official';
 import FaTwitter from 'react-icons/lib/fa/twitter';
+import FaChain from 'react-icons/lib/fa/chain';
+import FaCalendar from 'react-icons/lib/fa/calendar-plus-o';
 
 import style from '../../styles/style';
 import '../../assets/araceathlete240x240.png';
@@ -17,12 +19,27 @@ const propTypes = {
   urlRoot: PropTypes.string,
 };
 
-const ShareButtons = ({ hashtags, title, urlHash, urlPath, urlRoot }) => {
+const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) => {
   const url = encodeURIComponent(`${urlRoot}/${urlPath}#${urlHash}`);
   const imagePath = encodeURIComponent(`${urlRoot}/assets/araceathlete240x240.png`);
   const encodedTitle = encodeURIComponent(title);
-  const sites = ['facebook', 'twitter'];
+  const encodedLocation = encodeURIComponent(`${event.eventLocStreet}, ${event.eventLocCity}, ${event.eventLocState} ${event.eventLocZip}, ${event.eventLocCountry}`);
+  const eventDate = event.eventDate.replace(/-|:|T.*|\.\d\d\d/g, '');
+
+  const googleCalURL = `http://www.google.com/calendar/event?action=TEMPLATE&text=${event.eventTitle}+-+${event.eventAthleteType}&dates=${eventDate}/${(eventDate * 1) + 1}&details=A+Race+athlete+link%0A${url}%0A${event.eventDesc}&location=${encodedLocation}&trp=false`;
+
+  const sites = ['link', 'googleCal', 'facebook', 'twitter'];
   const templates = {
+    link: {
+      url: `/${urlPath}#${urlHash}`,
+      icon: FaChain,
+      toolTip: 'Link to this Event',
+    },
+    googleCal: {
+      url: googleCalURL,
+      icon: FaCalendar,
+      toolTip: 'Add to Google Calendar',
+    },
     facebook: {
       url: `https://www.facebook.com/sharer/sharer.php?u=${url}&title=${encodedTitle}&image=${imagePath}`,
       icon: FaFacebook,
@@ -50,7 +67,7 @@ const ShareButtons = ({ hashtags, title, urlHash, urlPath, urlRoot }) => {
       </IconButton>
     );
     return (
-      <a key={`social${s}`} href={templates[s].url} target="new">{iconButton}</a>
+      <a key={`social${s}`} href={templates[s].url} target="new" rel="nofollow">{iconButton}</a>
     );
   });
   return (
