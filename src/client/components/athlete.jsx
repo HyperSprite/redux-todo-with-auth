@@ -136,7 +136,7 @@ class Athlete extends Component {
               </div>
             ) : (
               <div>
-                Loading...
+                Loading Location Data...
               </div>
             )}
             <div className="quote-box">

@@ -98,6 +98,11 @@ class ListEvent extends Component {
           />
           {events.map((event, i) => {
             let subTitleName = '';
+
+            const niceEventDate = format(
+              event.eventDate, 'MMM Do YYYY',
+            );
+
             if (event.eventSeries) {
               subTitleName = `- ${event.eventSeries}`;
             } else if (event.eventOrg) {
@@ -115,9 +120,9 @@ class ListEvent extends Component {
                   new Date(event.eventDate),
                   new Date(),
                 );
-                subTitleName = `${timeToGo} days to go ${subTitleName}`;
+                subTitleName = `${timeToGo} days, ${niceEventDate} ${subTitleName}`;
               } else {
-                subTitleName = `${timeToGo} weeks to go ${subTitleName}`;
+                subTitleName = `${timeToGo} weeks, ${niceEventDate} ${subTitleName}`;
               }
             }
             let elevation = '';
@@ -129,9 +134,7 @@ class ListEvent extends Component {
               }
             }
 
-            const niceEventDate = format(
-              event.eventDate, 'MMM Do YYYY',
-            );
+
             // Expands Card on render if hash matchs eventid
             const expanded = (window.location.hash === `#${event.eventId}`);
 
@@ -151,9 +154,9 @@ class ListEvent extends Component {
             // ${window.location.href}
             const eventFullURL = `https://www.araceathlete/events#${event.eventId}`;
 
-            const eventLink = (
-              <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
-            );
+            // const eventLink = (
+            //   <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
+            // );
 
             return (
               <div key={event.eventId} id={`${event.eventId}`} >
@@ -165,7 +168,7 @@ class ListEvent extends Component {
                   editClick={() => this.editThisEvent(event.eventId, i)}
                   elevation={elevation}
                   eventFullURL={eventFullURL}
-                  eventLink={eventLink}
+                  eventLink={event.eventTitle}
                   expanded={expanded}
                   fav={fav}
                   favClick={() => this.favThisEvent(event.eventId)}

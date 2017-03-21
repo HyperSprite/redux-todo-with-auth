@@ -57,7 +57,7 @@ class Astrophases extends Component {
 
     // something went wrong, no astro forcast returned.
     if (!astrophases.dayofweek) {
-      return <div>Loading...</div>;
+      return <div>Loading Astrophases...</div>;
     }
 
     if (astrophases.error === 'true') {
