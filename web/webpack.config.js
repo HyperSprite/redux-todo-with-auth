@@ -12,10 +12,11 @@ function getPlugins() {
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }
-  })
-);
-
-  if (isProd) {
+  }));
+  console.log('isProd', isProd, 'isLogging', isLogging);
+  if (isProd && isLogging) {
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+  } else if (isProd) {
     plugins.push(new webpack.optimize.UglifyJsPlugin());
   } else {
     plugins.push(new webpack.HotModuleReplacementPlugin());
@@ -26,10 +27,12 @@ function getPlugins() {
 function getEntry() {
   const entry = [];
   if (!isProd) {
+    entry.push('react-hot-loader/patch');
     entry.push('webpack-hot-middleware/client');
+    entry.push('webpack/hot/only-dev-server');
   }
   entry.push('./src/client/index.jsx');
-  entry.push('babel-polyfill');
+  // entry.push('babel-polyfill-loader');
 
   return entry;
 }
@@ -47,84 +50,70 @@ function getOutput() {
   return output;
 }
 
-function getPreLoaders() {
-  const preLoaders = [];
-
+function getRules() {
+  const rules = [];
   if (isLogging) {
-    preLoaders.push({
+    rules.push({
       test: /\.js$/,
       loader: 'source-map-loader',
     });
   }
-  return preLoaders;
-}
-
-function getLoaders() {
-  const loaders = [];
   if (isProd) {
-    loaders.push({
+    rules.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loaders: ['babel?plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      loaders: ['babel-loader?plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
     });
   } else {
-    loaders.push({
+    rules.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loaders: ['babel?plugins[]=react-hot-loader/babel,plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      loaders: ['babel-loader?plugins[]=react-hot-loader/babel,plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
     });
   }
-  // common loaders
-  loaders.push({
+  // common rules
+  rules.push({
     test: /\.css$/,
     loader: 'style-loader!css-loader!postcss-loader',
   });
-  loaders.push({
+  rules.push({
     test: /\.less/,
-    loader: 'style!css!less?rootpath=/assets',
+    loader: 'style-loader!css-loader!less-loader?rootpath=/assets',
   });
-  loaders.push({
+  rules.push({
     test: /\.gif$/,
     loader: 'url-loader?mimetype=image/png',
   });
-  loaders.push({
+  rules.push({
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     loader: 'url-loader?limit=10000&minetype=application/font-woff',
   });
-  loaders.push({
+  rules.push({
     test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     loader: 'file-loader?name=[name].[ext]',
   });
-  loaders.push({
+  rules.push({
     test: /\.(jpe?g|png|gif)$/i,
-    loader: 'url?limit=10000!img?progressive=true',
+    loader: 'url-loader?limit=10000!img-loader?progressive=true',
   });
 
-  return loaders;
-}
-
-function getDevtool() {
-  const devtool = isLogging ? 'source-map' : null;
-  return devtool;
+  return rules;
 }
 
 module.exports = {
-  devtool: getDevtool(),
+  devtool: isLogging ? 'source-map' : '',
+  devServer: !isProd ? { hot: true } : { hot: false },
   context: __dirname,
   entry: getEntry(),
   output: getOutput(),
   resolve: {
     extensions: [
-      '',
-      '.webpack.js',
-      '.web.js',
       '.jsx',
       '.js',
     ],
   },
   plugins: getPlugins(),
   module: {
-    loaders: getLoaders(),
-    preLoaders: getPreLoaders(),
+    rules: getRules(),
   },
 };

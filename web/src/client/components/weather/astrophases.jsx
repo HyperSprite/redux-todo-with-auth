@@ -79,7 +79,8 @@ class Astrophases extends Component {
               </li>
             ))}
           </ul>
-          Moon is {astrophases.curphase}<br />
+          Moon Data <br />
+          moon phase is {astrophases.curphase}<br />
           <ul>
             {astrophases.moondata.map(aMoon => (
               <li key={aMoon.time}>
