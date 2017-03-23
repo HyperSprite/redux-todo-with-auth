@@ -53,7 +53,6 @@ const renderViewEvent = ({
     <CardHeader
       className="card-header"
       showExpandableButton
-      actAsExpander
       avatar={ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
       title={eventLink}
       subtitle={subTitleName}
