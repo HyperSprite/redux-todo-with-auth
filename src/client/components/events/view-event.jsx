@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Chip } from 'material-ui';
-import { Card, CardHeader, CardText, CardTitle } from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
+import OneDayWeather from './../weather/one-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
 
@@ -21,8 +22,10 @@ const propTypes = {
   fav: PropTypes.bool,
   favClick: PropTypes.func,
   favCount: PropTypes.number,
+  getWeather: PropTypes.bool,
   goal: PropTypes.bool,
   goalClick: PropTypes.func,
+  measurementPref: PropTypes.string,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
 };
@@ -41,8 +44,10 @@ const renderViewEvent = ({
   fav,
   favClick,
   favCount,
+  getWeather,
   goal,
   goalClick,
+  measurementPref,
   niceEventDate,
   subTitleName,
 }) => (
@@ -57,6 +62,17 @@ const renderViewEvent = ({
       title={eventLink}
       subtitle={subTitleName}
     />
+    {getWeather ? (
+      <CardActions>
+        <OneDayWeather
+          geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
+          dstOffset={event.eventGeoTzDSTOffset}
+          tzOffset={event.eventGeoTzRawOffset}
+          date={+new Date(event.eventDate)}
+          measurementPref={measurementPref}
+        />
+      </CardActions>
+    ) : null }
     <CardText
       expandable
     >
@@ -91,6 +107,7 @@ const renderViewEvent = ({
           );
         })}
       </div>
+
       <Static
         contentLabel="Event Date"
         content={niceEventDate}

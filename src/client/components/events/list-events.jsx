@@ -97,6 +97,16 @@ class ListEvent extends Component {
             headerHeight={70}
           />
           {events.map((event, i) => {
+            let getWeather = false;
+            if (isValid(new Date(event.eventDate))) {
+              const daysToGo = differenceInCalendarDays(
+                new Date(event.eventDate),
+                new Date(),
+              );
+
+              getWeather = (daysToGo < 6);
+            }
+
             let subTitleName = '';
 
             const niceEventDate = format(
@@ -125,6 +135,7 @@ class ListEvent extends Component {
                 subTitleName = `${timeToGo} weeks, ${niceEventDate} ${subTitleName}`;
               }
             }
+
             let elevation = '';
             if (event.eventGeoElevation) {
               if (user.measurement_preference === 'feet') {
@@ -173,10 +184,12 @@ class ListEvent extends Component {
                   fav={fav}
                   favClick={() => this.favThisEvent(event.eventId)}
                   favCount={favCount}
+                  getWeather={getWeather}
                   goal={goal}
                   goalClick={() => this.goalThisEvent(event.eventId)}
                   index={i}
                   niceEventDate={niceEventDate}
+                  measurementPref={user.measurement_preference}
                   subTitleName={subTitleName}
                   {...event}
                 />

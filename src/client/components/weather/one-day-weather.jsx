@@ -1,6 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { FlatButton, IconButton } from 'material-ui';
+import FaRefresh from 'react-icons/lib/fa/refresh';
+import FaToggleOff from 'react-icons/lib/fa/toggle-off';
+import FaToggleOn from 'react-icons/lib/fa/toggle-on';
+
+
+import HeadlineWeather from './headline-weather';
+import SingleWeather from './single-weather';
+
+import style from '../../styles/style';
+import '../../styles/weather.css';
 
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'
@@ -15,18 +26,18 @@ class OneDayWeather extends Component {
     super(props);
     this.state = {
       weatherforcast: [],
-      clecius: true,
+      celsius: true,
+      showExtended: false,
     };
     this.switchDisplay = this.switchDisplay.bind(this);
+    this.switchShowExtended = this.switchShowExtended.bind(this);
     this.updateWeather = this.updateWeather.bind(this);
   }
 
-  componentWillReceiveProps() {
+  componentDidMount() {
+  // componentWillReceiveProps() {
     this.getNewWeather();
-
-    if (this.props.measurementPref === 'feet') {
-      this.setState({ celsius: false });
-    }
+    this.setDisplay();
   }
 
   getNewWeather = () => {
@@ -44,6 +55,12 @@ class OneDayWeather extends Component {
       });
   }
 
+  setDisplay() {
+    if (this.props.measurementPref === 'feet') {
+      this.setState({ celsius: false });
+    }
+  }
+
   updateWeather() {
     this.getNewWeather();
   }
@@ -52,10 +69,14 @@ class OneDayWeather extends Component {
     this.setState({ celsius: !this.state.celsius });
   }
 
+  switchShowExtended() {
+    this.setState({ showExtended: !this.state.showExtended });
+  }
+
   render() {
     const { date, tzOffset, dstOffset } = this.props;
-    const { weatherforcast, celsius } = this.state;
-
+    const { weatherforcast, celsius, showExtended } = this.state;
+    console.log('date', date);
     // something went wrong, no weatherforcast returned.
     if (!weatherforcast) {
       return <div>Sorry, we could not load the weather forcast</div>;
@@ -72,19 +93,33 @@ class OneDayWeather extends Component {
       return elm.dt >= offsetDate && elm.dt <= offsetDate + 86400;
     }
 
-    function setMeasurementPref(temp, isCelsius) {
+    function setMeasurementPref(toCalc, isCelsius, type) {
       if (isCelsius) {
-        return Math.floor(temp - 273.15);
+        if (type === 'speed') {
+          return `${toCalc} m/s`;
+        }
+        return Math.floor(toCalc - 273.15);
       }
       // feet
-      return Math.floor(((temp - 273.15) * 1.8) + 32);
+      if (type === 'speed') {
+        return `${Math.floor(toCalc * 2.236936)} mph`;
+      }
+      return Math.floor(((toCalc - 273.15) * 1.8) + 32);
+    }
+
+    function setCandF(isCelsius) {
+      if (isCelsius) {
+        return '°C';
+      }
+      return '°F';
     }
 
     function localTime(utcTime) {
       return moment.unix(utcTime).format('ddd hA');
     }
 
-    const eventDayWF = weatherforcast.filter(filterDate);
+    const dayWF = {};
+    dayWF.eventDayWF = weatherforcast.filter(filterDate);
 
     function maxNumber(tempArr) {
       return Math.max(...tempArr);
@@ -94,36 +129,77 @@ class OneDayWeather extends Component {
       return Math.min(...tempArr);
     }
 
-    function returnTemps(wdInput) {
+    function toTextualDescription(degree) {
+      if (degree > 337.5) return 'Northerly';
+      if (degree > 292.5) return 'North Westerly';
+      if (degree > 247.5) return 'Westerly';
+      if (degree > 202.5) return 'South Westerly';
+      if (degree > 157.5) return 'Southerly';
+      if (degree > 122.5) return 'South Easterly';
+      if (degree > 67.5) return 'Easterly';
+      if (degree > 22.5) return 'North Easterly';
+      return 'Northerly';
+    }
+
+    function returnAggregate(wdInput) {
       const result = {};
+      // getting the high and low temps
       result.tempArray = wdInput.map(eWF => eWF.main.temp);
       result.high = maxNumber(result.tempArray);
       result.low = minNumber(result.tempArray);
+
+      // getting the worst weather for a given day
+      // TODO show day for day and night for night
+      // maybe if time is before sunset time,
+      // remove all times after sunset before current if
+      result.forcast = wdInput.reduce((acc, wdI) => {
+        if (wdI.weather[0].icon > acc.icon) {
+          return wdI.weather[0];
+        }
+        return acc;
+      }, {
+        icon: '',
+        main: '',
+      });
       return result;
     }
 
-    eventDayWF.temps = returnTemps(eventDayWF);
+    dayWF.aggregate = returnAggregate(dayWF.eventDayWF);
+    dayWF.high = setMeasurementPref(dayWF.aggregate.high, celsius);
+    dayWF.low = setMeasurementPref(dayWF.aggregate.low, celsius);
+    dayWF.tempType = setCandF(celsius);
+    dayWF.celsius = celsius;
+    dayWF.updateWeather = this.updateWeather;
+    dayWF.switchDisplay = this.switchDisplay;
+    dayWF.switchShowExtended = this.switchShowExtended;
+    dayWF.showExtended = showExtended;
+    console.log('this.props', this.props);
+    console.log('dayWF', dayWF);
+
+    if (dayWF.eventDayWF.length === 0) {
+      return null;
+    }
 
     return (
       <div>
-        <div>
-          High {setMeasurementPref(eventDayWF.temps.high, celsius)}<br />
-          Low {setMeasurementPref(eventDayWF.temps.low, celsius)}<br />
-        </div>
-        {eventDayWF.map(eDWF => (
-          <div key={eDWF.dt}>
-            <p>
-              temp {setMeasurementPref(eDWF.main.temp, celsius)}<br />
-              humidity {eDWF.main.humidity}<br />
-              pressure {eDWF.main.pressure}<br />
-              icon <img src={`https://openweathermap.org/img/w/${eDWF.weather[0].icon}.png`} /><br />
-              wind {eDWF.wind.speed} and {eDWF.wind.deg}<br />
-              time {localTime(eDWF.dt)}
-            </p>
+        <HeadlineWeather
+          {...dayWF}
+        />
+        {this.state.showExtended ? (
+          <div className="weather-row">
+            {dayWF.eventDayWF.map(eDWF => (
+              <SingleWeather
+                key={eDWF.dt}
+                {...eDWF}
+                localTime={localTime(eDWF.dt)}
+                temp={setMeasurementPref(eDWF.main.temp, celsius)}
+                tempType={setCandF(celsius)}
+                windDeg={toTextualDescription(eDWF.wind.deg)}
+                windSpeed={setMeasurementPref(eDWF.wind.speed, celsius, 'speed')}
+              />
+            ))}
           </div>
-        ))}
-        <button onClick={this.switchDisplay}>Display</button>
-        <button onClick={this.updateWeather}>Update</button>
+        ) : null }
       </div>
     );
   }

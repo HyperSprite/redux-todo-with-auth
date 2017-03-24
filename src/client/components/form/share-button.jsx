@@ -34,21 +34,29 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
       url: `/${urlPath}#${urlHash}`,
       icon: FaChain,
       toolTip: 'Link to this Event',
+      target: '_self',
+      rel: 'bookmark',
     },
     googleCal: {
       url: googleCalURL,
       icon: FaCalendar,
       toolTip: 'Add to Google Calendar',
+      target: 'new',
+      rel: 'nofollow',
     },
     facebook: {
       url: `https://www.facebook.com/sharer/sharer.php?u=${url}&title=${encodedTitle}&image=${imagePath}`,
       icon: FaFacebook,
       toolTip: 'Share on facebook',
+      target: 'new',
+      rel: 'nofollow',
     },
     twitter: {
       url: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${url}&hashtags=${hashtags}`,
       icon: FaTwitter,
       toolTip: 'Tweet this!',
+      target: 'new',
+      rel: 'nofollow',
     },
   };
 
@@ -67,7 +75,7 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
       </IconButton>
     );
     return (
-      <a key={`social${s}`} href={templates[s].url} target="new" rel="nofollow">{iconButton}</a>
+      <a key={`social${s}`} href={templates[s].url} target={templates[s].target} rel={templates[s].rel} >{iconButton}</a>
     );
   });
   return (
