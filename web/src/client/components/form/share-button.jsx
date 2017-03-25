@@ -26,7 +26,7 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
   const encodedLocation = encodeURIComponent(`${event.eventLocStreet}, ${event.eventLocCity}, ${event.eventLocState} ${event.eventLocZip}, ${event.eventLocCountry}`);
   const eventDate = event.eventDate.replace(/-|:|T.*|\.\d\d\d/g, '');
 
-  const googleCalURL = `http://www.google.com/calendar/event?action=TEMPLATE&text=${event.eventTitle}+-+${event.eventAthleteType}&dates=${eventDate}/${(eventDate * 1) + 1}&details=A+Race+athlete+link%0A${url}%0A${event.eventDesc}&location=${encodedLocation}&trp=false`;
+  const googleCalURL = `http://www.google.com/calendar/event?action=TEMPLATE&text=${event.eventTitle}+-+${event.eventAthleteType}&dates=${eventDate}/${(eventDate * 1) + 1}&details=A+Race+athlete+link%0A${url}&location=${encodedLocation}&trp=false`;
 
   const sites = ['link', 'googleCal', 'facebook', 'twitter'];
   const templates = {

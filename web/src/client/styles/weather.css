@@ -1,5 +1,6 @@
 ul {
   list-style: none;
+  /*padding-left: 4px*/
 }
 
 .weather-row {
@@ -8,8 +9,9 @@ ul {
   align-items: top;
 }
 
-.weather-card {
-
+.weather-single {
+  display: flex;
+  flex-direction: column;
 }
 
 .weather-item {

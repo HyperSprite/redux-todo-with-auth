@@ -9,6 +9,7 @@ import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 
 import HeadlineWeather from './headline-weather';
 import SingleWeather from './single-weather';
+import ToggleIcon from '../form/toggle-icon';
 
 import style from '../../styles/style';
 import '../../styles/weather.css';
@@ -76,7 +77,6 @@ class OneDayWeather extends Component {
   render() {
     const { date, tzOffset, dstOffset } = this.props;
     const { weatherforcast, celsius, showExtended } = this.state;
-    console.log('date', date);
     // something went wrong, no weatherforcast returned.
     if (!weatherforcast) {
       return <div>Sorry, we could not load the weather forcast</div>;
@@ -148,6 +148,8 @@ class OneDayWeather extends Component {
       result.high = maxNumber(result.tempArray);
       result.low = minNumber(result.tempArray);
 
+      result.maxWind = maxNumber(wdInput.map(fFW => fFW.wind.speed));
+
       // getting the worst weather for a given day
       // TODO show day for day and night for night
       // maybe if time is before sunset time,
@@ -167,14 +169,13 @@ class OneDayWeather extends Component {
     dayWF.aggregate = returnAggregate(dayWF.eventDayWF);
     dayWF.high = setMeasurementPref(dayWF.aggregate.high, celsius);
     dayWF.low = setMeasurementPref(dayWF.aggregate.low, celsius);
+    dayWF.maxWind = setMeasurementPref(dayWF.aggregate.maxWind, celsius, 'speed');
     dayWF.tempType = setCandF(celsius);
     dayWF.celsius = celsius;
     dayWF.updateWeather = this.updateWeather;
     dayWF.switchDisplay = this.switchDisplay;
     dayWF.switchShowExtended = this.switchShowExtended;
     dayWF.showExtended = showExtended;
-    console.log('this.props', this.props);
-    console.log('dayWF', dayWF);
 
     if (dayWF.eventDayWF.length === 0) {
       return null;
@@ -186,18 +187,32 @@ class OneDayWeather extends Component {
           {...dayWF}
         />
         {this.state.showExtended ? (
-          <div className="weather-row">
-            {dayWF.eventDayWF.map(eDWF => (
-              <SingleWeather
-                key={eDWF.dt}
-                {...eDWF}
-                localTime={localTime(eDWF.dt)}
-                temp={setMeasurementPref(eDWF.main.temp, celsius)}
-                tempType={setCandF(celsius)}
-                windDeg={toTextualDescription(eDWF.wind.deg)}
-                windSpeed={setMeasurementPref(eDWF.wind.speed, celsius, 'speed')}
-              />
-            ))}
+          <div>
+            <div className="weather-row">
+              <div>
+                <span >
+                  <FlatButton onClick={dayWF.switchDisplay} style={style.toggleIconButton} >
+                    F <ToggleIcon option={dayWF.celsius} /> C
+                  </FlatButton>
+                </span>
+              </div>
+              <IconButton onClick={dayWF.updateWeather} style={style.toggleIconButton} >
+                <FaRefresh size={20} />
+              </IconButton>
+            </div>
+            <div className="weather-row">
+              {dayWF.eventDayWF.map(eDWF => (
+                <SingleWeather
+                  key={eDWF.dt}
+                  {...eDWF}
+                  localTime={localTime(eDWF.dt)}
+                  temp={setMeasurementPref(eDWF.main.temp, celsius)}
+                  tempType={setCandF(celsius)}
+                  windDeg={toTextualDescription(eDWF.wind.deg)}
+                  windSpeed={setMeasurementPref(eDWF.wind.speed, celsius, 'speed')}
+                />
+              ))}
+            </div>
           </div>
         ) : null }
       </div>

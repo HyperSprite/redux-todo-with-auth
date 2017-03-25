@@ -70,6 +70,8 @@ const renderViewEvent = ({
           tzOffset={event.eventGeoTzRawOffset}
           date={+new Date(event.eventDate)}
           measurementPref={measurementPref}
+          expanded={expanded}
+          noShowExtender
         />
       </CardActions>
     ) : null }
