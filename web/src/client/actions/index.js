@@ -257,6 +257,11 @@ export function fetchStrava(path, id, index, stravatoken, context) {
               payload: result,
             });
             break;
+          case 'getUser':
+            dispatch({
+              type: TYPES.FETCH_USER,
+              payload: response.data.user,
+            });
         }
         // dispatch({
         //   type: TYPES.FETCH_STRAVA_ROUTES,

@@ -13,6 +13,93 @@ const getDate = (result) => {
   return result(newDate);
 };
 
+// push ftp or weight into user
+// (athlete, editUser, ['ftp', 'weight'], resUser) => {
+exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
+  let returnValue = editUser;
+  metricType.forEach((mT) => {
+    hlpr.consLog(['....................', 'auth.pushMetrics[mT] start', mT, athlete[mT]]);
+    if (athlete[mT]) {
+      const mTItem = { [mT]: athlete[mT], date: getDate(result => result) };
+      const mTArray = `${mT}History`;
+      const pushItem = { $push: { [mTArray]: mTItem } };
+      const options = { safe: true, upsert: true, new: true };
+      if (!editUser[mTArray] || editUser[mTArray].length === 0  || editUser[mTArray].length > 0 && athlete.ftp !== editUser[mTArray][editUser[mTArray].length - 1].ftp) {
+        User.findByIdAndUpdate(editUser._id, pushItem, options, (err, metricResults) => {
+          if (err) {
+            hlpr.consLog(['....................', `Error: auth.pushMetrics[mT] 0`, err, pushItem, mTArray, metricResults]);
+            returnValue = metricResults;
+          }
+          hlpr.consLog(['....................', `auth.pushMetrics[mT] 0`, mTArray, metricResults]);
+          returnValue = metricResults;
+        });
+      } else {
+        returnValue = returnValue;
+      }
+    }
+  });
+  return resUser(returnValue);
+};
+
+// write user to the database
+
+exports.writeUser = (userData, user, resultUser) => {
+
+  let admin = false;
+  admin = userData.athlete.clubs.some((c) => {
+    return c.id === process.env.STRAVA_MOD_CLUB * 1;
+  });
+
+  let club = false;
+  club = userData.athlete.clubs.some((c) => {
+    return c.id === process.env.STRAVA_CLUB * 1;
+  });
+  const athlete = userData.athlete;
+  if (userData.access_token) {
+    athlete.access_token = userData.access_token;
+  }
+  athlete.loc_city = userData.athlete.city;
+  athlete.loc_state = userData.athlete.state;
+  athlete.loc_country = userData.athlete.country;
+  athlete.adminMember = admin;
+  athlete.clubMember = club;
+
+  geocoder.userGeocoder(athlete, user, (err, toSave) => {
+    hlpr.consLog(['....................', 'auth.writeUser.callGeoCoder', 'user', user, err, toSave]);
+    // get user elevation and timezone
+    const inputElevation = {
+      loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
+      timestamp: user.updatedAt,
+    };
+    hlpr.consLog(['....................', 'auth.writeUser.inputElevation', inputElevation]);
+    resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
+      hlpr.consLog(['....................', 'geoElv', geoElv]);
+      toSave.userGeoElevation = geoElv.elevation;
+
+      resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
+        hlpr.consLog(['....................', 'auth.writeUser.geoTZ', geoTZ]);
+        if (geoTZ.timezone) {
+          toSave.userGeoTzId = geoTZ.timezone.timeZoneId;
+          toSave.userGeoTzName = geoTZ.timezone.timeZoneName;
+          toSave.userGeoTzRawOffset = geoTZ.timezone.rawOffset;
+          toSave.userGeoTzDSTOffset = geoTZ.timezone.dstOffset;
+        }
+        const options = { new: true };
+        User.findByIdAndUpdate(user._id, toSave, options, (err, editUser) => {
+          if (err || !editUser) {
+            hlpr.consLog(['....................', 'Error: auth.writeUser.findByIdAndUpdate', err, editUser, user._id]);
+            return resultUser({ error: 'Error updating user' });
+          }
+          exports.pushMetrics(athlete, editUser, ['ftp', 'weight'], (resUser) => {
+            hlpr.consLog(['....................', 'auth.writeUser resultUser', editUser]);
+            return resultUser(resUser);
+          });
+        });
+      });
+    });
+  });
+};
+
 function tokenForUser(user, cb) {
   const timestamp = getDate(result => result);
   const newJWT = jwt.encode({ sub: user.id, iat: timestamp }, process.env.AUTH_SECRET);
@@ -20,12 +107,12 @@ function tokenForUser(user, cb) {
   return cb(newJWT);
 }
 
-exports.signinError = (err, req, res, next) => {
+exports.signinError = (err, req, res) => {
   hlpr.consLog(['auth.signinError', `AUTH ERROR: Signin - Bad Email or Password @ ${req.ip}`, err]);
   return res.status(422).send({ error: 'Signin failed: Bad Email or Password.' });
 };
 
-exports.stravaSignin = (req, res, next) => {
+exports.stravaSignin = (req, res) => {
   hlpr.consLog([
     'auth.stravaSignin',
     'req.user:',
@@ -40,68 +127,14 @@ exports.stravaSignin = (req, res, next) => {
       `strava req.query.code: ${req.query.code}`,
     ]);
 
-    let admin = false;
-    admin = tokenPayload.athlete.clubs.some((c) => {
-      return c.id === process.env.STRAVA_MOD_CLUB * 1;
-    });
-
-    let club = false;
-    club = tokenPayload.athlete.clubs.some((c) => {
-      return c.id === process.env.STRAVA_CLUB * 1;
-    });
-    const athlete = tokenPayload.athlete;
-    athlete.access_token = tokenPayload.access_token;
-    athlete.loc_city = tokenPayload.athlete.city;
-    athlete.loc_state = tokenPayload.athlete.state;
-    athlete.loc_country = tokenPayload.athlete.country;
-    athlete.adminMember = admin;
-    athlete.clubMember = club;
-
-    geocoder.userGeocoder(athlete, req.user, (err, toSave) => {
-      hlpr.consLog(['auth.callGeoCoder', 'req.user', req.user, err, toSave]);
-      // get user elevation and timezone
-      const inputElevation = {
-        loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
-        timestamp: req.user.updatedAt,
-      };
-      hlpr.consLog(['inputElevation', inputElevation]);
-      resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
-        hlpr.consLog(['geoElv', geoElv]);
-        toSave.userGeoElevation = geoElv.elevation;
-
-        resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
-          hlpr.consLog(['geoTZ', geoTZ]);
-          if (geoTZ.timezone) {
-            toSave.userGeoTzId = geoTZ.timezone.timeZoneId;
-            toSave.userGeoTzName = geoTZ.timezone.timeZoneName;
-            toSave.userGeoTzRawOffset = geoTZ.timezone.rawOffset;
-            toSave.userGeoTzDSTOffset = geoTZ.timezone.dstOffset;
-          }
-          const options = { new: true };
-          User.findByIdAndUpdate(req.user._id, toSave, options, (err, editUser) => {
-            if (athlete.ftp) {
-              const ftpHistory = { ftp: athlete.ftp, date: getDate(result => result) };
-              if (req.user.ftpHistory.length === 0) {
-                User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
-                  if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
-                });
-              } else if (req.user.ftpHistory.length > 0 && athlete.ftp !== req.user.ftpHistory[req.user.ftpHistory.length - 1].ftp) {
-                User.findByIdAndUpdate(req.user._id, { $push: { ftpHistory: ftpHistory } }, { safe: true, upsert: true }, (err, ftpUpdate) => {
-                  if (err) hlpr.consLog(['auth.User.ftpHistory', err, editUser]);
-                });
-              }
-            }
-          });
-        });
-
-        // hlpr.consLog(['auth.User.fOAU', err, editUser]);
-        const result = `
-          <script>
-            localStorage.setItem('token', '${tokenForUser(req.user, tkn => tkn)}');
-            window.location='/events';
-          </script>`;
-        res.send(result);
-      });
+    exports.writeUser(tokenPayload, req.user, (resultUser) => {
+      hlpr.consLog(['auth.User.fOAU', err, resultUser]);
+      const result = `
+        <script>
+          localStorage.setItem('token', '${tokenForUser(req.user, tkn => tkn)}');
+          window.location='/events';
+        </script>`;
+      res.send(result);
     });
   });
 };
