@@ -33,12 +33,21 @@ const propTypes = {
 };
 
 class Athlete extends Component {
+  constructor(props) {
+    super(props);
+    this.updateUser = this.updateUser.bind(this);
+  }
   // this is here to allow users to refresh their strava user data
   // without signing out, this should already be loded in state.
   // actions/index.js fetchData(relURL)
   componentDidMount() {
     this.props.fetchData('auth/user');
     this.props.setPageName('Athlete');
+  }
+
+  updateUser() {
+    // fetchStrava(path, id, index, stravatoken, context)
+    this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser' )
   }
 
   render() {
@@ -78,6 +87,7 @@ class Athlete extends Component {
                 title="Athlete Profile on Strava"
               />
             </a>
+            <button onClick={this.updateUser}>Refresh</button>
             <Static
               contentLabel="Strava ID"
               content={stravaId}
@@ -120,18 +130,18 @@ class Athlete extends Component {
             />
             {userGeoTzRawOffset ? (
               <div>
-                <Astrophases
-                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
-                  dstOffset={userGeoTzDSTOffset}
-                  tzOffset={userGeoTzRawOffset}
-                  date={+new Date()}
-                />
                 <OneDayWeather
                   geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
                   dstOffset={userGeoTzDSTOffset}
                   tzOffset={userGeoTzRawOffset}
                   date={+new Date()}
                   measurementPref={measurement_preference}
+                />
+                <Astrophases
+                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                  dstOffset={userGeoTzDSTOffset}
+                  tzOffset={userGeoTzRawOffset}
+                  date={+new Date()}
                 />
               </div>
             ) : (

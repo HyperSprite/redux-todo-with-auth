@@ -20,7 +20,7 @@ exports.eventGeocoder = (toSave, event, res) => {
   ${toSave.eventLocState || event.eventLocState || ''},
   ${toSave.eventLocCountry || event.eventLocCountry || ''},
   ${toSave.eventLocZip || event.eventLocZip || ''},`;
-  hlpr.consLog(['geoQuery', geoQuery]);
+  // hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
     if (err || geoRes.length === 0) return res(err, toSave);
@@ -57,14 +57,14 @@ exports.userGeocoder = (toSave, user, res) => {
   ${toSave.loc_state || user.userLocState || ''},
   ${toSave.loc_country || user.userLocCountry || ''},
   ${user.userLocZip || ''},`;
-  hlpr.consLog(['geoQuery', geoQuery]);
+  // hlpr.consLog(['geoQuery', geoQuery]);
 
   geocoder.geocode(geoQuery, (err, geoRes) => {
     if (err || geoRes.length === 0) {
       hlpr.consLog(['callGeoCoder err', 'toSave', toSave, 'user', user, 'err', err]);
       return res(err, toSave);
     }
-    hlpr.consLog(['callGeoCoder', 'geoRes', geoRes, 'err', err]);
+    // hlpr.consLog(['callGeoCoder', 'geoRes', geoRes, 'err', err]);
     if (geoRes[0] && geoRes[0].extra.confidence >= 0.9) {
       result.userGeoFormattedAddress = geoRes[0].formattedAddress;
       result.userLocCity = geoRes[0].city;
@@ -84,7 +84,7 @@ exports.userGeocoder = (toSave, user, res) => {
     result.userGeoCountryCode = geoRes[0].countryCode;
     result.userGeoZipCode = geoRes[0].zipcode;
     result.userGeoProvider = geoRes[0].provider;
-    hlpr.consLog(['callGeoCoder', 'result', result]);
+    // hlpr.consLog(['callGeoCoder', 'result', result]);
     return res(err, result);
   });
 };

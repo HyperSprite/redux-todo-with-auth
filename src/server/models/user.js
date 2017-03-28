@@ -12,7 +12,7 @@ const tssGoalSchema = new Schema({
   trainingLog: String, // how did this week go?
 });
 
-const weightHitorySchema = Schema({
+const weightHistorySchema = Schema({
   weight: Number,
   date: String,
 });
@@ -70,7 +70,7 @@ const userSchema = new Schema({
   clubMember: Boolean,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
   ftpHistory: [ftpHistorySchema],
-  weightHitory: [weightHitorySchema],
+  weightHistory: [weightHistorySchema],
   tssGoals: [tssGoalSchema],
 },
   {

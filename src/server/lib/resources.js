@@ -9,6 +9,7 @@ const gMapsAPIKey = process.env.GOOGLE_MAPS;
 // input.loc: '-122.1439698,37.426941'
 exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
   const sLoc = loc.split(',');
+  hlpr.consLog(['resources.rLonLat', date, typeof date]);
   const timestamp = moment(date).format('X');
   let timeOffset = 0;
   if (tzOffset) {
@@ -36,7 +37,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     }, // body: "astrophases": {  ...see this http://aa.usno.navy.mil/data/docs/api.php#phase }
   };
 
-  hlpr.consLog(['rLonLat', resourceMap[target].url]);
+  // hlpr.consLog(['rLonLat', resourceMap[target].url]);
   requestify.request(resourceMap[target].url, {
     method: 'GET',
     cache: {
@@ -44,7 +45,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
       expires: 3.6e+6, // (1 hour = 3.6e+6) Time for cache to expire in milliseconds
     },
   }).then((response) => {
-    hlpr.consLog(['lib.resources.then', response.getBody()]);
+    // hlpr.consLog(['lib.resources.then', response.getBody()]);
     const result = {
       output: {},
     };
@@ -61,10 +62,10 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     }
 
     if (result.outputParsed.status === 'OK') {
-      hlpr.consLog(['lib: result:', result]);
+      // hlpr.consLog(['lib: result:', result]);
       if (target === 'elevation') {
         result.output.elevation = result.outputParsed.results[0].elevation;
-        hlpr.consLog(['result', result]);
+        // hlpr.consLog(['result', result]);
       } else if (target === 'timezone') {
         result.output.timezone = result.outputParsed;
       }
@@ -72,7 +73,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     }
     return output({ [target]: null });
   }).fail((response) => {
-    hlpr.consLog(['resources.rLonLat Error', response]);
+    hlpr.consLog(['Error resources.rLonLat', response]);
     return output({ [target]: null });
   });
 };
