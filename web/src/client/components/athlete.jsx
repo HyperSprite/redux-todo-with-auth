@@ -1,14 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { Paper, Subheader } from 'material-ui';
+import { IconButton, Paper, Subheader } from 'material-ui';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
+import FaRefresh from 'react-icons/lib/fa/refresh';
+import FaToggleOff from 'react-icons/lib/fa/toggle-off';
+import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 
 import * as actions from './../actions';
 import Static from './form/static';
 import OneDayWeather from './weather/one-day-weather';
 import Astrophases from './weather/astrophases';
 import ScrollIntoView from '../containers/scroll-into-view';
+
+import style from '../styles/style';
 
 const propTypes = {
   fetchData: PropTypes.func,
@@ -87,7 +92,9 @@ class Athlete extends Component {
                 title="Athlete Profile on Strava"
               />
             </a>
-            <button onClick={this.updateUser}>Refresh</button>
+            <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
+              <FaRefresh size={20} />
+            </IconButton>
             <Static
               contentLabel="Strava ID"
               content={stravaId}

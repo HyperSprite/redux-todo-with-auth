@@ -24,7 +24,9 @@ exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
       const mTArray = `${mT}History`;
       const pushItem = { $push: { [mTArray]: mTItem } };
       const options = { safe: true, upsert: true, new: true };
-      if (!editUser[mTArray] || editUser[mTArray].length === 0  || editUser[mTArray].length > 0 && athlete.ftp !== editUser[mTArray][editUser[mTArray].length - 1].ftp) {
+      hlpr.consLog(['>>>>>>>>>>>>>>>>>>>>', `athlete[${mT}] !== editUser[${mTArray}][editUser[${mTArray}].length - 1][${mT}]`]);
+      hlpr.consLog(['>>>>>>>>>>>>>>>>>>>>', editUser[mTArray][editUser[mTArray].length - 1].ftp]);
+      if (athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
         User.findByIdAndUpdate(editUser._id, pushItem, options, (err, metricResults) => {
           if (err) {
             hlpr.consLog(['....................', `Error: auth.pushMetrics[mT] 0`, err, pushItem, mTArray, metricResults]);
