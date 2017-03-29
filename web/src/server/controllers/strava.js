@@ -1,5 +1,6 @@
 const strava = require('strava-v3');
 const moment = require('moment');
+const schedule = require('node-schedule');
 
 const User = require('../models/user');
 const Events = require('../models/events');
@@ -25,3 +26,20 @@ exports.getUser = (req, res) => {
     });
   });
 };
+
+
+// Cron jobs for updating users stats each day.
+exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
+  hlpr.consLog(['dailyUserUpdate has started', new Date()]);
+  User.find({ clubMember: true }, (err, foundUsers) => {
+    foundUsers.forEach((fUser) => {
+      strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
+        if (!err && athlete) {
+          auth.pushMetrics(athlete, fUser, ['ftp', 'weight'], (resUser) => {
+            hlpr.consLog(['dailyUserUpdate', resUser.stravaId]);
+          });
+        }
+      });
+    });
+  });
+});
