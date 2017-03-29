@@ -20,6 +20,9 @@ const getDate = (result) => {
 
 exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
   let returnValue = editUser;
+  if (!athlete || !editUser) {
+    return resUser(returnValue);
+  }
   metricType.forEach((mT) => {
     hlpr.consLog(['....................', 'auth.pushMetrics[mT] start', mT, athlete[mT]]);
     if (athlete[mT]) {
@@ -27,7 +30,8 @@ exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
       const mTArray = `${mT}History`;
       const pushItem = { $push: { [mTArray]: mTItem } };
       const options = { safe: true, upsert: true, new: true };
-      if (!editUser[mTArray] || !editUser[mTArray].length === 0 || athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
+      hlpr.consLog(['....................', 'auth.pushMetrics[mT] Mid', editUser[mTArray], editUser[mTArray].length]);
+      if (!editUser[mTArray] || editUser[mTArray].length === 0 || athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
         User.findByIdAndUpdate(editUser._id, pushItem, options, (err, metricResults) => {
           if (err) {
             hlpr.consLog(['....................', `Error: auth.pushMetrics[mT] 0`, err, pushItem, mTArray, metricResults]);
