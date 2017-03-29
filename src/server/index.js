@@ -24,6 +24,9 @@ const portS = (port * 1) + 363;
 
 let httpServer;
 
+const contStrava = require('./controllers/strava');
+const dailyUserUpdate = contStrava.dailyUserUpdate;
+
 // hlpr.consLog(['process.env', process.env]);
 
 isSSL ?

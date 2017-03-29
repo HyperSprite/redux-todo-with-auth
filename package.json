@@ -59,6 +59,7 @@
     "mongoose-findorcreate": "^0.1.2",
     "morgan": "^1.7.0",
     "node-geocoder": "^3.15.2",
+    "node-schedule": "^1.2.1",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",

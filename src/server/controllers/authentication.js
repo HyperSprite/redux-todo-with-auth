@@ -14,7 +14,10 @@ const getDate = (result) => {
 };
 
 // push ftp or weight into user
-// (athlete, editUser, ['ftp', 'weight'], resUser) => {
+// exports.pushMetrics(athlete, editUser, ['ftp', 'weight'], resUser) => {
+// athlete is what is returned from strava
+// editUser is from db
+
 exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
   let returnValue = editUser;
   metricType.forEach((mT) => {
@@ -24,9 +27,7 @@ exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
       const mTArray = `${mT}History`;
       const pushItem = { $push: { [mTArray]: mTItem } };
       const options = { safe: true, upsert: true, new: true };
-      hlpr.consLog(['>>>>>>>>>>>>>>>>>>>>', `athlete[${mT}] !== editUser[${mTArray}][editUser[${mTArray}].length - 1][${mT}]`]);
-      hlpr.consLog(['>>>>>>>>>>>>>>>>>>>>', editUser[mTArray][editUser[mTArray].length - 1].ftp]);
-      if (athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
+      if (!editUser[mTArray] || !editUser[mTArray].length === 0 || athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
         User.findByIdAndUpdate(editUser._id, pushItem, options, (err, metricResults) => {
           if (err) {
             hlpr.consLog(['....................', `Error: auth.pushMetrics[mT] 0`, err, pushItem, mTArray, metricResults]);

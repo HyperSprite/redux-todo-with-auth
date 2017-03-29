@@ -37,6 +37,14 @@ const propTypes = {
   }),
 };
 
+function getLastInArray(arr, arrType) {
+  let item;
+  if (arr && arr.length > 0 && arr[arr.length - 1][arrType] != null) {
+    item = arr[arr.length - 1][arrType];
+  }
+  return item;
+}
+
 class Athlete extends Component {
   constructor(props) {
     super(props);
@@ -55,11 +63,14 @@ class Athlete extends Component {
     this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser' )
   }
 
+
+
   render() {
     const {
       email,
       stravaId,
       firstname,
+      ftpHistory,
       lastname,
       profile_medium,
       profile,
@@ -75,6 +86,7 @@ class Athlete extends Component {
       userGeoLatitude,
       userGeoTzDSTOffset,
       userGeoTzRawOffset,
+      weightHistory,
     } = this.props.user;
     return (
       <div className="main-flex-container" >
@@ -135,6 +147,28 @@ class Athlete extends Component {
               content={date_preference}
               contentType="text"
             />
+            {/* TODO - this is all ugly */}
+            {getLastInArray(ftpHistory, 'ftp') ? (
+              <Static
+                contentLabel="FTP"
+                content={getLastInArray(ftpHistory, 'ftp')}
+                contentType="text"
+              />
+            ) : null }
+            {getLastInArray(weightHistory, 'weight') ? (
+              <Static
+                contentLabel="Weight"
+                content={getLastInArray(weightHistory, 'weight')}
+                contentType="text"
+              />
+            ) : null }
+            {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
+              <Static
+                contentLabel="Watts per Kg"
+                content={(getLastInArray(ftpHistory, 'ftp') / getLastInArray(weightHistory, 'weight')).toFixed(2)}
+                contentType="text"
+              />
+            ) : null }
             {userGeoTzRawOffset ? (
               <div>
                 <OneDayWeather
