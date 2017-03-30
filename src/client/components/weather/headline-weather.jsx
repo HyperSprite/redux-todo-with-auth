@@ -7,7 +7,7 @@ import '../../styles/weather.css';
 // import '../../styles/weather-icons.css';
 
 const HeadlineWeather = ({ ...dayWF }) => {
-  const tempDiff = document.documentElement.clientWidth > 400 ?
+  const tempDiff = document.documentElement.clientWidth > 600 ?
     Math.floor((dayWF.high - dayWF.low) * 5) :
     50;
 

@@ -11,6 +11,7 @@ import * as actions from './../actions';
 import Static from './form/static';
 import OneDayWeather from './weather/one-day-weather';
 import Astrophases from './weather/astrophases';
+import FtpWeight from './metrics/ftp-weight';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 import style from '../styles/style';
@@ -114,6 +115,30 @@ class Athlete extends Component {
                 Loading Weather Data...
               </div>
             )}
+            {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
+              <FtpWeight
+                ftpHistory={ftpHistory}
+                weightHistory={weightHistory}
+              />
+            ) : (
+              <div>
+                {/* TODO - this is all ugly */}
+                {getLastInArray(ftpHistory, 'ftp') ? (
+                  <Static
+                    contentLabel="FTP"
+                    content={getLastInArray(ftpHistory, 'ftp')}
+                    contentType="text"
+                  />
+                ) : null }
+                {getLastInArray(weightHistory, 'weight') ? (
+                  <Static
+                    contentLabel="Weight"
+                    content={getLastInArray(weightHistory, 'weight')}
+                    contentType="text"
+                  />
+                ) : null }
+              </div>
+            )}
             <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
               <CardHeader
                 title="Athlete Profile on Strava"
@@ -162,28 +187,6 @@ class Athlete extends Component {
               content={date_preference}
               contentType="text"
             />
-            {/* TODO - this is all ugly */}
-            {getLastInArray(ftpHistory, 'ftp') ? (
-              <Static
-                contentLabel="FTP"
-                content={getLastInArray(ftpHistory, 'ftp')}
-                contentType="text"
-              />
-            ) : null }
-            {getLastInArray(weightHistory, 'weight') ? (
-              <Static
-                contentLabel="Weight"
-                content={getLastInArray(weightHistory, 'weight')}
-                contentType="text"
-              />
-            ) : null }
-            {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
-              <Static
-                contentLabel="Watts per Kg"
-                content={(getLastInArray(ftpHistory, 'ftp') / getLastInArray(weightHistory, 'weight')).toFixed(2)}
-                contentType="text"
-              />
-            ) : null }
             {userGeoTzRawOffset ? (
               <div>
                 <Astrophases
