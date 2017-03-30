@@ -62,19 +62,7 @@ const renderViewEvent = ({
       title={eventLink}
       subtitle={subTitleName}
     />
-    {getWeather ? (
-      <CardActions>
-        <OneDayWeather
-          geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
-          dstOffset={event.eventGeoTzDSTOffset}
-          tzOffset={event.eventGeoTzRawOffset}
-          date={+new Date(event.eventDate)}
-          measurementPref={measurementPref}
-          expanded={expanded}
-          noShowExtender
-        />
-      </CardActions>
-    ) : null }
+
     <CardText
       expandable
     >
@@ -176,6 +164,19 @@ const renderViewEvent = ({
         );
       })}
     </CardText>
+    {getWeather ? (
+      <CardActions>
+        <OneDayWeather
+          geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
+          dstOffset={event.eventGeoTzDSTOffset}
+          tzOffset={event.eventGeoTzRawOffset}
+          date={+new Date(event.eventDate)}
+          measurementPref={measurementPref}
+          expanded={expanded}
+          noShowExtender
+        />
+      </CardActions>
+    ) : null }
   </Card>
 );
 
