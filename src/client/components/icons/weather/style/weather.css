@@ -1,0 +1,20 @@
+
+.wi-small {
+  margin: 0.1em;
+  font-size: 0.8em;
+}
+
+.wi-standard {
+  margin: 0.1em;
+  font-size: 1em;
+}
+
+.wi-large {
+  margin: 0.2em;
+  font-size: 1.3em;
+}
+
+.wi-xlarge {
+  margin: 0.2em;
+  font-size: 1.6em;
+}

@@ -4,13 +4,14 @@ import { IconButton } from 'material-ui';
 import SpinnerIcon from '../form/spinner-icon';
 import style from '../../styles/style';
 import '../../styles/weather.css';
+// import '../../styles/weather-icons.css';
 
 const HeadlineWeather = ({ ...dayWF }) => {
   const tempDiff = Math.floor((dayWF.high - dayWF.low) * 5);
   return (
     <div className="weather-header">
       <div className="weather-header-row">
-        {dayWF.aggregate.forcast.icon ? (
+        {dayWF.aggregate.forcast.icon && document.documentElement.clientWidth > 400 ? (
           <div className="weather-header-img">
             <img src={`https://openweathermap.org/img/w/${dayWF.aggregate.forcast.icon}.png`} alt={dayWF.aggregate.forcast.main} /><br />
           </div>

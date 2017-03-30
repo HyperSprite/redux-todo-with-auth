@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 
+import WeatherIcon from '../icons/weather/index';
+
 import '../../styles/weather.css';
 
 const propTypes = {
@@ -7,19 +9,54 @@ const propTypes = {
   temp: PropTypes.number,
   tempType: PropTypes.string,
   windDeg: PropTypes.string,
-  windSpeed: PropTypes.string,
+  windSpeed: PropTypes.number,
+  windSpeedType: PropTypes.string,
 };
 
-const SingleWeather = ({ ...eDWF, localTime, temp, tempType, windDeg, windSpeed }) => {
+const SingleWeather = ({ ...eDWF, localTime, temp, tempType, windSpeed, windSpeedType }) => {
   return (
     <div className="weather-single">
-      <div>{localTime}</div>
-      <div><img src={`https://openweathermap.org/img/w/${eDWF.weather[0].icon}.png`} alt={eDWF.weather[0].main} /></div>
-      <div>{temp}{tempType}</div>
-      <div>{eDWF.main.humidity}% <span className="weather-detail" >humidity</span></div>
-      <div>{eDWF.main.pressure} <span className="weather-detail">hpa</span></div>
-      <div><span className="weather-detail" >{windDeg} wind</span></div>
-      <div><span className="weather-detail" >{windSpeed}</span></div>
+      <div className="weather-item">
+        {localTime}
+      </div>
+      <div className="weather-item">
+        <WeatherIcon
+          icon={`wi-owm-${eDWF.weather[0].id}`}
+          iconStyle="wi-xlarge"
+        />
+      </div>
+      <div className="weather-item">{temp}{tempType}</div>
+      <div className="weather-set weather-item">
+        <div>
+          {eDWF.main.humidity}
+        </div>
+        <WeatherIcon
+          icon="wi-humidity"
+          iconStyle="wi-small"
+        />
+      </div>
+      <div className="weather-set weather-item">
+        <div>
+          {Math.floor(eDWF.main.pressure)}
+        </div>
+        <WeatherIcon
+          icon="wi-barometer"
+          iconStyle="wi-small"
+        />
+      </div>
+      <div className="weather-single weather-item">
+        <div>
+          {windSpeed}
+        </div>
+        <div className="weather-detail">
+          {windSpeedType}
+        </div>
+        <WeatherIcon
+          icon={`towards-${Math.floor(eDWF.wind.deg)}-deg`}
+          wind
+          iconStyle="wi-large"
+        />
+      </div>
     </div>
   );
 };
