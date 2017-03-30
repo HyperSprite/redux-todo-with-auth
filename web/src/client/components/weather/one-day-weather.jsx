@@ -96,18 +96,24 @@ class OneDayWeather extends Component {
     function setMeasurementPref(toCalc, isCelsius, type) {
       if (isCelsius) {
         if (type === 'speed') {
-          return `${toCalc} m/s`;
+          return toCalc;
         }
         return Math.floor(toCalc - 273.15);
       }
       // feet
       if (type === 'speed') {
-        return `${Math.floor(toCalc * 2.236936)} mph`;
+        return Math.floor(toCalc * 2.236936);
       }
       return Math.floor(((toCalc - 273.15) * 1.8) + 32);
     }
 
-    function setCandF(isCelsius) {
+    function setCandF(isCelsius, type) {
+      if (type === 'speed') {
+        if (isCelsius) {
+          return 'm/s';
+        }
+        return 'mph';
+      }
       if (isCelsius) {
         return '°C';
       }
@@ -115,7 +121,7 @@ class OneDayWeather extends Component {
     }
 
     function localTime(utcTime) {
-      return moment.unix(utcTime).format('ddd hA');
+      return moment.unix(utcTime).format('hA');
     }
 
     const dayWF = {};
@@ -200,7 +206,7 @@ class OneDayWeather extends Component {
                 <FaRefresh size={20} />
               </IconButton>
             </div>
-            <div className="weather-row">
+            <div className="weather-set">
               {dayWF.eventDayWF.map(eDWF => (
                 <SingleWeather
                   key={eDWF.dt}
@@ -210,6 +216,8 @@ class OneDayWeather extends Component {
                   tempType={setCandF(celsius)}
                   windDeg={toTextualDescription(eDWF.wind.deg)}
                   windSpeed={setMeasurementPref(eDWF.wind.speed, celsius, 'speed')}
+                  windSpeedType={setCandF(celsius, 'speed')}
+                  celsius
                 />
               ))}
             </div>

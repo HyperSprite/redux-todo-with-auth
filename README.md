@@ -1,12 +1,12 @@
-#Redux Todo Example with Auth (with Node/Express/Mongo backend)
+# Redux Todo Example with Auth (with Node/Express/Mongo backend)
 
-This is taking a the React Todo example and putting Auth in front of it. It  uses all the latest stuff, as of time of committing, including React Router v4. At least that is what this started out as.
+This is taking a the React Todo example and putting Auth in front of it. It  uses all the latest stuff, as of time of committing, including React Router v4. At least that is what this started out as. 
 
 
-##This is really the repo for A Race athlete.
+## This is really the repo for A Race athlete.
 The idea behind **A Race athlete** is it will be a place that to help people pick, plan and train for their primary race goals, or A race. It works using by connecting to [Strava](https://strava.com), a popular endurance sport application for both authentication and data. Currently, I've been working on the events portion which allows a user to enter events, favorite events and quickly get relevant information about that event.
 
-##Handy Links:
+## Handy Links:
 
 * [Real Favicon Generator](https://realfavicongenerator.net) - [CSS-Tricks](https://css-tricks.com/favicon-quiz/)
 * [Flow type](https://flowtype.org/) - [github](https://github.com/facebook/flow)
@@ -15,9 +15,9 @@ The idea behind **A Race athlete** is it will be a place that to help people pic
 
 ###APIs:
 
-* Google:
+* Google: 
 	* [Geo Coding](https://developers.google.com/maps/documentation/geocoding/start)
-	* [Elevation](https://developers.google.com/maps/documentation/elevation/start)
+	* [Elevation](https://developers.google.com/maps/documentation/elevation/start) 
 	* [Time Zones](https://developers.google.com/maps/documentation/timezone/start)
 	* [Distance](https://developers.google.com/maps/documentation/distance-matrix/) - not yet implemented
 * [Open Weather Maps](https://openweathermap.org/forecast5) for Local Weather
@@ -37,6 +37,7 @@ The idea behind **A Race athlete** is it will be a place that to help people pic
 * [mongoose](http://mongoosejs.com/) - [github](https://github.com/Automattic/mongoose) - ORM for Mongodb
 * mongoose-findorcreate - [github](https://github.com/drudge/mongoose-findorcreate)
 * [nodemon](https://nodemon.io/) - [github](https://github.com/remy/nodemon) - run node on a watcher
+* [node-schedule](https://www.npmjs.com/package/node-schedule) - [github](https://github.com/node-schedule/node-schedule) - Like cron for node
 * [passport](http://passportjs.org/) - [github](https://github.com/jaredhanson/passport)
 * passport-jwt - [github](https://github.com/themikenicholson/passport-jwt)
 * passport-local - [github](https://github.com/jaredhanson/passport-local)
@@ -48,7 +49,7 @@ The idea behind **A Race athlete** is it will be a place that to help people pic
 * [redux](http://redux.js.org/) - [github](https://github.com/reactjs/redux/)
 * redux-form-material-ui - [github](https://github.com/erikras/redux-form-material-ui)
 * [redux-form](http://redux-form.com) - [github](https://github.com/erikras/redux-form)
-* requestify - [github](https://github.com/ranm8/requestify) - caching http client for node
+* requestify - [github](https://github.com/ranm8/requestify) - caching http client for node 
 * [serialize-javascript](https://github.com/yahoo/serialize-javascript) - similar to JSON.stringify
 * node-strava-v3 - [github](https://github.com/UnbounDev/node-strava-v3)
 * uuid - [github](https://github.com/kelektiv/node-uuid) - generates UUIDs

@@ -99,6 +99,21 @@ class Athlete extends Component {
           <Card
             className="card"
           >
+            {userGeoTzRawOffset ? (
+              <div>
+                <OneDayWeather
+                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                  dstOffset={userGeoTzDSTOffset}
+                  tzOffset={userGeoTzRawOffset}
+                  date={+new Date()}
+                  measurementPref={measurement_preference}
+                />
+              </div>
+            ) : (
+              <div>
+                Loading Weather Data...
+              </div>
+            )}
             <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
               <CardHeader
                 title="Athlete Profile on Strava"
@@ -171,13 +186,6 @@ class Athlete extends Component {
             ) : null }
             {userGeoTzRawOffset ? (
               <div>
-                <OneDayWeather
-                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
-                  dstOffset={userGeoTzDSTOffset}
-                  tzOffset={userGeoTzRawOffset}
-                  date={+new Date()}
-                  measurementPref={measurement_preference}
-                />
                 <Astrophases
                   geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
                   dstOffset={userGeoTzDSTOffset}
@@ -187,7 +195,7 @@ class Athlete extends Component {
               </div>
             ) : (
               <div>
-                Loading Location Data...
+                Loading Astrophase Data...
               </div>
             )}
             <div className="quote-box">
