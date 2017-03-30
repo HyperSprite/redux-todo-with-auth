@@ -26,6 +26,7 @@ const ftpWeight = ({ ftpHistory, weightHistory }) => (
     {getLastInArray(ftpHistory, 'ftp') ? (
       <Static
         contentLabel="FTP"
+        contentLabelLink="https://www.strava.com/settings/performance"
         content={getLastInArray(ftpHistory, 'ftp')}
         contentType="text"
       />
@@ -33,6 +34,7 @@ const ftpWeight = ({ ftpHistory, weightHistory }) => (
     {getLastInArray(weightHistory, 'weight') ? (
       <Static
         contentLabel="Weight"
+        contentLabelLink="https://www.strava.com/settings/profile"
         content={getLastInArray(weightHistory, 'weight')}
         contentType="text"
       />
