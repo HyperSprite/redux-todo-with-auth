@@ -119,6 +119,7 @@ class Athlete extends Component {
               <FtpWeight
                 ftpHistory={ftpHistory}
                 weightHistory={weightHistory}
+                measurementPref={measurement_preference}
               />
             ) : (
               <div>
@@ -139,14 +140,13 @@ class Athlete extends Component {
                 ) : null }
               </div>
             )}
-            <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
-              <CardHeader
-                title="Athlete Profile on Strava"
-              />
-            </a>
-            <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
-              <FaRefresh size={20} />
-            </IconButton>
+            <div className="flex-row">
+              <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
+                <FaRefresh size={20} />
+              </IconButton>
+              <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
+                Athlete Profile on Strava</a>
+            </div>
             <Static
               contentLabel="Strava ID"
               content={stravaId}

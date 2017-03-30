@@ -72,8 +72,19 @@ a {
   font-weight: 500;
 }
 
+
 .static-label {
   color: #9E9E9E;
+}
+
+.static a {
+  text-decoration: none;
+}
+
+a > .static-label:hover {
+  cursor: pointer;
+  color: #B71C1C;
+  text-decoration: underline;
 }
 
 .url {

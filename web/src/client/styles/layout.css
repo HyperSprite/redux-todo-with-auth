@@ -61,6 +61,17 @@ body {
   flex-direction: column;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .home-jumbotron {
   height: 80vh;
   content: '\00a0';

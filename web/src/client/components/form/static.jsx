@@ -4,6 +4,7 @@ const propTypes = {
   baseURL: PropTypes.string,
   content: PropTypes.any,
   contentLabel: PropTypes.string,
+  contentLabelLink: PropTypes.string,
   contentType: PropTypes.string,
   contentAlt: PropTypes.string,
 };
@@ -36,18 +37,40 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
   }
 };
 
-const renderStatic = ({ baseURL, contentLabel, content, contentType, contentAlt }) => {
+const renderStatic = ({
+  baseURL,
+  contentLabel,
+  contentLabelLink,
+  content,
+  contentType,
+  contentAlt,
+}) => {
   if (content) {
     return (
       <div
         className="static"
       >
-        <label
-          htmlFor={content}
-          className="static-label"
-        >
-          {contentLabel}
-        </label>
+        {contentLabelLink ? (
+          <a
+            href={contentLabelLink}
+            target="new"
+          >
+            <label
+              htmlFor={content}
+              className="static-label"
+            >
+              {contentLabel}
+            </label>
+          </a>
+        ) : (
+          <label
+            htmlFor={content}
+            className="static-label"
+          >
+            {contentLabel}
+          </label>
+        )}
+
         <div
           className="static-sub-div"
         >

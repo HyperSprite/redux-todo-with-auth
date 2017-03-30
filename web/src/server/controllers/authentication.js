@@ -17,7 +17,7 @@ const getDate = (result) => {
 // exports.pushMetrics(athlete, editUser, ['ftp', 'weight'], resUser) => {
 // athlete is what is returned from strava
 // editUser is from db
-
+// TODO this is updating but not returning the latest user to redux.
 exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
   let returnValue = editUser;
   if (!athlete || !editUser) {
