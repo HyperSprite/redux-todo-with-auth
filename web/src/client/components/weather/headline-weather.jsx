@@ -7,7 +7,10 @@ import '../../styles/weather.css';
 // import '../../styles/weather-icons.css';
 
 const HeadlineWeather = ({ ...dayWF }) => {
-  const tempDiff = Math.floor((dayWF.high - dayWF.low) * 5);
+  const tempDiff = document.documentElement.clientWidth > 400 ?
+    Math.floor((dayWF.high - dayWF.low) * 5) :
+    50;
+
   return (
     <div className="weather-header">
       <div className="weather-header-row">
@@ -17,20 +20,25 @@ const HeadlineWeather = ({ ...dayWF }) => {
           </div>
         ) : null }
         <div className="weather-header-temp">
-          <span className="weather-detail">Low</span> {dayWF.low}°
+          <span className="weather-detail weather-two">Low</span> <span className="weather-one">{dayWF.low}°</span>
         </div>
         <div className="weather-temp-diff" >
-          <hr style={{ width: tempDiff + 5 }} />
+          <hr style={{ width: tempDiff + 2 }} />
         </div>
         <div className="weather-header-temp">
-          {dayWF.high}° <span className="weather-detail">High</span>
+          <span className="weather-one">{dayWF.high}°</span> <span className="weather-detail weather-two">High</span>
         </div>
         <div className="weather-header-img">
-          {dayWF.maxWind}
+          {dayWF.maxWind} <span className="weather-detail">{dayWF.windSpeedType}</span>
         </div>
       </div>
       <div>
-        <IconButton onClick={dayWF.switchShowExtended} style={style.toggleIconButton} ><SpinnerIcon option={dayWF.showExtended}/></IconButton>
+        <IconButton
+          onClick={dayWF.switchShowExtended}
+          style={style.toggleIconButton}
+        >
+          <SpinnerIcon option={dayWF.showExtended} />
+        </IconButton>
       </div>
     </div>
   );

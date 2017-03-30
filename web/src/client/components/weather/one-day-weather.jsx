@@ -27,7 +27,7 @@ class OneDayWeather extends Component {
     super(props);
     this.state = {
       weatherforcast: [],
-      celsius: true,
+      celsius: false,
       showExtended: false,
     };
     this.switchDisplay = this.switchDisplay.bind(this);
@@ -176,6 +176,7 @@ class OneDayWeather extends Component {
     dayWF.high = setMeasurementPref(dayWF.aggregate.high, celsius);
     dayWF.low = setMeasurementPref(dayWF.aggregate.low, celsius);
     dayWF.maxWind = setMeasurementPref(dayWF.aggregate.maxWind, celsius, 'speed');
+    dayWF.windSpeedType = setCandF(celsius, 'speed');
     dayWF.tempType = setCandF(celsius);
     dayWF.celsius = celsius;
     dayWF.updateWeather = this.updateWeather;
