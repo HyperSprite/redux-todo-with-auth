@@ -44,7 +44,7 @@ const SingleWeather = ({ ...eDWF, localTime, temp, tempType, windSpeed, windSpee
           iconStyle="wi-small"
         />
       </div>
-      <div className="weather-single weather-item">
+      <div className="weather-set weather-item">
         <div>
           {windSpeed}
         </div>
