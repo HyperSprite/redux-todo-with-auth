@@ -64,8 +64,6 @@ class Athlete extends Component {
     this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser' )
   }
 
-
-
   render() {
     const {
       email,
@@ -89,6 +87,8 @@ class Athlete extends Component {
       userGeoTzRawOffset,
       weightHistory,
     } = this.props.user;
+
+    const measurementPref = measurement_preference === 'metric';
     return (
       <div className="main-flex-container" >
         <div className="side-lite left-pane" />
@@ -107,7 +107,7 @@ class Athlete extends Component {
                   dstOffset={userGeoTzDSTOffset}
                   tzOffset={userGeoTzRawOffset}
                   date={+new Date()}
-                  measurementPref={measurement_preference}
+                  measurementPref={measurementPref}
                 />
               </div>
             ) : (

@@ -3,9 +3,6 @@ import axios from 'axios';
 import moment from 'moment';
 import { FlatButton, IconButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
-import FaToggleOff from 'react-icons/lib/fa/toggle-off';
-import FaToggleOn from 'react-icons/lib/fa/toggle-on';
-
 
 import HeadlineWeather from './headline-weather';
 import SingleWeather from './single-weather';
@@ -17,7 +14,7 @@ import '../../styles/weather.css';
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'
   date: PropTypes.number.isRequired, // unix time in milliseconds
-  measurementPref: PropTypes.string, // defaults to C
+  measurementPref: PropTypes.bool, // defaults to C
   dstOffset: PropTypes.number.isRequired, // DST offset
   tzOffset: PropTypes.number.isRequired, // UTC offset in milliseconds
 };
@@ -27,7 +24,7 @@ class OneDayWeather extends Component {
     super(props);
     this.state = {
       weatherforcast: [],
-      celsius: false,
+      celsius: true,
       showExtended: false,
     };
     this.switchDisplay = this.switchDisplay.bind(this);
@@ -36,9 +33,11 @@ class OneDayWeather extends Component {
   }
 
   componentDidMount() {
-  // componentWillReceiveProps() {
     this.getNewWeather();
-    this.setDisplay();
+  }
+
+  componentWillReceiveProps() {
+    this.setState({ celsius: this.props.measurementPref });
   }
 
   getNewWeather = () => {
@@ -56,12 +55,6 @@ class OneDayWeather extends Component {
       });
   }
 
-  setDisplay() {
-    if (this.props.measurementPref === 'feet') {
-      this.setState({ celsius: false });
-    }
-  }
-
   updateWeather() {
     this.getNewWeather();
   }
@@ -77,10 +70,7 @@ class OneDayWeather extends Component {
   render() {
     const { date, tzOffset, dstOffset } = this.props;
     const { weatherforcast, celsius, showExtended } = this.state;
-    // something went wrong, no weatherforcast returned.
-    if (!weatherforcast) {
-      return <div>Sorry, we could not load the weather forcast</div>;
-    }
+    const dayWF = {};
 
     function dateSetup(theDate) {
       return moment(theDate).startOf('day');
@@ -123,9 +113,6 @@ class OneDayWeather extends Component {
     function localTime(utcTime) {
       return moment.unix(utcTime).format('hA');
     }
-
-    const dayWF = {};
-    dayWF.eventDayWF = weatherforcast.filter(filterDate);
 
     function maxNumber(tempArr) {
       return Math.max(...tempArr);
@@ -172,6 +159,7 @@ class OneDayWeather extends Component {
       return result;
     }
 
+    dayWF.eventDayWF = weatherforcast.filter(filterDate);
     dayWF.aggregate = returnAggregate(dayWF.eventDayWF);
     dayWF.high = setMeasurementPref(dayWF.aggregate.high, celsius);
     dayWF.low = setMeasurementPref(dayWF.aggregate.low, celsius);
@@ -183,6 +171,18 @@ class OneDayWeather extends Component {
     dayWF.switchDisplay = this.switchDisplay;
     dayWF.switchShowExtended = this.switchShowExtended;
     dayWF.showExtended = showExtended;
+
+    // something went wrong, no weatherforcast returned.
+    if (!weatherforcast) {
+      return (
+        <div>Sorry, we could not load the weather forcast. {' '}
+          <IconButton onClick={dayWF.updateWeather} style={style.toggleIconButton} >
+            <FaRefresh size={20} />
+          </IconButton>
+        </div>
+
+      );
+    }
 
     if (dayWF.eventDayWF.length === 0) {
       return null;

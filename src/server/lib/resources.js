@@ -56,7 +56,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
       return output(result.output);
     }
 
-    if (target === 'astrophases' && !result.outputParsed.error) {
+    if (target === 'astrophases') {
       result.output.astrophases = result.outputParsed;
       return output(result.output);
     }
