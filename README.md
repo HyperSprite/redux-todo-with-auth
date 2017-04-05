@@ -1,6 +1,6 @@
 # Redux Todo Example with Auth (with Node/Express/Mongo backend)
 
-This is taking a the React Todo example and putting Auth in front of it. It  uses all the latest stuff, as of time of committing, including React Router v4. At least that is what this started out as. 
+This is taking a the React Todo example and putting Auth in front of it. It  uses all the latest stuff, as of time of committing, including React Router v4. At least that is what this started out as.
 
 
 ## This is really the repo for A Race athlete.
@@ -13,18 +13,18 @@ The idea behind **A Race athlete** is it will be a place that to help people pic
 * [Node.js](https://nodejs.org) - [github](https://github.com/nodejs/node) - [docs](https://nodejs.org/en/docs/)
 * [Experss](http://expressjs.com/) - [github](https://github.com/expressjs/express) - [docs](http://expressjs.com/en/4x/api.html)
 
-###APIs:
+### APIs:
 
-* Google: 
+* Google:
 	* [Geo Coding](https://developers.google.com/maps/documentation/geocoding/start)
-	* [Elevation](https://developers.google.com/maps/documentation/elevation/start) 
+	* [Elevation](https://developers.google.com/maps/documentation/elevation/start)
 	* [Time Zones](https://developers.google.com/maps/documentation/timezone/start)
 	* [Distance](https://developers.google.com/maps/documentation/distance-matrix/) - not yet implemented
 * [Open Weather Maps](https://openweathermap.org/forecast5) for Local Weather
 * [Strava](https://strava.github.io/api/) for Oauth and Data
 * [United States Naval Observatory](http://aa.usno.navy.mil/data/docs/api.php) for Astrophases
 
-###Modules:
+### Modules:
 
 * axios - [github](https://github.com/mzabriskie/axios) - xhr (see client/actions/index)
 * [date-fns](https://date-fns.org) - like lodash for dates
@@ -49,7 +49,7 @@ The idea behind **A Race athlete** is it will be a place that to help people pic
 * [redux](http://redux.js.org/) - [github](https://github.com/reactjs/redux/)
 * redux-form-material-ui - [github](https://github.com/erikras/redux-form-material-ui)
 * [redux-form](http://redux-form.com) - [github](https://github.com/erikras/redux-form)
-* requestify - [github](https://github.com/ranm8/requestify) - caching http client for node 
+* requestify - [github](https://github.com/ranm8/requestify) - caching http client for node
 * [serialize-javascript](https://github.com/yahoo/serialize-javascript) - similar to JSON.stringify
 * node-strava-v3 - [github](https://github.com/UnbounDev/node-strava-v3)
 * uuid - [github](https://github.com/kelektiv/node-uuid) - generates UUIDs

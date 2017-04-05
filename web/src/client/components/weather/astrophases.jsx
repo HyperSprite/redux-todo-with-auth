@@ -56,12 +56,17 @@ class Astrophases extends Component {
     const { astrophases } = this.state;
 
     // something went wrong, no astro forcast returned.
-    if (!astrophases.dayofweek) {
-      return <div>Loading Astrophases...</div>;
+    if (astrophases.error === 'true') {
+      return (
+        <div>
+          Failed to load Astrophases<br />
+          <button onClick={this.updateAstrophases}>Try Again</button>
+        </div>
+      );
     }
 
-    if (astrophases.error === 'true') {
-      return <div>Failed to load Astrophases</div>;
+    if (!astrophases.dayofweek) {
+      return <div>Loading Astrophases...</div>;
     }
 
     return (
@@ -91,7 +96,6 @@ class Astrophases extends Component {
             ))}
           </ul>
         </div>
-        <button onClick={this.updateAstrophases}>Update</button>
       </div>
     );
   }

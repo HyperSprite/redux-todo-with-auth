@@ -25,7 +25,7 @@ const propTypes = {
   getWeather: PropTypes.bool,
   goal: PropTypes.bool,
   goalClick: PropTypes.func,
-  measurementPref: PropTypes.string,
+  measurementPref: PropTypes.bool,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
 };
@@ -164,7 +164,7 @@ const renderViewEvent = ({
         );
       })}
     </CardText>
-    {getWeather ? (
+    {getWeather && event.eventGeoTzRawOffset ? (
       <CardActions>
         <OneDayWeather
           geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
