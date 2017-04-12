@@ -119,7 +119,7 @@ class Athlete extends Component {
               <FtpWeight
                 ftpHistory={ftpHistory}
                 weightHistory={weightHistory}
-                measurementPref={measurement_preference}
+                measurementPref={measurementPref}
               />
             ) : (
               <div>
