@@ -3,11 +3,11 @@ import { flatten } from 'lodash';
 import { eachDay, format, min, max } from 'date-fns';
 
 import AthleteStatsLineChart from './athlete-stats-line-chart';
-import Static from '../form/static';
 
 const propTypes = {
   ftpHistory: PropTypes.array.isRequired,
   weightHistory: PropTypes.array.isRequired,
+  measurementPref: PropTypes.bool.isRequired,
 };
 
 function consolidateData(ftp, weight) {
@@ -43,7 +43,8 @@ function consolidateData(ftp, weight) {
       acc.data.push({ day: dR,
         date: tmpVals.dateSet[dR].date,
         ftp: null,
-        weight: acc.lastWeight,
+        weight: Math.round(acc.lastWeight * 100) / 100,
+        saWeight: Math.round((acc.lastWeight * 2.20462) * 10) / 10,
         wPKG: null,
       });
       return acc;
@@ -61,6 +62,7 @@ function consolidateData(ftp, weight) {
         date: tmpVals.dateSet[dR].date,
         ftp: acc.lastFTP,
         weight: Math.round(acc.lastWeight * 100) / 100,
+        saWeight: Math.round((acc.lastWeight * 2.20462) * 10) / 10,
         wPKG: Math.round((acc.lastFTP / acc.lastWeight) * 100) / 100,
       });
       return acc;
@@ -72,13 +74,14 @@ function consolidateData(ftp, weight) {
 }
 
 
-const ftpWeight = ({ ftpHistory, weightHistory }) => (
+const ftpWeight = ({ ftpHistory, weightHistory, measurementPref }) => (
   <div>
     {/* TODO - this is all ugly */}
     {(ftpHistory && ftpHistory.length > 0 && ftpHistory[ftpHistory.length - 1].ftp != null) ? (
       <AthleteStatsLineChart
         data={consolidateData(ftpHistory, weightHistory)}
         label="Power to Weight"
+        measurementPref={measurementPref}
       />
     ) : null }
   </div>
