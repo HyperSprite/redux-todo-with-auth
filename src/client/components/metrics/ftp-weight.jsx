@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { flatten } from 'lodash';
-import { eachDay, format, min, max } from 'date-fns';
+import { eachDay, format, min } from 'date-fns';
 
 import AthleteStatsLineChart from './athlete-stats-line-chart';
 
@@ -13,9 +13,10 @@ const propTypes = {
 function consolidateData(ftp, weight) {
   const valTypes = ['ftp', 'weight'];
   const tmpVals = { ftp, weight };
+  const nDate = new Date();
   tmpVals.flatArgs = flatten([ftp, weight]);
   tmpVals.min = min(...tmpVals.flatArgs.map(obj => obj.date));
-  tmpVals.max = max(...tmpVals.flatArgs.map(obj => obj.date));
+  tmpVals.max = nDate;
   tmpVals.dateSet = eachDay(tmpVals.min, tmpVals.max).reduce((acc, dR) => {
     const tmpDay = format(dR, 'MM-DD-YYYY');
     acc.tickValues.push(tmpDay);
