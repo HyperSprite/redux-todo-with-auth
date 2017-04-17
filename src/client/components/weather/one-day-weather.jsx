@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
-import moment from 'moment';
+import { format, startOfDay } from 'date-fns';
 import { FlatButton, IconButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
@@ -73,13 +73,15 @@ class OneDayWeather extends Component {
     const dayWF = {};
 
     function dateSetup(theDate) {
-      return moment(theDate).startOf('day');
+      // theDate is a unix string in milliseconds - 1492408132560
+      // result is the start of day in milliseconds - 1492326000000
+      return format(startOfDay(theDate), 'x') * 1;
     }
 
     function filterDate(elm) {
       // get array of one days worth of weather
-      const offsetDate = Math.floor((dateSetup(date) + tzOffset + dstOffset) / 1000);
       // seconds in a day 86400
+      const offsetDate = Math.floor((dateSetup(date) + tzOffset + dstOffset) / 1000);
       return elm.dt >= offsetDate && elm.dt <= offsetDate + 86400;
     }
 
@@ -111,7 +113,9 @@ class OneDayWeather extends Component {
     }
 
     function localTime(utcTime) {
-      return moment.unix(utcTime).format('hA');
+      // input time in seconds
+      // returns time like 8PM format
+      return format(utcTime * 1000, 'hA');
     }
 
     function maxNumber(tempArr) {
