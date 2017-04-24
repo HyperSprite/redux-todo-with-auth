@@ -2,15 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { Divider, FlatButton, LinearProgress, RaisedButton, RadioButton } from 'material-ui';
+import { Divider, FlatButton, LinearProgress, MenuItem, RaisedButton, RadioButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { DatePicker, TextField, RadioButtonGroup } from 'redux-form-material-ui';
+import { DatePicker, SelectField, TextField, RadioButtonGroup } from 'redux-form-material-ui';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import Alert from './../form/alert';
-import Static from './../form/static';
 import StaticMD from './../form/static-markdown';
 import { validate, warn } from './../form/validate';
 import EventRoutes from './event-routes';
@@ -37,6 +36,10 @@ const propTypes = {
 
 const relURLAdd = 'apiv1/events/addevent';
 const relURLEdit = 'apiv1/events';
+const NumOfDaysMenuOpts = [];
+for (let i = 1; i < 32; i++) {
+  NumOfDaysMenuOpts.push(i);
+}
 
 let EditEvent = class EditEvent extends Component {
   constructor() {
@@ -141,12 +144,25 @@ let EditEvent = class EditEvent extends Component {
           mode="landscape"
         />
         <div>
+          <Field
+            name="eventDays"
+            style={style.formelement}
+            component={SelectField}
+            floatingLabelText="Number of days"
+          >
+            {NumOfDaysMenuOpts.map(n => (
+              <MenuItem key={n} value={n} primaryText={n} />
+            ))}
+          </Field>
+        </div>
+        <div>
           <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
             <RadioButton value="Cycling" label="Cycling" default />
             <RadioButton value="Running" label="Running" />
             <RadioButton value="Triathlon" label="Triathlon" />
           </Field>
         </div>
+
         <div>
           <Field
             component={TextField}
@@ -347,6 +363,9 @@ function mapStateToProps(state) {
   } else {
     initialValues.eventAthleteType = 'Cycling';
     initialValues.eventOwners = [state.auth.user.stravaId];
+  }
+  if (state.events.event && !state.events.event.eventDays) {
+    initialValues.eventDays = 1;
   }
   let hashId = '';
   if (state.events.event.updated && state.events.event.updated.eventId) {

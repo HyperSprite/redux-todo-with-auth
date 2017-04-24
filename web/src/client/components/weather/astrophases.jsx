@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { format, startOfDay } from 'date-fns';
 
 function dateSetup(tDate, tzO) {
   // Takes a date object and rounds to midnight,
@@ -8,9 +9,16 @@ function dateSetup(tDate, tzO) {
   // and returns the formated date
   // console.log(tzO);
   // tzO is tzOffset in sec, converted to min.
-  return moment(moment(tDate).startOf('day')).utcOffset(-(tzO / 3600)).format('MM/DD/YYYY');
+  console.log('tDate', tDate, tDate.getTimezoneOffset);
+  const result = moment(moment(tDate).startOf('day')).utcOffset(-(tzO / 3600)).format('MM/DD/YYYY');
+  console.log('moment', result);
+  const otherResult = format(startOfDay(tDate), 'MM/DD/YYYY');
+  console.log('date-fns', otherResult);
+  return result;
   // return moment(moment(tDate).startOf('day')).format('MM/DD/YYYY');
 }
+
+
 
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'

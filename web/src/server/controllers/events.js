@@ -13,6 +13,14 @@ const getDate = (result) => {
   return result(newDate);
 };
 
+const endDate = (startDate, noOfDays, result) => {
+  const nOD = noOfDays * 1 || 1;
+  hlpr.consLog(['endDate', startDate, nOD]);
+  const resEndDate = moment(startDate).add(nOD -1 , 'days').toISOString();
+  hlpr.consLog(['hlpr.consLog', resEndDate]);
+  return result(resEndDate);
+};
+
 const hashtagger = (postedHashtags, result) => {
   hlpr.consLog(['events.hashtagger', 'postedHashtags', postedHashtags]);
   if (!postedHashtags || postedHashtags[0] === '') return result([]); // empty
@@ -53,15 +61,19 @@ exports.addEvent = (req, res) => {
           toSave.eventDescHTML = rendHTML;
           toSave.eventFavorites = [toSave.eventOwner];
           toSave.eventHashtags = req.form.eventHashtags;
-          Events.create(toSave, (err, event) => {
-            if (!err) {
-              hlpr.consLog(['Event saved']);
-              const result = { event: { postSuccess: true }, updated: event };
-              hlpr.consLog([result]);
-              return res.send(result);
-            }
-            hlpr.consLog(['Event error', err]);
-            return res.status(400).send({ error: 'Error adding new event' });
+          endDate(toSave.eventDate, toSave.eventDays, (eventDateEnd) => {
+            hlpr.consLog(['toSave.eventDateEnd', eventDateEnd]);
+            toSave.eventDateEnd = eventDateEnd;
+            Events.create(toSave, (err, event) => {
+              if (!err) {
+                hlpr.consLog(['Event saved']);
+                const result = { event: { postSuccess: true }, updated: event };
+                hlpr.consLog([result]);
+                return res.send(result);
+              }
+              hlpr.consLog(['Event error', err]);
+              return res.status(400).send({ error: 'Error adding new event' });
+            });
           });
         });
       });
@@ -96,15 +108,19 @@ exports.editEvent = (req, res) => {
               toSave.eventDescHTML = rendHTML;
               toSave.eventHashtags = req.form.eventHashtags;
               const options = { new: true };
-              Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
-                if (err) {
-                  hlpr.consLog(['editEvent', err]);
-                  return res.status(400).send({ error: 'Error updating event' });
-                }
-                hlpr.consLog(['editEvent', eventEdit.eventId]);
-                const result = { event: { postSuccess: true }, updated: eventEdit };
-                hlpr.consLog([result]);
-                res.send(result);
+              endDate(toSave.eventDate, toSave.eventDays, (eventDateEnd) => {
+                hlpr.consLog(['toSave.eventDateEnd', eventDateEnd]);
+                toSave.eventDateEnd = eventDateEnd;
+                Events.findByIdAndUpdate(event._id, toSave, options, (err, eventEdit) => {
+                  if (err) {
+                    hlpr.consLog(['editEvent', err]);
+                    return res.status(400).send({ error: 'Error updating event' });
+                  }
+                  hlpr.consLog(['editEvent', eventEdit.eventId]);
+                  const result = { event: { postSuccess: true }, updated: eventEdit };
+                  hlpr.consLog([result]);
+                  res.send(result);
+                });
               });
             });
           });
@@ -157,7 +173,7 @@ exports.getEvents = (req, res) => {
   if (andQuery.length > 0) {
     dbQuery.$and = andQuery;
   }
-  dbQuery.eventDate = { $gt: getDate(result => result) };
+  dbQuery.eventDateEnd = { $gt: getDate(result => result) };
   dbQuery.eventDeleted = false;
   hlpr.consLog(['dbQuery.eventDate', dbQuery.eventDate]);
 
@@ -222,3 +238,13 @@ exports.favEvent = (req, res) => {
     });
   });
 };
+
+// update Events with eventDateEnd
+// this is for a one time db update.
+Events.find({ eventDateEnd: { $exists: false } }, (err, results) => {
+  results.forEach((r) => {
+    Events.findByIdAndUpdate(r._id, { eventDateEnd: r.eventDate }, (err, done) => {
+      console.log(`${done.eventTitle} eventDateEnd updated`);
+    });
+  });
+});

@@ -97,7 +97,7 @@ exports.writeUser = (userData, user, resultUser) => {
             hlpr.consLog(['....................', 'Error: auth.writeUser.findByIdAndUpdate', err, editUser, user._id]);
             return resultUser({ error: 'Error updating user' });
           }
-          exports.pushMetrics(athlete, editUser, ['ftp', 'weight'], (resUser) => {
+          exports.pushMetrics(athlete, editUser, ['weight', 'ftp'], (resUser) => {
             hlpr.consLog(['....................', 'auth.writeUser resultUser', editUser]);
             return resultUser(resUser);
           });
