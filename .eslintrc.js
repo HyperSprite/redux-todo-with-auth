@@ -14,12 +14,13 @@ module.exports = {
     'react',
     'flowtype',
   ],
-  "extends": [
+  extends: [
     'airbnb',
     'plugin:react/recommended',
     'plugin:flowtype/recommended',
   ],
-  "rules": {
-    "arrow-body-style": ["error", "as-needed"],
+  rules: {
+    'arrow-body-style': ["error", "as-needed"],
+    'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
   },
 }

@@ -35,7 +35,9 @@ const eventSchema = new Schema(
     eventTitle: String,
     eventOwner: Number, // stravaId of user that creates event
     eventOwners: [Number], // stravaIds of users who can edit event
-    eventDate: String,
+    eventDate: String,  // starting day for this event
+    eventDateEnd: String, // end of event, calculated on save
+    eventDays: Number, // number of days for this event
     eventOrg: String, // event organizer
     eventSeries: String, // event series
     eventLocStreet: String,

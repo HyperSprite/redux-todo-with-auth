@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
-import OneDayWeather from './../weather/one-day-weather';
+import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
 
@@ -104,6 +104,11 @@ const renderViewEvent = ({
         contentType="text"
       />
       <Static
+        contentLabel="Number of Days"
+        content={event.eventDays}
+        contentType="text"
+      />
+      <Static
         contentLabel="Time Zone"
         content={event.eventGeoTzName}
         contentType="text"
@@ -152,25 +157,24 @@ const renderViewEvent = ({
         contentType="text"
       />
 
-      {event.eventRoutes.map((route) => {
-        return (
-          <Static
-            key={`${event.eventId}${route.eventRouteURL}`}
-            contentLabel="Route Link"
-            content={route.eventRouteURL}
-            contentType="url"
-            baseURL="https://www.strava.com/routes/"
-          />
-        );
-      })}
+      {event.eventRoutes.map(route => (
+        <Static
+          key={`${event.eventId}${route.eventRouteURL}`}
+          contentLabel="Route Link"
+          content={route.eventRouteURL}
+          contentType="url"
+          baseURL="https://www.strava.com/routes/"
+        />
+      ))}
     </CardText>
     {getWeather && event.eventGeoTzRawOffset ? (
       <CardActions>
-        <OneDayWeather
+        <MultiDayWeather
           geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
           dstOffset={event.eventGeoTzDSTOffset}
           tzOffset={event.eventGeoTzRawOffset}
-          date={+new Date(event.eventDate)}
+          date={new Date(event.eventDate)}
+          eventDays={event.eventDays || 1}
           measurementPref={measurementPref}
           expanded={expanded}
           noShowExtender

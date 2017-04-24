@@ -53,10 +53,10 @@ const userSchema = new Schema({
   userGeoCountryCode: String,
   userGeoZipCode: String,
   userGeoProvider: String,
-  userGeoTzId: String,
-  userGeoTzName: String,
-  userGeoTzRawOffset: Number,
-  userGeoTzDSTOffset: Number,
+  userGeoTzId: String, // e.g. "America/Los_Angeles"
+  userGeoTzName: String, // e.g. "Pacific Daylight Time"
+  userGeoTzRawOffset: Number, // in milliseconds (3600 per hour) e.g. -28800,
+  userGeoTzDSTOffset: Number, // in milliseconds (3600 per hour)
   userGeoElevation: Number, // in meters
   userLocationPref: { type: String, enum: ['Strava', 'Manual', 'Magic'], default: 'Strava' },
   sex: String,
