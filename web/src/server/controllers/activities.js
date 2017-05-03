@@ -50,33 +50,41 @@ exports.getExtendedActivityStats = setInterval(() => {
   const options = { new: true };
   Activities.find({ resource_state: 2 }).limit(limitCount).sort({ start_date: -1 }).exec((err, tmpActs) => {
     if (err) {
-      hlpr.consLog(['getExtendedActivityStats', err]);
+      hlpr.consLog(['getExtendedActivityStats err tmpActs', err]);
       return err;
     }
     tmpActs.forEach((tmpAct) => {
-      hlpr.consLog(['getExtendedActivityStats', tmpAct.activityId]);
-      User.findOne({ stravaId: tmpAct.athlete.id}, { access_token: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
+      hlpr.consLog(['getExtendedActivityStats tmpAct.activityId', tmpAct.activityId]);
+      User.findOne({ stravaId: tmpAct.athlete.id}, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
         hlpr.consLog(['getExtendedActivityStats token', user]);
         strava.activities.get({ id: tmpAct.activityId, access_token: user.access_token }, (err, data) => {
           if (err) hlpr.consLog(['strava.activities.get', err]);
-          strava.activities.listZones({ id: tmpAct.activityId, access_token: user.access_token }, (err, aData) => {
-            if (err) hlpr.consLog(['strava..activities.listZones', err]);
-            hlpr.consLog(['getExtendedActivityStats', data, aData]);
-            const tmpData = data;
-            tmpData.zones = aData;
-            tmpData.activityId = tmpData.id;
-            if (tmpData.weighted_average_watts) {
-              const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
-              const wattsOverFTP = data.weighted_average_watts / ftp;
-              const wattsByHour = ftp * 3600;
-              tmpData.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
-            }
-            hlpr.consLog(['pushActivities listZones', , tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
-            Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
+          const tmpData = data;
+          tmpData.activityId = tmpData.id;
+          if (user.premium) {
+            strava.activities.listZones({ id: tmpAct.activityId, access_token: user.access_token }, (err, aData) => {
               if (err) hlpr.consLog(['strava..activities.listZones', err]);
+              tmpData.zones = aData;
+              if (tmpData.weighted_average_watts) {
+                const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
+                const wattsOverFTP = data.weighted_average_watts / ftp;
+                const wattsByHour = ftp * 3600;
+                tmpData.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+              }
+              hlpr.consLog(['pushActivities listZones', , tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
+              Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
+                if (err) hlpr.consLog(['strava..activities premium', err]);
+                hlpr.consLog(['strava..activities premium', fullActivity]);
+                return fullActivity;
+              });
+            });
+          } else {
+            Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
+              if (err) hlpr.consLog(['strava..activities !premium', err]);
+              hlpr.consLog(['strava..activities !premium', fullActivity]);
               return fullActivity;
             });
-          });
+          }
         });
       });
     });
