@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const Schema = mongoose.Schema;
+mongoose.Promise = global.Promise;
 
 const tssGoalSchema = new Schema({
   week_of: String, // time string "2012-12-13T03:43:19Z"
@@ -69,6 +70,7 @@ const userSchema = new Schema({
   adminMember: Boolean,
   clubMember: Boolean,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
+  activitiesCollected: Boolean,
   ftpHistory: [ftpHistorySchema],
   weightHistory: [weightHistorySchema],
   tssGoals: [tssGoalSchema],
@@ -101,6 +103,8 @@ userSchema.methods.comparePassword = function userSchemaCompPasswords(candidateP
 };
 
 userSchema.plugin(findOrCreate);
+
+userSchema.index({ stravaId: 1, access_token: 1, firstname: 1, lastname: 1 });
 
 const Users = mongoose.model('user', userSchema);
 

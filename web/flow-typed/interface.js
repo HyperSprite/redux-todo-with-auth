@@ -16,6 +16,7 @@ export type ActionStrings = (
   'AUTH_ERROR' |
   'FETCH_DATA' |
   'FETCH_USER' |
+  'FETCH_USER_ACTIVITIES' |
   'FETCH_JSON' |
   'SET_USER' |
   'POST_EVENT_ERROR' |

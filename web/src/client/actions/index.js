@@ -16,6 +16,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   UNAUTH_USER: 'UNAUTH_USER',
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_USER: 'FETCH_USER',
+  FETCH_USER_ACTIVITIES: 'FETCH_USER_ACTIVITIES',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT_ERROR: 'POST_EVENT_ERROR',
@@ -232,8 +233,9 @@ export function fetchStrava(path, id, index, stravatoken, context) {
       access_token: stravatoken,
     },
   };
+  const isId = id ? `/${id}` : '';
   return (dispatch) => {
-    axios.get(`${relURLStrava}/${path}/${id}`, axiosConfig)
+    axios.get(`${relURLStrava}/${path}${isId}`, axiosConfig)
       .then((response) => {
         const result = {
           data: {},
@@ -262,6 +264,13 @@ export function fetchStrava(path, id, index, stravatoken, context) {
               type: TYPES.FETCH_USER,
               payload: response.data.user,
             });
+            break;
+          case 'getUserActivities':
+            dispatch({
+              type: TYPES.FETCH_USER_ACTIVITIES,
+              payload: response.data.activityCount,
+            });
+            break;
         }
         // dispatch({
         //   type: TYPES.FETCH_STRAVA_ROUTES,

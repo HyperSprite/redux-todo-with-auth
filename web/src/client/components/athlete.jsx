@@ -50,6 +50,7 @@ class Athlete extends Component {
   constructor(props) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
+    this.updateUserActivities = this.updateUserActivities.bind(this);
   }
   // this is here to allow users to refresh their strava user data
   // without signing out, this should already be loded in state.
@@ -61,7 +62,11 @@ class Athlete extends Component {
 
   updateUser() {
     // fetchStrava(path, id, index, stravatoken, context)
-    this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser' )
+    this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser')
+  }
+
+  updateUserActivities() {
+    this.props.fetchStrava('user-activities', null, null, this.props.user.stravatoken, 'getUserActivities')
   }
 
   render() {
@@ -146,6 +151,12 @@ class Athlete extends Component {
               </IconButton>
               <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
                 Athlete Profile on Strava</a>
+            </div>
+            <div className="flex-row">
+              <IconButton onClick={this.updateUserActivities} style={style.toggleIconButton} >
+                <FaRefresh size={20} />
+              </IconButton>
+              <p>Fetch Activities</p>
             </div>
             <Static
               contentLabel="Strava ID"

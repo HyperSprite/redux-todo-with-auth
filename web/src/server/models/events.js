@@ -3,6 +3,7 @@ const findOrCreate = require('mongoose-findorcreate');
 const uuid = require('uuid');
 
 const Schema = mongoose.Schema;
+mongoose.Promise = global.Promise;
 
 const uuidNow = () => {
   const u = uuid();
