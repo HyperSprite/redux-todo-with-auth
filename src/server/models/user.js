@@ -104,7 +104,7 @@ userSchema.methods.comparePassword = function userSchemaCompPasswords(candidateP
 
 userSchema.plugin(findOrCreate);
 
-userSchema.index({ stravaId: 1, access_token: 1, firstname: 1, lastname: 1 });
+userSchema.index({ stravaId: 1, access_token: 1, premium: 1, firstname: 1, lastname: 1 });
 
 const Users = mongoose.model('user', userSchema);
 
