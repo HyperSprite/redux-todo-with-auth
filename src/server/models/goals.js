@@ -6,6 +6,7 @@ const uuidv4 = require('uuid/v4');
 const hlpr = require('../lib/helpers');
 
 const Schema = mongoose.Schema;
+mongoose.Promise = global.Promise;
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const goalNotesSchema = new Schema(

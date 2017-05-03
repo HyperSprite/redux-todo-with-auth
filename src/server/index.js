@@ -26,6 +26,8 @@ let httpServer;
 
 const contStrava = require('./controllers/strava');
 const dailyUserUpdate = contStrava.dailyUserUpdate;
+const contActivities = require('./controllers/activities');
+const timerUpdateUserActivities = contActivities.getExtendedActivityStats;
 
 // hlpr.consLog(['process.env', process.env]);
 

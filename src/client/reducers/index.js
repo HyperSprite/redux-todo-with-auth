@@ -4,12 +4,14 @@ import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form';
 
 import { TYPES } from '../actions';
+import activities from './activities';
 import auth from './auth';
 import events from './events';
 import page from './page';
 import visibilityFilter from './visibility-filter';
 
 const appReducer = combineReducers({
+  activities,
   auth,
   events,
   page,

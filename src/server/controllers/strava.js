@@ -1,11 +1,18 @@
 const strava = require('strava-v3');
-const moment = require('moment');
 const schedule = require('node-schedule');
 
 const User = require('../models/user');
-const Events = require('../models/events');
+const activ = require('./activities');
 const auth = require('./authentication');
 const hlpr = require('../lib/helpers');
+
+exports.getActivities = (req, res) => {
+  strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+    if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    hlpr.consLog(['getActivity', data]);
+    res.send(data);
+  });
+};
 
 // TODO this is just starting but have tested it and it works to pull data.
 exports.getRoute = (req, res) => {
@@ -27,6 +34,16 @@ exports.getUser = (req, res) => {
   });
 };
 
+exports.getUserActivities = (req, res) => {
+  hlpr.consLog(['strava.getUserActivities start']);
+  const tmpReq = req;
+  tmpReq.pageCount = 1;
+  tmpReq.activities = [];
+  activ.getAllActivities(tmpReq, (result) => {
+    hlpr.consLog(['getUserActivities', result.activities]);
+    res.send({ activityCount: result.activities.length });
+  });
+};
 
 // Cron jobs for updating users stats each day.
 exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
@@ -37,6 +54,11 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
         if (!err && athlete) {
           auth.pushMetrics(athlete, fUser, ['ftp', 'weight'], (resUser) => {
             hlpr.consLog(['dailyUserUpdate', resUser.stravaId]);
+          });
+          const tmpReq = {};
+          tmpReq.user = fUser;
+          activ.getAllActivities(tmpReq, (result) => {
+            hlpr.consLog(['getUserActivities', result.activities.length]);
           });
         }
       });

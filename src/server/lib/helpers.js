@@ -1,3 +1,4 @@
+const moment = require('moment');
 // Helper functions
 
 exports.isProd = () => {
@@ -16,6 +17,12 @@ exports.consLog = (arr) => {
       console.log('>>> ', arg);
     });
   }
+};
+
+exports.getDate = (result) => {
+  const newDate = moment().utc().format();
+  newDate.toString();
+  return result(newDate);
 };
 
 // Date String helper
