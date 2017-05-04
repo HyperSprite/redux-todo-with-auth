@@ -40,7 +40,7 @@ function getEntry() {
 function getOutput() {
   const output = {};
   if (isProd) {
-    output.path = './src/server/public/assets/';
+    output.path = path.resolve(__dirname, 'assets');
   } else {
     output.path = '/../../public/assets/';
   }
