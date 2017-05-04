@@ -31,7 +31,7 @@ exports.getAllActivities = (input, result) => {
       Activities.findOrCreate({ activityId: tmpAct.activityId }, tmpAct, (err, dbActivity, created) => {
         // By using findOrCreate here, we are only adding new if they do not yet exist.
         // This can also be useful if an activity is updated in strava and needs to be re-fetched
-        if (created) {
+        if (created && !input.cronjob) {
           input.activities.push(dbActivity);
         }
       });
@@ -46,7 +46,7 @@ const theInterval = min => min * 60 * 1000;
 const limitCount = 40;
 
 exports.getExtendedActivityStats = setInterval(() => {
-  hlpr.consLog(['getExtendedActivityStats has run']);
+  // hlpr.consLog(['getExtendedActivityStats has run']);
   const options = { new: true };
   Activities.find({ resource_state: 2 }).limit(limitCount).sort({ start_date: -1 }).exec((err, tmpActs) => {
     if (err) {

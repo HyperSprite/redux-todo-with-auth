@@ -45,7 +45,7 @@ exports.getUserActivities = (req, res) => {
   });
 };
 
-// Cron jobs for updating users stats each day.
+// Cron jobs for updating users stats and collecting new activities if the user has not visited.
 exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
   hlpr.consLog(['dailyUserUpdate has started', new Date()]);
   User.find({ clubMember: true }, (err, foundUsers) => {
@@ -56,6 +56,7 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
             hlpr.consLog(['dailyUserUpdate', resUser.stravaId]);
           });
           const tmpReq = {};
+          tmpReq.cronjob = true;
           tmpReq.user = fUser;
           activ.getAllActivities(tmpReq, (result) => {
             hlpr.consLog(['getUserActivities', result.activities.length]);
