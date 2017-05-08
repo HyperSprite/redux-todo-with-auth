@@ -25,6 +25,7 @@ exports.getAllActivities = (input, result) => {
       hlpr.consLog(['strava.getAllActivities arrLength = 0 or !acts']);
       return result(input);
     }
+    input.pageCount++;
     acts.forEach((act) => {
       const tmpAct = act;
       tmpAct.activityId = tmpAct.id; // activities are returned as "id"
@@ -33,10 +34,11 @@ exports.getAllActivities = (input, result) => {
         // This can also be useful if an activity is updated in strava and needs to be re-fetched
         if (created && !input.cronjob) {
           input.activities.push(dbActivity);
+        } else {
+          input.lastActivity = dbActivity;
         }
       });
     });
-    input.pageCount++;
     return exports.getAllActivities(input, result);
   });
 };
