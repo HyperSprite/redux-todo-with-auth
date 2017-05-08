@@ -25,6 +25,7 @@ exports.getAllActivities = (input, result) => {
       hlpr.consLog(['strava.getAllActivities arrLength = 0 or !acts']);
       return result(input);
     }
+    hlpr.consLog(['getAllActivities input.pageCount acts.length', input.pageCount, acts.length]);
     input.pageCount++;
     acts.forEach((act) => {
       const tmpAct = act;
@@ -32,7 +33,7 @@ exports.getAllActivities = (input, result) => {
       Activities.findOrCreate({ activityId: tmpAct.activityId }, tmpAct, (err, dbActivity, created) => {
         // By using findOrCreate here, we are only adding new if they do not yet exist.
         // This can also be useful if an activity is updated in strava and needs to be re-fetched
-        if (created && !input.cronjob) {
+        if (created) {
           input.activities.push(dbActivity);
         } else {
           input.lastActivity = dbActivity;
