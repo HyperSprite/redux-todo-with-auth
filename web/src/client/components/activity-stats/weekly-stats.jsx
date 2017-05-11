@@ -61,30 +61,35 @@ function weeklyStats({ week, activities }) {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', border: '1px solid #880000' }}>
-      <BarChart
-        contentLabel="TSS"
-        content={`${weeklyTotals[0].tss.week}`}
-        contentType="text"
-        day="tss.day"
-        total="tss.total"
-        weeklyTotals={weeklyTotals}
-      />
-      <BarChart
-        contentLabel="Suffer Score"
-        content={`${weeklyTotals[0].ss.week}`}
-        contentType="text"
-        day="ss.day"
-        total="ss.total"
-        weeklyTotals={weeklyTotals}
-      />
-      {/* <BarChart
-        contentLabel="Distance"
-        content={`${weeklyTotals[0].dst.week}`}
-        contentType="text"
-        day="dst.day"
-        total="dst.total"
-        weeklyTotals={weeklyTotals}
-      /> */}
+      {weeklyTotals[0].tss.week ? (
+        <BarChart
+          contentLabel="TSS"
+          content={`${weeklyTotals[0].tss.week}`}
+          contentType="text"
+          day="tss.day"
+          total="tss.total"
+          weeklyTotals={weeklyTotals}
+        />
+      ) : (
+        <BarChart
+          contentLabel="Distance"
+          content={`${weeklyTotals[0].dst.week}`}
+          contentType="text"
+          day="dst.day"
+          total="dst.total"
+          weeklyTotals={weeklyTotals}
+        />
+      )}
+      {weeklyTotals[0].ss.week ? (
+        <BarChart
+          contentLabel="Suffer Score"
+          content={`${weeklyTotals[0].ss.week}`}
+          contentType="text"
+          day="ss.day"
+          total="ss.total"
+          weeklyTotals={weeklyTotals}
+        />
+      ) : (null)}
       <BarChart
         contentLabel="Time"
         content={`${weeklyTotals[0].time.week}`}
