@@ -40,7 +40,7 @@ exports.getUserActivities = (req, res) => {
   tmpReq.pageCount = 1;
   tmpReq.activities = [];
   activ.getAllActivities(tmpReq, (result) => {
-    hlpr.consLog(['getUserActivities', result.activities]);
+    hlpr.consLog(['getUserActivities result', result.activities.length]);
     res.send({ activityCount: result.activities.length });
   });
 };
@@ -72,27 +72,3 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
   hlpr.consLog(['dailyUserUpdate has started']);
   exports.nightlyUpdate();
 });
-
-// Cron jobs for updating users stats and collecting new activities if the user has not visited.
-// exports.dailyUserUpdate = schedule.scheduleJob('00 19 16 * *', () => {
-//   hlpr.consLog(['dailyUserUpdate has started', new Date()]);
-//   User.find({ clubMember: true }, (err, foundUsers) => {
-//     foundUsers.forEach((fUser) => {
-//       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
-//         if (!err && athlete) {
-//           auth.pushMetrics(athlete, fUser, ['ftp', 'weight'], (resUser) => {
-//             hlpr.consLog(['dailyUserUpdate', resUser.stravaId]);
-//           });
-//           const tmpReq = {};
-//           tmpReq.pageCount = 1;
-//           tmpReq.activities = [];
-//           tmpReq.cronjob = true;
-//           tmpReq.user = fUser;
-//           activ.getAllActivities(tmpReq, (result) => {
-//             hlpr.consLog(['dailyUserUpdate getAllActivities', result.activities.length]);
-//           });
-//         }
-//       });
-//     });
-//   });
-// });

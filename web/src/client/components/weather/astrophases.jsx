@@ -9,11 +9,11 @@ function dateSetup(tDate, tzO) {
   // and returns the formated date
   // console.log(tzO);
   // tzO is tzOffset in sec, converted to min.
-  console.log('tDate', tDate, tDate.getTimezoneOffset);
+  // console.log('tDate', tDate, tDate.getTimezoneOffset);
   const result = moment(moment(tDate).startOf('day')).utcOffset(-(tzO / 3600)).format('MM/DD/YYYY');
-  console.log('moment', result);
-  const otherResult = format(startOfDay(tDate), 'MM/DD/YYYY');
-  console.log('date-fns', otherResult);
+  // console.log('moment', result);
+  // const otherResult = format(startOfDay(tDate), 'MM/DD/YYYY');
+  // console.log('date-fns', otherResult);
   return result;
   // return moment(moment(tDate).startOf('day')).format('MM/DD/YYYY');
 }
