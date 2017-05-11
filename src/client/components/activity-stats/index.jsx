@@ -29,7 +29,7 @@ class activeStats extends Component {
   }
 
   render() {
-    const { weeks, weeksBack } = this.props;
+    const { weeks, weeksBack, datePref, measurementPref } = this.props;
 
     return (
       <div>
@@ -42,6 +42,8 @@ class activeStats extends Component {
                 key={Object.keys(oneWeek)[0]}
                 week={Object.keys(oneWeek)[0]}
                 activities={oneWeek[Object.keys(oneWeek)[0]]}
+                datePref={datePref}
+                measurementPref={measurementPref}
               />
             ))}
           </div>
@@ -54,18 +56,12 @@ class activeStats extends Component {
   }
 }
 
-// { weeks.map(oneWeek => oneWeek[Object.keys(oneWeek)].map(activity => (
-//   <WeeklyStats
-//     week={Object.keys(oneWeek)}
-//     activities={oneWeek}
-//   />
-// )))
-// }
-
 activeStats.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
+    datePref: state.auth.user.date_preference,
+    measurementPref: state.auth.user.measurement_preference === 'feet',
     stravaId: state.auth.user.stravaId,
     weeks: state.activities.weeks,
     weeksBack: state.activities.weeks.length || null,
