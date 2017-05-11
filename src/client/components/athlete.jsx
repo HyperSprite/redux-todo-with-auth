@@ -9,9 +9,10 @@ import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 
 import * as actions from './../actions';
 import Static from './form/static';
-import OneDayWeather from './weather/one-day-weather';
+import ActivityStats from './activity-stats';
 import Astrophases from './weather/astrophases';
 import FtpWeight from './metrics/ftp-weight';
+import OneDayWeather from './weather/one-day-weather';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 import style from '../styles/style';
@@ -120,6 +121,9 @@ class Athlete extends Component {
                 Loading Weather Data...
               </div>
             )}
+            <div>
+              <ActivityStats />
+            </div>
             {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
               <FtpWeight
                 ftpHistory={ftpHistory}
@@ -152,7 +156,7 @@ class Athlete extends Component {
               <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
                 Athlete Profile on Strava</a>
             </div>
-            <div className="flex-row">
+                        <div className="flex-row">
               <IconButton onClick={this.updateUserActivities} style={style.toggleIconButton} >
                 <FaRefresh size={20} />
               </IconButton>

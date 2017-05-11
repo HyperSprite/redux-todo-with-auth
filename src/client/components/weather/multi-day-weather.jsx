@@ -7,9 +7,7 @@ function renderMultiDayWeather(props) {
   const daySet = [props.date];
   for (let i = 1; i < props.eventDays; i++) {
     daySet.push(addDays(props.date, i));
-    console.log(daySet);
   }
-  console.log('props', props);
   return (
     <div>
       {daySet.map(d => (

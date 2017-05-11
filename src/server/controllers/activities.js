@@ -1,8 +1,16 @@
+const addDays = require('date-fns/add_days');
+const format = require('date-fns/format');
+const startOfWeek = require('date-fns/start_of_week');
+const subWeeks = require('date-fns/sub_weeks');
 const Activities = require('../models/activities');
 const User = require('../models/user');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
 
+// This is a recursive fucntion that returns 200 resource_state: 2 activities
+// per pass (strava limit per request). It will keep going until is returns
+// all activities for a user. Input.pageCount is used to track pagination.
+// If an activity ID does not exist, it will be created, otherwise, no change.
 exports.getAllActivities = (input, result) => {
   const options = {
     id: input.user.stravaId,
@@ -44,10 +52,16 @@ exports.getAllActivities = (input, result) => {
   });
 };
 
+
+// This function runs every three minutes to process 40 activities to ensure
+// the 600 requests per 15 min rate limit is not exceeded.
+// There is no user triger for this.
 const minutes = 3;
 const theInterval = min => min * 60 * 1000;
 const limitCount = 40;
 
+// It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
+// and Zone info.
 exports.getExtendedActivityStats = setInterval(() => {
   // hlpr.consLog(['getExtendedActivityStats has run']);
   const options = { new: true };
@@ -93,3 +107,40 @@ exports.getExtendedActivityStats = setInterval(() => {
     });
   });
 }, theInterval(minutes));
+
+// Get one week worth of activities
+// {
+//     "athlete.id": 12345678, // Number
+//     "start_date_local": {
+//         "$gt": "2017-05-01", // String
+//         "$lt": "2017-05-08"  // String
+//     }
+// }
+// sort: {"start_date_local": 1} // oldest first
+//
+
+function oneWeek(weekStart) {
+  const weekEnd = format(addDays(weekStart, 7), 'YYYY-MM-DD');
+  return weekEnd;
+}
+
+// localhost:3080/apiv1/activities/one-week/100 (returns -40 weeks)
+// localhost:3080/apiv1/activities/one-week (no number returns current week)
+exports.getWeekOfActivities = (req, res) => {
+  const weeksPast = req.params.weeksPast * 1 || 0;
+  const startDate = req.params.startDate || format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
+  const query = {
+    'athlete.id': req.user.stravaId,
+    start_date_local: {
+      $gt: startDate,
+      $lt: oneWeek(startDate),
+    },
+  };
+  const sort = { start_date_local: 1 };
+  hlpr.consLog(['getWeekOfActivities', req.user.stravaId, startDate, query, sort]);
+
+  Activities.find(query).sort(sort).exec((err, week) => {
+    if (err) res.send({ [weeksPast]: [{ error: 'no data' }] });
+    res.send({ [startDate]: week });
+  });
+};

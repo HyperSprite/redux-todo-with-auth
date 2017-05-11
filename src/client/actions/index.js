@@ -17,6 +17,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   AUTH_ERROR: 'AUTH_ERROR',
   FETCH_USER: 'FETCH_USER',
   FETCH_USER_ACTIVITIES: 'FETCH_USER_ACTIVITIES',
+  FETCH_WEEKS_ACTIVITIES: 'FETCH_WEEKS_ACTIVITIES',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT_ERROR: 'POST_EVENT_ERROR',
@@ -286,8 +287,35 @@ export function fetchStrava(path, id, index, stravatoken, context) {
   };
 }
 
-
 // end Strava
+
+// Activities
+
+export function fetchActivitiesOneWeek(relURL, stravaId, weeksBack) {
+  const axiosConfig = {
+    headers: {
+      authorization: localStorage.getItem('token'),
+    },
+  };
+  const isWeeksBack = weeksBack ? `/${weeksBack}` : '';
+  return (dispatch) => {
+    axios.get(`${relURL}${isWeeksBack}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_WEEKS_ACTIVITIES,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+// end Activities
 
 export function fetchMessage() {
   return (dispatch) => {
