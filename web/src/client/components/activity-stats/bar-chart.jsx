@@ -1,35 +1,73 @@
 import React, { PropTypes } from 'react';
+// import { addSeconds, startOfDay, format } from 'date-fns';
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
+import lib from '../../containers/lib';
 import Static from '../form/static';
 
 // const setWeight = measurementPref ? 'weight' : 'saWeight';
 
-// const linearGrad = () => (
-//   <defs>
-//     <linearGradient id="lGColor" x1="0" y1="0" x2="0" y2="1">
-//       <stop offset="5%" stopColor="#990000" stopOpacity={0.8} />
-//       <stop offset="95%" stopColor="#990000" stopOpacity={0} />
-//     </linearGradient>
-//   </defs>
-// );
+const renderTooltipContent = (o) => {
+  const { payload, label } = o;
+  const total = payload.reduce((result, entry) => (result + entry.value), 0);
 
-const Chart = (props) => (
+  return (
+    <div style={{ background: '#FFFFFF', margin: 5 }} className="customized-tooltip-content" >
+      <p>{label}</p>
+      <ul style={{ listStyle: 'none', marginLeft: 4, padding: 0 }}>
+        <li>
+          {`Total: ${lib.secondsToTime(total)}`}
+        </li>
+        {
+          payload.map(entry => (
+            <li key={`item-${entry.value + entry.name}`} style={{ color: entry.color }}>
+              {`${entry.name}: ${lib.secondsToTime(entry.value)}`}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  );
+};
+
+const conversions = (metric, yAxis, data) => {
+  if (data) {
+    switch (metric) {
+      case 'time':
+        return lib.secondsToTime(data);
+      default:
+        return data;
+    }
+  }
+  if (yAxis) {
+    switch (metric) {
+      case 'time':
+        return lib.secondsToTime;
+      default:
+        return null;
+    }
+  }
+  if (metric) {
+    return renderTooltipContent;
+  }
+  return null;
+};
+
+const Chart = props => (
   <div>
     <Static
       contentLabel={props.contentLabel}
-      content={props.content}
+      content={conversions(props.metric, false, props.content)}
     />
     <BarChart width={180} height={150} data={props.weeklyTotals}
       margin={{ top: 5, right: 10, left: 2, bottom: 5 }}
     >
-      <XAxis />
-      <YAxis />
+      <XAxis dataKey="day" />
+      <YAxis tickFormatter={conversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip />
-      {/* <Legend /> */}
+      <Tooltip content={conversions(props.metric)} />
       <Bar name="Day" dataKey={props.day} stackId="a" fill="#DD0000" barGap={1} />
-      <Bar name="Cumulative" dataKey={props.total} stackId="a" fill="#770000" barGap={1} />
+      <Bar name="Previous" dataKey={props.previous} stackId="a" fill="#770000" barGap={1} />
     </BarChart>
   </div>
 );
