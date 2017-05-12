@@ -66,8 +66,8 @@ const Chart = props => (
       <YAxis tickFormatter={conversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip content={conversions(props.metric)} />
-      <Bar name="Day" dataKey={props.day} stackId="a" fill="#DD0000" barGap={1} />
-      <Bar name="Previous" dataKey={props.previous} stackId="a" fill="#770000" barGap={1} />
+      <Bar name="Day" dataKey={props.day} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />
+      <Bar name="Previous" dataKey={props.previous} stackId="a" fill="#770000" barGap={1} isAnimationActive={false} />
     </BarChart>
   </div>
 );
