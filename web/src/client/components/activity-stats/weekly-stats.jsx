@@ -19,132 +19,128 @@ function oneWeek(weekStart) {
   return weekEnd;
 }
 
-function distanceConversion(value, type, measurementPref) {
-  console.log('distanceConversion', value, type, measurementPref);
-  if (!measurementPref) {
-    switch (type) {
-      case 'dst':
-        return lib.metersToKm(value);
-      default:
-        return value;
-    }
-  }
-  switch (type) {
-    case 'dst':
-      return lib.metersToMiles(value);
-    case 'elev':
-      return lib.metersToFeet(value);
-    default:
-      return value;
+class OneMetric {
+  constructor(day = 0, total = 0) {
+    this.day = day;
+    this.total = total;
   }
 }
 
-function weeklyStats({ week, activities, datePref, measurementPref }) {
-  const tickValues = eachDay(week, oneWeek(week)).map(eDay => format(eDay, 'YYYY-MM-DD'));
+class OneDay {
+  constructor(date = '', day = '') {
+    this.date = date;
+    this.day = day;
+    this.names = [];
+  }
+}
+// date is the date in string "2017-05-02" format
+function dayObjBuilder(date, datePref) {
+  const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev'];
+  const resDay = new OneDay(lib.dateFormat(date, datePref), date.slice(-2));
+  metricsTypes.forEach(mType => resDay[mType] = new OneMetric());
+  return resDay;
+}
 
-  const totals = {
-    day: '',
-    names: [],
-    tss: { day: 0, week: 0, total: 0, previous: 0 },
-    ss: { day: 0, week: 0, total: 0, previous: 0 },
-    dst: { day: 0, week: 0, total: 0, previous: 0 },
-    time: { day: 0, week: 0, total: 0, previous: 0 },
-    elev: { day: 0, week: 0, total: 0, previous: 0 },
-  };
-  const weeklyTotals = [];
-  // const dayValues = [];
-  for (let i = 0; i < tickValues.length; i++) {
-    const dayTotals = cloneDeep(totals);
+function weeklyStats({ week, activities, datePref, measurementPref }) {
+  // make simple weekly totals object track totals.
+  const weeklyTotals = dayObjBuilder(week, datePref);
+  // const weekArr = ["2017-05-01", "2017-05-02", "2017-05-03", "2017-05-04", "2017-05-05", "2017-05-06", "2017-05-07"];
+  const weekArr = eachDay(week, oneWeek(week)).map(eDay => format(eDay, 'YYYY-MM-DD'));
+  const dayTotals = weekArr.map(day => dayObjBuilder(day, datePref));
+  // go through each day and add activities.
+
+  for (let i = 0; i < weekArr.length; i++) {
+
+    if (weekArr[i] <= format(new Date(), 'YYYY-MM-DD')) {
+      dayTotals[i].tss.total = weeklyTotals.tss.day;
+      dayTotals[i].ss.total = weeklyTotals.ss.day;
+      dayTotals[i].dst.total = weeklyTotals.dst.day;
+      dayTotals[i].time.total = weeklyTotals.time.day;
+      dayTotals[i].elev.total = weeklyTotals.elev.day;
+    }
+
     activities.forEach((act) => {
-      if (tickValues[i] === format(act.start_date_local, 'YYYY-MM-DD')) {
-        dayTotals.names.push(act.name);
-        dayTotals.tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
-        dayTotals.ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
-        dayTotals.dst.day += isNaN(act.distance) ? 0 : lib.round(distanceConversion(act.distance, 'dst', measurementPref), 2);
-        dayTotals.time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
-        dayTotals.elev.day += isNaN(act.total_elevation_gain) ? 0 : lib.round(distanceConversion(act.total_elevation_gain, 'elev', measurementPref), 0);
-        totals.tss.total += isNaN(act.tssScore) ? 0 : act.tssScore;
-        totals.ss.total += isNaN(act.suffer_score) ? 0 : act.suffer_score;
-        totals.dst.total += isNaN(act.distance) ? 0 : distanceConversion(act.distance, 'dst', measurementPref);
-        totals.time.total += isNaN(act.moving_time) ? 0 : act.moving_time;
-        totals.elev.total += isNaN(act.total_elevation_gain) ? 0 : distanceConversion(act.total_elevation_gain, 'elev', measurementPref);
+      if (weekArr[i] === act.start_date_local.slice(0, 10)) {
+        dayTotals[i].names.push(act.name);
+
+        dayTotals[i].tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
+        dayTotals[i].ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
+        dayTotals[i].dst.day += isNaN(act.distance) ? 0 : act.distance;
+        dayTotals[i].time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
+        dayTotals[i].elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
+
+        weeklyTotals.tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
+        weeklyTotals.ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
+        weeklyTotals.dst.day += isNaN(act.distance) ? 0 : act.distance;
+        weeklyTotals.time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
+        weeklyTotals.elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
       }
     });
-    dayTotals.date = format(tickValues[i], lib.dateFormating(datePref));
-    dayTotals.day = format(tickValues[i], 'DD');
-    dayTotals.tss.previous = totals.tss.total - dayTotals.tss.day;
-    dayTotals.ss.previous = totals.ss.total - dayTotals.ss.day;
-    dayTotals.dst.previous = lib.round(totals.dst.total - dayTotals.dst.day, 2);
-    dayTotals.time.previous = totals.time.total - dayTotals.time.day;
-    dayTotals.elev.previous = lib.round(totals.elev.total - dayTotals.elev.day, 1);
-    console.log(dayTotals);
-    weeklyTotals.push(dayTotals);
-    // totals.tss.total += dayTotals.tss.day;
-    // totals.ss.total += dayTotals.ss.day;
-    // totals.dst.total += dayTotals.dst.day;
-    // totals.time.total += dayTotals.time.day;
-    // totals.elev.total += dayTotals.elev.day;
   }
-
-  weeklyTotals[0].tss.week = weeklyTotals[6].tss.day + weeklyTotals[6].tss.total;
-  weeklyTotals[0].ss.week = weeklyTotals[6].ss.day + weeklyTotals[6].ss.total;
-  weeklyTotals[0].dst.week = lib.round(weeklyTotals[6].dst.day + weeklyTotals[6].dst.total, 1);
-  weeklyTotals[0].time.week = weeklyTotals[6].time.day + weeklyTotals[6].time.total;
-  weeklyTotals[0].elev.week = lib.round(weeklyTotals[6].elev.day + weeklyTotals[6].elev.total, 2);
-  console.log(weeklyTotals);
+  weeklyTotals.tss.total = weeklyTotals.tss.day;
+  weeklyTotals.ss.total = weeklyTotals.ss.day;
+  weeklyTotals.dst.total = weeklyTotals.dst.day;
+  weeklyTotals.time.total = weeklyTotals.time.day;
+  weeklyTotals.elev.total = weeklyTotals.elev.day;
+  console.log('weeklyTotals2', weeklyTotals);
+  console.log('dayTotals2', dayTotals);
   return (
     <div style={{ border: '1px solid #880000' }}>
       <Static
         contentLabel="Week of "
-        content={weeklyTotals[0].date}
+        content={format(weeklyTotals.date, lib.dateFormating(datePref))}
         contentType="text"
       />
       <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-        {weeklyTotals[0].tss.week ? (
+        {weeklyTotals.tss.total ? (
           <BarChart
             contentLabel="TSS"
-            content={`${weeklyTotals[0].tss.week}`}
+            content={`${weeklyTotals.tss.total}`}
             contentType="text"
-            day="tss.day"
-            previous="tss.previous"
-            weeklyTotals={weeklyTotals}
+            metric="tss"
+            day="day"
+            previous="total"
+            weeklyTotals={dayTotals}
           />
         ) : (
           <BarChart
             contentLabel="Distance"
-            content={`${weeklyTotals[0].dst.week}`}
+            content={`${weeklyTotals.dst.total}`}
             contentType="text"
-            day="dst.day"
-            previous="dst.previous"
-            weeklyTotals={weeklyTotals}
+            metric="dst"
+            day="day"
+            previous="total"
+            weeklyTotals={dayTotals}
           />
         )}
-        {weeklyTotals[0].ss.week ? (
+        {weeklyTotals.ss.total ? (
           <BarChart
             contentLabel="Suffer Score"
-            content={`${weeklyTotals[0].ss.week}`}
+            content={`${weeklyTotals.ss.total}`}
             contentType="text"
+            metric="ss"
             day="ss.day"
-            previous="ss.previous"
-            weeklyTotals={weeklyTotals}
+            previous="ss.total"
+            weeklyTotals={dayTotals}
           />
         ) : (null)}
         <BarChart
           contentLabel="Moving Time"
-          content={`${weeklyTotals[0].time.week}`}
+          content={`${weeklyTotals.time.total}`}
           contentType="text"
           metric="time"
           day="time.day"
-          previous="time.previous"
-          weeklyTotals={weeklyTotals}
+          previous="time.total"
+          weeklyTotals={dayTotals}
         />
         <BarChart
           contentLabel="Elevation"
-          content={`${weeklyTotals[0].elev.week}`}
+          content={`${weeklyTotals.elev.total}`}
           contentType="text"
+          metric="elev"
           day="elev.day"
-          previous="elev.previous"
-          weeklyTotals={weeklyTotals}
+          previous="elev.total"
+          weeklyTotals={dayTotals}
         />
       </div>
     </div>

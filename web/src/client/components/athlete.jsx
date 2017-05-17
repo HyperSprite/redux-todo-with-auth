@@ -124,6 +124,12 @@ class Athlete extends Component {
             <div>
               <ActivityStats />
             </div>
+            <div className="flex-row">
+              <IconButton onClick={this.updateUserActivities} style={style.toggleIconButton} >
+                <FaRefresh size={20} />
+              </IconButton>
+              <p>Get Latest Activities</p>
+            </div>
             {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
               <FtpWeight
                 ftpHistory={ftpHistory}
@@ -155,12 +161,6 @@ class Athlete extends Component {
               </IconButton>
               <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
                 Athlete Profile on Strava</a>
-            </div>
-                        <div className="flex-row">
-              <IconButton onClick={this.updateUserActivities} style={style.toggleIconButton} >
-                <FaRefresh size={20} />
-              </IconButton>
-              <p>Fetch Activities</p>
             </div>
             <Static
               contentLabel="Strava ID"
