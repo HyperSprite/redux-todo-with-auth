@@ -66,7 +66,7 @@ const userSchema = new Schema({
   updated_at: String,
   athlete_type: Number,
   date_preference: String,
-  measurement_preference: String,
+  measurement_preference: String, // ‘feet’ or ‘meters’
   adminMember: Boolean,
   clubMember: Boolean,
   week_start_day: Number, // 0 - Sun, 1 - Mon...

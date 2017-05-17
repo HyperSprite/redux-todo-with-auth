@@ -30,6 +30,26 @@ const renderTooltipContent = (o) => {
   );
 };
 
+function distanceConversion(value, type, measurementPref) {
+  console.log('distanceConversion', value, type, measurementPref);
+  if (!measurementPref) {
+    switch (type) {
+      case 'dst':
+        return lib.metersToKm(value);
+      default:
+        return value;
+    }
+  }
+  switch (type) {
+    case 'dst':
+      return lib.metersToMiles(value);
+    case 'elev':
+      return lib.metersToFeet(value);
+    default:
+      return value;
+  }
+}
+
 const conversions = (metric, yAxis, data) => {
   if (data) {
     switch (metric) {
@@ -66,8 +86,8 @@ const Chart = props => (
       <YAxis tickFormatter={conversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip content={conversions(props.metric)} />
-      <Bar name="Day" dataKey={props.day} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />
-      <Bar name="Previous" dataKey={props.previous} stackId="a" fill="#770000" barGap={1} isAnimationActive={false} />
+      <Bar name="Day" dataKey={`${props.metric}.day`} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />
+      <Bar name="Previous" dataKey={`${props.metric}.total`} stackId="a" fill="#770000" barGap={1} isAnimationActive={false} />
     </BarChart>
   </div>
 );

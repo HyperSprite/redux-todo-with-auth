@@ -16,4 +16,6 @@ lib.dateFormating = (dateFormat) => {
   return dateFormats[`D${dateFormat}`];
 };
 
+lib.dateFormat = (date, datePref) => format(date, lib.dateFormating(datePref));
+
 export default lib;

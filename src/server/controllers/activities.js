@@ -7,7 +7,7 @@ const User = require('../models/user');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
 
-// This is a recursive fucntion that returns 200 resource_state: 2 activities
+// This is a recursive fucntion that returns 200 (or input.perPage) resource_state: 2 activities
 // per pass (strava limit per request). It will keep going until is returns
 // all activities for a user. Input.pageCount is used to track pagination.
 // If an activity ID does not exist, it will be created, otherwise, no change.
@@ -15,7 +15,7 @@ exports.getAllActivities = (input, result) => {
   const options = {
     id: input.user.stravaId,
     access_token: input.user.access_token,
-    per_page: 200,
+    per_page: input.perPage || 200,
     page: input.pageCount,
   };
 
