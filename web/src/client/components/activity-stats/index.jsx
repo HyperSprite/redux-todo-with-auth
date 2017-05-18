@@ -1,13 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { flatten } from 'lodash';
-import { eachDay, format, min } from 'date-fns';
 
 import * as actions from '../../actions';
 import WeeklyStats from './weekly-stats';
 
 const propTypes = {
-  // activities: PropTypes.object,
   fetchActivitiesOneWeek: PropTypes.func,
   stravaId: PropTypes.number,
 };
