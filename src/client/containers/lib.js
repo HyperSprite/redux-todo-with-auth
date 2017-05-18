@@ -13,11 +13,14 @@ lib.metersToMilesRound = (m, p = 0) => lib.round(m * 0.00062137121212121, p);
 lib.metersToKm = m => m * 1000;
 lib.metersToKmRound = (m, p = 0) => lib.round(m * 1000, p);
 
-lib.dateFormating = (dateFormat) => {
+// Only one type of date format on Strava as far as I can tell
+// Have not found a setting to change date pref
+// if I find more, will add them to this object
+lib.dateFormating = (datePref) => {
   const dateFormats = {
     'D%m/%d/%Y': 'MM-DD-YYYY',
   };
-  return dateFormats[`D${dateFormat}`];
+  return dateFormats[`D${datePref}`];
 };
 
 lib.dateFormat = (date, datePref) => format(date, lib.dateFormating(datePref));

@@ -88,7 +88,7 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
     <div style={{ border: '1px solid #880000' }}>
       <Static
         contentLabel="Week of "
-        content={format(weeklyTotals.date, lib.dateFormating(datePref))}
+        content={weeklyTotals.date}
         contentType="text"
       />
       <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
