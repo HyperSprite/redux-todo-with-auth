@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { cloneDeep } from 'lodash';
 import { addDays, eachDay, format } from 'date-fns';
 
 import lib from '../../containers/lib';
@@ -7,11 +6,15 @@ import BarChart from './bar-chart';
 import Static from '../form/static';
 
 const propTypes = {
-
+  week: PropTypes.string.isRequired, // "2017-05-02"
+  activities: PropTypes.array.isRequired,
+  datePref: PropTypes.string,
+  measurementPref: PropTypes.bool,
 };
 
 const defaultProps = {
-
+  datePref: '%m/%d/%Y',
+  measurementPref: false,
 };
 
 function oneWeek(weekStart) {
@@ -44,13 +47,12 @@ function dayObjBuilder(date, datePref) {
 function weeklyStats({ week, activities, datePref, measurementPref }) {
   // make simple weekly totals object track totals.
   const weeklyTotals = dayObjBuilder(week, datePref);
-  // const weekArr = ["2017-05-01", "2017-05-02", "2017-05-03", "2017-05-04", "2017-05-05", "2017-05-06", "2017-05-07"];
+  // const weekArr = ["2017-05-01", "2017-05-02", "2017-05-03", "2017-05-04"..."];
   const weekArr = eachDay(week, oneWeek(week)).map(eDay => format(eDay, 'YYYY-MM-DD'));
   const dayTotals = weekArr.map(day => dayObjBuilder(day, datePref));
   // go through each day and add activities.
 
   for (let i = 0; i < weekArr.length; i++) {
-
     if (weekArr[i] <= format(new Date(), 'YYYY-MM-DD')) {
       dayTotals[i].tss.total = weeklyTotals.tss.day;
       dayTotals[i].ss.total = weeklyTotals.ss.day;
@@ -82,8 +84,6 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
   weeklyTotals.dst.total = weeklyTotals.dst.day;
   weeklyTotals.time.total = weeklyTotals.time.day;
   weeklyTotals.elev.total = weeklyTotals.elev.day;
-  console.log('weeklyTotals2', weeklyTotals);
-  console.log('dayTotals2', dayTotals);
   return (
     <div style={{ border: '1px solid #880000' }}>
       <Static
@@ -98,8 +98,6 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
             content={`${weeklyTotals.tss.total}`}
             contentType="text"
             metric="tss"
-            day="day"
-            previous="total"
             weeklyTotals={dayTotals}
           />
         ) : (
@@ -108,9 +106,8 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
             content={`${weeklyTotals.dst.total}`}
             contentType="text"
             metric="dst"
-            day="day"
-            previous="total"
             weeklyTotals={dayTotals}
+            mPref={measurementPref}
           />
         )}
         {weeklyTotals.ss.total ? (
@@ -119,8 +116,6 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
             content={`${weeklyTotals.ss.total}`}
             contentType="text"
             metric="ss"
-            day="ss.day"
-            previous="ss.total"
             weeklyTotals={dayTotals}
           />
         ) : (null)}
@@ -129,8 +124,6 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
           content={`${weeklyTotals.time.total}`}
           contentType="text"
           metric="time"
-          day="time.day"
-          previous="time.total"
           weeklyTotals={dayTotals}
         />
         <BarChart
@@ -138,9 +131,8 @@ function weeklyStats({ week, activities, datePref, measurementPref }) {
           content={`${weeklyTotals.elev.total}`}
           contentType="text"
           metric="elev"
-          day="elev.day"
-          previous="elev.total"
           weeklyTotals={dayTotals}
+          mPref={measurementPref}
         />
       </div>
     </div>
