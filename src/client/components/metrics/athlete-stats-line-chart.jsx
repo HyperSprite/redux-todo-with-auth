@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
 
+import lib from '../../containers/lib';
 import Areachart from './areaChart';
 
 const propTypes = {
   data: PropTypes.array.isRequired,
+  hasFTP: PropTypes.number.isRequired,
   measurementPref: PropTypes.bool.isRequired,
 };
 
@@ -16,33 +18,27 @@ const propTypes = {
 // saWeight: 153.1
 // weight: 69.8079
 
-function getLastInArray(arr, arrType) {
-  let item;
-  if (arr && arr.length > 0 && arr[arr.length - 1][arrType] != null) {
-    item = arr[arr.length - 1][arrType];
-  }
-  return item;
-}
-
 // TODO make carts responsive
-const ChartStack = ({ data, measurementPref }) => (
+const ChartStack = ({ data, hasFTP, measurementPref }) => (
   <div style={{ margin: 5 }}>
-    <Areachart
-      contentLabel="Watts per Kg"
-      content={getLastInArray(data, 'wPKG')}
-      contentType="text"
-      id="wPKGChart"
-      data={data}
-      domain={['dataMin', 'dataMax']}
-      syncId="anyId"
-      xAxisDataKey="day"
-      name="Watts per Kg"
-      dataKey="wPKG"
-    />
+    {hasFTP ? (
+      <Areachart
+        contentLabel="Watts per Kg"
+        content={lib.getLastInArray(data, 'wPKG')}
+        contentType="text"
+        id="wPKGChart"
+        data={data}
+        domain={['dataMin', 'dataMax']}
+        syncId="anyId"
+        xAxisDataKey="day"
+        name="Watts per Kg"
+        dataKey="wPKG"
+      />
+    ) : null}
     <Areachart
       contentLabel="Weight"
       contentLabelLink="https://www.strava.com/settings/profile"
-      content={getLastInArray(data, measurementPref ? 'weight' : 'saWeight')}
+      content={lib.getLastInArray(data, measurementPref ? 'weight' : 'saWeight')}
       contentType="text"
       id="weightChart"
       data={data}
@@ -52,20 +48,22 @@ const ChartStack = ({ data, measurementPref }) => (
       name="Weight"
       dataKey={measurementPref ? 'weight' : 'saWeight'}
     />
-    <Areachart
-      contentLabel="FTP"
-      contentLabelLink="https://www.strava.com/settings/performance"
-      content={getLastInArray(data, 'ftp')}
-      contentType="text"
-      id="ftpChart"
-      data={data}
-      dataKey="ftp"
-      domain={['dataMin - 2', 'dataMax + 2']}
-      syncId="anyId"
-      xAxisDataKey="day"
-      name="FTP"
-      brush
-    />
+    {hasFTP ? (
+      <Areachart
+        contentLabel="FTP"
+        contentLabelLink="https://www.strava.com/settings/performance"
+        content={lib.getLastInArray(data, 'ftp')}
+        contentType="text"
+        id="ftpChart"
+        data={data}
+        dataKey="ftp"
+        domain={['dataMin - 2', 'dataMax + 2']}
+        syncId="anyId"
+        xAxisDataKey="day"
+        name="FTP"
+        brush
+      />
+    ) : null}
   </div>
 );
 

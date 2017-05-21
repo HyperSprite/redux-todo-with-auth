@@ -139,18 +139,11 @@ class Athlete extends Component {
             ) : (
               <div>
                 {/* TODO - this is all ugly */}
-                {getLastInArray(ftpHistory, 'ftp') ? (
-                  <Static
-                    contentLabel="FTP"
-                    content={getLastInArray(ftpHistory, 'ftp')}
-                    contentType="text"
-                  />
-                ) : null }
                 {getLastInArray(weightHistory, 'weight') ? (
-                  <Static
-                    contentLabel="Weight"
-                    content={getLastInArray(weightHistory, 'weight')}
-                    contentType="text"
+                  <FtpWeight
+                    ftpHistory={[]}
+                    weightHistory={weightHistory}
+                    measurementPref={measurementPref}
                   />
                 ) : null }
               </div>

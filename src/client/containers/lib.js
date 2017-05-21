@@ -25,4 +25,12 @@ lib.dateFormating = (datePref) => {
 
 lib.dateFormat = (date, datePref) => format(date, lib.dateFormating(datePref));
 
+lib.getLastInArray = (arr, arrType) => {
+  let item;
+  if (arr && arr.length > 0 && arr[arr.length - 1][arrType] != null) {
+    item = arr[arr.length - 1][arrType];
+  }
+  return item;
+};
+
 export default lib;
