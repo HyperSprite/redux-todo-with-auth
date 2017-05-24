@@ -68,7 +68,7 @@ exports.nightlyUpdate = () => {
 };
 
 // Cron jobs for updating users stats and collecting new activities if the user has not visited.
-exports.dailyUserUpdate = schedule.scheduleJob('00 06 * * *', () => {
+exports.dailyUserUpdate = schedule.scheduleJob('00 30 15 * *', () => {
   hlpr.consLog(['dailyUserUpdate has started']);
   exports.nightlyUpdate();
 });
