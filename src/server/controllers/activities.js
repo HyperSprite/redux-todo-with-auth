@@ -124,6 +124,137 @@ function oneWeek(weekStart) {
   return weekEnd;
 }
 
+function fourWeek(weekStart) {
+  const weekEnd = format(addDays(weekStart, 28), 'YYYY-MM-DD');
+  return weekEnd;
+}
+
+const getOneWeek = async (startDate, stravaId) => {
+  let data = [];
+  const query = {
+    'athlete.id': stravaId,
+    resource_state: 3,
+    start_date_local: {
+      $gt: startDate,
+      $lt: oneWeek(startDate),
+    },
+  };
+  const sort = { start_date_local: 1 };
+  // hlpr.consLog(['getWeekOfActivities', stravaId, startDate, query, sort]);
+  try {
+    const week = await Activities.find(query).sort(sort).exec();
+    data = week;
+  } catch (err) {
+    err => (['Error']);
+  }
+  return data;
+};
+
+class OneMetric {
+  constructor(day = 0, total = 0) {
+    this.day = day;
+    this.total = total;
+  }
+}
+
+class OneDay {
+  constructor(date = '', day = '') {
+    this.date = date;
+    this.day = day;
+    this.names = [];
+  }
+}
+
+// date is the date in string "2017-05-02" format
+function dayObjBuilder(date, datePref) {
+  const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev'];
+  const resDay = new OneDay(hlpr.lib.dateFormat(date, datePref), date.slice(-2));
+  metricsTypes.forEach(mType => resDay[mType] = new OneMetric());
+  return resDay;
+}
+
+// localhost:3080/apiv1/activities/weekly-stats/100 (returns -40 weeks)
+// localhost:3080/apiv1/activities/weekly-stats (no number returns current week)
+function weeklyStats(week, activities, datePref) {
+  // make simple weekly totals object track totals.
+  const weeklyTotals = dayObjBuilder(week, datePref);
+  // const weekArr = ["2017-05-01", "2017-05-02", "2017-05-03", "2017-05-04"..."];
+  const weekArr = hlpr.lib.weekArray(week);
+  const dayTotals = weekArr.map(day => dayObjBuilder(day, datePref));
+  // go through each day and add activities.
+
+  for (let i = 0; i < weekArr.length; i++) {
+    if (weekArr[i] <= format(new Date(), 'YYYY-MM-DD')) {
+      dayTotals[i].tss.total = weeklyTotals.tss.day;
+      dayTotals[i].ss.total = weeklyTotals.ss.day;
+      dayTotals[i].dst.total = weeklyTotals.dst.day;
+      dayTotals[i].time.total = weeklyTotals.time.day;
+      dayTotals[i].elev.total = weeklyTotals.elev.day;
+    }
+
+    activities.forEach((act) => {
+      if (weekArr[i] === act.start_date_local.slice(0, 10)) {
+        dayTotals[i].names.push({ name: act.name, activityId: act.activityId });
+
+        dayTotals[i].tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
+        dayTotals[i].ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
+        dayTotals[i].dst.day += isNaN(act.distance) ? 0 : act.distance;
+        dayTotals[i].time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
+        dayTotals[i].elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
+
+        weeklyTotals.names.push({ name: act.name, activityId: act.activityId });
+        weeklyTotals.tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
+        weeklyTotals.ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
+        weeklyTotals.dst.day += isNaN(act.distance) ? 0 : act.distance;
+        weeklyTotals.time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
+        weeklyTotals.elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
+      }
+    });
+  }
+
+  weeklyTotals.tss.total = weeklyTotals.tss.day;
+  weeklyTotals.ss.total = weeklyTotals.ss.day;
+  weeklyTotals.dst.total = weeklyTotals.dst.day;
+  weeklyTotals.time.total = weeklyTotals.time.day;
+  weeklyTotals.elev.total = weeklyTotals.elev.day;
+
+  return { weeklyTotals, dayTotals };
+}
+
+exports.getWeeklyStats = async (req, res) => {
+  const weeksPast = req.params.weeksPast * 1 || 0;
+  const startDate = format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
+  const resultWeek = await getOneWeek(startDate, req.user.stravaId);
+  const result = await weeklyStats(startDate, resultWeek, req.user.date_preference);
+
+  res.send(result);
+};
+
+// TODO setup activity reset front end
+// activities set to "2" are not returned from the DB to the user
+// They are "fresh", this sets existing "3"s back to "2", then we
+// update the activity with the lates info, unless it has been deleted
+// from strava, then it never gets updated. At that point, we should
+// set the status to "4" so it is not returned but also not cheked.
+exports.resetActivity = (req, res) => {
+  const query = {
+    activityId: req.params.activityId,
+    'athlete.id': req.user.stravaId,
+  };
+  const data = {
+    $set: { resource_state: 2 },
+  };
+  Activities.findOneAndUpdate(query, data, { new: true }, (err, activity) => {
+    hlpr.consLog([query, activity]);
+    if (err || !event) {
+      hlpr.consLog(['favEvent err', err]);
+      res.status(404).send({ resetActivity: 'Activity not found' });
+    }
+    res.send({ activityId: activity.activityId, resetActivity: activity.resource_state });
+  });
+};
+
+// No longer useing this version
 // localhost:3080/apiv1/activities/one-week/100 (returns -40 weeks)
 // localhost:3080/apiv1/activities/one-week (no number returns current week)
 exports.getWeekOfActivities = (req, res) => {
@@ -131,6 +262,7 @@ exports.getWeekOfActivities = (req, res) => {
   const startDate = req.params.startDate || format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
   const query = {
     'athlete.id': req.user.stravaId,
+    resource_state: 3,
     start_date_local: {
       $gt: startDate,
       $lt: oneWeek(startDate),

@@ -195,7 +195,7 @@ class Athlete extends Component {
               content={date_preference}
               contentType="text"
             />
-            {userGeoTzRawOffset ? (
+            {/* {userGeoTzRawOffset ? (
               <div>
                 <Astrophases
                   geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
@@ -208,7 +208,7 @@ class Athlete extends Component {
               <div>
                 Loading Astrophase Data...
               </div>
-            )}
+            )} */}
             <div className="quote-box">
               <p>The information above is supplied by the Strava connection.</p>
               <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
