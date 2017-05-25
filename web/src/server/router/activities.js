@@ -6,7 +6,8 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 const Activ = require('./../controllers/activities');
 
 
-router.get('/one-week/:weeksPast', requireAuth, Activ.getWeekOfActivities);
-router.get('/one-week', requireAuth, Activ.getWeekOfActivities);
+router.get('/weekly-stats/:weeksPast', requireAuth, Activ.getWeeklyStats);
+router.get('/weekly-stats', requireAuth, Activ.getWeeklyStats);
+router.post('reset-activity', requireAuth, Activ.resetActivity);
 
 module.exports = router;

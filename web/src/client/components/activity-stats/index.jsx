@@ -5,11 +5,17 @@ import * as actions from '../../actions';
 import WeeklyStats from './weekly-stats';
 
 const propTypes = {
-  fetchActivitiesOneWeek: PropTypes.func,
+  fetchActivitiesWeeklyTotals: PropTypes.func.isRequired,
   stravaId: PropTypes.number,
+  weeksBack: PropTypes.number,
 };
 
-const relURL = 'apiv1/activities/one-week';
+const defaultProps = {
+  weeksBack: 0,
+  stravaId: null,
+};
+
+const relURL = 'apiv1/activities/weekly-stats';
 
 class activeStats extends Component {
   constructor(props) {
@@ -18,27 +24,27 @@ class activeStats extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchActivitiesOneWeek(relURL, this.props.stravaId, this.props.weeksBack);
+    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeksBack);
   }
 
   fetchAnotherWeek() {
-    this.props.fetchActivitiesOneWeek(relURL, this.props.stravaId, this.props.weeksBack);
+    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeksBack);
   }
 
   render() {
-    const { weeks, weeksBack, datePref, measurementPref } = this.props;
+    const { weeklyStats, weeksBack, datePref, measurementPref } = this.props;
 
     return (
       <div>
-        {!weeks ? (
+        {!weeklyStats ? (
           <p>Loading Activities</p>
         ) : (
           <div>
-            { weeks.map(oneWeek => (
+            { weeklyStats.map(oneWeek => (
               <WeeklyStats
-                key={Object.keys(oneWeek)[0]}
-                week={Object.keys(oneWeek)[0]}
-                activities={oneWeek[Object.keys(oneWeek)[0]]}
+                key={oneWeek.weeklyTotals.date}
+                week={oneWeek.weeklyTotals.date}
+                stats={oneWeek}
                 datePref={datePref}
                 measurementPref={measurementPref}
               />
@@ -54,14 +60,15 @@ class activeStats extends Component {
 }
 
 activeStats.propTypes = propTypes;
+activeStats.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
     datePref: state.auth.user.date_preference,
     measurementPref: state.auth.user.measurement_preference === 'feet',
     stravaId: state.auth.user.stravaId,
-    weeks: state.activities.weeks,
-    weeksBack: state.activities.weeks.length || null,
+    weeklyStats: state.activities.weeklyStats,
+    weeksBack: state.activities.weeklyStats.length || null,
   };
 }
 
