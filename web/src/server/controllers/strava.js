@@ -67,8 +67,18 @@ exports.nightlyUpdate = () => {
   });
 };
 
+// *    *    *    *    *    *
+// ┬    ┬    ┬    ┬    ┬    ┬
+// │    │    │    │    │    |
+// │    │    │    │    │    └ day of week (0 - 7) (0 or 7 is Sun)
+// │    │    │    │    └───── month (1 - 12)
+// │    │    │    └────────── day of month (1 - 31)
+// │    │    └─────────────── hour (0 - 23)
+// │    └──────────────────── minute (0 - 59)
+// └───────────────────────── second (0 - 59, OPTIONAL) * not using this.
+
 // Cron jobs for updating users stats and collecting new activities if the user has not visited.
-exports.dailyUserUpdate = schedule.scheduleJob('00 30 15 * *', () => {
+exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
   hlpr.consLog(['dailyUserUpdate has started']);
   exports.nightlyUpdate();
 });
