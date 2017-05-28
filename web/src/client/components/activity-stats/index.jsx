@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IconButton, Paper } from 'material-ui';
+import { IconButton, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 
@@ -81,13 +81,19 @@ class activeStats extends Component {
                 ))}
               </div>
             )}
-            <button onClick={this.fetchAnotherWeek} >Get Another Week</button>
-            <div className="flex-row">
-              <IconButton onClick={this.updateUserActivities} style={style.toggleIconButton} >
-                <FaRefresh size={20} />
-              </IconButton>
-              <p>Get Latest Activities</p>
-            </div>
+            <RaisedButton
+              label="Load Another Week"
+              primary
+              style={style.button}
+              onClick={this.fetchAnotherWeek}
+            />
+            <RaisedButton
+              label="Check Strava for New Activities"
+              secondary
+              style={style.button}
+              onClick={this.updateUserActivities}
+              icon={<FaRefresh size={20} />}
+            />
           </Paper>
         </div>
         <div className="side-lite right-pane" />
