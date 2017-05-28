@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import WeatherIcon from '../icons/weather/index';
 
-import '../../styles/weather.css';
+import './weather.css';
 
 const propTypes = {
   localTime: PropTypes.string,

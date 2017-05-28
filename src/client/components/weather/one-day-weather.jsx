@@ -9,7 +9,7 @@ import SingleWeather from './single-weather';
 import ToggleIcon from '../form/toggle-icon';
 
 import style from '../../styles/style';
-import '../../styles/weather.css';
+import './weather.css';
 
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'

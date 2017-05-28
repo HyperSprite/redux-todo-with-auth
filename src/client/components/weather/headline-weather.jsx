@@ -3,7 +3,7 @@ import { IconButton } from 'material-ui';
 
 import SpinnerIcon from '../form/spinner-icon';
 import style from '../../styles/style';
-import '../../styles/weather.css';
+import './weather.css';
 // import '../../styles/weather-icons.css';
 
 const HeadlineWeather = ({ ...dayWF }) => {
