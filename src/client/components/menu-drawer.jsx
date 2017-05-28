@@ -39,6 +39,11 @@ class MenuDrawer extends Component {
         />
         <MenuItem
           onTouchTap={this.handleClose}
+          primaryText="Weekly Stats"
+          containerElement={<Link to="/weekly-stats">Weekly Stats</Link>}
+        />
+        <MenuItem
+          onTouchTap={this.handleClose}
           primaryText="Athlete"
           containerElement={<Link to="/athlete">Athlete</Link>}
         />
