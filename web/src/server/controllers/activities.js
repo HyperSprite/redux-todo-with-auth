@@ -224,8 +224,9 @@ function weeklyStats(week, activities, datePref) {
 exports.getWeeklyStats = async (req, res) => {
   const weeksPast = req.params.weeksPast * 1 || 0;
   const startDate = format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
-  const resultWeek = await getOneWeek(startDate, req.user.stravaId);
-  const result = await weeklyStats(startDate, resultWeek, req.user.date_preference);
+  const result = {};
+  result.week = await getOneWeek(startDate, req.user.stravaId);
+  result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
 
   res.send(result);
 };

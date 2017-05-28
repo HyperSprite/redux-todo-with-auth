@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import { addDays, eachDay, format } from 'date-fns';
+import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 import lib from '../../containers/lib';
 import BarChart from './bar-chart';
 import SingleActivity from './single-activity';
-import Static from '../form/static';
 
 const propTypes = {
   week: PropTypes.string.isRequired, // "2017-05-02"
@@ -18,70 +18,76 @@ const defaultProps = {
   measurementPref: false,
 };
 
-function weeklyStats({ week, stats, datePref, measurementPref }) {
+function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
 
   return (
-    <div style={{ border: '1px solid #880000' }}>
-      <Static
-        contentLabel="Week of "
-        content={week}
-        contentType="text"
+    <Card>
+      <CardHeader
+        title={`Week of ${week}`}
+        actAsExpander
+        showExpandableButton
       />
-      <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-        {stats.weeklyTotals.tss.total ? (
+      <CardActions>
+        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+          {stats.weeklyTotals.tss.total ? (
+            <BarChart
+              contentLabel="TSS"
+              content={`${stats.weeklyTotals.tss.total}`}
+              contentType="text"
+              metric="tss"
+              weeklyTotals={stats.dayTotals}
+            />
+          ) : (
+            <BarChart
+              contentLabel="Distance"
+              content={`${stats.weeklyTotals.dst.total}`}
+              contentType="text"
+              metric="dst"
+              weeklyTotals={stats.dayTotals}
+              mPref={measurementPref}
+            />
+          )}
+          {stats.weeklyTotals.ss.total ? (
+            <BarChart
+              contentLabel="Suffer Score"
+              content={`${stats.weeklyTotals.ss.total}`}
+              contentType="text"
+              metric="ss"
+              weeklyTotals={stats.dayTotals}
+            />
+          ) : (null)}
           <BarChart
-            contentLabel="TSS"
-            content={`${stats.weeklyTotals.tss.total}`}
+            contentLabel="Moving Time"
+            content={`${stats.weeklyTotals.time.total}`}
             contentType="text"
-            metric="tss"
+            metric="time"
             weeklyTotals={stats.dayTotals}
           />
-        ) : (
           <BarChart
-            contentLabel="Distance"
-            content={`${stats.weeklyTotals.dst.total}`}
+            contentLabel="Elevation"
+            content={`${stats.weeklyTotals.elev.total}`}
             contentType="text"
-            metric="dst"
+            metric="elev"
             weeklyTotals={stats.dayTotals}
             mPref={measurementPref}
           />
-        )}
-        {stats.weeklyTotals.ss.total ? (
-          <BarChart
-            contentLabel="Suffer Score"
-            content={`${stats.weeklyTotals.ss.total}`}
-            contentType="text"
-            metric="ss"
-            weeklyTotals={stats.dayTotals}
-          />
-        ) : (null)}
-        <BarChart
-          contentLabel="Moving Time"
-          content={`${stats.weeklyTotals.time.total}`}
-          contentType="text"
-          metric="time"
-          weeklyTotals={stats.dayTotals}
-        />
-        <BarChart
-          contentLabel="Elevation"
-          content={`${stats.weeklyTotals.elev.total}`}
-          contentType="text"
-          metric="elev"
-          weeklyTotals={stats.dayTotals}
-          mPref={measurementPref}
-        />
-      </div>
-      {/* <ul>
-        {activities.map(act => (
+        </div>
+      </CardActions>
+      <CardText
+        expandable
+      >
+
+        {stats.weeklyTotals.names.map(act => (
           // TODO build a component to show each activity
-          <li key={act.activityId}>
+          <div key={act.activityId}>
             <SingleActivity
               {...act}
             />
-          </li>
+          </div>
         ))}
-      </ul> */}
-    </div>
+
+      </CardText>
+    </Card>
   );
 }
 
