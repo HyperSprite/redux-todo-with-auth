@@ -2,6 +2,7 @@ const addDays = require('date-fns/add_days');
 const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
+const getTime = require('date-fns/get_time');
 const Activities = require('../models/activities');
 const User = require('../models/user');
 const strava = require('strava-v3');
@@ -222,8 +223,12 @@ function weeklyStats(week, activities, datePref) {
 }
 
 exports.getWeeklyStats = async (req, res) => {
+  // setup date for users local time
+  const d = new Date();
+  const userLocalTime = getTime(d) + req.user.userGeoTzRawOffset + req.user.userGeoTzRawOffset;
+  // 0 === get this week, weeksPast are weeks from this week, they also match array index in redux.
   const weeksPast = req.params.weeksPast * 1 || 0;
-  const startDate = format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
+  const startDate = format(subWeeks(startOfWeek(userLocalTime, { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
   const result = {};
   result.week = await getOneWeek(startDate, req.user.stravaId);
   result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
