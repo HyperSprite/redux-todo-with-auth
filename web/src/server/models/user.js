@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs');
 
-const ObjectId = mongoose.Schema.Types.ObjectId;
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
@@ -23,6 +22,23 @@ const ftpHistorySchema = Schema({
   date: String,
 });
 
+const bikeSchema = Schema({
+  id: String, // "b105763",
+  primary: Boolean, // false,
+  name: String, // "Cannondale TT",
+  distance: Number, // 476612.9,
+  resource_state: Number, // 2
+});
+
+const shoeSchema = Schema({
+  id: String, // "g1",
+  primary: Boolean, // true,
+  name: String, // "Running Shoes",
+  distance: Number, // 67492.9,
+  resource_state: Number, // 2
+});
+
+
 const userSchema = new Schema({
   email: { type: String, lowercase: true },
   password: String,
@@ -36,6 +52,20 @@ const userSchema = new Schema({
   loc_city: String,  // from Strava
   loc_state: String,  // from Strava
   loc_country: String,  // from Strava
+  sex: String,
+  premium: Boolean,
+  created_at: String,
+  updated_at: String,
+  athlete_type: Number,
+  date_preference: String,
+  measurement_preference: String, // ‘feet’ or ‘meters’
+  adminMember: Boolean,
+  clubMember: Boolean,
+  week_start_day: Number, // 0 - Sun, 1 - Mon...
+  activitiesCollected: Boolean,
+  bikes: [bikeSchema],
+  shoes: [shoeSchema],
+  // custom user data
   userLocStreet: String,  // from user input
   userLocCity: String,  // from user input
   userLocState: String,  // from user input
@@ -60,17 +90,6 @@ const userSchema = new Schema({
   userGeoTzDSTOffset: Number, // in milliseconds (3600 per hour)
   userGeoElevation: Number, // in meters
   userLocationPref: { type: String, enum: ['Strava', 'Manual', 'Magic'], default: 'Strava' },
-  sex: String,
-  premium: Boolean,
-  created_at: String,
-  updated_at: String,
-  athlete_type: Number,
-  date_preference: String,
-  measurement_preference: String, // ‘feet’ or ‘meters’
-  adminMember: Boolean,
-  clubMember: Boolean,
-  week_start_day: Number, // 0 - Sun, 1 - Mon...
-  activitiesCollected: Boolean,
   ftpHistory: [ftpHistorySchema],
   weightHistory: [weightHistorySchema],
   tssGoals: [tssGoalSchema],
