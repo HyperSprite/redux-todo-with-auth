@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { IconButton, Paper, RaisedButton } from 'material-ui';
+import { Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 
@@ -17,13 +17,13 @@ const propTypes = {
   measurementPref: PropTypes.bool.isRequired,
   stravaId: PropTypes.number,
   setPageName: PropTypes.func.isRequired,
+  setWeeklyStats: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  weeksBack: PropTypes.number,
+  weeklyStatsCount: PropTypes.number.isRequired,
   weeklyStats: PropTypes.array.isRequired,
 };
 
 const defaultProps = {
-  weeksBack: 0,
   stravaId: null,
 };
 
@@ -37,15 +37,21 @@ class activeStats extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchData('auth/user');
-    if (!this.props.weeklyStats.length) {
-      this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeksBack);
-    }
+    this.fetchWeeksActivities();
     this.props.setPageName('Weekly Stats');
   }
 
   fetchAnotherWeek() {
-    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeksBack);
+    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStatsCount);
+    this.props.setWeeklyStats();
+  }
+
+  fetchWeeksActivities() {
+    setTimeout(() => {
+      if (!this.props.weeklyStats.length) {
+        this.fetchAnotherWeek();
+      }
+    }, 300);
   }
 
   updateUserActivities() {
@@ -107,12 +113,12 @@ activeStats.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
-    user: state.auth.user,
     datePref: state.auth.user.date_preference,
     measurementPref: state.auth.user.measurement_preference === 'feet',
     stravaId: state.auth.user.stravaId,
+    user: state.auth.user,
     weeklyStats: state.activities.weeklyStats,
-    weeksBack: state.activities.weeklyStats.length || null,
+    weeklyStatsCount: state.activities.weeklyStatsCount,
   };
 }
 

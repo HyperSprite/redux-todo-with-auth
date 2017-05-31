@@ -18,6 +18,7 @@ export type ActionStrings = (
   'FETCH_USER' |
   'FETCH_USER_ACTIVITIES' |
   'FETCH_WEEKLYTOTALS_ACTIVITIES' |
+  'SET_WEEKLY_STATS' |
   'FETCH_JSON' |
   'SET_USER' |
   'POST_EVENT_ERROR' |
