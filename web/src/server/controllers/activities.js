@@ -229,7 +229,10 @@ exports.getWeeklyStats = async (req, res) => {
   // 0 === get this week, weeksPast are weeks from this week, they also match array index in redux.
   const weeksPast = req.params.weeksPast * 1 || 0;
   const startDate = format(subWeeks(startOfWeek(userLocalTime, { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
-  const result = {};
+  const result = {
+    weeksPast,
+    startDate,
+  };
   result.week = await getOneWeek(startDate, req.user.stravaId);
   result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
 

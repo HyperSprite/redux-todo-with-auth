@@ -3,9 +3,9 @@
 import { TYPES } from '../actions';
 
 export default function (state = {
-  user: {
-    authenticated: false,
-  },
+  user: {},
+  authenticated: false,
+  // },
 }, action) {
   switch (action.type) {
     case TYPES.AUTH_USER:

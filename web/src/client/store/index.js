@@ -16,11 +16,9 @@ const prodMiddleware = [
   thunk,
 ];
 
-const devMiddleware = [
-  promise(),
-  thunk,
+const devMiddleware = prodMiddleware.concat(prodMiddleware, [
   logger(),
-];
+]);
 
 let middlewareOptions;
 

@@ -18,6 +18,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_USER: 'FETCH_USER',
   FETCH_USER_ACTIVITIES: 'FETCH_USER_ACTIVITIES',
   FETCH_WEEKLYTOTALS_ACTIVITIES: 'FETCH_WEEKLYTOTALS_ACTIVITIES',
+  SET_WEEKLY_STATS: 'SET_WEEKLY_STATS',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
   POST_EVENT_ERROR: 'POST_EVENT_ERROR',
@@ -290,6 +291,12 @@ export function fetchStrava(path, id, index, stravatoken, context) {
 // end Strava
 
 // Activities
+
+export function setWeeklyStats() {
+  return {
+    type: TYPES.SET_WEEKLY_STATS,
+  };
+}
 
 export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
   const axiosConfig = {
