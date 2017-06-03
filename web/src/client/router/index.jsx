@@ -15,7 +15,7 @@ import WeeklyStats from './../components/activity-stats';
 
 const router = (
   <Switch>
-    <RouteAuthorized exact path="/" component={Home} />
+    <RouteAuthorized exact path="/" component={WeeklyStats} />
     <RouteAuthorized path="/athlete" component={Athlete} />
     <RouteAuthorized path="/events/addevent" component={EditEvent} />
     <Route exact path="/events" component={Events} />

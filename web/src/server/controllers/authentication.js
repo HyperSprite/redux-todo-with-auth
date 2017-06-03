@@ -139,7 +139,7 @@ exports.stravaSignin = (req, res) => {
       const result = `
         <script>
           localStorage.setItem('token', '${tokenForUser(req.user, tkn => tkn)}');
-          window.location='/events';
+          window.location='/';
         </script>`;
       res.send(result);
     });
