@@ -40,7 +40,8 @@ class activeStats extends Component {
   }
 
   componentDidMount() {
-    this.fetchAnotherWeek();
+    this.updateUserActivities();
+    this.props.setWeeklyStats();
     this.props.setPageName('Weekly Stats');
   }
 
