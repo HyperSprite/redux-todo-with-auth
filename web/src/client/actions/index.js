@@ -3,6 +3,12 @@
 import axios from 'axios';
 import { v4 } from 'uuid';
 
+const axiosConfig = {
+  headers: {
+    authorization: localStorage.getItem('token'),
+  },
+};
+
 const ROOT_URL = process.env.ROOT_URL || '';
 
 // If any of these have a flow error about
@@ -18,6 +24,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_USER: 'FETCH_USER',
   FETCH_USER_ACTIVITIES: 'FETCH_USER_ACTIVITIES',
   FETCH_WEEKLYTOTALS_ACTIVITIES: 'FETCH_WEEKLYTOTALS_ACTIVITIES',
+  ACTIVITY_REMOVED: 'ACTIVITY_REMOVED',
   SET_WEEKLY_STATS: 'SET_WEEKLY_STATS',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
@@ -34,6 +41,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
   SET_IS_FETCHING: 'SET_IS_FETCHING',
   SET_IS_FETCHING_OFF: 'SET_IS_FETCHING_OFF',
+  MESSAGE_FOR_USER: 'MESSAGE_FOR_USER',
 };
 
 // handle error mesages
@@ -86,12 +94,7 @@ export function ifToken() {
 
 // Gets a list of Events
 export function fetchEvents(relURL, stravaId) {
-  const axiosConfig = {
-    headers: {
-      authorization: localStorage.getItem('token'),
-      stravaId,
-    },
-  };
+  axiosConfig.stravaId = stravaId;
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
       .then((response) => {
@@ -111,9 +114,9 @@ export function fetchEvents(relURL, stravaId) {
 
 // Posts new or updated Event to server
 export function postForm(formProps, relURL, index) {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
+  // const axiosConfig = {
+  //   headers: { authorization: localStorage.getItem('token') },
+  // };
   return (dispatch) => {
     axios.post(`${ROOT_URL}/${relURL}`, formProps, axiosConfig)
       .then((response) => {
@@ -160,9 +163,9 @@ export function cancelEdit() {
 
 // Posts a delete to the server and removes the item from the list
 export function deleteEvent(eventId, relURL) {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
+  // const axiosConfig = {
+  //   headers: { authorization: localStorage.getItem('token') },
+  // };
   const formData = {};
   formData.eventId = eventId;
   return (dispatch) => {
@@ -183,9 +186,9 @@ export function deleteEvent(eventId, relURL) {
 }
 
 export function editEvent(eventId, relURL) {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
+  // const axiosConfig = {
+  //   headers: { authorization: localStorage.getItem('token') },
+  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}/${eventId}`, axiosConfig)
     .then((response) => {
@@ -204,9 +207,9 @@ export function editEvent(eventId, relURL) {
 }
 
 export function favEvent(eventId, relURL) {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
+  // const axiosConfig = {
+  //   headers: { authorization: localStorage.getItem('token') },
+  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}/${eventId}/fav`, axiosConfig)
     .then((response) => {
@@ -231,12 +234,13 @@ const relURLStrava = 'apiv1/strava';
 // FETCH_STRAVA_ROUTES
 // fetchStravaRoutes
 export function fetchStrava(path, id, index, stravatoken, context) {
-  const axiosConfig = {
-    headers: {
-      authorization: localStorage.getItem('token'),
-      access_token: stravatoken,
-    },
-  };
+  // const axiosConfig = {
+  //   headers: {
+  //     authorization: localStorage.getItem('token'),
+  //     access_token: stravatoken,
+  //   },
+  // };
+  axiosConfig.access_token = stravatoken;
   const isId = id ? `/${id}` : '';
   return (dispatch) => {
     axios.get(`${relURLStrava}/${path}${isId}`, axiosConfig)
@@ -304,17 +308,38 @@ export function setWeeklyStats() {
 }
 
 export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
-  const axiosConfig = {
-    headers: {
-      authorization: localStorage.getItem('token'),
-    },
-  };
+  // const axiosConfig = {
+  //   headers: {
+  //     authorization: localStorage.getItem('token'),
+  //   },
+  // };
   const isWeeksBack = weeksBack ? `/${weeksBack}` : '';
   return (dispatch) => {
     axios.get(`${relURL}${isWeeksBack}`, axiosConfig)
       .then((response) => {
         dispatch({
           type: TYPES.FETCH_WEEKLYTOTALS_ACTIVITIES,
+          payload: response.data,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function removeActivity(relURL, activityId) {
+  return (dispatch) => {
+    axios.post(`${relURL}`, { activityId }, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.ACTIVITY_REMOVED,
           payload: response.data,
         });
         dispatch({
@@ -353,9 +378,9 @@ export function fetchMessage() {
 }
 
 export function fetchData(relURL) {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
+  // const axiosConfig = {
+  //   headers: { authorization: localStorage.getItem('token') },
+  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
       .then((response) => {
