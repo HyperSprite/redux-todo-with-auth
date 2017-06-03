@@ -12,41 +12,6 @@ const propTypes = {
   weeklyTotals: PropTypes.array,
 };
 
-// metric = 'time', 'dst', 'elev' type: string
-// yAxis = bool
-// data = non-formatted number, like time in seconds, dist in meters.
-// mPref = true for SAE, false for Metric
-const conversions = (metric, yAxis, data, mPref) => {
-  if (data || data === 0) {
-    switch (metric) {
-      case 'time':
-        return lib.secondsToTime(data);
-      case 'dst':
-        return mPref ? lib.metersToMilesRound(data, 2) : lib.metersToKmRound(data, 1);
-      case 'elev':
-        return mPref ? lib.metersToFeetRound(data, 2) : data;
-      case 'cal':
-      case 'kj':
-        return lib.round(data, 0);
-      default:
-        return data;
-    }
-  }
-  if (yAxis) {
-    switch (metric) {
-      case 'time':
-        return lib.secondsToTime;
-      case 'dst':
-        return lib.metersToMilesRound;
-      case 'elev':
-        return lib.metersToFeetRound;
-      default:
-        return null;
-    }
-  }
-  return null;
-};
-
 const renderTooltipContent = (o) => {
   // payload array item for each bar
   // metric = 'time', 'dst', 'elev' type: string
@@ -60,12 +25,12 @@ const renderTooltipContent = (o) => {
       <p>{label}</p>
       <ul style={{ listStyle: 'none', marginLeft: 4, padding: 0 }}>
         <li>
-          {`Total: ${conversions(metric, false, total, mPref)}`}
+          {`Total: ${lib.statsConversions(metric, false, total, mPref)}`}
         </li>
         {
           payload.map(entry => (
             <li key={`item-${entry.value + entry.name}`} style={{ color: entry.color }}>
-              {`${entry.name}: ${conversions(metric, false, entry.value, mPref)}`}
+              {`${entry.name}: ${lib.statsConversions(metric, false, entry.value, mPref)}`}
             </li>
           ))
         }
@@ -78,7 +43,7 @@ const Chart = props => (
   <div>
     <Static
       contentLabel={props.contentLabel}
-      content={`${conversions(props.metric, false, props.content, props.mPref)}`}
+      content={`${lib.statsConversions(props.metric, false, props.content, props.mPref)}`}
     />
     <BarChart
       width={180}
@@ -87,7 +52,7 @@ const Chart = props => (
       margin={{ top: 5, right: 10, left: 2, bottom: 5 }}
     >
       <XAxis dataKey="day" />
-      <YAxis tickFormatter={conversions(props.metric, true)} />
+      <YAxis tickFormatter={lib.statsConversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip content={renderTooltipContent} metric={props.metric} mPref={props.mPref} />
       <Bar name="Day" dataKey={`${props.metric}.day`} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />

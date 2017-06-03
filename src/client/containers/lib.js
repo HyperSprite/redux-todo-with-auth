@@ -13,6 +13,41 @@ lib.metersToMilesRound = (m, p = 0) => lib.round(m * 0.00062137121212121, p);
 lib.metersToKm = m => m * 1000;
 lib.metersToKmRound = (m, p = 0) => lib.round(m * 1000, p);
 
+// metric = 'time', 'dst', 'elev', 'cal', 'kj' type: string
+// yAxis = bool - for recharts
+// data = non-formatted number, like time in seconds, dist in meters.
+// mPref = true for SAE, false for Metric
+lib.statsConversions = (metric, yAxis, data, mPref) => {
+  if (data || data === 0) {
+    switch (metric) {
+      case 'time':
+        return lib.secondsToTime(data);
+      case 'dst':
+        return mPref ? lib.metersToMilesRound(data, 2) : lib.metersToKmRound(data, 1);
+      case 'elev':
+        return mPref ? lib.metersToFeetRound(data, 2) : data;
+      case 'cal':
+      case 'kj':
+        return lib.round(data, 0);
+      default:
+        return data;
+    }
+  }
+  if (yAxis) {
+    switch (metric) {
+      case 'time':
+        return lib.secondsToTime;
+      case 'dst':
+        return lib.metersToMilesRound;
+      case 'elev':
+        return lib.metersToFeetRound;
+      default:
+        return null;
+    }
+  }
+  return null;
+};
+
 // Only one type of date format on Strava as far as I can tell
 // Have not found a setting to change date pref
 // if I find more, will add them to this object
