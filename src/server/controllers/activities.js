@@ -99,7 +99,7 @@ exports.getRecentActivities = (req, res) => {
   const options = {
     id: req.user.stravaId,
     access_token: req.user.access_token,
-    per_page: req.perPage || 5,
+    per_page: req.perPage || 21,
     page: req.pageCount,
     user: req.user,
   };
