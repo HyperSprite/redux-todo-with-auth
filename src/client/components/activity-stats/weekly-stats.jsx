@@ -29,6 +29,7 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
       />
       <CardActions>
         <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+          
           {stats.weeklyTotals.tss.total ? (
             <BarChart
               contentLabel="TSS"
@@ -37,16 +38,18 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
               metric="tss"
               weeklyTotals={stats.dayTotals}
             />
-          ) : (
+          ) : (null)}
+
+          {stats.weeklyTotals.kj.total ? (
             <BarChart
-              contentLabel="Distance"
-              content={`${stats.weeklyTotals.dst.total}`}
+              contentLabel="Kilojoules"
+              content={`${stats.weeklyTotals.kj.total}`}
               contentType="text"
-              metric="dst"
+              metric="kj"
               weeklyTotals={stats.dayTotals}
-              mPref={measurementPref}
             />
-          )}
+          ) : (null)}
+
           {stats.weeklyTotals.ss.total ? (
             <BarChart
               contentLabel="Suffer Score"
@@ -56,6 +59,17 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
               weeklyTotals={stats.dayTotals}
             />
           ) : (null)}
+
+          {stats.weeklyTotals.cal.total ? (
+            <BarChart
+              contentLabel="Calories"
+              content={`${stats.weeklyTotals.cal.total}`}
+              contentType="text"
+              metric="cal"
+              weeklyTotals={stats.dayTotals}
+            />
+          ) : (null)}
+
           <BarChart
             contentLabel="Moving Time"
             content={`${stats.weeklyTotals.time.total}`}
@@ -63,6 +77,16 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
             metric="time"
             weeklyTotals={stats.dayTotals}
           />
+
+          <BarChart
+            contentLabel="Distance"
+            content={`${stats.weeklyTotals.dst.total}`}
+            contentType="text"
+            metric="dst"
+            weeklyTotals={stats.dayTotals}
+            mPref={measurementPref}
+          />
+
           <BarChart
             contentLabel="Elevation"
             content={`${stats.weeklyTotals.elev.total}`}
@@ -71,6 +95,7 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
             weeklyTotals={stats.dayTotals}
             mPref={measurementPref}
           />
+
         </div>
       </CardActions>
       <CardText
