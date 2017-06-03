@@ -6,7 +6,7 @@ import Areachart from './areaChart';
 const propTypes = {
   data: PropTypes.array.isRequired,
   hasFTP: PropTypes.number.isRequired,
-  measurementPref: PropTypes.bool.isRequired,
+  mPref: PropTypes.bool.isRequired,
 };
 
 // incoming data
@@ -19,7 +19,7 @@ const propTypes = {
 // weight: 69.8079
 
 // TODO make carts responsive
-const ChartStack = ({ data, hasFTP, measurementPref }) => (
+const ChartStack = ({ data, hasFTP, mPref }) => (
   <div style={{ margin: 5 }}>
     {hasFTP ? (
       <Areachart
@@ -38,7 +38,7 @@ const ChartStack = ({ data, hasFTP, measurementPref }) => (
     <Areachart
       contentLabel="Weight"
       contentLabelLink="https://www.strava.com/settings/profile"
-      content={lib.getLastInArray(data, measurementPref ? 'weight' : 'saWeight')}
+      content={lib.getLastInArray(data, mPref ? 'saWeight' : 'weight')}
       contentType="text"
       id="weightChart"
       data={data}
@@ -46,7 +46,7 @@ const ChartStack = ({ data, hasFTP, measurementPref }) => (
       syncId="anyId"
       xAxisDataKey="day"
       name="Weight"
-      dataKey={measurementPref ? 'weight' : 'saWeight'}
+      dataKey={mPref ? 'saWeight' : 'weight'}
     />
     {hasFTP ? (
       <Areachart

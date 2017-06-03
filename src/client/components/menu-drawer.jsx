@@ -6,12 +6,14 @@ import { Divider, Drawer, MenuItem } from 'material-ui';
 import * as actions from './../actions';
 
 const propTypes = {
+  adminMember: PropTypes.bool.isRequired,
   authenticated: PropTypes.bool,
   open: PropTypes.bool,
   setDrawer: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
+  adminMember: false,
   authenticated: false,
   open: false,
 };
@@ -39,14 +41,21 @@ class MenuDrawer extends Component {
         />
         <MenuItem
           onTouchTap={this.handleClose}
-          primaryText="Weekly Stats"
-          containerElement={<Link to="/weekly-stats">Weekly Stats</Link>}
+          primaryText="Power & Weight"
+          containerElement={<Link to="/power-and-weight">Power & Weight</Link>}
         />
         <MenuItem
           onTouchTap={this.handleClose}
-          primaryText="Athlete"
-          containerElement={<Link to="/athlete">Athlete</Link>}
+          primaryText="Weekly Stats"
+          containerElement={<Link to="/weekly-stats">Weekly Stats</Link>}
         />
+        {this.props.adminMember ? (
+          <MenuItem
+            onTouchTap={this.handleClose}
+            primaryText="Athlete"
+            containerElement={<Link to="/athlete">Athlete</Link>}
+          />
+        ) : (null)}
         <Divider />
         <MenuItem
           onTouchTap={this.handleClose}
@@ -78,6 +87,7 @@ class MenuDrawer extends Component {
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
+    adminMember: state.auth.user.adminMember,
     open: state.page.drawer,
   };
 }
