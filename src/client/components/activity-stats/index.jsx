@@ -51,7 +51,7 @@ class activeStats extends Component {
       if (!this.props.weeklyStats.length) {
         this.fetchAnotherWeek();
       }
-    }, 300);
+    }, 400);
   }
 
   updateUserActivities() {

@@ -2,6 +2,8 @@
 
 import { TYPES } from '../actions';
 
+import lib from './reducer-lib';
+
 export default function (state = { events: [], event: { eventRoutes: [] } }, action) {
   switch (action.type) {
     case TYPES.POST_EVENT:
@@ -12,11 +14,7 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
       return {
         ...state,
         event: action.payload.event,
-        events: [
-          ...state.events.slice(0, action.payload.index),
-          state.events[action.payload.index] = action.payload.updated,
-          ...state.events.slice(action.payload.index + 1),
-        ],
+        events: lib.replaceArrayItem(state.events, action.payload, 'updated'),
       };
     case TYPES.CLEAR_EVENT:
       return { ...state, event: {} };

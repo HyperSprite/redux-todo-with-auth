@@ -53,6 +53,109 @@ exports.getAllActivities = (input, result) => {
   });
 };
 
+const setExtendedActivityStats = (input, act, options, result) => {
+  const superReturn = Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
+    // By using findOrCreate here, we are only adding new if they do not yet exist.
+    // This can also be useful if an activity is updated in strava and needs to be re-fetched
+    if (created) {
+      hlpr.consLog(['setExtendedActivityStats findOrCreate created', dbActivity.activityId]);
+      strava.activities.get({ id: dbActivity.activityId, access_token: options.access_token }, (err, data) => {
+        if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
+        if (input.user.premium) {
+          strava.activities.listZones({ id: dbActivity.activityId, access_token: options.access_token }, (err, aData) => {
+            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
+            data.zones = aData;
+            if (data.weighted_average_watts) {
+              const ftp = input.user.ftpHistory[input.user.ftpHistory.length -1].ftp;
+              const wattsOverFTP = data.weighted_average_watts / ftp;
+              const wattsByHour = ftp * 3600;
+              data.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+            }
+            hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
+            Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
+              if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
+              // hlpr.consLog(['strava..activities premium', fullActivity]);
+              return fullActivity;
+            });
+          });
+        } else {
+          Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
+            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
+            // hlpr.consLog(['strava..activities !premium', fullActivity]);
+            return fullActivity;
+          });
+        }
+      });
+    } else {
+      hlpr.consLog(['setExtendedActivityStats findOrCreate not created', dbActivity.activityId]);
+      return { notUpdated: dbActivity.activityId };
+    }
+    hlpr.consLog(['superReturn', superReturn]);
+    return result(superReturn);
+  });
+};
+
+exports.getRecentActivities = (req, res) => {
+  const options = {
+    id: req.user.stravaId,
+    access_token: req.user.access_token,
+    per_page: req.perPage || 5,
+    page: req.pageCount,
+    user: req.user,
+  };
+
+  function getActivityDetails(activity, opts, index, created, cb) {
+    if (!created) return cb(index);
+    strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data) => {
+      if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
+      if (opts.user.premium) {
+        strava.activities.listZones({ id: activity.activityId, access_token: opts.access_token }, (err, aData) => {
+          if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
+          data.zones = aData;
+          if (data.weighted_average_watts) {
+            const ftp = opts.user.ftpHistory[opts.user.ftpHistory.length -1].ftp;
+            const wattsOverFTP = data.weighted_average_watts / ftp;
+            const wattsByHour = ftp * 3600;
+            data.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+          }
+          hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
+          Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
+            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
+            hlpr.consLog(['strava..activities premium']);
+            if (fullActivity) {
+              return cb(index);
+            }
+            // return cb(fullActivity);
+          });
+        });
+      } else {
+        Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
+          if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
+          hlpr.consLog(['strava..activities !premium']);
+          return cb(index);
+        });
+      }
+    });
+  }
+
+  strava.athlete.listActivities(options, (err, acts) => {
+    // let activitiesProcessed = 0;
+    const counter = [];
+    acts.forEach((act, index) => {
+
+    // const tmpExtAct = setExtendedActivityStats(req, act, options, (cb) => {
+      Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
+        if (err) return { error: err };
+        getActivityDetails(dbActivity, options, index, created, (done) => {
+          counter.push(done);
+          if (counter.length === acts.length) {
+            exports.getWeeklyStats(req, res);
+          }
+        });
+      });
+    });
+  });
+};
 
 // This function runs every three minutes to process 40 activities to ensure
 // the 600 requests per 15 min rate limit is not exceeded.
@@ -230,11 +333,15 @@ exports.getWeeklyStats = async (req, res) => {
   const weeksPast = req.params.weeksPast * 1 || 0;
   const startDate = format(subWeeks(startOfWeek(userLocalTime, { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
   const result = {
-    weeksPast,
+    index: weeksPast,
     startDate,
   };
-  result.week = await getOneWeek(startDate, req.user.stravaId);
-  result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
+  try {
+    result.week = await getOneWeek(startDate, req.user.stravaId);
+    result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
+  } catch (error) {
+    hlpr.consLog(['getWeeklyStats error', error]);
+  }
 
   res.send(result);
 };
