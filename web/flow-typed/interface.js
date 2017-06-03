@@ -32,5 +32,7 @@ export type ActionStrings = (
   'FETCH_EVENT_STRAVA_ROUTE' |
   'SET_PAGE_NAME' |
   'SET_PAGE_DRAWER' |
+  'SET_IS_FETCHING' |
+  'SET_IS_FETCHING_OFF' |
   'SET_TSS_GOAL'
   )

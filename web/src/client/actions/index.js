@@ -32,6 +32,8 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_EVENT_STRAVA_ROUTE: 'FETCH_EVENT_STRAVA_ROUTE',
   SET_PAGE_NAME: 'SET_PAGE_NAME',
   SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
+  SET_IS_FETCHING: 'SET_IS_FETCHING',
+  SET_IS_FETCHING_OFF: 'SET_IS_FETCHING_OFF',
 };
 
 // handle error mesages
@@ -272,6 +274,9 @@ export function fetchStrava(path, id, index, stravatoken, context) {
               type: TYPES.FETCH_USER_ACTIVITIES,
               payload: response.data,
             });
+            dispatch({
+              type: TYPES.SET_IS_FETCHING_OFF,
+            });
             break;
         }
         // dispatch({
@@ -311,6 +316,9 @@ export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
         dispatch({
           type: TYPES.FETCH_WEEKLYTOTALS_ACTIVITIES,
           payload: response.data,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
         });
       })
       .catch((error) => {
@@ -406,6 +414,12 @@ export function setDrawer(drawer: boolean) {
   return {
     type: TYPES.SET_PAGE_DRAWER,
     payload: drawer,
+  };
+}
+
+export function setIsFetching() {
+  return {
+    type: TYPES.SET_IS_FETCHING,
   };
 }
 
