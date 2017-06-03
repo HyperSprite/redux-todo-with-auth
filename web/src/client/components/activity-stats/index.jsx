@@ -27,7 +27,7 @@ const propTypes = {
 
 const defaultProps = {
   stravaId: null,
-  isFetching: false,
+  isFetching: true,
 };
 
 const relURL = 'apiv1/activities/weekly-stats';
@@ -40,7 +40,7 @@ class activeStats extends Component {
   }
 
   componentDidMount() {
-    this.fetchWeeksActivities();
+    this.fetchAnotherWeek();
     this.props.setPageName('Weekly Stats');
   }
 

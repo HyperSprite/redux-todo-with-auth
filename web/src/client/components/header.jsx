@@ -28,10 +28,6 @@ class Header extends Component {
     if (this.props.authenticated && !this.props.user) {
       this.props.fetchData('auth/user');
     }
-    if (this.props.authenticated && !this.props.weeklyStats.length) {
-      this.props.fetchActivitiesWeeklyTotals(weeklyStatsURL, this.props.stravaId, this.props.weeklyStatsCount);
-      this.props.setWeeklyStats();
-    }
   }
 
   handleToggle = () => this.props.setDrawer({ drawer: !this.props.page.drawer });
