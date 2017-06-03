@@ -268,7 +268,7 @@ class OneDay {
 
 // date is the date in string "2017-05-02" format
 function dayObjBuilder(date, datePref) {
-  const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev'];
+  const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev', 'cal', 'kj'];
   const resDay = new OneDay(hlpr.lib.dateFormat(date, datePref), date.slice(-2));
   metricsTypes.forEach(mType => resDay[mType] = new OneMetric());
   return resDay;
@@ -291,6 +291,8 @@ function weeklyStats(week, activities, datePref) {
       dayTotals[i].dst.total = weeklyTotals.dst.day;
       dayTotals[i].time.total = weeklyTotals.time.day;
       dayTotals[i].elev.total = weeklyTotals.elev.day;
+      dayTotals[i].cal.total = weeklyTotals.cal.day;
+      dayTotals[i].kj.total = weeklyTotals.kj.day;
     }
 
     activities.forEach((act) => {
@@ -302,6 +304,9 @@ function weeklyStats(week, activities, datePref) {
         dayTotals[i].dst.day += isNaN(act.distance) ? 0 : act.distance;
         dayTotals[i].time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
         dayTotals[i].elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
+        dayTotals[i].cal.day += isNaN(act.calories) ? 0 : act.calories;
+        dayTotals[i].kj.day += isNaN(act.kilojoules) ? 0 : act.kilojoules;
+
 
         weeklyTotals.names.push({ name: act.name, activityId: act.activityId });
         weeklyTotals.tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
@@ -309,6 +314,8 @@ function weeklyStats(week, activities, datePref) {
         weeklyTotals.dst.day += isNaN(act.distance) ? 0 : act.distance;
         weeklyTotals.time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
         weeklyTotals.elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
+        weeklyTotals.cal.day += isNaN(act.calories) ? 0 : act.calories;
+        weeklyTotals.kj.day += isNaN(act.kilojoules) ? 0 : act.kilojoules;
       }
     });
   }
@@ -318,6 +325,8 @@ function weeklyStats(week, activities, datePref) {
   weeklyTotals.dst.total = weeklyTotals.dst.day;
   weeklyTotals.time.total = weeklyTotals.time.day;
   weeklyTotals.elev.total = weeklyTotals.elev.day;
+  weeklyTotals.cal.total = weeklyTotals.cal.day;
+  weeklyTotals.kj.total = weeklyTotals.kj.day;
 
   return { weeklyTotals, dayTotals };
 }

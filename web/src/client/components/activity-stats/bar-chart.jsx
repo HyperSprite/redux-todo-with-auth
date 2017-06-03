@@ -25,6 +25,9 @@ const conversions = (metric, yAxis, data, mPref) => {
         return mPref ? lib.metersToMilesRound(data, 2) : lib.metersToKmRound(data, 1);
       case 'elev':
         return mPref ? lib.metersToFeetRound(data, 2) : data;
+      case 'cal':
+      case 'kj':
+        return lib.round(data, 0);
       default:
         return data;
     }
