@@ -27,7 +27,7 @@ lib.replaceArrayItem = (array, action, item) => {
 };
 
 lib.insertOrReplaceArrayItem = (array, action, item, id) => {
-  const actionItem = action[item] || action;
+  const actionItem = item ? action[item] : action;
   // let result = array;
   const result = actionItem.reduce((acc, aI) => {
     const index = acc.map(i => i[id]).indexOf(aI[id]);

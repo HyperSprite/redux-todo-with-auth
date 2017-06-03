@@ -18,6 +18,7 @@ export type ActionStrings = (
   'FETCH_USER' |
   'FETCH_USER_ACTIVITIES' |
   'FETCH_WEEKLYTOTALS_ACTIVITIES' |
+  'ACTIVITY_REMOVED' |
   'SET_WEEKLY_STATS' |
   'FETCH_JSON' |
   'SET_USER' |
@@ -34,5 +35,6 @@ export type ActionStrings = (
   'SET_PAGE_DRAWER' |
   'SET_IS_FETCHING' |
   'SET_IS_FETCHING_OFF' |
+  'MESSAGE_FOR_USER' |
   'SET_TSS_GOAL'
   )

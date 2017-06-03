@@ -22,11 +22,19 @@ export default function (state = {
         ...state,
         weeklyStatsCount: state.weeklyStatsCount + 1,
       };
+
     case TYPES.FETCH_WEEKLYTOTALS_ACTIVITIES:
       return {
         ...state,
         activities: [...state.activities.concat(action.payload.week)],
         weeklyStats: [...state.weeklyStats.concat(action.payload.stats)],
+      };
+
+    case TYPES.ACTIVITY_REMOVED:
+    console.log('payload', action);
+      return {
+        ...state,
+        activities: lib.insertOrReplaceArrayItem(state.activities, action.payload, null, 'activityId'),
       };
 
     default:

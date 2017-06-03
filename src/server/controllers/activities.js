@@ -355,12 +355,12 @@ exports.getWeeklyStats = async (req, res) => {
 // TODO setup activity reset front end
 // activities set to "2" are not returned from the DB to the user
 // They are "fresh", this sets existing "3"s back to "2", then we
-// update the activity with the lates info, unless it has been deleted
+// update the activity with the latest info, unless it has been deleted
 // from strava, then it never gets updated. At that point, we should
 // set the status to "4" so it is not returned but also not cheked.
 exports.resetActivity = (req, res) => {
   const query = {
-    activityId: req.params.activityId,
+    activityId: req.body.activityId,
     'athlete.id': req.user.stravaId,
   };
   const data = {
@@ -373,6 +373,21 @@ exports.resetActivity = (req, res) => {
       res.status(404).send({ resetActivity: 'Activity not found' });
     }
     res.send({ activityId: activity.activityId, resetActivity: activity.resource_state });
+  });
+};
+
+exports.deleteActivity = (req, res) => {
+  const query = {
+    activityId: req.body.activityId,
+    'athlete.id': req.user.stravaId,
+  };
+  Activities.remove(query, (err) => {
+    hlpr.consLog(['remove', query]);
+    if (err) {
+      hlpr.consLog(['favEvent err', err]);
+      res.status(404).send({ type: 'MESSAGE_FOR_USER', payload: 'Activity not found or not removed' });
+    }
+    res.send([{ activityId: query.activityId, deleted: true }]);
   });
 };
 
