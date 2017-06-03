@@ -139,11 +139,8 @@ exports.getRecentActivities = (req, res) => {
   }
 
   strava.athlete.listActivities(options, (err, acts) => {
-    // let activitiesProcessed = 0;
     const counter = [];
     acts.forEach((act, index) => {
-
-    // const tmpExtAct = setExtendedActivityStats(req, act, options, (cb) => {
       Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
         if (err) return { error: err };
         getActivityDetails(dbActivity, options, index, created, (done) => {

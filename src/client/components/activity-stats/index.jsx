@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Paper, RaisedButton } from 'material-ui';
+import { Divider, LinearProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 
@@ -14,8 +14,10 @@ const propTypes = {
   fetchActivitiesWeeklyTotals: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
   fetchStrava: PropTypes.func.isRequired,
+  isFetching: PropTypes.bool.isRequired,
   measurementPref: PropTypes.bool.isRequired,
   stravaId: PropTypes.number,
+  setIsFetching: PropTypes.func.isRequired,
   setPageName: PropTypes.func.isRequired,
   setWeeklyStats: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
@@ -25,6 +27,7 @@ const propTypes = {
 
 const defaultProps = {
   stravaId: null,
+  isFetching: false,
 };
 
 const relURL = 'apiv1/activities/weekly-stats';
@@ -42,6 +45,7 @@ class activeStats extends Component {
   }
 
   fetchAnotherWeek() {
+    this.props.setIsFetching();
     this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStatsCount);
     this.props.setWeeklyStats();
   }
@@ -55,11 +59,12 @@ class activeStats extends Component {
   }
 
   updateUserActivities() {
+    this.props.setIsFetching();
     this.props.fetchStrava('user-activities', null, null, this.props.user.stravatoken, 'getUserActivities');
   }
 
   render() {
-    const { weeklyStats, datePref, measurementPref } = this.props;
+    const { weeklyStats, datePref, isFetching, measurementPref } = this.props;
 
     return (
       <div className="main-flex-container" >
@@ -87,19 +92,41 @@ class activeStats extends Component {
                 ))}
               </div>
             )}
-            <RaisedButton
-              label="Load Another Week"
-              primary
-              style={style.button}
-              onClick={this.fetchAnotherWeek}
-            />
-            <RaisedButton
-              label="Check Strava for New Activities"
-              secondary
-              style={style.button}
-              onClick={this.updateUserActivities}
-              icon={<FaRefresh size={20} />}
-            />
+            {isFetching ? (
+              <div>
+                <LinearProgress mode="indeterminate" />
+                <RaisedButton
+                  label="Load Another Week"
+                  primary
+                  style={style.button}
+                  disabled
+                />
+                <RaisedButton
+                  label="Check Strava for New Activities"
+                  secondary
+                  style={style.button}
+                  icon={<FaRefresh size={20} />}
+                  disabled
+                />
+              </div>
+            ) : (
+              <div>
+                <Divider style={{ height: 4 }} />
+                <RaisedButton
+                  label="Load Another Week"
+                  primary
+                  style={style.button}
+                  onClick={this.fetchAnotherWeek}
+                />
+                <RaisedButton
+                  label="Check Strava for New Activities"
+                  secondary
+                  style={style.button}
+                  onClick={this.updateUserActivities}
+                  icon={<FaRefresh size={20} />}
+                />
+              </div>
+            )}
           </Paper>
         </div>
         <div className="side-lite right-pane" />
@@ -119,6 +146,7 @@ function mapStateToProps(state) {
     user: state.auth.user,
     weeklyStats: state.activities.weeklyStats,
     weeklyStatsCount: state.activities.weeklyStatsCount,
+    isFetching: state.page.isFetching,
   };
 }
 
