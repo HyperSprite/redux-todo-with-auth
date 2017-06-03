@@ -3,13 +3,12 @@ import { flatten } from 'lodash';
 import { eachDay, format, min } from 'date-fns';
 
 import lib from '../../containers/lib';
-import Areachart from './areaChart';
 import AthleteStatsLineChart from './athlete-stats-line-chart';
 
 const propTypes = {
   ftpHistory: PropTypes.array,
   weightHistory: PropTypes.array.isRequired,
-  measurementPref: PropTypes.bool.isRequired,
+  mPref: PropTypes.bool.isRequired,
 };
 
 const defaultProps = {
@@ -85,7 +84,7 @@ function consolidateData(ftp = [], weight) {
 }
 
 
-const ftpWeight = ({ ftpHistory, weightHistory, measurementPref }) => (
+const ftpWeight = ({ ftpHistory, weightHistory, mPref }) => (
   <div>
     {/* TODO - this is all ugly */}
     {/* {(ftpHistory && ftpHistory.length > 0 && ftpHistory[ftpHistory.length - 1].ftp != null) ? ( */}
@@ -93,7 +92,7 @@ const ftpWeight = ({ ftpHistory, weightHistory, measurementPref }) => (
       <AthleteStatsLineChart
         data={consolidateData(ftpHistory, weightHistory)}
         label="Power to Weight"
-        measurementPref={measurementPref}
+        mPref={mPref}
         hasFTP={ftpHistory.length}
       />
     ) : null}
