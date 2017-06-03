@@ -10,16 +10,16 @@ const propTypes = {
 };
 
 class SingleActivity extends Component {
-  componentDidMount() {
 
+  thisActivity() {
+    return this.props.activities.filter(activity => activity.activityId === this.props.activityId);
   }
 
   render() {
-    const { activityId, activities } = this.props;
-    const thisActivity = activities.filter(activity => activity.activityId === activityId);
+    const activity = this.thisActivity()[0];
     return (
       <div>
-        <p>{thisActivity[0].name}</p>
+        <p>{activity.name}</p>
       </div>
     );
   }

@@ -38,11 +38,7 @@ exports.getUserActivities = (req, res) => {
   hlpr.consLog(['strava.getUserActivities start']);
   const tmpReq = req;
   tmpReq.pageCount = 1;
-  tmpReq.activities = [];
-  activ.getAllActivities(tmpReq, (result) => {
-    hlpr.consLog(['getUserActivities result', result.activities.length]);
-    res.send({ activityCount: result.activities.length });
-  });
+  activ.getRecentActivities(tmpReq, res);
 };
 
 exports.nightlyUpdate = () => {

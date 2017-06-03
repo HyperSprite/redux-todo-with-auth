@@ -270,7 +270,7 @@ export function fetchStrava(path, id, index, stravatoken, context) {
           case 'getUserActivities':
             dispatch({
               type: TYPES.FETCH_USER_ACTIVITIES,
-              payload: response.data.activityCount,
+              payload: response.data,
             });
             break;
         }
