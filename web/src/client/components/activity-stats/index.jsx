@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Divider, LinearProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
-
 import * as actions from '../../actions';
 import WeeklyStats from './weekly-stats';
+import HelpCard from '../form/help-card';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import style from '../../styles/style';
 
@@ -68,69 +68,72 @@ class activeStats extends Component {
     const { weeklyStats, datePref, isFetching, measurementPref } = this.props;
 
     return (
-      <div className="main-flex-container" >
-        <div className="side-lite left-pane" />
-        <div className="main" >
-          <ScrollIntoView
-            id={location.hash}
-            headerHeight={70}
-          />
-          <Paper
-            zDepth={1}
-          >
-            {!weeklyStats ? (
-              <p>Loading Activities</p>
-            ) : (
-              <div>
-                { weeklyStats.map(oneWeek => (
-                  <WeeklyStats
-                    key={oneWeek.weeklyTotals.date}
-                    week={oneWeek.weeklyTotals.date}
-                    stats={oneWeek}
-                    datePref={datePref}
-                    measurementPref={measurementPref}
+      <div>
+        <div className="main-flex-container" >
+          <div className="side-lite left-pane" />
+          <div className="main" >
+            <ScrollIntoView
+              id={location.hash}
+              headerHeight={70}
+            />
+            <Paper
+              zDepth={1}
+            >
+              {!weeklyStats ? (
+                <p>Loading Activities</p>
+              ) : (
+                <div>
+                  { weeklyStats.map(oneWeek => (
+                    <WeeklyStats
+                      key={oneWeek.weeklyTotals.date}
+                      week={oneWeek.weeklyTotals.date}
+                      stats={oneWeek}
+                      datePref={datePref}
+                      measurementPref={measurementPref}
+                    />
+                  ))}
+                </div>
+              )}
+              {isFetching ? (
+                <div>
+                  <LinearProgress mode="indeterminate" />
+                  <RaisedButton
+                    label="Load Another Week"
+                    primary
+                    style={style.button}
+                    disabled
                   />
-                ))}
-              </div>
-            )}
-            {isFetching ? (
-              <div>
-                <LinearProgress mode="indeterminate" />
-                <RaisedButton
-                  label="Load Another Week"
-                  primary
-                  style={style.button}
-                  disabled
-                />
-                <RaisedButton
-                  label="Check Strava for New Activities"
-                  secondary
-                  style={style.button}
-                  icon={<FaRefresh size={20} />}
-                  disabled
-                />
-              </div>
-            ) : (
-              <div>
-                <Divider style={{ height: 4 }} />
-                <RaisedButton
-                  label="Load Another Week"
-                  primary
-                  style={style.button}
-                  onClick={this.fetchAnotherWeek}
-                />
-                <RaisedButton
-                  label="Check Strava for New Activities"
-                  secondary
-                  style={style.button}
-                  onClick={this.updateUserActivities}
-                  icon={<FaRefresh size={20} />}
-                />
-              </div>
-            )}
-          </Paper>
+                  <RaisedButton
+                    label="Check Strava for New Activities"
+                    secondary
+                    style={style.button}
+                    icon={<FaRefresh size={20} />}
+                    disabled
+                  />
+                </div>
+              ) : (
+                <div>
+                  <Divider style={{ height: 4 }} />
+                  <RaisedButton
+                    label="Load Another Week"
+                    primary
+                    style={style.button}
+                    onClick={this.fetchAnotherWeek}
+                  />
+                  <RaisedButton
+                    label="Check Strava for New Activities"
+                    secondary
+                    style={style.button}
+                    onClick={this.updateUserActivities}
+                    icon={<FaRefresh size={20} />}
+                  />
+                </div>
+              )}
+            </Paper>
+          </div>
+          <div className="side-lite right-pane" />
         </div>
-        <div className="side-lite right-pane" />
+        <HelpCard src="/blog/weekly-stats" title="Learn more about Weekly Stats" />
       </div>
     );
   }

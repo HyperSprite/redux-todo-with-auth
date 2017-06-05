@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper } from 'material-ui';
 
-import style from '../styles/style';
+
 import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
 
 const today = new Date().getFullYear();
@@ -16,13 +16,10 @@ const Footer = () => (
         </div>
         <div>
           <a href="https://www.strava.com" target="new">
-            <img src={PoweredByStrava} alt="Powered By Strava" style={style.footer.stravaLogo} />
+            <img src={PoweredByStrava} alt="Powered By Strava" style={{ width: 200 }} />
           </a>
         </div>
         <div>
-          <blockquote className="footer-text quote-box" >
-            <p>Note: The  original organizer should be considered the source of truth regarding all information listed (just like you should never trust a newspaper for movie times).</p>
-          </blockquote>
           <p className="footer-text" >
             &copy; {today} araceathlete.com
           </p>
