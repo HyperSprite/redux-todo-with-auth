@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Redirect } from 'react-router-dom';
 import { IconButton, Paper, Subheader } from 'material-ui';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
@@ -67,6 +68,7 @@ class Athlete extends Component {
 
   render() {
     const {
+      adminMember,
       email,
       stravaId,
       firstname,
@@ -90,6 +92,13 @@ class Athlete extends Component {
     } = this.props.user;
 
     const measurementPref = measurement_preference === 'metric';
+
+    if (!adminMember) {
+      return (
+        <Redirect to="/" />
+      );
+    }
+
     return (
       <div className="main-flex-container" >
         <div className="side-lite left-pane" />

@@ -97,6 +97,7 @@
   },
   "devDependencies": {
     "flow-bin": "^0.33.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "webpack-bundle-analyzer": "^2.8.2"
   }
 }
