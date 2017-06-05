@@ -28,9 +28,18 @@ const indexHTML = `
       <link rel="shortcut icon" href="/favicons/favicon.ico">
       <meta name="msapplication-config" content="/favicons/browserconfig.xml">
       <meta name="theme-color" content="#cc0000">
+      <link rel="stylesheet" type="text/css" href="/styles/main.css" >
     </head>
     <body>
-      <div id='root'></div>
+      <div id='root'>
+        <div className="home-jumbotron">
+          <div className="side-lite left-pane" />
+          <div className="brand">
+          </div>
+          <div className="side-lite right-pane" />
+        </div>
+      </div>
+      <script src='/assets/node-static.js'></script>
       <script src='/assets/bundle.js'></script>
     </body>
   </html>

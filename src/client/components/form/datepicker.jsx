@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import { DatePicker } from 'redux-form-material-ui';
-import Moment from 'moment';
+// import Moment from 'moment';
 import momentLocalizer from 'react-widgets/lib/localizers/moment';
 import 'react-widgets/dist/css/react-widgets.css';
 import './styles.css';
 
-momentLocalizer(Moment);
+momentLocalizer(moment);
 
 const propTypes = {
   input: PropTypes.object,

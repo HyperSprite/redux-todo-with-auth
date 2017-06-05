@@ -6,7 +6,7 @@ import Footer from './footer';
 import MenuDrawer from './menu-drawer';
 
 import style from '../styles/style';
-import '../styles/main.css';
+// import '../styles/main.css';
 
 export default class App extends Component {
   render() {

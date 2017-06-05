@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
-import moment from 'moment';
+// import moment from 'moment';   //TODO replace this with date-fns, needs doing
 import { format, startOfDay } from 'date-fns';
 
 function dateSetup(tDate, tzO) {
