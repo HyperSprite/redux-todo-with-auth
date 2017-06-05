@@ -29,10 +29,19 @@ function getPlugins() {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
     }
   }));
+  plugins.push(new webpack.optimize.CommonsChunkPlugin({
+    name: 'node-static',
+    filename: 'node-static.js',
+    minChunks(module, count) {
+      let context = module.context;
+      return context && context.indexOf('node_modules') >= 0;
+    }
+  }));
   console.log('isProd', isProd, 'isLogging', isLogging);
   if (isProd && isLogging) {
     plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
   } else if (isProd) {
+    console.log('Loading prod plugins');
     plugins.push(new webpack.optimize.UglifyJsPlugin({
       compress: compress,
       output: {
@@ -40,8 +49,9 @@ function getPlugins() {
       },
     }));
   } else {
+    console.log('Loading non-prod plugins');
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: compress, sourceMap: true }));
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
     plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
@@ -68,7 +78,8 @@ function getOutput() {
     output.path = '/../../public/assets/';
   }
   output.publicPath = '/assets/';
-  output.filename = 'bundle.js';
+  output.filename = '[name].js';
+  output.chunkFilename = '[id].[chunkhash].js';
 
   return output;
 }
@@ -154,7 +165,9 @@ module.exports = {
   devtool: isLogging ? 'source-map' : '',
   devServer: !isProd ? { hot: true } : { hot: false },
   context: __dirname,
-  entry: getEntry(),
+  entry: {
+    bundle: getEntry(),
+  },
   output: getOutput(),
   resolve: {
     extensions: [

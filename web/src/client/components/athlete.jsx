@@ -11,7 +11,7 @@ import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 import * as actions from './../actions';
 import Static from './form/static';
 import ActivityStats from './activity-stats';
-import Astrophases from './weather/astrophases';
+// import Astrophases from './weather/astrophases';
 import FtpWeight from './metrics/ftp-weight';
 import OneDayWeather from './weather/one-day-weather';
 import ScrollIntoView from '../containers/scroll-into-view';
