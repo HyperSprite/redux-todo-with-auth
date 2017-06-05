@@ -1,8 +1,11 @@
 const webpack = require('webpack');
 const path = require('path');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProd = (process.env.NODE_ENV === 'production');
 const isLogging = (process.env.LOGGING === 'true');
+
+// process.traceDeprecation = true;
 
 console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging);
 
@@ -20,6 +23,8 @@ function getPlugins() {
     plugins.push(new webpack.optimize.UglifyJsPlugin());
   } else {
     plugins.push(new webpack.HotModuleReplacementPlugin());
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+    plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
 }
@@ -62,13 +67,40 @@ function getRules() {
     rules.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loaders: ['babel-loader?plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['es2015', { modules: false }],
+            ['stage-0'],
+            ['react'],
+          ],
+          plugins: [
+            ['transform-flow-strip-types'],
+            ['transform-runtime'],
+          ],
+        },
+      }],
     });
   } else {
     rules.push({
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loaders: ['babel-loader?plugins[]=react-hot-loader/babel,plugins[]=transform-flow-strip-types,plugins[]=transform-runtime,presets[]=es2015,presets[]=stage-0,presets[]=react'],
+      use: [{
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['es2015', { modules: false }],
+            ['stage-0'],
+            ['react'],
+          ],
+          plugins: [
+            ['react-hot-loader/babel'],
+            ['transform-flow-strip-types'],
+            ['transform-runtime'],
+          ],
+        },
+      }],
     });
   }
   // common rules
