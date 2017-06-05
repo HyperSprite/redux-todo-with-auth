@@ -7,6 +7,19 @@ const isLogging = (process.env.LOGGING === 'true');
 
 // process.traceDeprecation = true;
 
+const compress = {
+  warnings: false,
+  screw_ie8: true,
+  conditionals: true,
+  unused: true,
+  comparisons: true,
+  sequences: true,
+  dead_code: true,
+  evaluate: true,
+  if_return: true,
+  join_vars: true,
+};
+
 console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging);
 
 function getPlugins() {
@@ -20,10 +33,15 @@ function getPlugins() {
   if (isProd && isLogging) {
     plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
   } else if (isProd) {
-    plugins.push(new webpack.optimize.UglifyJsPlugin());
+    plugins.push(new webpack.optimize.UglifyJsPlugin({
+      compress: compress,
+      output: {
+        comments: false,
+      },
+    }));
   } else {
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+    plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: compress, sourceMap: true }));
     plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
