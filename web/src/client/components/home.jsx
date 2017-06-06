@@ -34,6 +34,7 @@ class Home extends Component {
         </div>
 
         <Iframe src="blog/welcome-to-araceathlete" />
+        <Iframe src="blog/how-do-i-get-started" />
         <Iframe src="blog/weekly-stats" />
         <Iframe src="blog/events" />
         <Iframe src="blog/power-and-weight" />
