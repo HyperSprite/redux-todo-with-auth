@@ -34,7 +34,7 @@ const indexHTML = `
     <body>
       <div id='root'>
         <div class="centered">
-          <img src="/images/preloader.gif"
+          <img src="/images/preloader.gif">
         </div>
       </div>
       <script src='/assets/node-static.js'></script>
