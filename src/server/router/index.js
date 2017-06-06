@@ -26,9 +26,10 @@ const indexHTML = `
       <link rel="manifest" href="/favicons/manifest.json">
       <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#cc0000">
       <link rel="shortcut icon" href="/favicons/favicon.ico">
+      <link rel="image_src" href="https://www.araceathlete.com/blog/weekly-stats/example-weekly-stats-01.png">
       <meta name="msapplication-config" content="/favicons/browserconfig.xml">
       <meta name="theme-color" content="#cc0000">
-      <link rel="stylesheet" type="text/css" href="/styles/main.css" >
+      <link rel="stylesheet" type="text/css" href="/styles/main.css">
     </head>
     <body>
       <div id='root'>
