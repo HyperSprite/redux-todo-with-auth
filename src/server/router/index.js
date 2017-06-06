@@ -32,11 +32,8 @@ const indexHTML = `
     </head>
     <body>
       <div id='root'>
-        <div className="home-jumbotron">
-          <div className="side-lite left-pane" />
-          <div className="brand">
-          </div>
-          <div className="side-lite right-pane" />
+        <div class="centered">
+          <img src="/images/preloader.gif"
         </div>
       </div>
       <script src='/assets/node-static.js'></script>
