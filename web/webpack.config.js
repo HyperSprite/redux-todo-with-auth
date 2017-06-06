@@ -100,11 +100,14 @@ function getRules() {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['es2015', { modules: false }],
+            ['es2015'],
             ['stage-0'],
             ['react'],
           ],
           plugins: [
+            ['lodash'],
+            ['date-fns'],
+            ['recharts'],
             ['transform-flow-strip-types'],
             ['transform-runtime'],
           ],
@@ -119,11 +122,14 @@ function getRules() {
         loader: 'babel-loader',
         options: {
           presets: [
-            ['es2015', { modules: false }],
+            ['es2015'],
             ['stage-0'],
             ['react'],
           ],
           plugins: [
+            ['lodash'],
+            ['date-fns'],
+            ['recharts'],
             ['react-hot-loader/babel'],
             ['transform-flow-strip-types'],
             ['transform-runtime'],

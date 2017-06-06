@@ -1,112 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('./color-and-style.css');
 @import url('./layout.css');
 
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #fefefe;
-  color: #770000;
-}
-
-a {
-  cursor: pointer;
-  color: #B71C1C;
-}
-
-.footer-flex-container {
-  background-color: #330101;
-}
-
-.footer-text {
-  color: #fefefe;
-}
-
-.home-jumbotron {
-  background-image: url('/images/background-large.jpg');
-  background-size:cover;
-  background-repeat: no-repeat;
-  background-position: bottom center;
-}
-
-@media all and (max-width: 700px) {
-  .home-jumbotron {
-    background-image: url('/images/background-small.jpg');
-    background-size:cover;
-    background-repeat: no-repeat;
-    background-position: bottom center;
-  }
-}
-@media all and (max-width: 700px) {
-
-.card {
-  background-color: #fefefe;
-}
-
-.card-header {
-  background-color: #F5F5F5
-}
-
-.card-header-title-link {
-  text-decoration: none;
-  color: #770000;
-}
-
-.icon-star {
-  fill: #770000;
-}
-
-.icon-off {
-  fill: #E0E0E0;
-
-}
-
-.paper {
-  background-color: #fefefe;
-}
-
-.sub-header {
-  font-style: italic;
-  font-size: .8em;
-  margin-left: 1em;
-}
-
-.static-sub-div {
-  font-weight: 500;
-}
-
-
-.static-label {
-  color: #9E9E9E;
-}
-
-.static a {
-  text-decoration: none;
-}
-
-a > .static-label:hover {
-  cursor: pointer;
-  color: #B71C1C;
-  text-decoration: underline;
-}
-
-.url {
-  cursor: pointer;
-  color: #B71C1C;
-}
-
-.plus-h1 {
-  font-size: 1.1em;
-}
-
-.quote-box {
-  max-width: 40em;
-  margin: 1em;
-  padding-bottom: 1em;
-}
-
-blockquote {
-  margin-top: 1em;
-  margin-bottom: 1em;
-  margin-left: 2em;
-  padding-left: 1.5em;
-  border-left: .3em solid #B71C1C;
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -85px;
+  margin-left: -85px;
 }
