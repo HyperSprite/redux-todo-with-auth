@@ -29,7 +29,7 @@ exports.getAllActivities = (input, result) => {
       hlpr.consLog(['strava.getAllActivities err', err]);
       return err;
     }
-    if (acts.length === 0 || !acts) {
+    if (!acts.length || !acts) {
       input.arrLength = 0;
       hlpr.consLog(['strava.getAllActivities arrLength = 0 or !acts']);
       return result(input);
