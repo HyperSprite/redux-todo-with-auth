@@ -47,7 +47,7 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
       hlpr.consLog(['passport.jwtLogin err', err]);
       return done(err, false);
     }
-    hlpr.consLog(['passport.jwtLogin user', user]);
+    hlpr.consLog(['passport.jwtLogin user', user.stravaId]);
     return user ? done(null, user) : done(null, false);
   });
 });

@@ -72,7 +72,7 @@ exports.writeUser = (userData, user, resultUser) => {
   athlete.clubMember = club;
 
   geocoder.userGeocoder(athlete, user, (err, toSave) => {
-    hlpr.consLog(['....................', 'auth.writeUser.callGeoCoder', 'user', user, err, toSave]);
+    hlpr.consLog(['....................', 'auth.writeUser.callGeoCoder', 'user', user.stravaId, err, toSave]);
     // get user elevation and timezone
     const inputElevation = {
       loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
@@ -150,7 +150,7 @@ exports.user = (req, res, next) => {
   User.findOne({ stravaId: req.user.stravaId }, { password: 0 }, (err, user) => {
     if (err) { return next(err); }
     if (user) {
-      hlpr.consLog(['auth.user', 'AUTH USER: User found', user]);
+      hlpr.consLog(['auth.user', 'AUTH USER: User found', user.stravaId]);
       return res.json({ user: user });
     }
   });
