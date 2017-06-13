@@ -1,4 +1,5 @@
 {
+    "short_name": "araceathlete",
     "name": "A Race athlete",
     "icons": [
         {
@@ -14,5 +15,6 @@
     ],
     "theme_color": "#cc0000",
     "background_color": "#cc0000",
+    "start_url": "/",
     "display": "standalone"
 }
