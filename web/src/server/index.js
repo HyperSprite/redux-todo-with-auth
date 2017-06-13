@@ -15,6 +15,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const router = require('./router');
 const hlpr = require('./lib/helpers');
+const compression = require('compression');
 
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
@@ -74,8 +75,20 @@ mongoose.connect(process.env.MONGODB_URI, {
   },
 });
 
+function shouldCompress(req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false;
+  }
+
+  // fallback to standard filter function
+  return compression.filter(req, res);
+}
+
 // Express Middleware
 app.use(secureHost);
+// compression
+app.use(compression({ filter: shouldCompress }));
 // app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
@@ -84,22 +97,17 @@ app.use(express.static(rootDir));
 app.use('/', router);
 
 // 404 catch-all handler (middleware)
-app.use(
-  (req, res) => {
-    console.log(`>>>> 404 URL : ${req.url}`);
-    console.log(`>>>> 404 IP  : ${req.ip}`);
-    res.redirect('/');
-  }
-);
+app.use((req, res) => {
+  console.log(`>>>> 404 URL : ${req.url}`);
+  console.log(`>>>> 404 IP  : ${req.ip}`);
+  res.redirect('/');
+});
 
 // 500 error handler (middleware)
-app.use(
-  (err, req, res) => {
-    console.log('!!!! 500 ', err.stack);
-    res.status(500)
-       .render('500');
-  }
-);
+app.use((err, req, res) => {
+  console.log('!!!! 500 ', err.stack);
+  res.status(500).render('500');
+});
 
 // HTTPS
 if (isSSL) {
