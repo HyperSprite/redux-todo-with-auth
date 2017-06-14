@@ -120,22 +120,11 @@ exports.signinError = (err, req, res) => {
 };
 
 exports.stravaSignin = (req, res) => {
-  hlpr.consLog([
-    'auth.stravaSignin',
-    'req.user:',
-    req.user,
-    'req.query:',
-    req.query,
-  ]);
-
-  strava.oauth.getToken(req.query.code, (err, tokenPayload) => {
-    hlpr.consLog([
-      'auth.getToken',
-      `strava req.query.code: ${req.query.code}`,
-    ]);
-
-    exports.writeUser(tokenPayload, req.user, (resultUser) => {
-      hlpr.consLog(['auth.User.fOAU', err, resultUser]);
+  strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+    if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    // controllers/authentication.writeUser(userData, user, resultUser)
+    exports.writeUser({ athlete: data }, req.user, (resultUser) => {
+      hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
       const result = `
         <script>
           localStorage.setItem('token', '${tokenForUser(req.user, tkn => tkn)}');

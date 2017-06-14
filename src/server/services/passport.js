@@ -29,7 +29,10 @@ const stravaLogin = new StravaStrategy({
   callbackURL: `${process.env.SITE_URL}/${process.env.STRAVA_REDIRECT_URI}`,
 },
 (accessToken, refreshToken, profile, done) => {
-  User.findOrCreate({ stravaId: profile.id }, (err, user) => {
+  const tmpAthlete = {};
+  tmpAthlete.stravaId = profile.id;
+  tmpAthlete.access_token = profile.token;
+  User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user) => {
     hlpr.consLog(['passport.stravaLogin', 'err', err, 'user', user, 'accessToken', accessToken, 'profile', profile]);
     return done(err, user);
   });

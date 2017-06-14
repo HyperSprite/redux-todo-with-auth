@@ -5,7 +5,9 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const isProd = (process.env.NODE_ENV === 'production');
 const isLogging = (process.env.LOGGING === 'true');
 
-process.traceDeprecation = true;
+// process.traceDeprecation = true;
+const useBundleAnalyzerPlugin = false;
+// const useBundleAnalyzerPlugin = true;
 
 const compress = {
   warnings: false,
@@ -52,7 +54,7 @@ function getPlugins() {
     console.log('Loading non-prod plugins');
     plugins.push(new webpack.HotModuleReplacementPlugin());
     // plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
-    plugins.push(new BundleAnalyzerPlugin());
+    if (useBundleAnalyzerPlugin) plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
 }
