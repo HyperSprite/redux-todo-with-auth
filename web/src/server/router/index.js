@@ -13,10 +13,6 @@ const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
 const resourceRoutes = require('./resources');
 
-exports.requireAuth = passport.authenticate('jwt', { session: false });
-
-
-
 const indexHTML = `
   <!doctype html>
   <html lang="en">
@@ -63,7 +59,7 @@ router.get('/', (req, res) => {
 });
 
 // for testing
-router.get('/secret', exports.requireAuth, (req, res) => {
+router.get('/secret', rLib.requireAuth, (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   hlpr.consLog(['index/secret']);
   res.send(JSON.stringify({ secret: 'Authorized' }));
@@ -74,8 +70,8 @@ router.use('/auth', authRoutes);
 router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/resource', resourceRoutes);
 // all requireAuth
-router.use('/apiv1/activities', exports.requireAuth, activRoutes);
-router.use('/apiv1/strava', exports.requireAuth, stravaRoutes);
+router.use('/apiv1/activities', rLib.requireAuth, activRoutes);
+router.use('/apiv1/strava', rLib.requireAuth, stravaRoutes);
 // all requireAdmin and requireAuth
 router.use('/apiv1/admin', rLib.requireAuth, rLib.requireAdmin, adminRoutes);
 
