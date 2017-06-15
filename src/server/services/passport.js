@@ -33,8 +33,18 @@ const stravaLogin = new StravaStrategy({
   tmpAthlete.stravaId = profile.id;
   tmpAthlete.access_token = profile.token;
   User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user) => {
-    hlpr.consLog(['passport.stravaLogin', 'err', err, 'user', user, 'accessToken', accessToken, 'profile', profile]);
-    return done(err, user);
+    // this if handles if the user removes access then changes mind and gets a new token
+    if (tmpAthlete.access_token !== user.access_token) {
+      User.findOneAndUpdate(
+        { stravaId: tmpAthlete.stravaId },
+        { access_token: tmpAthlete.access_token },
+        {new: true},
+        (err, updatedUser) => {
+          return done(err, updatedUser);
+        });
+    } else {
+      return done(err, user);
+    }
   });
 });
 
@@ -56,5 +66,5 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 });
 
 passport.use(jwtLogin);
-passport.use(localLogin);
+// passport.use(localLogin);  // not using any localLogin
 passport.use(stravaLogin);

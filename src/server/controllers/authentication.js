@@ -51,7 +51,6 @@ exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
 // write user to the database
 
 exports.writeUser = (userData, user, resultUser) => {
-
   let admin = false;
   admin = userData.athlete.clubs.some((c) => {
     return c.id === process.env.STRAVA_MOD_CLUB * 1;
@@ -120,9 +119,13 @@ exports.signinError = (err, req, res) => {
 };
 
 exports.stravaSignin = (req, res) => {
-  strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
-    if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-    // controllers/authentication.writeUser(userData, user, resultUser)
+  const stravaArgs = {
+    id: req.user.stravaId,
+    access_token: req.user.access_token
+  }
+  strava.athlete.get(stravaArgs, (err, data) => {
+    if (err || !data) return res.status(401).send({ error: 'Error or no data found' });
+    if (data.message === 'Authorization Error') return res.status(401).send(data);
     exports.writeUser({ athlete: data }, req.user, (resultUser) => {
       hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
       const result = `

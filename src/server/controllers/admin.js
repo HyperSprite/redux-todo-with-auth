@@ -6,9 +6,6 @@ const hlpr = require('../lib/helpers');
 
 // TODO write an aggregation that will return a list of users and their activities and events
 exports.userList = (req, res) => {
-  if (req.user.adminMember !== true) {
-    res.status(404).send({ userlist: 'Not Found' });
-  }
   User.aggregate(
     [
       { $match: {} },
@@ -47,3 +44,7 @@ exports.userList = (req, res) => {
     res.send(result);
   });
 };
+
+exports.nightlyUpdate = (req, res) => {
+  res.send(hello);
+}
