@@ -10,10 +10,10 @@ import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 
 import * as actions from './../actions';
 import Static from './form/static';
-import ActivityStats from './activity-stats';
 // import Astrophases from './weather/astrophases';
 import FtpWeight from './metrics/ftp-weight';
 import OneDayWeather from './weather/one-day-weather';
+import UserList from './form/user-list';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 import style from '../styles/style';
@@ -126,31 +126,6 @@ class Athlete extends Component {
               </div>
             )}
 
-            {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
-              <FtpWeight
-                ftpHistory={ftpHistory}
-                weightHistory={weightHistory}
-                measurementPref={measurementPref}
-              />
-            ) : (
-              <div>
-                {/* TODO - this is all ugly */}
-                {getLastInArray(weightHistory, 'weight') ? (
-                  <FtpWeight
-                    ftpHistory={[]}
-                    weightHistory={weightHistory}
-                    measurementPref={measurementPref}
-                  />
-                ) : null }
-              </div>
-            )}
-            <div className="flex-row">
-              <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
-                <FaRefresh size={20} />
-              </IconButton>
-              <a href={`https://www.strava.com/athletes/${stravaId}`} target="new">
-                Athlete Profile on Strava</a>
-            </div>
             <Static
               contentLabel="Strava ID"
               content={stravaId}
@@ -205,6 +180,7 @@ class Athlete extends Component {
                 Loading Astrophase Data...
               </div>
             )} */}
+            <UserList />
             <div className="quote-box">
               <p>The information above is supplied by the Strava connection.</p>
               <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
