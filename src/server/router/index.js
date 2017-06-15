@@ -8,6 +8,7 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 const hlpr = require('../lib/helpers');
 
 const activRoutes = require('./activities');
+const adminRoutes = require('./admin');
 const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
@@ -66,6 +67,7 @@ router.get('/secret', requireAuth, (req, res) => {
 
 router.use('/auth', authRoutes);
 router.use('/apiv1/activities', activRoutes);
+router.use('/apiv1/admin', adminRoutes);
 router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/strava', stravaRoutes);
 router.use('/apiv1/resource', resourceRoutes);

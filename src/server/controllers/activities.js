@@ -179,7 +179,7 @@ exports.getExtendedActivityStats = setInterval(() => {
           if (err) hlpr.consLog(['strava.activities.get', err]);
           const tmpData = data;
           tmpData.activityId = tmpData.id;
-          if (user.premium) {
+          if (user.premium && user.ftpHistory.length !== 0) {
             strava.activities.listZones({ id: tmpAct.activityId, access_token: user.access_token }, (err, aData) => {
               if (err) hlpr.consLog(['strava..activities.listZones', err]);
               tmpData.zones = aData;
