@@ -100,95 +100,98 @@ class Athlete extends Component {
     }
 
     return (
-      <div className="main-flex-container" >
-        <div className="side-lite left-pane" />
-        <div className="main" >
-          <ScrollIntoView
-            id={location.hash}
-            headerHeight={70}
-          />
-          <Card
-            className="card"
-          >
-            {userGeoTzRawOffset ? (
-              <div>
-                <OneDayWeather
-                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
-                  dstOffset={userGeoTzDSTOffset}
-                  tzOffset={userGeoTzRawOffset}
-                  date={+new Date()}
-                  measurementPref={measurementPref}
-                />
-              </div>
-            ) : (
-              <div>
-                Loading Weather Data...
-              </div>
-            )}
+      <div>
+        <div className="main-flex-container" >
+          <div className="side-lite left-pane" />
+          <div className="main" >
+            <ScrollIntoView
+              id={location.hash}
+              headerHeight={70}
+            />
+            <Card
+              className="card"
+            >
+              {userGeoTzRawOffset ? (
+                <div>
+                  <OneDayWeather
+                    geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                    dstOffset={userGeoTzDSTOffset}
+                    tzOffset={userGeoTzRawOffset}
+                    date={+new Date()}
+                    measurementPref={measurementPref}
+                  />
+                </div>
+              ) : (
+                <div>
+                  Loading Weather Data...
+                </div>
+              )}
 
-            <Static
-              contentLabel="Strava ID"
-              content={stravaId}
-              contentType="text"
-            />
-            <Static
-              contentLabel="Name"
-              content={`${firstname} ${lastname}`}
-              contentType="text"
-            />
-            <Static
-              contentLabel="City"
-              content={loc_city}
-              contentType="text"
-            />
-            <Static
-              contentLabel="State"
-              content={loc_state}
-              contentType="text"
-            />
-            <Static
-              contentLabel="Country"
-              content={loc_country}
-              contentType="text"
-            />
-            <Static
-              contentLabel="Created On"
-              content={created_at}
-              contentType="text"
-            />
-            <Static
-              contentLabel="Last Updated"
-              content={updated_at}
-              contentType="text"
-            />
-            <Static
-              contentLabel="Date Pref."
-              content={date_preference}
-              contentType="text"
-            />
-            {/* {userGeoTzRawOffset ? (
-              <div>
-                <Astrophases
-                  geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
-                  dstOffset={userGeoTzDSTOffset}
-                  tzOffset={userGeoTzRawOffset}
-                  date={+new Date()}
-                />
+              <Static
+                contentLabel="Strava ID"
+                content={stravaId}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Name"
+                content={`${firstname} ${lastname}`}
+                contentType="text"
+              />
+              <Static
+                contentLabel="City"
+                content={loc_city}
+                contentType="text"
+              />
+              <Static
+                contentLabel="State"
+                content={loc_state}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Country"
+                content={loc_country}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Created On"
+                content={created_at}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Last Updated"
+                content={updated_at}
+                contentType="text"
+              />
+              <Static
+                contentLabel="Date Pref."
+                content={date_preference}
+                contentType="text"
+              />
+              {/* {userGeoTzRawOffset ? (
+                <div>
+                  <Astrophases
+                    geoCoordinates={`${userGeoLongitude},${userGeoLatitude}`}
+                    dstOffset={userGeoTzDSTOffset}
+                    tzOffset={userGeoTzRawOffset}
+                    date={+new Date()}
+                  />
+                </div>
+              ) : (
+                <div>
+                  Loading Astrophase Data...
+                </div>
+              )} */}
+              <div className="quote-box">
+                <p>The information above is supplied by the Strava connection.</p>
+                <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
               </div>
-            ) : (
-              <div>
-                Loading Astrophase Data...
-              </div>
-            )} */}
-            <UserList />
-            <div className="quote-box">
-              <p>The information above is supplied by the Strava connection.</p>
-              <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
-            </div>
-          </Card>
+            </Card>
+          </div>
+          <div className="side-lite right-pane" />
         </div>
-        <div className="side-lite right-pane" />
+        <UserList />
       </div>
+
     );
   }
 }
