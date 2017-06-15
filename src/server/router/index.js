@@ -3,9 +3,8 @@ const path = require('path');
 const passport = require('passport');
 
 const passportService = require('./../services/passport');
-
-const requireAuth = passport.authenticate('jwt', { session: false });
 const hlpr = require('../lib/helpers');
+const rLib = require('./router-lib');
 
 const activRoutes = require('./activities');
 const adminRoutes = require('./admin');
@@ -13,6 +12,10 @@ const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
 const resourceRoutes = require('./resources');
+
+exports.requireAuth = passport.authenticate('jwt', { session: false });
+
+
 
 const indexHTML = `
   <!doctype html>
@@ -59,18 +62,22 @@ router.get('/', (req, res) => {
   res.send(indexHTML);
 });
 
-router.get('/secret', requireAuth, (req, res) => {
+// for testing
+router.get('/secret', exports.requireAuth, (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   hlpr.consLog(['index/secret']);
   res.send(JSON.stringify({ secret: 'Authorized' }));
 });
 
 router.use('/auth', authRoutes);
-router.use('/apiv1/activities', activRoutes);
-router.use('/apiv1/admin', adminRoutes);
+// some open routes
 router.use('/apiv1/events', eventsRoutes);
-router.use('/apiv1/strava', stravaRoutes);
 router.use('/apiv1/resource', resourceRoutes);
+// all requireAuth
+router.use('/apiv1/activities', exports.requireAuth, activRoutes);
+router.use('/apiv1/strava', exports.requireAuth, stravaRoutes);
+// all requireAdmin and requireAuth
+router.use('/apiv1/admin', rLib.requireAuth, rLib.requireAdmin, adminRoutes);
 
 // for letsencrypt setup
 router.get('/.well-known/acme-challenge/:acmeToken', (req, res, next) => {
