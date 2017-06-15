@@ -38,6 +38,24 @@ const shoeSchema = Schema({
   resource_state: Number, // 2
 });
 
+const clubSchema = Schema({
+  id:	Number,
+  resource_state: Number, // indicates level of detail
+  name: String,
+  profile_medium: String, // URL to a 60x60 pixel profile picture
+  profile: String, // URL to a 124x124 pixel profile picture
+  cover_photo: String, // URL to a ~1185x580 pixel cover photo
+  cover_photo_small: String, // URL to a ~360x176 pixel cover photo
+  sport_type: String, // cycling, running, triathlon, other
+  city: String,
+  state: String,
+  country: String,
+  private: Boolean,
+  member_count: Number,
+  featured: Boolean,
+  verified: Boolean,
+  url: String, // vanity: club URL slug
+});
 
 const userSchema = new Schema({
   email: { type: String, lowercase: true },
@@ -65,6 +83,7 @@ const userSchema = new Schema({
   activitiesCollected: Boolean,
   bikes: [bikeSchema],
   shoes: [shoeSchema],
+  clubs: [clubSchema],
   // custom user data
   userLocStreet: String,  // from user input
   userLocCity: String,  // from user input
