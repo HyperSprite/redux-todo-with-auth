@@ -1,14 +1,13 @@
 const router = require('express').Router();
-const passport = require('passport');
 
-const requireAuth = passport.authenticate('jwt', { session: false });
+const rLib = require('./router-lib');
 
 const Activ = require('./../controllers/activities');
 
-
-router.get('/weekly-stats/:weeksPast', requireAuth, Activ.getWeeklyStats);
-router.get('/weekly-stats', requireAuth, Activ.getWeeklyStats);
-router.post('/reset-activity', requireAuth, Activ.resetActivity);
-router.post('/delete-activity', requireAuth, Activ.deleteActivity);
+// All routes require Auth, see indexRoutes
+router.get('/weekly-stats/:weeksPast', Activ.getWeeklyStats);
+router.get('/weekly-stats', Activ.getWeeklyStats);
+router.post('/reset-activity', Activ.resetActivity);
+router.post('/delete-activity', Activ.deleteActivity);
 
 module.exports = router;

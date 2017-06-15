@@ -181,10 +181,6 @@ class Athlete extends Component {
                   Loading Astrophase Data...
                 </div>
               )} */}
-              <div className="quote-box">
-                <p>The information above is supplied by the Strava connection.</p>
-                <blockquote>As with any Strava app, if you would like to revoke access to ARaceAthlete, visit <a href="https://www.strava.com/settings/apps" target="new">www.strava.com/settings/apps</a>, find ARaceAthlete and click the Revoke Access button.</blockquote>
-              </div>
             </Card>
           </div>
           <div className="side-lite right-pane" />

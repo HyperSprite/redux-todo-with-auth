@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const passport = require('passport');
 
-const requireAuth = passport.authenticate('jwt', { session: false });
+const rLib = require('./router-lib');
 
 const Admin = require('./../controllers/admin');
 
-router.get('/user-list', requireAuth, Admin.userList);
+router.get('/user-list', Admin.userList);
+// router.get('/nightly-update', requireAuth, requireAdmin, Admin.nightlyUpdate);
 
 module.exports = router;
