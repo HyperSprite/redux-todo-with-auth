@@ -42,13 +42,19 @@ exports.getUserActivities = (req, res) => {
 };
 
 exports.nightlyUpdate = () => {
+  console.log('nightlyUpdate');
   User.find({}, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
+      console.log('nightlyUpdate', fUser.stravaId, '  ', fUser.access_token);
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
+        console.dir(athlete)
+        if (err || !athlete) console.log('error: Error or no data found'); return null;
+        if (athlete.message === 'Authorization Error') console.dir(athlete); return null;;
         if (!err && athlete) {
           const tmpAthlete = {
             athlete: athlete,
           }
+          hlpr.consLog(['nightlyUpdate.athlete', tmpAthlete.athlete.stravaId]);
           auth.writeUser(tmpAthlete, fUser, (resUser) => {
             hlpr.consLog(['nightlyUpdate writeUser', resUser.stravaId]);
             if (resUser.clubMember === true) {
@@ -64,8 +70,6 @@ exports.nightlyUpdate = () => {
               hlpr.consLog(['nightlyUpdate getAllActivities not a club member', resUser.stravaId]);
             }
           });
-
-
         }
       });
     });

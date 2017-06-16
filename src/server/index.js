@@ -91,7 +91,7 @@ app.use(compression({ filter: shouldCompress }));
 // app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
-app.use(express.static(rootDir));
+app.use(express.static(rootDir, { maxAge: '30d' }));
 
 app.use('/', router);
 

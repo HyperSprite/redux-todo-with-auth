@@ -38,7 +38,6 @@ class GetUpdateAllUsers extends Component {
     return (
       <div>
         <button onClick={this.forceUpdateAllUsers}>Update All Users</button>
-        {` Result: ${this.state.updateAllUsers}`}
       </div>
     );
   }
