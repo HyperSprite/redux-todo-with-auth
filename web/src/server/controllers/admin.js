@@ -2,6 +2,7 @@ const User = require('../models/user');
 const Events = require('../models/events');
 const Activities = require('../models/activities');
 
+const stravaControl = require('./strava');
 const hlpr = require('../lib/helpers');
 
 // TODO write an aggregation that will return a list of users and their activities and events
@@ -45,6 +46,8 @@ exports.userList = (req, res) => {
   });
 };
 
-exports.nightlyUpdate = (req, res) => {
-  res.send(hello);
+// run nightlyUpdate
+exports.updateAllUsers = (req, res) => {
+  stravaControl.nightlyUpdate()
+  res.send('update started');
 }

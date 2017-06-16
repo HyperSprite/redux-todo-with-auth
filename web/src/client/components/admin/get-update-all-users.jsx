@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-const nightlyUpdate = () => {
+const updateAllUsers = () => {
   const axiosConfig = {
     headers: { authorization: localStorage.getItem('token') },
   };
-  axios.get('/apiv1/strava/nightly-update', axiosConfig)
+  axios.get('/apiv1/admin/update-all-users', axiosConfig)
     .then((response) => {
       if (response.status === 200) {
         return response.data;
@@ -14,34 +14,34 @@ const nightlyUpdate = () => {
     })
     .then((responseData) => {
       console.dir(responseData);
-      return { nightlyUpdate: responseData };
+      return responseData;
     }).catch((error) => {
-      return { nightlyUpdate: { error: 'true', fullError: error } };
+      return `error: ${error}`;
     });
 };
 
-class GetNightlyUpdate extends Component {
+class GetUpdateAllUsers extends Component {
   constructor() {
     super();
     this.state = {
-      nightlyUpdate: {},
+      updateAllUsers: '',
     };
-    this.forceNightlyUpdate = this.forceNightlyUpdate.bind(this);
+    this.forceUpdateAllUsers = this.forceUpdateAllUsers.bind(this);
   }
 
-  forceNightlyUpdate() {
-    this.setState(nightlyUpdate());
+  forceUpdateAllUsers() {
+    updateAllUsers();
   }
 
 
   render() {
     return (
       <div>
-        <button onClick={this.nightlyUpdate}>Nightly Update</button>
-        {`Result: ${this.state.nightlyUpdate}`}
+        <button onClick={this.forceUpdateAllUsers}>Update All Users</button>
+        {` Result: ${this.state.updateAllUsers}`}
       </div>
     );
   }
 }
 
-export default GetNightlyUpdate;
+export default GetUpdateAllUsers;
