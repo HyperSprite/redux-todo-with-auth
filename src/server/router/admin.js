@@ -5,6 +5,7 @@ const rLib = require('./router-lib');
 const Admin = require('./../controllers/admin');
 
 router.get('/user-list', Admin.userList);
-// router.get('/nightly-update', requireAuth, requireAdmin, Admin.nightlyUpdate);
+router.get('/update-all-users', Admin.updateAllUsers);
 
 module.exports = router;
+ 

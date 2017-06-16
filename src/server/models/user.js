@@ -57,6 +57,21 @@ const clubSchema = Schema({
   url: String, // vanity: club URL slug
 });
 
+const minmaxZonesSchema = Schema({
+  min: Number,
+  max: Number,
+},{ _id : false });
+
+const heartrateZonesSchema = Schema({
+  custom_zones: Boolean,
+  zones: [minmaxZonesSchema],
+},{ _id : false });
+
+const powerZonesSchema = Schema({
+  custom_zones: Boolean,
+  zones: [minmaxZonesSchema],
+},{ _id : false });
+
 const userSchema = new Schema({
   email: { type: String, lowercase: true },
   password: String,
@@ -84,6 +99,8 @@ const userSchema = new Schema({
   bikes: [bikeSchema],
   shoes: [shoeSchema],
   clubs: [clubSchema],
+  hear_rate: [heartrateZonesSchema],
+  power: [powerZonesSchema],
   // custom user data
   userLocStreet: String,  // from user input
   userLocCity: String,  // from user input

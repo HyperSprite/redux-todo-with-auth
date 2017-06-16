@@ -42,21 +42,30 @@ exports.getUserActivities = (req, res) => {
 };
 
 exports.nightlyUpdate = () => {
-  User.find({ clubMember: true }, (err, foundUsers) => {
+  User.find({}, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
         if (!err && athlete) {
-          auth.pushMetrics(athlete, fUser, ['ftp', 'weight'], (resUser) => {
-            hlpr.consLog(['nightlyUpdate Metrics', resUser.stravaId]);
+          const tmpAthlete = {
+            athlete: athlete,
+          }
+          auth.writeUser(tmpAthlete, fUser, (resUser) => {
+            hlpr.consLog(['nightlyUpdate writeUser', resUser.stravaId]);
+            if (resUser.clubMember === true) {
+              const tmpReq = {};
+              tmpReq.pageCount = 1;
+              tmpReq.activities = [];
+              tmpReq.cronjob = true;
+              tmpReq.user = fUser;
+              activ.getAllActivities(tmpReq, (result) => {
+                hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
+              });
+            } else {
+              hlpr.consLog(['nightlyUpdate getAllActivities not a club member', resUser.stravaId]);
+            }
           });
-          const tmpReq = {};
-          tmpReq.pageCount = 1;
-          tmpReq.activities = [];
-          tmpReq.cronjob = true;
-          tmpReq.user = fUser;
-          activ.getAllActivities(tmpReq, (result) => {
-            hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
-          });
+
+
         }
       });
     });
