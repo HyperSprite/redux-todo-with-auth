@@ -47,9 +47,8 @@ exports.nightlyUpdate = () => {
     foundUsers.forEach((fUser) => {
       console.log('nightlyUpdate', fUser.stravaId, '  ', fUser.access_token);
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
-        console.dir(athlete)
         if (err || !athlete) console.log('error: Error or no data found'); return null;
-        if (athlete.message === 'Authorization Error') console.dir(athlete); return null;;
+        if (athlete.message === 'Authorization Error') console.dir(athlete, fUser.stravaId, fUser.access_token); return null;;
         if (!err && athlete) {
           const tmpAthlete = {
             athlete: athlete,
