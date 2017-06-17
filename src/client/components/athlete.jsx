@@ -13,7 +13,6 @@ import Static from './form/static';
 // import Astrophases from './weather/astrophases';
 import FtpWeight from './metrics/ftp-weight';
 import OneDayWeather from './weather/one-day-weather';
-import GetUpdateAllUsers from './admin/get-update-all-users';
 import UserList from './form/user-list';
 import ScrollIntoView from '../containers/scroll-into-view';
 
@@ -186,7 +185,7 @@ class Athlete extends Component {
           </div>
           <div className="side-lite right-pane" />
         </div>
-        <GetUpdateAllUsers />
+
         <UserList />
       </div>
 

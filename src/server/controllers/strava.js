@@ -42,34 +42,38 @@ exports.getUserActivities = (req, res) => {
 };
 
 exports.nightlyUpdate = () => {
-  console.log('nightlyUpdate');
+  hlpr.consLog(['nightlyUpdate']);
   User.find({}, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
-      console.log('nightlyUpdate', fUser.stravaId, '  ', fUser.access_token);
+      hlpr.consLog(['nightlyUpdate', fUser.stravaId, fUser.access_token]);
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
-        if (err || !athlete) console.log('error: Error or no data found'); return null;
-        if (athlete.message === 'Authorization Error') console.dir(athlete, fUser.stravaId, fUser.access_token); return null;;
-        if (!err && athlete) {
-          const tmpAthlete = {
-            athlete: athlete,
-          }
-          hlpr.consLog(['nightlyUpdate.athlete', tmpAthlete.athlete.stravaId]);
-          auth.writeUser(tmpAthlete, fUser, (resUser) => {
-            hlpr.consLog(['nightlyUpdate writeUser', resUser.stravaId]);
-            if (resUser.clubMember === true) {
-              const tmpReq = {};
-              tmpReq.pageCount = 1;
-              tmpReq.activities = [];
-              tmpReq.cronjob = true;
-              tmpReq.user = fUser;
-              activ.getAllActivities(tmpReq, (result) => {
-                hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
-              });
-            } else {
-              hlpr.consLog(['nightlyUpdate getAllActivities not a club member', resUser.stravaId]);
-            }
-          });
+        hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
+
+        if (err || !athlete) {
+          hlpr.consLog(['error: Error or no data found']);
+          return null;
         }
+        if (athlete.message === 'Authorization Error') {
+          hlpr.consLog([athlete, fUser.stravaId, fUser.access_token]);
+          return null;
+        }
+
+        hlpr.consLog(['nightlyUpdate.athlete', athlete.id]);
+        auth.writeUser({ athlete: athlete }, fUser, (resUser) => {
+          hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
+          if (resUser.clubMember === true) {
+            const tmpReq = {};
+            tmpReq.pageCount = 1;
+            tmpReq.activities = [];
+            tmpReq.cronjob = true;
+            tmpReq.user = fUser;
+            activ.getAllActivities(tmpReq, (result) => {
+              hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
+            });
+          } else {
+            hlpr.consLog(['nightlyUpdate getAllActivities not a club member', resUser.stravaId]);
+          }
+        });
       });
     });
   });
