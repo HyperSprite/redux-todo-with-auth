@@ -9,6 +9,7 @@ const hlpr = require('../lib/helpers');
 exports.getActivities = (req, res) => {
   strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
     hlpr.consLog(['getActivity', data]);
     res.send(data);
   });
@@ -18,6 +19,7 @@ exports.getActivities = (req, res) => {
 exports.getRoute = (req, res) => {
   strava.routes.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
     hlpr.consLog(['getRoute', data]);
     res.send(data);
   });
@@ -26,6 +28,7 @@ exports.getRoute = (req, res) => {
 exports.getUser = (req, res) => {
   strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
     // controllers/authentication.writeUser(userData, user, resultUser)
     auth.writeUser({ athlete: data }, req.user, (resultUser) => {
       hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);

@@ -133,7 +133,7 @@ exports.stravaSignin = (req, res) => {
   }
   strava.athlete.get(stravaArgs, (err, athlete) => {
     if (err || !athlete) return res.status(401).send({ error: 'Error or no data found' });
-    if (athlete.message === 'Authorization Error') return res.status(401).send(athlete);
+    if (athlete.message === 'Authorization Error') exports.stravaSignOut(req, res);
     exports.writeUser({ athlete: athlete }, req.user, (resultUser) => {
       hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
       const result = `
@@ -144,6 +144,11 @@ exports.stravaSignin = (req, res) => {
       res.send(result);
     });
   });
+};
+
+exports.stravaSignOut = (req, res) => {
+  hlpr.consLog(['stravaSignOut', req.user.stravaId]);
+  res.send({ signout: true, types: 'UNAUTH_USER' });
 };
 
 exports.user = (req, res, next) => {
