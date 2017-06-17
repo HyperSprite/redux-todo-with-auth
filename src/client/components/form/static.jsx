@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
+import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
 const propTypes = {
   baseURL: PropTypes.string,
@@ -11,6 +13,9 @@ const propTypes = {
 
 const renderContent = (content, contentType, contentAlt, baseURL) => {
   switch (contentType) {
+    case 'bool': {
+      return content ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />);
+    }
     case 'html': {
       return <div dangerouslySetInnerHTML={{ __html: content }} />;
     }
@@ -45,7 +50,7 @@ const renderStatic = ({
   contentType,
   contentAlt,
 }) => {
-  if (content) {
+  if (content || contentType === 'bool') {
     return (
       <div
         className="static"

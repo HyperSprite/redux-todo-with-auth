@@ -3,10 +3,15 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import { LinearProgress } from 'material-ui';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';
+
+const style = {
+  margin: 5,
+};
 
 const propTypes = {
 
@@ -50,44 +55,34 @@ export default class UserList extends Component {
     return (
       <div>
         <GetUpdateAllUsers />
-        <Table
-          fixedHeader
-          selectable={false}
-          multiSelectable={false}
-        >
-          <TableHeader
-            displaySelectAll={false}
-            adjustForCheckbox={false}
-          >
-            <TableRow>
-              <TableHeaderColumn>Strava ID</TableHeaderColumn>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Premium</TableHeaderColumn>
-              <TableHeaderColumn>Admin</TableHeaderColumn>
-              <TableHeaderColumn>Club</TableHeaderColumn>
-              <TableHeaderColumn>Activities</TableHeaderColumn>
-              <TableHeaderColumn>Event</TableHeaderColumn>
-              <TableHeaderColumn>Updated</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody
-            displayRowCheckbox={false}
-            stripedRows
-          >
-            {this.state.userList.map(user => (
-              <TableRow key={user.stravaId}>
-                <TableRowColumn>{user.stravaId}</TableRowColumn>
-                <TableRowColumn>{`${user.firstname} ${user.lastname}`}</TableRowColumn>
-                <TableRowColumn>{user.premium ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}</TableRowColumn>
-                <TableRowColumn>{user.adminMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}</TableRowColumn>
-                <TableRowColumn>{user.clubMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}</TableRowColumn>
-                <TableRowColumn>{user.activityCount}</TableRowColumn>
-                <TableRowColumn>{user.eventCount}</TableRowColumn>
-                <TableRowColumn>{user.updated_at}</TableRowColumn>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+          {this.state.userList.map(user => (
+            <Card key={user.stravaId}>
+              <CardHeader
+                title={`${user.firstname} ${user.lastname}`}
+                subtitle={user.stravaId}
+              />
+              <CardText>
+                <span style={style}>
+                  Strava Premium: {user.premium ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                </span>
+                <span style={style}>
+                  Admin: {user.adminMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                </span>
+                <span style={style}>
+                  Club: {user.clubMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                </span>
+                <span style={style}>
+                  Activities: {user.activityCount}
+                </span>
+                <span style={style}>
+                  Event: {user.eventCount}
+                </span>
+                <span style={style}>
+                  Updated: {user.updated_at}
+                </span>
+              </CardText>
+            </Card>
+          ))}
       </div>
 
     );
