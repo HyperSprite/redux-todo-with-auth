@@ -1,24 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
-const updateAllUsers = () => {
-  const axiosConfig = {
-    headers: { authorization: localStorage.getItem('token') },
-  };
-  axios.get('/apiv1/admin/update-all-users', axiosConfig)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.data;
-      }
-      throw new Error('Server fetch failed');
-    })
-    .then((responseData) => {
-      console.dir(responseData);
-      return responseData;
-    }).catch((error) => {
-      return `error: ${error}`;
-    });
-};
+import RaisedButton from 'material-ui/RaisedButton';
 
 class GetUpdateAllUsers extends Component {
   constructor() {
@@ -29,15 +11,34 @@ class GetUpdateAllUsers extends Component {
     this.forceUpdateAllUsers = this.forceUpdateAllUsers.bind(this);
   }
 
+  updateAllUsers = () => {
+    const axiosConfig = {
+      headers: { authorization: localStorage.getItem('token') },
+    };
+    axios.get('/apiv1/admin/update-all-users', axiosConfig)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.data;
+        }
+        throw new Error('Server fetch failed');
+      })
+      .then((responseData) => {
+        console.dir(responseData);
+        return responseData;
+      }).catch(error => `error: ${error}`);
+  };
+
   forceUpdateAllUsers() {
-    updateAllUsers();
+    this.updateAllUsers();
   }
 
   render() {
     return (
-      <div>
-        <button onClick={this.forceUpdateAllUsers}>Update All Users</button>
-      </div>
+      <RaisedButton
+        label="Update All Users"
+        primary
+        onClick={this.forceUpdateAllUsers}
+      />
     );
   }
 }

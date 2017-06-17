@@ -182,11 +182,10 @@ class Athlete extends Component {
                 </div>
               )} */}
             </Card>
+            <UserList />
           </div>
           <div className="side-lite right-pane" />
         </div>
-
-        <UserList />
       </div>
 
     );
