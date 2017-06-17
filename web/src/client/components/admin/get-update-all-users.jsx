@@ -33,7 +33,6 @@ class GetUpdateAllUsers extends Component {
     updateAllUsers();
   }
 
-
   render() {
     return (
       <div>

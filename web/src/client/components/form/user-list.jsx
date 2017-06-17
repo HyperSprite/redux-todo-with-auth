@@ -6,6 +6,7 @@ import { LinearProgress } from 'material-ui';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import GetUpdateAllUsers from '../admin/get-update-all-users';
 
 const propTypes = {
 
@@ -48,6 +49,7 @@ export default class UserList extends Component {
   render() {
     return (
       <div>
+        <GetUpdateAllUsers />
         <Table
           fixedHeader
           selectable={false}
