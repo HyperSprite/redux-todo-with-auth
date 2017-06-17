@@ -114,9 +114,6 @@ export function fetchEvents(relURL, stravaId) {
 
 // Posts new or updated Event to server
 export function postForm(formProps, relURL, index) {
-  // const axiosConfig = {
-  //   headers: { authorization: localStorage.getItem('token') },
-  // };
   return (dispatch) => {
     axios.post(`${ROOT_URL}/${relURL}`, formProps, axiosConfig)
       .then((response) => {
@@ -163,9 +160,6 @@ export function cancelEdit() {
 
 // Posts a delete to the server and removes the item from the list
 export function deleteEvent(eventId, relURL) {
-  // const axiosConfig = {
-  //   headers: { authorization: localStorage.getItem('token') },
-  // };
   const formData = {};
   formData.eventId = eventId;
   return (dispatch) => {
@@ -186,9 +180,6 @@ export function deleteEvent(eventId, relURL) {
 }
 
 export function editEvent(eventId, relURL) {
-  // const axiosConfig = {
-  //   headers: { authorization: localStorage.getItem('token') },
-  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}/${eventId}`, axiosConfig)
     .then((response) => {
@@ -207,9 +198,6 @@ export function editEvent(eventId, relURL) {
 }
 
 export function favEvent(eventId, relURL) {
-  // const axiosConfig = {
-  //   headers: { authorization: localStorage.getItem('token') },
-  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}/${eventId}/fav`, axiosConfig)
     .then((response) => {
@@ -234,12 +222,6 @@ const relURLStrava = 'apiv1/strava';
 // FETCH_STRAVA_ROUTES
 // fetchStravaRoutes
 export function fetchStrava(path, id, index, stravatoken, context) {
-  // const axiosConfig = {
-  //   headers: {
-  //     authorization: localStorage.getItem('token'),
-  //     access_token: stravatoken,
-  //   },
-  // };
   axiosConfig.access_token = stravatoken;
   const isId = id ? `/${id}` : '';
   return (dispatch) => {
@@ -248,45 +230,48 @@ export function fetchStrava(path, id, index, stravatoken, context) {
         const result = {
           data: {},
         };
-        switch (context) {
-          case 'eventRoute':
-            result.index = index;
-            result.data.eventRouteURL = response.data.id;
-            result.data.eventRouteName = response.data.name;
-            result.data.eventType = response.data.type;
-            result.data.evenSubType = response.data.sub_type;
-            result.data.eventRouteAthlete = response.data.athlete.id;
-            result.data.eventRouteDescription = response.data.description;
-            result.data.eventRouteDistacne = response.data.distance;
-            result.data.eventRouteElevationGain = response.data.elevation_gain;
-            result.data.eventRouteTimestamp = response.data.timestamp;
-            result.data.eventRouteSummaryPolyline = response.data.map.summary_polyline;
-            result.data.eventRouteSegments = response.data.segments;
-            dispatch({
-              type: TYPES.FETCH_EVENT_STRAVA_ROUTE,
-              payload: result,
-            });
-            break;
-          case 'getUser':
-            dispatch({
-              type: TYPES.FETCH_USER,
-              payload: response.data.user,
-            });
-            break;
-          case 'getUserActivities':
-            dispatch({
-              type: TYPES.FETCH_USER_ACTIVITIES,
-              payload: response.data,
-            });
-            dispatch({
-              type: TYPES.SET_IS_FETCHING_OFF,
-            });
-            break;
+        if (response.data.signout) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('state');
+          window.location='/';
+          dispatch ({ type: response.data.types });
+        } else {
+          switch (context) {
+            case 'eventRoute':
+              result.index = index;
+              result.data.eventRouteURL = response.data.id;
+              result.data.eventRouteName = response.data.name;
+              result.data.eventType = response.data.type;
+              result.data.evenSubType = response.data.sub_type;
+              result.data.eventRouteAthlete = response.data.athlete.id;
+              result.data.eventRouteDescription = response.data.description;
+              result.data.eventRouteDistacne = response.data.distance;
+              result.data.eventRouteElevationGain = response.data.elevation_gain;
+              result.data.eventRouteTimestamp = response.data.timestamp;
+              result.data.eventRouteSummaryPolyline = response.data.map.summary_polyline;
+              result.data.eventRouteSegments = response.data.segments;
+              dispatch({
+                type: TYPES.FETCH_EVENT_STRAVA_ROUTE,
+                payload: result,
+              });
+              break;
+            case 'getUser':
+              dispatch({
+                type: TYPES.FETCH_USER,
+                payload: response.data.user,
+              });
+              break;
+            case 'getUserActivities':
+              dispatch({
+                type: TYPES.FETCH_USER_ACTIVITIES,
+                payload: response.data,
+              });
+              dispatch({
+                type: TYPES.SET_IS_FETCHING_OFF,
+              });
+              break;
+          }
         }
-        // dispatch({
-        //   type: TYPES.FETCH_STRAVA_ROUTES,
-        //   payload: result,
-        // });
       })
       .catch((error) => {
         dispatch({
@@ -308,11 +293,6 @@ export function setWeeklyStats() {
 }
 
 export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
-  // const axiosConfig = {
-  //   headers: {
-  //     authorization: localStorage.getItem('token'),
-  //   },
-  // };
   const isWeeksBack = weeksBack ? `/${weeksBack}` : '';
   return (dispatch) => {
     axios.get(`${relURL}${isWeeksBack}`, axiosConfig)
@@ -378,9 +358,6 @@ export function fetchMessage() {
 }
 
 export function fetchData(relURL) {
-  // const axiosConfig = {
-  //   headers: { authorization: localStorage.getItem('token') },
-  // };
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}`, axiosConfig)
       .then((response) => {

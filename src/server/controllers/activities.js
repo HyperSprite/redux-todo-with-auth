@@ -3,7 +3,9 @@ const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
 const getTime = require('date-fns/get_time');
+
 const Activities = require('../models/activities');
+const auth = require('./authentication');
 const User = require('../models/user');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
@@ -28,6 +30,10 @@ exports.getAllActivities = (input, result) => {
     if (err) {
       hlpr.consLog(['strava.getAllActivities err', err]);
       return err;
+    }
+    if (!input.cronjob && acts.message === 'Authorization Error') {
+      hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
+      auth.stravaSignOut(input, result);
     }
     if (!acts.length || !acts) {
       input.arrLength = 0;
@@ -139,18 +145,23 @@ exports.getRecentActivities = (req, res) => {
   }
 
   strava.athlete.listActivities(options, (err, acts) => {
-    const counter = [];
-    acts.forEach((act, index) => {
-      Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
-        if (err) return { error: err };
-        getActivityDetails(dbActivity, options, index, created, (done) => {
-          counter.push(done);
-          if (counter.length === acts.length) {
-            exports.getWeeklyStats(req, res);
-          }
+    if (acts.message === 'Authorization Error') {
+      hlpr.consLog(['listActivities Authorization Error', req.user.stravaId]);
+      return auth.stravaSignOut(req, res);
+    } else {
+      const counter = [];
+      acts.forEach((act, index) => {
+        Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
+          if (err) return { error: err };
+          getActivityDetails(dbActivity, options, index, created, (done) => {
+            counter.push(done);
+            if (counter.length === acts.length) {
+              exports.getWeeklyStats(req, res);
+            }
+          });
         });
       });
-    });
+    }
   });
 };
 
