@@ -262,6 +262,18 @@ const getOneWeek = async (startDate, stravaId) => {
   return data;
 };
 
+const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev', 'cal', 'kj'];
+
+const metricToField = {
+  tss: 'tssScore',
+  ss: 'suffer_score',
+  dst: 'distance',
+  time: 'moving_time',
+  elev: 'total_elevation_gain',
+  cal: 'calories',
+  kj: 'kilojoules',
+};
+
 class OneMetric {
   constructor(day = 0, total = 0) {
     this.day = day;
@@ -279,7 +291,6 @@ class OneDay {
 
 // date is the date in string "2017-05-02" format
 function dayObjBuilder(date, datePref) {
-  const metricsTypes = ['tss', 'ss', 'dst', 'time', 'elev', 'cal', 'kj'];
   const resDay = new OneDay(hlpr.lib.dateFormat(date, datePref), date.slice(-2));
   metricsTypes.forEach(mType => resDay[mType] = new OneMetric());
   return resDay;
@@ -297,48 +308,29 @@ function weeklyStats(week, activities, datePref) {
 
   for (let i = 0; i < weekArr.length; i++) {
     if (weekArr[i] <= format(new Date(), 'YYYY-MM-DD')) {
-      dayTotals[i].tss.total = weeklyTotals.tss.day;
-      dayTotals[i].ss.total = weeklyTotals.ss.day;
-      dayTotals[i].dst.total = weeklyTotals.dst.day;
-      dayTotals[i].time.total = weeklyTotals.time.day;
-      dayTotals[i].elev.total = weeklyTotals.elev.day;
-      dayTotals[i].cal.total = weeklyTotals.cal.day;
-      dayTotals[i].kj.total = weeklyTotals.kj.day;
+      metricsTypes.forEach((mT) => {
+        dayTotals[i][mT].total = weeklyTotals[mT].day;
+      });
     }
 
     activities.forEach((act) => {
       if (weekArr[i] === act.start_date_local.slice(0, 10)) {
         dayTotals[i].names.push({ name: act.name, activityId: act.activityId });
-
-        dayTotals[i].tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
-        dayTotals[i].ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
-        dayTotals[i].dst.day += isNaN(act.distance) ? 0 : act.distance;
-        dayTotals[i].time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
-        dayTotals[i].elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
-        dayTotals[i].cal.day += isNaN(act.calories) ? 0 : act.calories;
-        dayTotals[i].kj.day += isNaN(act.kilojoules) ? 0 : act.kilojoules;
-
+        metricsTypes.forEach((mT) => {
+          dayTotals[i][mT].day += isNaN(act[metricToField[mT]]) ? 0 : act[metricToField[mT]];
+        });
 
         weeklyTotals.names.push({ name: act.name, activityId: act.activityId });
-        weeklyTotals.tss.day += isNaN(act.tssScore) ? 0 : act.tssScore;
-        weeklyTotals.ss.day += isNaN(act.suffer_score) ? 0 : act.suffer_score;
-        weeklyTotals.dst.day += isNaN(act.distance) ? 0 : act.distance;
-        weeklyTotals.time.day += isNaN(act.moving_time) ? 0 : act.moving_time;
-        weeklyTotals.elev.day += isNaN(act.total_elevation_gain) ? 0 : act.total_elevation_gain;
-        weeklyTotals.cal.day += isNaN(act.calories) ? 0 : act.calories;
-        weeklyTotals.kj.day += isNaN(act.kilojoules) ? 0 : act.kilojoules;
+        metricsTypes.forEach((mT) => {
+          weeklyTotals[mT].day += isNaN(act[metricToField[mT]]) ? 0 : act[metricToField[mT]];
+        });
       }
     });
   }
 
-  weeklyTotals.tss.total = weeklyTotals.tss.day;
-  weeklyTotals.ss.total = weeklyTotals.ss.day;
-  weeklyTotals.dst.total = weeklyTotals.dst.day;
-  weeklyTotals.time.total = weeklyTotals.time.day;
-  weeklyTotals.elev.total = weeklyTotals.elev.day;
-  weeklyTotals.cal.total = weeklyTotals.cal.day;
-  weeklyTotals.kj.total = weeklyTotals.kj.day;
-
+  metricsTypes.forEach((mT) => {
+    weeklyTotals[mT].total = weeklyTotals[mT].day;
+  });
   return { weeklyTotals, dayTotals };
 }
 
