@@ -6,6 +6,12 @@ import { ActionDeleteForever } from 'material-ui/svg-icons';
 import lib from '../../containers/lib';
 import * as actions from '../../actions';
 
+const style = {
+  box: {
+    width: 100,
+  },
+};
+
 const propTypes = {
   name: PropTypes.string,
   activityId: PropTypes.number,
@@ -48,39 +54,39 @@ class SingleActivity extends Component {
     return (
       <div>
         <h4><a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">{activity.name}</a></h4>
-        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }} >
-
-          {activity.tssScore ? (
-            <div style={{ width: 100 }} >TSS<br />{activity.tssScore}</div>
-          ) : (null)}
-
-          {activity.suffer_score ? (
-            <div style={{ width: 100 }} >SS<br />{activity.suffer_score}</div>
-          ) : (null)}
-
-          {activity.kilojoules ? (
-            <div style={{ width: 100 }} >KJ<br />{activity.kilojoules}</div>
-          ) : (null)}
-
-          <div style={{ width: 100 }} >Moving Time<br />
-            {lib.statsConversions('time', false, activity.moving_time)}
-          </div>
-
-          <div style={{ width: 100 }} >Distance<br />
-            {lib.statsConversions('dst', false, activity.distance, mPref)}
-            {mPref ? (<span> miles</span>) : (<span> meters</span>)}
-          </div>
-
-          <div style={{ width: 100 }} >Elevation<br />
-            {lib.statsConversions('elev', false, activity.total_elevation_gain, mPref)}
-            {mPref ? (<span> feet</span>) : (<span> meters</span>)}
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }} >
           <IconButton
             onClick={this.deleteActivity}
             tooltip="Delete from A Race athlete (does not remove from Strava)"
           >
             <ActionDeleteForever />
           </IconButton>
+
+          {activity.tssScore ? (
+            <div style={style.box} >TSS<br />{activity.tssScore}</div>
+          ) : (null)}
+
+          {activity.suffer_score ? (
+            <div style={style.box} >SS<br />{activity.suffer_score}</div>
+          ) : (null)}
+
+          {activity.kilojoules ? (
+            <div style={style.box} >KJ<br />{activity.kilojoules}</div>
+          ) : (null)}
+
+          <div style={style.box} >Moving Time<br />
+            {lib.statsConversions('time', false, activity.moving_time)}
+          </div>
+
+          <div style={style.box} >Distance<br />
+            {lib.statsConversions('dst', false, activity.distance, mPref)}
+            {mPref ? (<span> miles</span>) : (<span> meters</span>)}
+          </div>
+
+          <div style={style.box} >Elevation<br />
+            {lib.statsConversions('elev', false, activity.total_elevation_gain, mPref)}
+            {mPref ? (<span> feet</span>) : (<span> meters</span>)}
+          </div>
         </div>
       </div>
     );
