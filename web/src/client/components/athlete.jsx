@@ -12,6 +12,7 @@ import * as actions from './../actions';
 import Static from './form/static';
 // import Astrophases from './weather/astrophases';
 import FtpWeight from './metrics/ftp-weight';
+import Motovation from './motovation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
 import ScrollIntoView from '../containers/scroll-into-view';
@@ -126,7 +127,7 @@ class Athlete extends Component {
                   Loading Weather Data...
                 </div>
               )}
-
+              <Motovation />
               <Static
                 contentLabel="Strava ID"
                 content={stravaId}

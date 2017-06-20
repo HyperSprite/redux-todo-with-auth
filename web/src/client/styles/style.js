@@ -67,6 +67,10 @@ export default {
     marginTop: 4,
   },
 
+  span: {
+    margin: 5,
+  },
+
   subheader: {
     margin: 12,
     fontSize: 20,
