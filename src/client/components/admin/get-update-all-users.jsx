@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import style from '../../styles/style';
+
 class GetUpdateAllUsers extends Component {
   constructor() {
     super();
@@ -38,6 +40,7 @@ class GetUpdateAllUsers extends Component {
         label="Update All Users"
         primary
         onClick={this.forceUpdateAllUsers}
+        style={style.button}
       />
     );
   }
