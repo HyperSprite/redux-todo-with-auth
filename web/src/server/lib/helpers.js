@@ -1,5 +1,7 @@
 const moment = require('moment');
 const dateFNS = require('date-fns');
+
+const Logs = require('../models/logging');
 // Helper functions
 
 exports.isProd = () => {
@@ -31,6 +33,23 @@ exports.consLog = (arr) => {
     });
   }
 };
+
+// const logObj = {
+//   stravaId: req.user.stravaId,
+//   logType: 'auth',
+//   level: 3, // 1 = high, 2 = med, 3 = low
+//   error: err,
+//   message: `Controler/Authentication: exports.user`,
+//   page: req.originalUrl,
+// };
+exports.logOut = (logObj) => {
+  const log = logObj;
+  log.date = exports.getDate(gD => gD);
+  Logs.create(log, (err, logging) => {
+    exports.consLog([logging]);
+  });
+};
+
 
 exports.lib = {
   round: (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`),

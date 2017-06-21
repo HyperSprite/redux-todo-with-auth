@@ -87,24 +87,33 @@ export default class UserList extends Component {
                 subtitle={user.stravaId}
               />
               <CardText>
-                <span style={style.span}>
-                  Strava Premium: {user.premium ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
-                </span>
-                <span style={style.span}>
-                  Club: {user.clubMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
-                </span>
-                <span style={style.span}>
-                  Admin: {user.adminMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
-                </span>
-                <span style={style.span}>
-                  Activities: {user.activityCount}
-                </span>
-                <span style={style.span}>
-                  Event: {user.eventCount}
-                </span>
-                <span style={style.span}>
-                  Updated: {user.updated_at}
-                </span>
+                <div>
+                  <span style={style.span}>
+                    Strava Premium: {user.premium ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                  </span>
+                  <span style={style.span}>
+                    Club: {user.clubMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                  </span>
+                  <span style={style.span}>
+                    Admin: {user.adminMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                  </span>
+                  <span style={style.span}>
+                    Activities: {user.activityCount}
+                  </span>
+                  <span style={style.span}>
+                    Event: {user.eventCount}
+                  </span>
+                </div>
+                <div>
+                  <span style={style.span}>
+                    Updated: {user.updated_at}
+                  </span>
+                  {user.logCount && user.logLastAccess ? (
+                    <span style={style.span}>
+                      Last Access: {user.logLastAccess[0].updatedAt}, Access Count: {user.logCount}
+                    </span>
+                  ) : (null)}
+                </div>
               </CardText>
             </Card>
           ))}

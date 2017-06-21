@@ -99,7 +99,7 @@ const userSchema = new Schema({
   bikes: [bikeSchema],
   shoes: [shoeSchema],
   clubs: [clubSchema],
-  hear_rate: [heartrateZonesSchema],
+  heartrate: [heartrateZonesSchema],
   power: [powerZonesSchema],
   // custom user data
   userLocStreet: String,  // from user input

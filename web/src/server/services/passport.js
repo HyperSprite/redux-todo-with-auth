@@ -56,7 +56,7 @@ const jwtOptions = {
 // { sub: user.id, iat: timestamp } from authentication.js is the payload here
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   User.findById(payload.sub, (err, user) => {
-    if (err ) {
+    if (err) {
       return done(err, false);
     }
     return user ? done(null, user) : done(null, false);
