@@ -152,11 +152,17 @@ exports.stravaSignOut = (req, res) => {
 };
 
 exports.user = (req, res, next) => {
-  User.findOne({ stravaId: req.user.stravaId }, { password: 0 }, (err, user) => {
-    if (err) { return next(err); }
-    if (user) {
-      hlpr.consLog(['auth.user', 'AUTH USER: User found', user.stravaId]);
-      return res.json({ user: user });
-    }
+  User.findOne({ stravaId: req.user.stravaId }, (err, user) => {
+    const logObj = {
+      stravaId: req.user.stravaId,
+      logType: 'auth',
+      level: 3,
+      error: err,
+      message: 'Controler/Authentication: exports.user',
+      page: req.originalUrl,
+    };
+    hlpr.logOut(logObj);
+    if (err || !user) { return next(err); }
+    res.json({ user: user });
   });
 };

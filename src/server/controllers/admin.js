@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Events = require('../models/events');
 const Activities = require('../models/activities');
+const Logging = require('../models/logging');
 
 const stravaControl = require('./strava');
 const hlpr = require('../lib/helpers');
@@ -26,6 +27,14 @@ exports.userList = (req, res) => {
           as: 'userevents',
         },
       },
+      {
+        $lookup: {
+          from: 'logs',
+          localField: 'stravaId',
+          foreignField: 'stravaId',
+          as: 'userlogs',
+        },
+      },
       { $project: {
         firstname: 1,
         lastname: 1,
@@ -37,6 +46,8 @@ exports.userList = (req, res) => {
         clubMember: 1,
         activityCount: { $size: '$useractivities' },
         eventCount: { $size: '$userevents' },
+        logCount: { $size: '$userlogs' },
+        logLastAccess: { $slice: ['$userlogs', -1] },
         _id: 0,
       } },
       { $sort: { firstname: 1, lastname: 1 } },
