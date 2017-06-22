@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const ManifestPlugin = require('webpack-manifest-plugin');
+const WebpackChunkHash = require('webpack-chunk-hash');
 
 const isProd = (process.env.NODE_ENV === 'production');
 const isLogging = (process.env.LOGGING === 'true');
@@ -33,12 +35,13 @@ function getPlugins() {
   }));
   plugins.push(new webpack.optimize.CommonsChunkPlugin({
     name: 'node-static',
-    filename: 'node-static.js',
-    minChunks(module, count) {
-      let context = module.context;
+    minChunks(module) {
+      const context = module.context;
       return context && context.indexOf('node_modules') >= 0;
     }
   }));
+  plugins.push(new ManifestPlugin());
+  plugins.push(new WebpackChunkHash());
   console.log('isProd', isProd, 'isLogging', isLogging);
   if (isProd && isLogging) {
     plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
@@ -76,13 +79,13 @@ function getOutput() {
   const output = {};
   if (isProd) {
     output.path = path.resolve(__dirname, './src/server/public/assets/');
+    output.filename = '[name]-[chunkhash].js';
+    output.chunkFilename = '[name].[chunkhash].js';
   } else {
     output.path = '/../../public/assets/';
+    output.filename = '[name].js';
   }
   output.publicPath = '/assets/';
-  output.filename = '[name].js';
-  output.chunkFilename = '[id].[chunkhash].js';
-
   return output;
 }
 
