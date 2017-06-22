@@ -12,6 +12,32 @@ const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
 const resourceRoutes = require('./resources');
+const jsonfile = require('jsonfile');
+
+let manifest;
+if (hlpr.isProd() || process.env.NODE_ENV === 'API-ONLY') {
+  const manifestPath = `${__dirname}/../public/assets/manifest.json`;
+  manifest = jsonfile.readFileSync(manifestPath);
+} else {
+  manifest = {
+    'bundle.js': 'bundle.js',
+    'node-static.js': 'node-static.js',
+  };
+}
+
+const googleAnalytics = hlpr.isProd() ? `
+  <!-- Google Analytics -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-84713563-2', 'auto');
+      ga('send', 'pageview');
+    </script>
+  <!-- End Google Analytics -->
+` : '';
 
 const indexHTML = `
   <!doctype html>
@@ -37,19 +63,9 @@ const indexHTML = `
           <img src="/images/preloader.gif">
         </div>
       </div>
-      <script src='/assets/node-static.js'></script>
-      <script src='/assets/bundle.js'></script>
-      <!-- Google Analytics -->
-        <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-84713563-2', 'auto');
-        ga('send', 'pageview');
-        </script>
-      <!-- End Google Analytics -->
+      <script src="/assets/${manifest['node-static.js']}"></script>
+      <script src="/assets/${manifest['bundle.js']}"></script>
+      ${googleAnalytics}
     </body>
   </html>
 `;

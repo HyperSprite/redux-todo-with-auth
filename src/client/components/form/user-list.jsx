@@ -59,7 +59,6 @@ export default class UserList extends Component {
 
   render() {
     return (
-
       <div>
         {this.state.udpating ? (
           <LinearProgress mode="indeterminate" />
@@ -110,7 +109,7 @@ export default class UserList extends Component {
                   </span>
                   {user.logCount && user.logLastAccess ? (
                     <span style={style.span}>
-                      Last Access: {user.logLastAccess[0].updatedAt}, Access Count: {user.logCount}
+                      Last Access: <strong>{user.logLastAccess[0].updatedAt}</strong>, Access Count: <strong>{user.logCount}</strong>
                     </span>
                   ) : (null)}
                 </div>

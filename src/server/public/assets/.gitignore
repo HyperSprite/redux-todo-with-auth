@@ -1,6 +1,1 @@
-bundle.js
-bundle.js.map
-*.svg
-*.jpg
-*.wof*
-node-static.js
+*.*
