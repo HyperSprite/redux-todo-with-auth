@@ -6,7 +6,7 @@ const Logging = require('../models/logging');
 const stravaControl = require('./strava');
 const hlpr = require('../lib/helpers');
 
-// TODO write an aggregation that will return a list of users and their activities and events
+// Aggregation that returns a list of users and coungs of activities and events
 exports.userList = (req, res) => {
   User.aggregate(
     [
@@ -52,6 +52,15 @@ exports.userList = (req, res) => {
       } },
       { $sort: { firstname: 1, lastname: 1 } },
     ], (err, result) => {
+    const logObj = {
+      stravaId: req.user.stravaId,
+      logType: 'admin',
+      level: 3,
+      error: err,
+      message: 'Controler/Admin: exports.userList',
+      page: req.originalUrl,
+    };
+    hlpr.logOut(logObj);
     if (err) return err;
     res.send(result);
   });
@@ -59,6 +68,6 @@ exports.userList = (req, res) => {
 
 // run nightlyUpdate
 exports.updateAllUsers = (req, res) => {
-  stravaControl.nightlyUpdate()
+  stravaControl.nightlyUpdate();
   res.send('update started');
-}
+};
