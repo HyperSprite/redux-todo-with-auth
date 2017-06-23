@@ -6,6 +6,14 @@ import ScrollIntoView from './../containers/scroll-into-view';
 import Iframe from './form/iframe';
 
 // import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
+const posts = [
+  'blog/welcome-to-araceathlete',
+  'blog/how-do-i-get-started',
+  'blog/weekly-stats',
+  'blog/events',
+  'blog/power-and-weight',
+  'blog/power-at-altitude',
+];
 
 const propTypes = {
   setPageName: PropTypes.func.isRequired,
@@ -32,17 +40,15 @@ class Home extends Component {
           </div>
           <div className="side-lite right-pane" />
         </div>
-
-        <Iframe src="blog/welcome-to-araceathlete" />
-        <Iframe src="blog/how-do-i-get-started" />
-        <Iframe src="blog/weekly-stats" />
-        <Iframe src="blog/events" />
-        <Iframe src="blog/power-and-weight" />
-
+        {posts.map(p => (
+          <Iframe key={p} src={p} />
+        ))}
       </div>
     );
   }
 }
+
+
 
 Home.propTypes = propTypes;
 

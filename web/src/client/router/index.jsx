@@ -13,6 +13,7 @@ import Goals from './../components/goals/list-goals';
 import AddGoal from './../components/goals/add-goal';
 import Metrics from './../components/metrics';
 import WeeklyStats from './../components/activity-stats';
+import PowerAtAltitude from './../components/power-at-altitude';
 
 const router = (
   <Switch>
@@ -23,6 +24,7 @@ const router = (
     <RouteAuthorized path="/goals/addgoal" component={AddGoal} />
     <RouteAuthorized exact path="/goals" component={Goals} />
     <RouteAuthorized exact path="/power-and-weight" component={Metrics} />
+    <RouteAuthorized exact path="/power-at-altitude" component={PowerAtAltitude} />
     <RouteAuthorized exact path="/weekly-stats" component={WeeklyStats} />
     <Route path="/home" component={Home} />
     <Route path="/signin" component={Signin} />

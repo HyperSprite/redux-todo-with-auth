@@ -1,10 +1,12 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { IconButton } from 'material-ui';
 import { Card } from 'material-ui/Card';
 import { connect } from 'react-redux';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 import * as actions from './../../actions';
+import lib from '../../containers/lib';
 
 import FtpWeight from './ftp-weight';
 import HelpCard from '../form/help-card';
@@ -34,14 +36,6 @@ const propTypes = {
   }),
 };
 
-function getLastInArray(arr, arrType) {
-  let item;
-  if (arr && arr.length > 0 && arr[arr.length - 1][arrType] != null) {
-    item = arr[arr.length - 1][arrType];
-  }
-  return item;
-}
-
 class Athlete extends Component {
   constructor(props) {
     super(props);
@@ -64,6 +58,7 @@ class Athlete extends Component {
       ftpHistory,
       measurement_preference,
       weightHistory,
+      userGeoElevation,
     } = this.props.user;
 
     const mPref = measurement_preference === 'feet';
@@ -79,7 +74,7 @@ class Athlete extends Component {
             <Card
               className="card"
             >
-              {getLastInArray(ftpHistory, 'ftp') && getLastInArray(weightHistory, 'weight') ? (
+              {lib.getLastInArray(ftpHistory, 'ftp') && lib.getLastInArray(weightHistory, 'weight') ? (
                 <FtpWeight
                   ftpHistory={ftpHistory}
                   weightHistory={weightHistory}
@@ -88,7 +83,7 @@ class Athlete extends Component {
               ) : (
                 <div>
                   {/* TODO - this is all ugly */}
-                  {getLastInArray(weightHistory, 'weight') ? (
+                  {lib.getLastInArray(weightHistory, 'weight') ? (
                     <FtpWeight
                       ftpHistory={[]}
                       weightHistory={weightHistory}
@@ -102,7 +97,6 @@ class Athlete extends Component {
                   <FaRefresh size={20} />
                 </IconButton>
               </div>
-
             </Card>
           </div>
           <div className="side-lite right-pane" />
