@@ -17,6 +17,7 @@ import lib from '../../containers/lib';
 import CheckBox from '../form/checkbox-icon';
 import ToggleIcon from '../form/toggle-icon';
 import HelpCard from '../form/help-card';
+import Dialog from './dialog';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
 import style from '../../styles/style';
@@ -154,9 +155,13 @@ class AltitudeTable extends Component {
                             )}
                           </TableRowColumn>
                           <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>
-                          <TableRowColumn style={style.cells}>{ftpAE.ftpAccCalc}</TableRowColumn>
+                          <TableRowColumn style={style.cells}>
+                            <Dialog dialogData={ftpAE.ftpAccCalc} />
+                          </TableRowColumn>
                           <TableRowColumn style={style.cells}>{ftpAE.ftpNAcc}%</TableRowColumn>
-                          <TableRowColumn style={style.cells}>{ftpAE.ftpNAccCalc}</TableRowColumn>
+                          <TableRowColumn style={style.cells}>
+                            <Dialog dialogData={ftpAE.ftpNAccCalc} />
+                          </TableRowColumn>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -164,24 +169,24 @@ class AltitudeTable extends Component {
                 </CardText>
                 </div>
               ) : (
-                  <div style={{ margin: 20 }}>
-                    <h4>
-                      {'We\'re sorry, this is an A Race athlete Premium feature'}
-                    </h4>
-                    <p>
-                      To access this page you need the following:
-                    </p>
-                    <ul style={{ listStyle: 'none' }}>
-                      <li><CheckBox option={!!user.clubMember} /> Be a member of the A Race athlete Strava Club</li>
-                      <li><CheckBox option={!!user.premium} /> Be a Strava Premium user</li>
-                      <li><CheckBox option={!!currentFTP} />An entry in the Strava FTP field</li>
-                      <li><CheckBox option={!!user.userGeoElevation} />An entry in the Strava City and Country fields</li>
-                    </ul>
-                    <p>
-                      {'See "Learn more about Power at Altitude" below for more information.'}
-                    </p>
-                  </div>
-                )}
+                <div style={{ margin: 20 }}>
+                  <h4>
+                    {'We\'re sorry, this is an A Race athlete Premium feature'}
+                  </h4>
+                  <p>
+                    To access this page you need the following:
+                  </p>
+                  <ul style={{ listStyle: 'none' }}>
+                    <li><CheckBox option={!!user.clubMember} /> Be a member of the A Race athlete Strava Club</li>
+                    <li><CheckBox option={!!user.premium} /> Be a Strava Premium user</li>
+                    <li><CheckBox option={!!currentFTP} />An entry in the Strava FTP field</li>
+                    <li><CheckBox option={!!user.userGeoElevation} />An entry in the Strava City and Country fields</li>
+                  </ul>
+                  <p>
+                    {'See "Learn more about Power at Altitude" below for more information.'}
+                  </p>
+                </div>
+              )}
             </Card>
           </div>
           <div className="side-lite right-pane" />
