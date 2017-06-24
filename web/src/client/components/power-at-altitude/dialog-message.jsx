@@ -52,8 +52,6 @@ const DialogMessage = props => (
         >
           <TableRow >
             <TableHeaderColumn>Zone</TableHeaderColumn>
-            <TableHeaderColumn>Zone Name</TableHeaderColumn>
-            <TableHeaderColumn>Zone Percentage</TableHeaderColumn>
             <TableHeaderColumn>Zone FTP</TableHeaderColumn>
           </TableRow>
         </TableHeader>
@@ -63,9 +61,7 @@ const DialogMessage = props => (
         >
           {powerZones.map(pZ => (
             <TableRow key={pZ[0]}>
-              <TableRowColumn>{pZ[0]}</TableRowColumn>
-              <TableRowColumn>{pZ[1]}</TableRowColumn>
-              <TableRowColumn>{getZones(pZ[2], pZ[3], 100, true)}</TableRowColumn>
+              <TableRowColumn>{`${pZ[0]} - ${pZ[1]} - ${getZones(pZ[2], pZ[3], 100, true)}`}</TableRowColumn>
               <TableRowColumn>{getZones(pZ[2], pZ[3], props.data, false)}</TableRowColumn>
             </TableRow>
           ))}
