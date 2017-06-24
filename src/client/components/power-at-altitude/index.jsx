@@ -14,6 +14,7 @@ import {
 
 import * as actions from './../../actions';
 import lib from '../../containers/lib';
+import CheckBox from '../form/checkbox-icon';
 import ToggleIcon from '../form/toggle-icon';
 import HelpCard from '../form/help-card';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -88,14 +89,15 @@ class AltitudeTable extends Component {
               headerHeight={70}
             />
             <Card>
-              <CardActions>
-                <FlatButton onClick={this.switchMeasurementPref} style={style.toggleIconButton} >
-                  F <ToggleIcon option={this.state.measurementPref} /> M
-                </FlatButton>
+              {(user.clubMember && user.premium && user.userGeoElevation && currentFTP && !isNaN(currentFTP)) ? (
+                <div>
+                <CardActions>
+                  <FlatButton onClick={this.switchMeasurementPref} style={style.toggleIconButton} >
+                    F <ToggleIcon option={this.state.measurementPref} /> M
+                  </FlatButton>
 
-              </CardActions>
-              <CardText>
-                {(ftpAtElv && !isNaN(ftpAtElv[0].ftpAcc)) ? (
+                </CardActions>
+                <CardText>
                   <Table
                     fixedHeader
                     selectable={false}
@@ -159,10 +161,27 @@ class AltitudeTable extends Component {
                       ))}
                     </TableBody>
                   </Table>
-                ) : (
-                  <LinearProgress mode="indeterminate" />
+                </CardText>
+                </div>
+              ) : (
+                  <div style={{ margin: 20 }}>
+                    <h4>
+                      {'We\'re sorry, this is an A Race athlete Premium feature'}
+                    </h4>
+                    <p>
+                      To access this page you need the following:
+                    </p>
+                    <ul style={{ listStyle: 'none' }}>
+                      <li><CheckBox option={!!user.clubMember} /> Be a member of the A Race athlete Strava Club</li>
+                      <li><CheckBox option={!!user.premium} /> Be a Strava Premium user</li>
+                      <li><CheckBox option={!!currentFTP} />An entry in the Strava FTP field</li>
+                      <li><CheckBox option={!!user.userGeoElevation} />An entry in the Strava City and Country fields</li>
+                    </ul>
+                    <p>
+                      {'See "Learn more about Power at Altitude" below for more information.'}
+                    </p>
+                  </div>
                 )}
-              </CardText>
             </Card>
           </div>
           <div className="side-lite right-pane" />
