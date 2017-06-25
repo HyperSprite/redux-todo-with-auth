@@ -21,7 +21,7 @@ const powerZones = [
   [6, 'Anaerobic', 1.21, false],
   [5, 'VO2 Max', 1.06, 1.20],
   [4, 'Threshold', 0.96, 1.05],
-  [3, 'Tempo', 0.76, 0.84],
+  [3, 'Tempo', 0.76, 0.95],
   [2, 'Endurance', 0.56, 0.75],
   [1, 'Active Recovery', false, 0.55],
 ];
