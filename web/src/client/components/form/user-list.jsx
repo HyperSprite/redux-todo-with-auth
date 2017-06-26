@@ -7,9 +7,12 @@ import { Card, CardHeader, CardText } from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+
+import lib from '../../containers/lib';
 import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';
 import style from '../../styles/style';
+import CheckBox from './checkbox-icon';
 
 const propTypes = {
 
@@ -88,19 +91,25 @@ export default class UserList extends Component {
               <CardText>
                 <div>
                   <span style={style.span}>
-                    Strava Premium: {user.premium ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                    <CheckBox option={!!user.premium} /> Strava Premium
                   </span>
                   <span style={style.span}>
-                    Club: {user.clubMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                    <CheckBox option={!!user.clubMember} /> Club
                   </span>
                   <span style={style.span}>
-                    Admin: {user.adminMember ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />)}
+                    <CheckBox option={!!user.userGeoElevation} /> Elevation
                   </span>
                   <span style={style.span}>
-                    Activities: {user.activityCount}
+                    <CheckBox option={!!lib.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
                   </span>
                   <span style={style.span}>
-                    Event: {user.eventCount}
+                    <CheckBox option={!!user.adminMember} /> Admin
+                  </span>
+                  <span style={style.span}>
+                    {user.activityCount} Activities
+                  </span>
+                  <span style={style.span}>
+                    {user.eventCount} Event
                   </span>
                 </div>
                 <div>
