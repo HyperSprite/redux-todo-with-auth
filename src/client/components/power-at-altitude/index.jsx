@@ -122,22 +122,22 @@ class AltitudeTable extends Component {
                         <TableHeaderColumn
                           style={style.cells}
                         >
-                          FTP%<br />Acclimatized<br />100%
+                          FTP%<br />Acclimated<br />100%
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           style={style.cells}
                         >
-                          Reletive FTP<br />Acclimatized<br />{currentFTP}
+                          Reletive FTP<br />Acclimated<br />{currentFTP}
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           style={style.cells}
                         >
-                          FTP%<br />Not<br />Acclimatized
+                          FTP%<br />Not<br />Acclimated
                         </TableHeaderColumn>
                         <TableHeaderColumn
                           style={style.cells}
                         >
-                          Reletive FTP<br />Not<br />Acclimatized
+                          Reletive FTP<br />Not<br />Acclimated
                         </TableHeaderColumn>
                       </TableRow>
                     </TableHeader>
