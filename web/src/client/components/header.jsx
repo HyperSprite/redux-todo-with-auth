@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AppBar } from 'material-ui';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
@@ -14,13 +15,14 @@ const propTypes = {
   authenticated: PropTypes.bool,
   page: PropTypes.object.isRequired,
   setDrawer: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  user: PropTypes.object,
 };
 
 const defaultProps = {
   authenticated: false,
+  user: {},
 };
-
-const weeklyStatsURL = 'apiv1/activities/weekly-stats';
 
 class Header extends Component {
 
@@ -74,8 +76,6 @@ function mapStateToProps(state) {
     page: state.page,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
-    weeklyStats: state.activities.weeklyStats,
-    weeklyStatsCount: state.activities.weeklyStatsCount,
   };
 }
 
