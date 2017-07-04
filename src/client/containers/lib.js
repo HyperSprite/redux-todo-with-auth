@@ -13,6 +13,8 @@ lib.metersToMilesRound = (m, p = 0) => lib.round(m * 0.00062137121212121, p);
 lib.metersToKm = m => m * 1000;
 lib.metersToKmRound = (m, p = 0) => lib.round(m * 1000, p);
 
+lib.percentFTPAcc = adjustedElev => -1.12 * (Math.pow(adjustedElev, 2)) - 1.90 * adjustedElev + 99.9;
+lib.percentFTPNAcc = adjustedElev => 0.178 * (Math.pow(adjustedElev, 3)) - 1.43 * (Math.pow(adjustedElev, 2)) - (4.07 * adjustedElev) + 100;
 // metric = 'time', 'dst', 'elev', 'cal', 'kj' type: string
 // yAxis = bool - for recharts
 // data = non-formatted number, like time in seconds, dist in meters.
