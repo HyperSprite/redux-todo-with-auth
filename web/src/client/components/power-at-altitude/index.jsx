@@ -68,8 +68,8 @@ class AltitudeTable extends Component {
     const currentFTP = lib.getLastInArray(user.ftpHistory, 'ftp');
     const ftpAtElv = elevations.map(e => {
       const adjustedElev = e - (user.userGeoElevation * 0.01);
-      const percentFTPAcc = -1.12 * (Math.pow(adjustedElev, 2)) - 1.90 * adjustedElev + 99.9;
-      const percentFTPNAcc = 0.178 * (Math.pow(adjustedElev, 3)) - 1.43 * (Math.pow(adjustedElev, 2)) - (4.07 * adjustedElev) + 100;
+      const percentFTPAcc = lib.percentFTPAcc(adjustedElev);
+      const percentFTPNAcc = lib.percentFTPNAcc(adjustedElev);
       const tmpObj = {
         eachElvM: e * 1000,
         // returns xx.xx (%) to use, * by 100

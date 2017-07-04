@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Divider, LinearProgress, Paper, RaisedButton } from 'material-ui';
+import { Divider, CircularProgress, LinearProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 import * as actions from '../../actions';
@@ -79,6 +79,27 @@ class activeStats extends Component {
             <Paper
               zDepth={1}
             >
+              {isFetching ? (
+                <div>
+                  <RaisedButton
+                    label="Check Strava for New Activities"
+                    secondary
+                    style={style.button}
+                    icon={<CircularProgress size={22} thickness={4} />}
+                    disabled
+                  />
+                </div>
+              ) : (
+                <div>
+                  <RaisedButton
+                    label="Check Strava for New Activities"
+                    secondary
+                    style={style.button}
+                    onClick={this.updateUserActivities}
+                    icon={<FaRefresh size={20} />}
+                  />
+                </div>
+              )}
               {!weeklyStats ? (
                 <p>Loading Activities</p>
               ) : (
@@ -96,36 +117,21 @@ class activeStats extends Component {
               )}
               {isFetching ? (
                 <div>
-                  <LinearProgress mode="indeterminate" />
                   <RaisedButton
                     label="Load Another Week"
                     primary
                     style={style.button}
                     disabled
-                  />
-                  <RaisedButton
-                    label="Check Strava for New Activities"
-                    secondary
-                    style={style.button}
-                    icon={<FaRefresh size={20} />}
-                    disabled
+                    icon={<CircularProgress size={22} thickness={4} />}
                   />
                 </div>
               ) : (
                 <div>
-                  <Divider style={{ height: 4 }} />
                   <RaisedButton
                     label="Load Another Week"
                     primary
                     style={style.button}
                     onClick={this.fetchAnotherWeek}
-                  />
-                  <RaisedButton
-                    label="Check Strava for New Activities"
-                    secondary
-                    style={style.button}
-                    onClick={this.updateUserActivities}
-                    icon={<FaRefresh size={20} />}
                   />
                 </div>
               )}
