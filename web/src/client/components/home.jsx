@@ -1,5 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { RaisedButton } from 'material-ui';
 
 import * as actions from './../actions';
 import ScrollIntoView from './../containers/scroll-into-view';
@@ -7,12 +9,12 @@ import Iframe from './form/iframe';
 
 // import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 const posts = [
-  'blog/welcome-to-araceathlete',
-  'blog/how-do-i-get-started',
-  'blog/weekly-stats',
-  'blog/events',
-  'blog/power-and-weight',
-  'blog/power-at-altitude',
+  'welcome-to-araceathlete',
+  'how-do-i-get-started',
+  'weekly-stats',
+  'events',
+  'power-and-weight',
+  'power-at-altitude',
 ];
 
 const propTypes = {
@@ -28,7 +30,7 @@ class Home extends Component {
     return (
       <div>
         <ScrollIntoView
-          id=""
+          id={location.hash}
           headerHeight={70}
         />
         <div className="home-jumbotron">
@@ -40,15 +42,27 @@ class Home extends Component {
           </div>
           <div className="side-lite right-pane" />
         </div>
+
+          {/* <div >
+            {posts.map(p => (
+              <RaisedButton
+                key={`${p}link`}
+                label={p.replace(/-/g, ' ')}
+                href={`#${p}`}
+                // fullWidth
+              />
+            ))}
+          </div> */}
+
         {posts.map(p => (
-          <Iframe key={p} src={p} />
+          <div key={p} >
+            <Iframe src={`blog/${p}`} iFrameId={p} />
+          </div>
         ))}
       </div>
     );
   }
 }
-
-
 
 Home.propTypes = propTypes;
 

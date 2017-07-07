@@ -188,10 +188,14 @@ class AltitudeTable extends Component {
                 </div>
               )}
             </Card>
+            <HelpCard
+              src="/blog/power-at-altitude"
+              iFrameId="power-at-altitude"
+              title="Learn more about Power at Altitude"
+            />
           </div>
           <div className="side-lite right-pane" />
         </div>
-        <HelpCard src="/blog/power-at-altitude" title="Learn more about Power at Altitude" />
       </div>
     );
   }

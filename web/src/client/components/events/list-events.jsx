@@ -198,11 +198,15 @@ class ListEvent extends Component {
                 </div>
               );
             })}
+            <HelpCard
+              src="/blog/events"
+              iFrameId="events"
+              title="Learn more about Events"
+            />
             { this.renderActionButton() }
           </div>
           <div className="side-lite right-pane" />
         </div>
-        <HelpCard src="/blog/events" title="Learn more about Events" />
       </div>
     );
   }

@@ -1,41 +1,59 @@
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui/Card';
+import FaQuestionCircle from 'react-icons/lib/fa/question-circle';
 
 import Iframe from './iframe';
 
 const propTypes = {
-  src: PropTypes.string.isRequired,
   title: PropTypes.string,
+  iFrameId: PropTypes.string,
 };
 
 const defaultProps = {
-  title: "Laern More...",
+  title: 'Laern More...',
+  iFrameId: '',
 };
 
 // example: <HelpCard src="/blog/weekly-stats" title="Learn more about Weekly Stats" />
 
-const helpCard = props => (
-  <div className="main-flex-container">
-    <div className="side-lite left-pane" />
-    <div className="main" >
-      <Card>
-        <CardHeader
-          title={props.title}
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText
-          expandable
+export default class HelpCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: !!window.location.hash,
+    };
+  }
+
+  handleExpandChange = (expanded) => {
+    this.setState({ expanded });
+    window.location.hash = window.location.hash === '' ?
+      this.props.iFrameId :
+      '';
+  };
+
+  render() {
+    return (
+      <div className="main" >
+        <Card
+          expanded={this.state.expanded}
+          onExpandChange={this.handleExpandChange}
         >
-          <Iframe src={props.src} />
-        </CardText>
-      </Card>
-    </div>
-    <div className="side-lite right-pane" />
-  </div>
-);
+          <CardHeader
+            title={this.props.title}
+            actAsExpander
+            avatar={<FaQuestionCircle style={{ verticalAlign: 'inherit' }} />}
+          />
+          <CardText
+            expandable
+          >
+            <Iframe {...this.props} />
+          </CardText>
+        </Card>
+      </div>
+    );
+  }
+}
 
-helpCard.propTypes = propTypes;
-helpCard.defaultProps = defaultProps;
-
-export default helpCard;
+HelpCard.propTypes = propTypes;
+HelpCard.defaultProps = defaultProps;
