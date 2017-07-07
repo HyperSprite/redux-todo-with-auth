@@ -62,7 +62,7 @@ export default class ScrollIntoView extends Component {
   }
 
   render() {
-    return this.props.children ? this.props.children : null;
+    return this.props.children || null;
   }
 }
 

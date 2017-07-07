@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 import { LinearProgress } from 'material-ui';
 
 const propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.node.isRequired,
+  iFrameId: PropTypes.string,
 };
 
 export default class FullheightIframe extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      iFrameHeight: '0px',
+      iFrameHeight: 0,
+      iFramIsLoaded: false,
     };
   }
 
@@ -22,7 +24,7 @@ export default class FullheightIframe extends Component {
           style={{ maxWidth: '100%', width: '100%', height: this.state.iFrameHeight, overflow: 'visible' }}
           onLoad={() => {
             this.setState({
-              iFrameHeight: `${this.iframe.contentWindow.document.body.scrollHeight}px`,
+              iFrameHeight: this.iframe.contentWindow.document.body.scrollHeight,
             });
           }}
           ref={(c) => { this.iframe = c; }}
@@ -31,8 +33,12 @@ export default class FullheightIframe extends Component {
           height={this.state.iFrameHeight}
           scrolling="no"
           frameBorder="0"
+          id={this.props.iFrameId}
         />
-        {(this.state.iFrameHeight === '0px') ? (<LinearProgress mode="indeterminate" />) : null }
+        {(this.state.iFrameHeight === 0) ? (
+          <div style={{ height: 400 }}>
+            <LinearProgress mode="indeterminate" />
+          </div>) : null }
       </div>
 
     );

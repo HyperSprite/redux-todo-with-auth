@@ -98,10 +98,14 @@ class Athlete extends Component {
                 </IconButton>
               </div>
             </Card>
+            <HelpCard
+              src="/blog/power-and-weight"
+              iFrameId="power-and-weight"
+              title="Learn more about Power and Weight"
+            />
           </div>
           <div className="side-lite right-pane" />
         </div>
-        <HelpCard src="/blog/power-and-weight" title="Learn more about Power and Weight" />
       </div>
     );
   }

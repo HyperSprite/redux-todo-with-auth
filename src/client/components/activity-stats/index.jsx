@@ -136,10 +136,14 @@ class activeStats extends Component {
                 </div>
               )}
             </Paper>
+            <HelpCard
+              src="/blog/weekly-stats"
+              iFrameId="weekly-stats"
+              title="Learn more about Weekly Stats"
+            />
           </div>
           <div className="side-lite right-pane" />
         </div>
-        <HelpCard src="/blog/weekly-stats" title="Learn more about Weekly Stats" />
       </div>
     );
   }
