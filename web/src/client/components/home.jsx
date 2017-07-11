@@ -12,9 +12,9 @@ const posts = [
   'welcome-to-araceathlete',
   'how-do-i-get-started',
   'weekly-stats',
+  'power-at-altitude',
   'events',
   'power-and-weight',
-  'power-at-altitude',
 ];
 
 const propTypes = {
