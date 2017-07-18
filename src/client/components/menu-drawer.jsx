@@ -54,6 +54,11 @@ class MenuDrawer extends Component {
           primaryText="Weekly Stats"
           containerElement={<Link to="/weekly-stats">Weekly Stats</Link>}
         />
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Strava Club"
+          containerElement={<Link target="blank" to="https://www.strava.com/clubs/araceathlete">Strava Club</Link>}
+        />
         {this.props.adminMember ? (
           <MenuItem
             onTouchTap={this.handleClose}
