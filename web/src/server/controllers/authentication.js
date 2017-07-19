@@ -166,3 +166,17 @@ exports.user = (req, res, next) => {
     res.json({ user: user });
   });
 };
+
+exports.toggleClubNotice = async (req, res) => {
+  hlpr.consLog(['toggleClubNotice', req.body.clubNotice]);
+  let result;
+  try {
+    result = await User.findOneAndUpdate(
+      { stravaId: req.user.stravaId }, { clubNotice: req.body.clubNotice }, { new: true }
+    );
+  } catch (err) {
+    hlpr.consLog(['toggleClubNotice', err]);
+    return res.status(500).send({ Error: 'Failed to update' });
+  }
+  return res.send({ clubNotice: result.clubNotice });
+};

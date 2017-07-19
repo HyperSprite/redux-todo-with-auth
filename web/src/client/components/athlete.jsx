@@ -11,7 +11,7 @@ import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 import * as actions from './../actions';
 import Static from './form/static';
 // import Astrophases from './weather/astrophases';
-import FtpWeight from './metrics/ftp-weight';
+import ClubNotice from './club-notice';
 import Motovation from './motovation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
@@ -128,6 +128,7 @@ class Athlete extends Component {
                 </div>
               )}
               <Motovation />
+              <ClubNotice />
               <Static
                 contentLabel="Strava ID"
                 content={stravaId}

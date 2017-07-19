@@ -94,6 +94,7 @@ const userSchema = new Schema({
   measurement_preference: String, // ‘feet’ or ‘meters’
   adminMember: Boolean,
   clubMember: Boolean,
+  clubNotice: Boolean,
   week_start_day: Number, // 0 - Sun, 1 - Mon...
   activitiesCollected: Boolean,
   bikes: [bikeSchema],

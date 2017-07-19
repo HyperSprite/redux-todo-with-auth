@@ -8,6 +8,7 @@ import * as actions from './../actions';
 
 import Signin from './auth/signin';
 import EventFilter from './events/filter-toolbar';
+import ClubNotice from './club-notice';
 
 import style from '../styles/style';
 
@@ -41,7 +42,7 @@ class Header extends Component {
         rightMenu = EventFilter();
         break;
       default:
-        rightMenu = null;
+        rightMenu = <ClubNotice />;
         break;
     }
 
@@ -65,6 +66,7 @@ class Header extends Component {
           style={style.appBar}
           className="app-bar"
         />
+
       </div>
     );
   }
