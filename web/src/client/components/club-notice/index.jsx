@@ -12,9 +12,15 @@ import * as actions from '../../actions';
 
 const propTypes = {
   toggleClubNotice: PropTypes.func.isRequired,
+  firstname: PropTypes.string.isRequired,
   clubMember: PropTypes.bool.isRequired,
   clubNotice: PropTypes.bool.isRequired,
-  firstname: PropTypes.string.isRequired,
+};
+
+const defaultProps = {
+  firstname: '',
+  clubMember: false,
+  clubNotice: false,
 };
 
 class toggleClubNoticeDialog extends Component {
@@ -45,7 +51,8 @@ class toggleClubNoticeDialog extends Component {
   render() {
     const buttonActions = [
       <IconButton
-        tooltip={this.props.closeToolTip}
+        key={1}
+        tooltip="Close this message"
         onTouchTap={this.handleClose}
       >
         <Cancel />
@@ -94,6 +101,7 @@ class toggleClubNoticeDialog extends Component {
 }
 
 toggleClubNoticeDialog.propTypes = propTypes;
+toggleClubNoticeDialog.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
