@@ -18,6 +18,8 @@ export default function (state = {
       return { ...state, message: action.payload };
     case TYPES.FETCH_USER:
       return { ...state, user: action.payload };
+    case TYPES.SET_CLUB_NOTICE:
+      return { ...state, user: { ...state.user, clubNotice: action.payload.clubNotice } };
     default:
       return state;
   }

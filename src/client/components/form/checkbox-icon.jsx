@@ -12,10 +12,10 @@ const defaultProps = {
   option: false,
 };
 
-const CheckboxIcon = ({ option }) => {
+const CheckboxIcon = ({ option, onClick }) => {
   const CheckBox = option ? ToggleCheckBox : ToggleCheckBoxOutlineBlank;
   return (
-    <CheckBox style={style.toggleIconButton} />
+    <CheckBox style={style.toggleIconButton} onClick={onClick} />
   );
 };
 

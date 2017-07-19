@@ -41,6 +41,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
   SET_IS_FETCHING: 'SET_IS_FETCHING',
   SET_IS_FETCHING_OFF: 'SET_IS_FETCHING_OFF',
+  SET_CLUB_NOTICE: 'SET_CLUB_NOTICE',
   MESSAGE_FOR_USER: 'MESSAGE_FOR_USER',
 };
 
@@ -88,6 +89,24 @@ export function ifToken() {
       dispatch({ type: TYPES.AUTH_USER });
     };
   }
+}
+
+export function toggleClubNotice(toggle) {
+  return (dispatch) => {
+    axios.patch(`${ROOT_URL}/auth/clubNotice`, { clubNotice: toggle }, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.SET_CLUB_NOTICE,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          paylaod: error.data,
+        });
+      });
+  };
 }
 
 // Events
@@ -233,8 +252,8 @@ export function fetchStrava(path, id, index, stravatoken, context) {
         if (response.data.signout) {
           localStorage.removeItem('token');
           localStorage.removeItem('state');
-          window.location='/';
-          dispatch ({ type: response.data.types });
+          window.location = '/';
+          dispatch({ type: response.data.types });
         } else {
           switch (context) {
             case 'eventRoute':
