@@ -117,13 +117,15 @@ class activeStats extends Component {
               )}
               {isFetching ? (
                 <div>
-                  <RaisedButton
-                    label="Load Another Week"
-                    primary
-                    style={style.button}
-                    disabled
-                    icon={<CircularProgress size={22} thickness={4} />}
-                  />
+                  {weeklyStats.length ? (
+                    <RaisedButton
+                      label="Load Another Week"
+                      primary
+                      style={style.button}
+                      disabled
+                      icon={<CircularProgress size={22} thickness={4} />}
+                    />
+                  ) : null}
                 </div>
               ) : (
                 <div>
