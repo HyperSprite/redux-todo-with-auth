@@ -1,3 +1,4 @@
+const csv = require('fast-csv');
 const addDays = require('date-fns/add_days');
 const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
@@ -392,6 +393,127 @@ exports.deleteActivity = (req, res) => {
     }
     res.send([{ activityId: query.activityId, deleted: true }]);
   });
+};
+
+
+// Search Activities:
+// localhost:3080/apiv1/activities/search-activities?text=rock&sort={"total_elevation_gain":-1}&wildcard=true
+// with no query string, returns all
+exports.searchActivities = async (req, res) => {
+  const query = req.query;
+  query.search = [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }];
+
+  if (query.wildcard && query.text) {
+    // slow but allows wildcard option
+    query.search.push({ name: { $regex: query.text, $options: 'i' } });
+  } else if (query.text) {
+    // fast but returns stemmed words, will not return partial matches
+    // also works with -not words
+    query.search.push({ $text: { $search: query.text } });
+  }
+  if (query.trainer) {
+    query.search.push({ trainer: true });
+  }
+  // Put all search above this line
+  query.aggregate = [
+    { $match: { $and: query.search } },
+  ];
+  // sort={"total_elevation_gain":1}
+  query.sort = JSON.parse(query.sort) || { start_date_local: -1 };
+  query.aggregate.push({ $sort: query.sort });
+
+  // projection for CSV
+  if (query.csv) {
+    query.aggregate.push({ $project:  {
+      _id: 0,
+      name: 1,
+      description: 1,
+      type: 1,
+      workout_type: 1,
+      distance: 1,
+      moving_time: 1,
+      elapsed_time: 1,
+      average_speed: 1,
+      max_speed: 1,
+      average_cadence: 1,
+      max_cadence: 1,
+      average_heartrate: 1,
+      max_heartrate: 1,
+      has_heartrate: 1,
+      suffer_score: 1,
+      calories: 1,
+      device_watts: 1,
+      tssScore: 1,
+      average_watts: 1,
+      max_watts: 1,
+      weighted_average_watts: 1,
+      kilojoules: 1,
+      elev_high: 1,
+      elev_low: 1,
+      total_elevation_gain: 1,
+      start_date: 1,
+      start_date_local: 1,
+      timezone: 1,
+      start_lat: '$start_latlng[0]',
+      start_lon: '$start_latlng[1]',
+      end_lat: '$end_latlng[0]',
+      end_lon: '$end_latlng[1]',
+      average_temp: 1,
+      max_temp: 1,
+      gearname: '$gear.name',
+      achievement_count: 1,
+      activityId: 1,
+      trainer: 1,
+      commute: 1,
+      manual: 1,
+      private: 1,
+      flagged: 1,
+    } });
+  }
+
+  // text: full text search of activity titles and descriptions
+  hlpr.consLog([query, query.text]);
+  let result;
+  try {
+    result = await Activities.aggregate(query.aggregate);
+    //   [
+    //     { $match: { $and: query.search } },
+    //     { $sort: query.sort },
+    //     query.project,
+    //   ]
+    // );
+  } catch (err) {
+    hlpr.consLog(['searchActivities', err]);
+    return res.status(500).send({ Error: 'Failed to Search Activities' });
+  }
+  if (query.csv) {
+    const filename = 'activity-data.csv';
+    res.setHeader('Content-disposition', `attachment; filename=${filename}`);
+    res.setHeader('content-type', 'text/csv');
+    csv.writeToString(result, {
+      headers: true,
+      objectMode: true,
+    }, (err, resultCsv) => {
+      if (err) return console.log(err);
+      res.send(resultCsv);
+    });
+  } else {
+    res.send(result);
+  }
+};
+
+exports.toggleClubNotice = async (req, res) => {
+  hlpr.consLog(['toggleClubNotice', req.body.clubNotice]);
+  let result;
+  try {
+    result = await User.findOneAndUpdate(
+      { stravaId: req.user.stravaId }, { clubNotice: req.body.clubNotice }, { new: true }
+    );
+  } catch (err) {
+    hlpr.consLog(['toggleClubNotice', err]);
+    return res.status(500).send({ Error: 'Failed to update' });
+  }
+  return res.send({ clubNotice: result.clubNotice });
 };
 
 // No longer useing this version
