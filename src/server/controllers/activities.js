@@ -469,7 +469,7 @@ exports.searchActivities = async (req, res) => {
   //   results: { $push: '$$ROOT' },
   // } });
 
-  query.limit = query.limit * 1 || 4;
+  query.limit = query.limit * 1 || 12;
 
   query.page = query.page || 1;
   query.page *= 1;
