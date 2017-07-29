@@ -354,7 +354,6 @@ export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
 }
 
 export function fetchActivitiesSearch(relURL, queryOptions) {
-  console.log('what', queryOptions, qs.stringify(queryOptions));
   // axiosConfig.data = qs.stringify(queryOptions);
   return (dispatch) => {
     axios.get(`${relURL}?${qs.stringify(queryOptions)}`, axiosConfig)

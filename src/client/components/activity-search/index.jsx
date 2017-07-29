@@ -22,8 +22,6 @@ import validate from '../form/validate';
 import style from './style';
 import { formValues, relURL, thisForm, title } from './values';
 
-console.log('formValues', ...formValues.map(fV => fV.contentName));
-
 const propTypes = {
   activities: PropTypes.array,
   activitySearchCount: PropTypes.number.isRequired,
