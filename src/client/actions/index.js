@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import { v4 } from 'uuid';
+import qs from 'qs';
 
 const axiosConfig = {
   headers: {
@@ -24,6 +25,9 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   FETCH_USER: 'FETCH_USER',
   FETCH_USER_ACTIVITIES: 'FETCH_USER_ACTIVITIES',
   FETCH_WEEKLYTOTALS_ACTIVITIES: 'FETCH_WEEKLYTOTALS_ACTIVITIES',
+  FETCH_ACTIVITIES_SEARCH: 'FETCH_ACTIVITIES_SEARCH',
+  CLEAR_ACTIVITY_SEARCH: 'CLEAR_ACTIVITY_SEARCH',
+  SET_ACTIVITY_SEARCH_CUSTOM: 'SET_ACTIVITY_SEARCH_CUSTOM',
   ACTIVITY_REMOVED: 'ACTIVITY_REMOVED',
   SET_WEEKLY_STATS: 'SET_WEEKLY_STATS',
   FETCH_DATA: 'FETCH_DATA',
@@ -311,6 +315,22 @@ export function setWeeklyStats() {
   };
 }
 
+export function clearActivitySearch() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.CLEAR_ACTIVITY_SEARCH,
+    });
+  };
+}
+
+export function setActivitySearchCustom() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SET_ACTIVITY_SEARCH_CUSTOM,
+    });
+  };
+}
+
 export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
   const isWeeksBack = weeksBack ? `/${weeksBack}` : '';
   return (dispatch) => {
@@ -318,6 +338,29 @@ export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
       .then((response) => {
         dispatch({
           type: TYPES.FETCH_WEEKLYTOTALS_ACTIVITIES,
+          payload: response.data,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function fetchActivitiesSearch(relURL, queryOptions) {
+  console.log('what', queryOptions, qs.stringify(queryOptions));
+  // axiosConfig.data = qs.stringify(queryOptions);
+  return (dispatch) => {
+    axios.get(`${relURL}?${qs.stringify(queryOptions)}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_ACTIVITIES_SEARCH,
           payload: response.data,
         });
         dispatch({

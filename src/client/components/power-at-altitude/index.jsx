@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import { FlatButton, LinearProgress } from 'material-ui';
+import { Card, CardActions, CardText } from 'material-ui/Card';
+import { FlatButton } from 'material-ui';
 import {
   Table,
   TableBody,
@@ -14,13 +14,15 @@ import {
 
 import * as actions from './../../actions';
 import lib from '../../containers/lib';
-import CheckBox from '../form/checkbox-icon';
+import FeatureNotice from '../form/feature-notice';
 import ToggleIcon from '../form/toggle-icon';
 import HelpCard from '../form/help-card';
 import Dialog from './dialog';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
 import style from '../../styles/style';
+
+const title = 'Power at Altitude';
 
 const propTypes = {
   fetchData: PropTypes.func.isRequired,
@@ -50,7 +52,7 @@ class AltitudeTable extends Component {
 
   componentDidMount() {
     this.props.fetchData('auth/user');
-    this.props.setPageName('Power at Altitude');
+    this.props.setPageName(title);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -169,29 +171,17 @@ class AltitudeTable extends Component {
                 </CardText>
                 </div>
               ) : (
-                <div style={{ margin: 20 }}>
-                  <h4>
-                    {'We\'re sorry, this is an A Race athlete Premium feature'}
-                  </h4>
-                  <p>
-                    To access this page you need the following:
-                  </p>
-                  <ul style={{ listStyle: 'none' }}>
-                    <li><CheckBox option={!!user.clubMember} /> Be a member of the A Race athlete Strava Club</li>
-                    <li><CheckBox option={!!user.premium} /> Be a Strava Premium user</li>
-                    <li><CheckBox option={!!currentFTP} />An entry in the Strava FTP field</li>
-                    <li><CheckBox option={!!user.userGeoElevation} />An entry in the Strava City and Country fields</li>
-                  </ul>
-                  <p>
-                    {'See "Learn more about Power at Altitude" below for more information.'}
-                  </p>
-                </div>
+                <FeatureNotice
+                  user={user}
+                  checks={['clubMember', 'premium', 'ftpHistory', 'userGeoElevation']}
+                  title={`Learn more about ${title}`}
+                />
               )}
             </Card>
             <HelpCard
               src="/blog/power-at-altitude"
               iFrameId="power-at-altitude"
-              title="Learn more about Power at Altitude"
+              title={`Learn more about ${title}`}
             />
           </div>
           <div className="side-lite right-pane" />

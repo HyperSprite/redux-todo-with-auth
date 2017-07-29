@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Divider, Drawer, MenuItem } from 'material-ui';
@@ -33,6 +34,11 @@ class MenuDrawer extends Component {
           onTouchTap={this.handleClose}
           primaryText="Home"
           containerElement={<Link to="/home">Home</Link>}
+        />
+        <MenuItem
+          onTouchTap={this.handleClose}
+          primaryText="Activity Search"
+          containerElement={<Link to="/activity-search">Activity Search</Link>}
         />
         <MenuItem
           onTouchTap={this.handleClose}

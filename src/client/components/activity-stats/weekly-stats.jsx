@@ -4,7 +4,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 import lib from '../../containers/lib';
 import BarChart from './bar-chart';
-import SingleActivity from './single-activity';
+import SingleActivity from '../form/single-activity';
 
 const propTypes = {
   week: PropTypes.string.isRequired, // "2017-05-02"
@@ -29,7 +29,7 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
       />
       <CardActions>
         <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-          
+
           {stats.weeklyTotals.tss.total ? (
             <BarChart
               contentLabel="TSS"
