@@ -41,19 +41,17 @@ class activeStats extends Component {
 
   componentDidMount() {
     this.updateUserActivities();
-    this.props.setWeeklyStats();
     this.props.setPageName('Weekly Stats');
   }
 
   fetchAnotherWeek() {
     this.props.setIsFetching();
-    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStatsCount);
-    this.props.setWeeklyStats();
+    this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStats.length);
   }
 
   fetchWeeksActivities() {
     setTimeout(() => {
-      if (!this.props.weeklyStats.length) {
+      if (!this.props.weeklyStats[0].name.length) {
         this.fetchAnotherWeek();
       }
     }, 400);

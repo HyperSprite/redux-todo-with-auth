@@ -7,6 +7,7 @@ import Home from './../components/home';
 import Signin from './../components/auth/signin';
 import Signout from './../components/auth/signout';
 import Athlete from './../components/athlete';
+import ActivitySearch from './../components/activity-search';
 import Events from './../components/events/list-events';
 import EditEvent from './../components/events/edit-event';
 import Goals from './../components/goals/list-goals';
@@ -19,6 +20,7 @@ const router = (
   <Switch>
     <RouteAuthorized exact path="/" component={WeeklyStats} />
     <RouteAuthorized path="/athlete" component={Athlete} />
+    <RouteAuthorized path="/activity-search" component={ActivitySearch} />
     <RouteAuthorized path="/events/addevent" component={EditEvent} />
     <Route exact path="/events" component={Events} />
     <RouteAuthorized path="/goals/addgoal" component={AddGoal} />

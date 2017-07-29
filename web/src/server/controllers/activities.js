@@ -4,10 +4,12 @@ const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
 const getTime = require('date-fns/get_time');
+const qs = require('qs');
 
 const Activities = require('../models/activities');
 const auth = require('./authentication');
 const User = require('../models/user');
+const stopwords = require('../lib/stopwords');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
 
@@ -396,35 +398,92 @@ exports.deleteActivity = (req, res) => {
 };
 
 
+// TODO work this into query
+// make a trie function for stopwords,
+// load the array on startup into a trie for faster resolution,
+// then check words against that
+const queryVar = (str) => {
+  const q = str.replace(/\r\n/g, '').replace(/^\s+|\s+$/, '').replace(/[^a-z\s]+/gi, '').replace(/\s+$/, '');
+
+  const parts = q.split(/\s/);
+  const terms = [];
+  parts.forEach((part) => {
+    if (stopwords.indexOf(part) === -1) {
+      terms.push(part);
+    }
+  });
+  const query = { $and: [] };
+  terms.forEach((term) => {
+    const queryFrag = { title: { $regex: term, $options: 'i' } };
+    query.$and.push(queryFrag);
+  });
+  return query;
+};
+// also consider using $or operator and then ranking the return
+// for instance a search useing $or: "rockwell relay race"
+// would return all results that contain any of those words
+// if we can average the results and then sort based on rank...
+// const partsMap = parts.map(part => $cond: [{ $eq: [$field, part] }, 1, 0] )
+// const $project: {
+  // result: {
+    // $add: partsMap(parts),
+  // },
+// }
+
+
 // Search Activities:
 // localhost:3080/apiv1/activities/search-activities?text=rock&sort={"total_elevation_gain":-1}&wildcard=true
 // with no query string, returns all
 exports.searchActivities = async (req, res) => {
-  const query = req.query;
+  const query = qs.parse(req.query);
+
   query.search = [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }];
 
-  if (query.wildcard && query.text) {
+  if (query.wildcard && query.textsearch) {
     // slow but allows wildcard option
-    query.search.push({ name: { $regex: query.text, $options: 'i' } });
-  } else if (query.text) {
+    query.search.push({ name: { $regex: query.textsearch, $options: 'i' } });
+  } else if (query.textsearch) {
     // fast but returns stemmed words, will not return partial matches
     // also works with -not words
-    query.search.push({ $text: { $search: query.text } });
+    query.search.push({ $text: { $search: query.textsearch } });
   }
   if (query.trainer) {
     query.search.push({ trainer: true });
   }
+  if (query.commute) {
+    query.search.push({ commute: true });
+  }
+  // manual
+  // private
+  // flagged
   // Put all search above this line
   query.aggregate = [
     { $match: { $and: query.search } },
   ];
-  // sort={"total_elevation_gain":1}
-  query.sort = JSON.parse(query.sort) || { start_date_local: -1 };
+  query.sort = { start_date_local: -1 };
   query.aggregate.push({ $sort: query.sort });
 
+  // query.aggregate.push({ $group: {
+  //   _id: null,
+  //   count: { $sum: 1 },
+  //   results: { $push: '$$ROOT' },
+  // } });
+
+  query.limit = query.limit * 1 || 4;
+
+  query.page = query.page || 1;
+  query.page *= 1;
+  console.log('query.page', query.page);
+  if (query.page > 1) {
+    query.skip = (query.page * query.limit) - query.limit;
+    query.aggregate.push({ $skip: query.skip });
+  }
+  query.aggregate.push({ $limit: query.limit });
+
+  console.dir(query.aggregate);
   // projection for CSV
   if (query.csv) {
-    query.aggregate.push({ $project:  {
+    query.aggregate.push({ $project: {
       _id: 0,
       name: 1,
       description: 1,
@@ -498,7 +557,8 @@ exports.searchActivities = async (req, res) => {
       res.send(resultCsv);
     });
   } else {
-    res.send(result);
+    const activitySearch = result.map(r => r.activityId);
+    res.send({ activities: result, activitySearch });
   }
 };
 

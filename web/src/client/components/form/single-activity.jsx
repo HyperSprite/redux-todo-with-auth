@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton } from 'material-ui';
 import { ActionDeleteForever } from 'material-ui/svg-icons';
@@ -52,7 +53,7 @@ class SingleActivity extends Component {
     }
 
     return (
-      <div>
+      <div key={`${activity.activityId}-single`}>
         <h4><a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">{activity.name}</a></h4>
         <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }} >
           <IconButton
