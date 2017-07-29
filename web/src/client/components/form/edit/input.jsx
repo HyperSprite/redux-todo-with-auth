@@ -9,7 +9,6 @@ import validate from '../../form/validate';
 
 const WizardInput = (props) => {
   const { content, formValues, handleSubmit, auxButton, auxButtonLabel, pristine, submitting, submitLabel } = props;
-  console.log('formValues', formValues, content);
 
   const buttonSet = (
     formValues.addButtonset ? (
