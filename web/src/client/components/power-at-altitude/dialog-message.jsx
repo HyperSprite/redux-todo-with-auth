@@ -28,46 +28,28 @@ const powerZones = [
 
 const getZones = (low, high, data, percent) => {
   const tmpPercent = percent ? '%' : '';
-  const tmpLow = low ? `${lib.round(low * data, 0)}${tmpPercent}` : 'below';
-  const tmpHigh = high ? `${lib.round(high * data, 0)}${tmpPercent}` : 'and above';
+  const tmpLow = low ? `${lib.round(low * data, 0)}${tmpPercent}` : '<';
+  const tmpHigh = high ? `${lib.round(high * data, 0)}${tmpPercent}` : '+';
   return `${tmpLow} - ${tmpHigh}`;
 };
 
 
 const DialogMessage = props => (
-  <Card>
-    <CardHeader
-      title={`Based on an FTP of ${props.data}`}
-    />
-    <CardText>
-      <Table
-        fixedHeader
-        selectable={false}
-        multiSelectable={false}
-      >
-        <TableHeader
-          displaySelectAll={false}
-          adjustForCheckbox={false}
-        >
-          <TableRow >
-            <TableHeaderColumn>Zone</TableHeaderColumn>
-            <TableHeaderColumn>Zone FTP</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody
-          displayRowCheckbox={false}
-          stripedRows
-        >
-          {powerZones.map(pZ => (
-            <TableRow key={pZ[0]}>
-              <TableRowColumn>{`${pZ[0]} - ${pZ[1]} - ${getZones(pZ[2], pZ[3], 100, true)}`}</TableRowColumn>
-              <TableRowColumn>{getZones(pZ[2], pZ[3], props.data, false)}</TableRowColumn>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </CardText>
-  </Card>
+  <div>
+    <h4>{`Reletive FTP of ${props.data}`}</h4>
+    <div>
+      {powerZones.map(pZ => (
+        <div key={pZ[0]} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: 10 }}>
+          <div style={{ width: '240px' }}>
+            {`${pZ[0]} - ${pZ[1]} - ${getZones(pZ[2], pZ[3], 100, true)}`}
+          </div>
+          <div style={{ width: '240px' }}>
+            {getZones(pZ[2], pZ[3], props.data, false)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
 );
 
 DialogMessage.propTypes = propTypes;
