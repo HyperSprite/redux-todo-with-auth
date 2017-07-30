@@ -37,7 +37,7 @@ class MenuDrawer extends Component {
         />
         <MenuItem
           onTouchTap={this.handleClose}
-          primaryText="Activity Search"
+          primaryText="Activity Search (beta)"
           containerElement={<Link to="/activity-search">Activity Search</Link>}
         />
         <MenuItem
