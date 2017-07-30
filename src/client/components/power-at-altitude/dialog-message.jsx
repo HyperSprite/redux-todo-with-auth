@@ -36,7 +36,7 @@ const getZones = (low, high, data, percent) => {
 
 const DialogMessage = props => (
   <div>
-    <h4>{`Reletive FTP of ${props.data}`}</h4>
+    <h4>{`Relative FTP of ${props.data}`}</h4>
     <div>
       {powerZones.map(pZ => (
         <div key={pZ[0]} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: 10 }}>
