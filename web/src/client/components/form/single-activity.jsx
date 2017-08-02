@@ -24,7 +24,7 @@ const style = {
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-    width: 600,
+    maxWidth: 600,
   },
   box: {
     width: 200,
