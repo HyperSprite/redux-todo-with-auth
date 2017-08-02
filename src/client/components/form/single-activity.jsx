@@ -6,12 +6,101 @@ import { ActionDeleteForever } from 'material-ui/svg-icons';
 
 import lib from '../../containers/lib';
 import * as actions from '../../actions';
+import theme from '../../styles/theme';
+
 
 const style = {
+  title: {
+    display: 'inline-flex',
+    verticalAlign: 'middle',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontWeight: 600,
+  },
+  delete: {
+
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    width: 600,
+  },
   box: {
-    width: 100,
+    width: 200,
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    // border: `thin solid ${theme.palette.accent3Color}`,
+  },
+  boxLabel: {
+    fontStyle: 'strong',
+    color: theme.palette.accent1Color,
+    marginLeft: 10,
+  },
+  boxData: {
+    marginRight: 10,
   },
 };
+
+const returnValues = [
+  {
+    activityType: 'gear',
+    activityTypeSub: 'name',
+    activityLabel: 'Gear',
+  },
+  {
+    activityType: 'tssScore',
+    activityLabel: 'TSS',
+  },
+  {
+    activityType: 'kilojoules',
+    activityLabel: 'Kilojoules',
+  },
+  {
+    activityType: 'weighted_average_watts',
+    activityLabel: 'Nomalized Power',
+  },
+  {
+    activityType: 'suffer_score',
+    activityLabel: 'Suffer Score',
+  },
+  {
+    activityType: 'calories',
+    activityLabel: 'Calories',
+  },
+  {
+    activityType: 'moving_time',
+    activityLabel: 'Moving Time',
+    conversionFunction: lib.statsConversions,
+    conversionMetric: 'time',
+    conversionYAxis: false,
+    conversionData: 'moving_time',
+  },
+  {
+    activityType: 'distance',
+    activityLabel: 'Distance',
+    conversionFunction: lib.statsConversions,
+    conversionMetric: 'dst',
+    conversionYAxis: false,
+    conversionData: 'distance',
+    conversionTypeSA: 'miles',
+    conversionTypeMetric: 'meters',
+    conversionmPref: true,
+  },
+  {
+    activityType: 'total_elevation_gain',
+    activityLabel: 'Elevation',
+    conversionFunction: lib.statsConversions,
+    conversionMetric: 'elev',
+    conversionYAxis: false,
+    conversionData: 'total_elevation_gain',
+    conversionTypeSA: 'feet',
+    conversionTypeMetric: 'meters',
+    conversionmPref: true,
+  },
+];
+// metric, yAxis, data, mPref
 
 const propTypes = {
   name: PropTypes.string,
@@ -48,46 +137,76 @@ class SingleActivity extends Component {
 
     if (activity.deleted) {
       return (
-        <h4 style={{ color: '#77000' }}>{activity.name}</h4>
+        <h4 style={style.h4}>{activity.name}</h4>
       );
     }
 
     return (
-      <div key={`${activity.activityId}-single`}>
-        <h4><a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">{activity.name}</a></h4>
-        <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }} >
+      <div key={`${activity.activityId}-single`} >
+        <div style={style.title}>
+          <a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">
+            {activity.name}
+          </a>
           <IconButton
             onClick={this.deleteActivity}
             tooltip="Delete from A Race athlete (does not remove from Strava)"
           >
             <ActionDeleteForever />
           </IconButton>
+        </div>
+        <div style={style.container} >
 
-          {activity.tssScore ? (
-            <div style={style.box} >TSS<br />{activity.tssScore}</div>
-          ) : (null)}
-
-          {activity.suffer_score ? (
-            <div style={style.box} >SS<br />{activity.suffer_score}</div>
-          ) : (null)}
-
-          {activity.kilojoules ? (
-            <div style={style.box} >KJ<br />{activity.kilojoules}</div>
-          ) : (null)}
-
-          <div style={style.box} >Moving Time<br />
-            {lib.statsConversions('time', false, activity.moving_time)}
-          </div>
-
-          <div style={style.box} >Distance<br />
-            {lib.statsConversions('dst', false, activity.distance, mPref)}
-            {mPref ? (<span> miles</span>) : (<span> meters</span>)}
-          </div>
-
-          <div style={style.box} >Elevation<br />
-            {lib.statsConversions('elev', false, activity.total_elevation_gain, mPref)}
-            {mPref ? (<span> feet</span>) : (<span> meters</span>)}
-          </div>
+          {returnValues.map((rV) => {
+            if (activity[rV.activityType] && rV.conversionMetric) {
+              return (
+                <div key={rV.activityType} style={style.box} >
+                  <div style={style.boxLabel}>
+                    {rV.activityLabel}
+                  </div>
+                  <div style={style.boxData}>
+                    {rV.conversionFunction(
+                      rV.conversionMetric,
+                      rV.conversionYAxis,
+                      activity[rV.conversionData],
+                      mPref,
+                    )}
+                    {rV.conversionmPref ? (
+                      <span>
+                        {mPref ? (
+                          <span> {rV.conversionTypeSA}</span>
+                        ) : (
+                          <span> {rV.conversionTypeMetric}</span>
+                        )}
+                      </span>
+                    ) : (null)}
+                  </div>
+                </div>
+              );
+            } else if (activity[rV.activityType] && activity[rV.activityType][rV.activityTypeSub]) {
+              return (
+                <div key={rV.activityType} style={style.box} >
+                  <div style={style.boxLabel}>
+                    {rV.activityLabel}
+                  </div>
+                  <div style={style.boxData}>
+                    {activity[rV.activityType][rV.activityTypeSub]}
+                  </div>
+                </div>
+              );
+            } else if (activity[rV.activityType]) {
+              return (
+                <div key={rV.activityType} style={style.box} >
+                  <div style={style.boxLabel}>
+                    {rV.activityLabel}
+                  </div>
+                  <div style={style.boxData}>
+                    {activity[rV.activityType]}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
         </div>
       </div>
     );
