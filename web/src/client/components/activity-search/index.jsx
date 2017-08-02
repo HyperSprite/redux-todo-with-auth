@@ -151,96 +151,96 @@ class ActivitySearch extends Component {
       user
     } = this.props;
 
+    if (!user.clubMember) {
+      return (
+        <FeatureNotice
+          user={user}
+          checks={['clubMember']}
+          title={title}
+        />
+      );
+    }
+
     return (
       <div>
         <div className="main-flex-container" >
           <div className="side-lite left-pane" />
           <div className="main" >
-            {user.clubMember ? (
-              <div>
-                <ScrollIntoView
-                  id={location.hash}
-                  headerHeight={70}
-                />
-                <Paper
-                  zDepth={1}
-                >
-                  <div style={style.div}>
-                    <Form id={contentName} onSubmit={handleSubmit(this.handleFormSubmit)}>
-                      {formValues.map((fV) => (
-                        <div key={fV.contentName}>
-                          <EditSwitch
-                            form={this.props.form}
-                            formValues={fV}
+            <ScrollIntoView
+              id={location.hash}
+              headerHeight={70}
+            />
+            <Paper
+              zDepth={1}
+            >
+              <div style={style.div}>
+                <Form id={contentName} onSubmit={handleSubmit(this.handleFormSubmit)}>
+                  {formValues.map((fV) => (
+                    <div key={fV.contentName}>
+                      <EditSwitch
+                        form={this.props.form}
+                        formValues={fV}
+                      />
+                    </div>
+                  ))}
+                  <div>
+                    {isFetching ? (
+                      <RaisedButton
+                        label="Searching"
+                        disabled
+                        primary
+                        style={style.button}
+                        icon={<CircularProgress size={22} />}
+                      />
+                    ) : (
+                      <RaisedButton
+                        label="Search"
+                        type={pristine ? 'button' : 'submit'}
+                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                        primary
+                        autoFocus
+                        style={style.button}
+                        icon={<MdSearch size={24} />}
+                      />
+                    )}
+                    <RaisedButton
+                      label="Clear Values"
+                      onClick={reset}
+                      style={style.button}
+                      disabled={pristine || submitting}
+                    />
+                    <RaisedButton
+                      label="Download Activities"
+                      primary
+                      style={style.button}
+                      onClick={handleSubmit(this.activitiesDownload)}
+                    />
+                  </div>
+                  {!activities ? (
+                    <p>Loading Activities</p>
+                  ) : (
+                    <div>
+                      { activities.map(act => (
+                        <div key={act} style={style.div}>
+                          <SingleActivity
+                            activityId={act}
                           />
                         </div>
                       ))}
-                      <div>
-                        {isFetching ? (
-                          <RaisedButton
-                            label="Searching"
-                            disabled
-                            primary
-                            style={style.button}
-                            icon={<CircularProgress size={22} />}
-                          />
-                        ) : (
-                          <RaisedButton
-                            label="Search"
-                            type={pristine ? 'button' : 'submit'}
-                            onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                            primary
-                            autoFocus
-                            style={style.button}
-                            icon={<MdSearch size={24} />}
-                          />
-                        )}
-                        <RaisedButton
-                          label="Clear Values"
-                          onClick={reset}
-                          style={style.button}
-                          disabled={pristine || submitting}
-                        />
-                        <RaisedButton
-                          label="Download Activities"
-                          primary
-                          style={style.button}
-                          onClick={handleSubmit(this.activitiesDownload)}
-                        />
-                      </div>
-                      {!activities ? (
-                        <p>Loading Activities</p>
-                      ) : (
-                        <div>
-                          { activities.map(act => (
-                            <div key={act} style={style.div}>
-                              <SingleActivity
-                                activityId={act}
-                              />
-                            </div>
-                          ))}
-                          <RaisedButton
-                            label="Load more"
-                            type={pristine ? 'button' : 'submit'}
-                            onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                            primary
-                            autoFocus
-                            style={style.button}
-                          />
-                        </div>
-                      )}
-                    </Form>
-                  </div>
-
-                </Paper>
+                      <RaisedButton
+                        label="Load more"
+                        type={pristine ? 'button' : 'submit'}
+                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                        primary
+                        autoFocus
+                        style={style.button}
+                      />
+                    </div>
+                  )}
+                </Form>
               </div>
-          ) : (
-            <FeatureNotice
-              user={user}
-              checks={['clubMember']}
-              title={title}
-            />
-          )}
+            </Paper>
+
             <HelpCard
               src="/blog/activity-search"
               iFrameId="activity-search"
