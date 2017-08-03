@@ -11,14 +11,14 @@ import theme from '../../styles/theme';
 
 const style = {
   title: {
-    display: 'inline-flex',
+    display: 'flex',
     verticalAlign: 'middle',
     alignItems: 'center',
     justifyContent: 'space-between',
     fontWeight: 600,
   },
   delete: {
-
+    marginRight: '3vw',
   },
   container: {
     display: 'flex',
@@ -44,6 +44,10 @@ const style = {
 };
 
 const returnValues = [
+  {
+    activityType: 'type',
+    activityLabel: 'Type',
+  },
   {
     activityType: 'gear',
     activityTypeSub: 'name',
@@ -144,15 +148,19 @@ class SingleActivity extends Component {
     return (
       <div key={`${activity.activityId}-single`} >
         <div style={style.title}>
-          <a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">
-            {activity.name}
-          </a>
-          <IconButton
-            onClick={this.deleteActivity}
-            tooltip="Delete from A Race athlete (does not remove from Strava)"
-          >
-            <ActionDeleteForever />
-          </IconButton>
+          <div>
+            <a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">
+              {activity.name}
+            </a>
+          </div>
+          <div style={style.delete}>
+            <IconButton
+              onClick={this.deleteActivity}
+              tooltip="Delete from A Race athlete (does not remove from Strava)"
+            >
+              <ActionDeleteForever />
+            </IconButton>
+          </div>
         </div>
         <div style={style.container} >
 
@@ -162,6 +170,15 @@ class SingleActivity extends Component {
                 <div key={rV.activityType} style={style.box} >
                   <div style={style.boxLabel}>
                     {rV.activityLabel}
+                    {rV.conversionmPref ? (
+                      <span>
+                        {mPref ? (
+                          <span> {`(${rV.conversionTypeSA})`}</span>
+                        ) : (
+                          <span> {`(${rV.conversionTypeMetric})`}</span>
+                        )}
+                      </span>
+                    ) : (null)}
                   </div>
                   <div style={style.boxData}>
                     {rV.conversionFunction(
@@ -170,15 +187,7 @@ class SingleActivity extends Component {
                       activity[rV.conversionData],
                       mPref,
                     )}
-                    {rV.conversionmPref ? (
-                      <span>
-                        {mPref ? (
-                          <span> {rV.conversionTypeSA}</span>
-                        ) : (
-                          <span> {rV.conversionTypeMetric}</span>
-                        )}
-                      </span>
-                    ) : (null)}
+
                   </div>
                 </div>
               );
