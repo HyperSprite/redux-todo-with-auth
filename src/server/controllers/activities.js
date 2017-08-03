@@ -151,20 +151,22 @@ exports.getRecentActivities = (req, res) => {
     if (acts.message === 'Authorization Error') {
       hlpr.consLog(['listActivities Authorization Error', req.user.stravaId]);
       return auth.stravaSignOut(req, res);
-    } else {
-      const counter = [];
-      acts.forEach((act, index) => {
-        Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
-          if (err) return { error: err };
-          getActivityDetails(dbActivity, options, index, created, (done) => {
-            counter.push(done);
-            if (counter.length === acts.length) {
-              exports.getWeeklyStats(req, res);
-            }
-          });
+    } else if (Array.isArray(acts)) {
+      hlpr.consLog(['listActivities !acts or !acts[0]']);
+      return exports.getWeeklyStats(req, res);
+    }
+    const counter = [];
+    acts.forEach((act, index) => {
+      Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
+        if (err) return { error: err };
+        getActivityDetails(dbActivity, options, index, created, (done) => {
+          counter.push(done);
+          if (counter.length === acts.length) {
+            exports.getWeeklyStats(req, res);
+          }
         });
       });
-    }
+    });
   });
 };
 

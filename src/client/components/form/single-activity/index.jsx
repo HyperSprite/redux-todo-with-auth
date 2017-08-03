@@ -4,114 +4,16 @@ import { connect } from 'react-redux';
 import { IconButton } from 'material-ui';
 import { ActionDeleteForever } from 'material-ui/svg-icons';
 
-import lib from '../../containers/lib';
-import * as actions from '../../actions';
-import theme from '../../styles/theme';
-
-
-const style = {
-  title: {
-    display: 'flex',
-    verticalAlign: 'middle',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontWeight: 600,
-  },
-  delete: {
-    marginRight: '3vw',
-  },
-  container: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    flexWrap: 'wrap',
-    maxWidth: 600,
-  },
-  box: {
-    width: 200,
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    // border: `thin solid ${theme.palette.accent3Color}`,
-  },
-  boxLabel: {
-    fontStyle: 'strong',
-    color: theme.palette.accent1Color,
-    marginLeft: 10,
-  },
-  boxData: {
-    marginRight: 10,
-  },
-};
-
-const returnValues = [
-  {
-    activityType: 'type',
-    activityLabel: 'Type',
-  },
-  {
-    activityType: 'gear',
-    activityTypeSub: 'name',
-    activityLabel: 'Gear',
-  },
-  {
-    activityType: 'tssScore',
-    activityLabel: 'TSS',
-  },
-  {
-    activityType: 'kilojoules',
-    activityLabel: 'Kilojoules',
-  },
-  {
-    activityType: 'weighted_average_watts',
-    activityLabel: 'Nomalized Power',
-  },
-  {
-    activityType: 'suffer_score',
-    activityLabel: 'Suffer Score',
-  },
-  {
-    activityType: 'calories',
-    activityLabel: 'Calories',
-  },
-  {
-    activityType: 'moving_time',
-    activityLabel: 'Moving Time',
-    conversionFunction: lib.statsConversions,
-    conversionMetric: 'time',
-    conversionYAxis: false,
-    conversionData: 'moving_time',
-  },
-  {
-    activityType: 'distance',
-    activityLabel: 'Distance',
-    conversionFunction: lib.statsConversions,
-    conversionMetric: 'dst',
-    conversionYAxis: false,
-    conversionData: 'distance',
-    conversionTypeSA: 'miles',
-    conversionTypeMetric: 'meters',
-    conversionmPref: true,
-  },
-  {
-    activityType: 'total_elevation_gain',
-    activityLabel: 'Elevation',
-    conversionFunction: lib.statsConversions,
-    conversionMetric: 'elev',
-    conversionYAxis: false,
-    conversionData: 'total_elevation_gain',
-    conversionTypeSA: 'feet',
-    conversionTypeMetric: 'meters',
-    conversionmPref: true,
-  },
-];
-// metric, yAxis, data, mPref
+import * as actions from '../../../actions';
+import returnValues from './return-values';
+import style from './style';
 
 const propTypes = {
-  name: PropTypes.string,
-  activityId: PropTypes.number,
-  activities: PropTypes.array,
+  activityId: PropTypes.number.isRequired,
+  activities: PropTypes.array.isRequired,
   mPref: PropTypes.bool,
-  removeActivity: PropTypes.func,
+  removeActivity: PropTypes.func.isRequired,
+  setIsFetching: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
