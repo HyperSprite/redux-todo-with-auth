@@ -128,7 +128,6 @@ class Athlete extends Component {
                 </div>
               )}
               <Motovation />
-              <ActivitySearch />
               <Static
                 contentLabel="Strava ID"
                 content={stravaId}

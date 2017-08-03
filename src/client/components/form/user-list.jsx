@@ -11,8 +11,34 @@ import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-o
 import lib from '../../containers/lib';
 import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';
-import style from '../../styles/style';
+import theme from '../../styles/theme';
+import styleMain from '../../styles/style';
 import CheckBox from './checkbox-icon';
+
+const style = {
+  button: styleMain.button,
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    maxWidth: 600,
+  },
+  box: {
+    width: 300,
+    display: 'inline-flex',
+    verticalAlign: 'middle',
+    alignItems: 'center',
+    // justifyContent: 'space-between',
+    // flexWrap: 'wrap',
+    // border: `thin solid ${theme.palette.accent3Color}`,
+  },
+  boxLabel: {
+    color: theme.palette.accent1Color,
+  },
+  boxData: {
+    marginLeft: 10,
+  },
+};
 
 const propTypes = {
 
@@ -89,37 +115,68 @@ export default class UserList extends Component {
                 subtitle={user.stravaId}
               />
               <CardText>
-                <div>
-                  <span style={style.span}>
+                <div style={style.container}>
+                  <div style={style.box}>
                     <CheckBox option={!!user.premium} /> Strava Premium
-                  </span>
-                  <span style={style.span}>
+                  </div>
+                  <div style={style.box}>
                     <CheckBox option={!!user.clubMember} /> Club
-                  </span>
-                  <span style={style.span}>
+                  </div>
+                  <div style={style.box}>
                     <CheckBox option={!!user.userGeoElevation} /> Elevation
-                  </span>
-                  <span style={style.span}>
+                  </div>
+                  <div style={style.box}>
                     <CheckBox option={!!lib.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
-                  </span>
-                  <span style={style.span}>
+                  </div>
+                  <div style={style.box}>
                     <CheckBox option={!!user.adminMember} /> Admin
-                  </span>
-                  <span style={style.span}>
-                    {user.activityCount} Activities
-                  </span>
-                  <span style={style.span}>
-                    {user.eventCount} Event
-                  </span>
+                  </div>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Activities
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.activityCount}`}
+                    </div>
+                  </div>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Events Created
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.eventCount}`}
+                    </div>
+                  </div>
                 </div>
                 <div>
-                  <span style={style.span}>
-                    Updated: {user.updated_at}
-                  </span>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Updated
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.updated_at}`}
+                    </div>
+                  </div>
                   {user.logCount && user.logLastAccess ? (
-                    <span style={style.span}>
-                      Last Access: <strong>{user.logLastAccess[0].updatedAt}</strong>, Access Count: <strong>{user.logCount}</strong>
-                    </span>
+                    <div>
+                      <div style={style.box}>
+                        <div style={style.boxLabel}>
+                          Last Access
+                        </div>
+                        <div style={style.boxData}>
+                          {` ${user.logLastAccess[0].updatedAt}`}
+                        </div>
+                      </div>
+                      <div style={style.box}>
+                        <div style={style.boxLabel}>
+                          Access Count
+                        </div>
+                        <div style={style.boxData}>
+                          {` ${user.logCount}`}
+                        </div>
+                      </div>
+                    </div>
+
                   ) : (null)}
                 </div>
               </CardText>
