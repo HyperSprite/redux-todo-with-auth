@@ -25,7 +25,6 @@ const style = {
     // border: `thin solid ${theme.palette.accent3Color}`,
   },
   boxLabel: {
-    fontStyle: 'strong',
     color: theme.palette.accent1Color,
     marginLeft: 10,
   },
