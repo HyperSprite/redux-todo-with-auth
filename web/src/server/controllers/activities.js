@@ -151,9 +151,6 @@ exports.getRecentActivities = (req, res) => {
     if (acts.message === 'Authorization Error') {
       hlpr.consLog(['listActivities Authorization Error', req.user.stravaId]);
       return auth.stravaSignOut(req, res);
-    } else if (Array.isArray(acts)) {
-      hlpr.consLog(['listActivities !acts or !acts[0]']);
-      return exports.getWeeklyStats(req, res);
     }
     const counter = [];
     acts.forEach((act, index) => {
