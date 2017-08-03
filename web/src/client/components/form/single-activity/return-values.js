@@ -3,15 +3,6 @@ import lib from '../../../containers/lib';
 // this array will be mapped to display each metric for an activity.
 const returnValues = [
   {
-    activityType: 'type',
-    activityLabel: 'Type',
-  },
-  {
-    activityType: 'gear',
-    activityTypeSub: 'name',
-    activityLabel: 'Gear',
-  },
-  {
     activityType: 'tssScore',
     activityLabel: 'TSS',
   },
@@ -60,6 +51,15 @@ const returnValues = [
     conversionTypeSA: 'feet',
     conversionTypeMetric: 'meters',
     conversionmPref: true,
+  },
+  {
+    activityType: 'type',
+    activityLabel: 'Type',
+  },
+  {
+    activityType: 'gear',
+    activityTypeSub: 'name',
+    activityLabel: 'Gear',
   },
 ];
 
