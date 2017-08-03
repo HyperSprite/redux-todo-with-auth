@@ -87,6 +87,11 @@ export default class UserList extends Component {
 
 
   render() {
+    const AthleteLink = (user) => (
+      <a href={`https://www.strava.com/athletes/${user.stravaId}`} target="new">
+        {user.stravaId}
+      </a>
+    );
     return (
       <div>
         {this.state.udpating ? (
@@ -112,7 +117,7 @@ export default class UserList extends Component {
             <Card key={user.stravaId}>
               <CardHeader
                 title={`${user.firstname} ${user.lastname}`}
-                subtitle={user.stravaId}
+                subtitle={AthleteLink(user)}
               />
               <CardText>
                 <div style={style.container}>
@@ -151,10 +156,34 @@ export default class UserList extends Component {
                 <div>
                   <div style={style.box}>
                     <div style={style.boxLabel}>
-                      Updated
+                      Strava Created
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.created_at}`}
+                    </div>
+                  </div>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Strava Updated
                     </div>
                     <div style={style.boxData}>
                       {` ${user.updated_at}`}
+                    </div>
+                  </div>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Created
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.createdAt}`}
+                    </div>
+                  </div>
+                  <div style={style.box}>
+                    <div style={style.boxLabel}>
+                      Updated
+                    </div>
+                    <div style={style.boxData}>
+                      {` ${user.updatedAt}`}
                     </div>
                   </div>
                   {user.logCount && user.logLastAccess ? (

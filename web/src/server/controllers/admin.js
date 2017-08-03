@@ -44,6 +44,8 @@ exports.userList = (req, res) => {
         userGeoElevation: 1,
         created_at: 1,
         updated_at: 1,
+        createdAt: 1,
+        updatedAt: 1,
         adminMember: 1,
         clubMember: 1,
         activityCount: { $size: '$useractivities' },
