@@ -19,14 +19,14 @@ exports.userList = (req, res) => {
           as: 'useractivities',
         },
       },
-      {
-        $lookup: {
-          from: 'events',
-          localField: 'stravaId',
-          foreignField: 'eventOwner',
-          as: 'userevents',
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: 'events',
+      //     localField: 'stravaId',
+      //     foreignField: 'eventOwner',
+      //     as: 'userevents',
+      //   },
+      // },
       {
         $lookup: {
           from: 'logs',
@@ -49,7 +49,7 @@ exports.userList = (req, res) => {
         adminMember: 1,
         clubMember: 1,
         activityCount: { $size: '$useractivities' },
-        eventCount: { $size: '$userevents' },
+        // eventCount: { $size: '$userevents' },
         logCount: { $size: '$userlogs' },
         logLastAccess: { $slice: ['$userlogs', -1] },
         _id: 0,
