@@ -11,22 +11,22 @@ exports.userList = (req, res) => {
   User.aggregate(
     [
       { $match: {} },
-      {
-        $lookup: {
-          from: 'activities',
-          localField: 'stravaId',
-          foreignField: 'athlete.id',
-          as: 'useractivities',
-        },
-      },
       // {
       //   $lookup: {
-      //     from: 'events',
+      //     from: 'activities',
       //     localField: 'stravaId',
-      //     foreignField: 'eventOwner',
-      //     as: 'userevents',
+      //     foreignField: 'athlete.id',
+      //     as: 'useractivities',
       //   },
       // },
+      {
+        $lookup: {
+          from: 'events',
+          localField: 'stravaId',
+          foreignField: 'eventOwner',
+          as: 'userevents',
+        },
+      },
       {
         $lookup: {
           from: 'logs',
@@ -48,8 +48,8 @@ exports.userList = (req, res) => {
         updatedAt: 1,
         adminMember: 1,
         clubMember: 1,
-        activityCount: { $size: '$useractivities' },
-        // eventCount: { $size: '$userevents' },
+        // activityCount: { $size: '$useractivities' },
+        eventCount: { $size: '$userevents' },
         logCount: { $size: '$userlogs' },
         logLastAccess: { $slice: ['$userlogs', -1] },
         _id: 0,
