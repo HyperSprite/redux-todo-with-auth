@@ -26,6 +26,10 @@ const defaultProps = {
 };
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.handleToggle = this.handleToggle.bind(this);
+  }
 
   componentDidMount() {
     if (this.props.authenticated && !this.props.user) {
@@ -58,8 +62,8 @@ class Header extends Component {
       <div className="site-header" >
         <AppBar
           title={this.props.page.name}
-          onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
-          showMenuIconButton={this.props.authenticated}
+          onLeftIconButtonTouchTap={this.handleToggle}
+          showMenuIconButton
           iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}
           iconElementRight={this.renderRightMenu()}
           zDepth={1}
