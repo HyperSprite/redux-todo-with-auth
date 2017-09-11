@@ -106,7 +106,7 @@ class ListEvent extends Component {
                   new Date(),
                 );
 
-                getWeather = (daysToGo < 6);
+                getWeather = (daysToGo < 5);
               }
 
               let subTitleName = '';
