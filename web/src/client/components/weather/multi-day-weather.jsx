@@ -17,7 +17,7 @@ function renderMultiDayWeather(props) {
             dstOffset={props.dstOffset}
             tzOffset={props.tzOffset}
             date={+new Date(d)}
-            measurementPref={props.measurementPref}
+            mPref={props.mPref}
             expanded={props.expanded}
             noShowExtender
           />
@@ -25,6 +25,6 @@ function renderMultiDayWeather(props) {
       ))}
     </div>
   );
-};
+}
 
 export default renderMultiDayWeather;

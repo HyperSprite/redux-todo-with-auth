@@ -170,7 +170,7 @@ class ListEvent extends Component {
               // const eventLink = (
               //   <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
               // );
-              const measurementPref = user.measurement_preference === 'metric';
+              const mPref = user.measurement_preference === 'feet';
               return (
                 <div key={event.eventId} id={`${event.eventId}`} >
                   <ViewEvent
@@ -191,7 +191,7 @@ class ListEvent extends Component {
                     goalClick={() => this.goalThisEvent(event.eventId)}
                     index={i}
                     niceEventDate={niceEventDate}
-                    measurementPref={measurementPref}
+                    mPref={mPref}
                     subTitleName={subTitleName}
                     {...event}
                   />

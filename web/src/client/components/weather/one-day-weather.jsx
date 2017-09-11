@@ -14,9 +14,13 @@ import './weather.css';
 const propTypes = {
   geoCoordinates: PropTypes.string.isRequired, // expects 'lon,lat'
   date: PropTypes.number.isRequired, // unix time in milliseconds
-  measurementPref: PropTypes.bool, // defaults to C
+  mPref: PropTypes.bool.isRequired, // defaults to C
   dstOffset: PropTypes.number.isRequired, // DST offset
   tzOffset: PropTypes.number.isRequired, // UTC offset in milliseconds
+};
+
+const defaultProps = {
+  // mPref: false,
 };
 
 class OneDayWeather extends Component {
@@ -24,7 +28,6 @@ class OneDayWeather extends Component {
     super(props);
     this.state = {
       weatherforcast: [],
-      celsius: true,
       showExtended: false,
     };
     this.switchDisplay = this.switchDisplay.bind(this);
@@ -37,7 +40,7 @@ class OneDayWeather extends Component {
   }
 
   componentWillReceiveProps() {
-    this.setState({ celsius: this.props.measurementPref });
+    this.setState({ mPref: this.props.mPref });
   }
 
   getNewWeather = () => {
@@ -60,7 +63,7 @@ class OneDayWeather extends Component {
   }
 
   switchDisplay() {
-    this.setState({ celsius: !this.state.celsius });
+    this.setState({ mPref: !this.state.mPref });
   }
 
   switchShowExtended() {
@@ -69,7 +72,7 @@ class OneDayWeather extends Component {
 
   render() {
     const { date, tzOffset, dstOffset } = this.props;
-    const { weatherforcast, celsius, showExtended } = this.state;
+    const { weatherforcast, mPref, showExtended } = this.state;
     const dayWF = {};
 
     function dateSetup(theDate) {
@@ -85,31 +88,25 @@ class OneDayWeather extends Component {
       return elm.dt >= offsetDate && elm.dt <= offsetDate + 86400;
     }
 
-    function setMeasurementPref(toCalc, isCelsius, type) {
-      if (isCelsius) {
+    function setMeasurementPref(toCalc, isSAE, type) {
+      if (isSAE) {
         if (type === 'speed') {
-          return toCalc;
+          return Math.floor(toCalc * 2.236936);
         }
-        return Math.floor(toCalc - 273.15);
+        return Math.floor(((toCalc - 273.15) * 1.8) + 32);
       }
       // feet
       if (type === 'speed') {
-        return Math.floor(toCalc * 2.236936);
+        return toCalc;
       }
-      return Math.floor(((toCalc - 273.15) * 1.8) + 32);
+      return Math.floor(toCalc - 273.15);
     }
 
-    function setCandF(isCelsius, type) {
+    function setCandF(isSAE, type) {
       if (type === 'speed') {
-        if (isCelsius) {
-          return 'm/s';
-        }
-        return 'mph';
+        return isSAE ? 'mph' : 'm/s';
       }
-      if (isCelsius) {
-        return '°C';
-      }
-      return '°F';
+      return isSAE ? '°F' : '°C';
     }
 
     function localTime(utcTime) {
@@ -165,12 +162,12 @@ class OneDayWeather extends Component {
 
     dayWF.eventDayWF = weatherforcast.filter(filterDate);
     dayWF.aggregate = returnAggregate(dayWF.eventDayWF);
-    dayWF.high = setMeasurementPref(dayWF.aggregate.high, celsius);
-    dayWF.low = setMeasurementPref(dayWF.aggregate.low, celsius);
-    dayWF.maxWind = setMeasurementPref(dayWF.aggregate.maxWind, celsius, 'speed');
-    dayWF.windSpeedType = setCandF(celsius, 'speed');
-    dayWF.tempType = setCandF(celsius);
-    dayWF.celsius = celsius;
+    dayWF.high = setMeasurementPref(dayWF.aggregate.high, mPref);
+    dayWF.low = setMeasurementPref(dayWF.aggregate.low, mPref);
+    dayWF.maxWind = setMeasurementPref(dayWF.aggregate.maxWind, mPref, 'speed');
+    dayWF.windSpeedType = setCandF(mPref, 'speed');
+    dayWF.tempType = setCandF(mPref);
+    dayWF.mPref = mPref;
     dayWF.updateWeather = this.updateWeather;
     dayWF.switchDisplay = this.switchDisplay;
     dayWF.switchShowExtended = this.switchShowExtended;
@@ -191,6 +188,7 @@ class OneDayWeather extends Component {
     if (dayWF.eventDayWF.length === 0) {
       return null;
     }
+    console.log('mPref', mPref);
 
     return (
       <div>
@@ -203,7 +201,7 @@ class OneDayWeather extends Component {
               <div>
                 <span >
                   <FlatButton onClick={dayWF.switchDisplay} style={style.toggleIconButton} >
-                    F <ToggleIcon option={dayWF.celsius} /> C
+                    C <ToggleIcon option={dayWF.mPref} /> F
                   </FlatButton>
                 </span>
               </div>
@@ -217,12 +215,12 @@ class OneDayWeather extends Component {
                   key={eDWF.dt}
                   {...eDWF}
                   localTime={localTime(eDWF.dt)}
-                  temp={setMeasurementPref(eDWF.main.temp, celsius)}
-                  tempType={setCandF(celsius)}
+                  temp={setMeasurementPref(eDWF.main.temp, mPref)}
+                  tempType={setCandF(mPref)}
                   windDeg={toTextualDescription(eDWF.wind.deg)}
-                  windSpeed={setMeasurementPref(eDWF.wind.speed, celsius, 'speed')}
-                  windSpeedType={setCandF(celsius, 'speed')}
-                  celsius
+                  windSpeed={setMeasurementPref(eDWF.wind.speed, mPref, 'speed')}
+                  windSpeedType={setCandF(mPref, 'speed')}
+                  mPref
                 />
               ))}
             </div>
@@ -234,5 +232,6 @@ class OneDayWeather extends Component {
 }
 
 OneDayWeather.propTypes = propTypes;
+OneDayWeather.defaultProps = defaultProps;
 
 export default OneDayWeather;

@@ -12,7 +12,7 @@ import * as actions from '../../actions';
 import Alert from './../form/alert';
 import StaticMD from './../form/static-markdown';
 import { validate, warn } from './../form/validate';
-import EventRoutes from './event-routes';
+import EditEventRoute from './edit-event-routes';
 import singleFieldArray from '../form/single-field-array';
 
 import style from '../../styles/style';
@@ -256,7 +256,7 @@ let EditEvent = class EditEvent extends Component {
         <div>
           <FieldArray
             name="eventRoutes"
-            component={EventRoutes}
+            component={EditEventRoute}
             fetchStravaRoutes={this.fetchStravaRoutes}
             eventSelector={eventSelector.eventRoutes}
           />
