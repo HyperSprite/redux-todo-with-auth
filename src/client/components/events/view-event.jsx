@@ -157,8 +157,12 @@ const renderViewEvent = ({
         content={elevation}
         contentType="text"
       />
-
-      {event.eventRoutes.map(route => (
+      <Static
+        contentLabel="Routes"
+        content={event.eventRoutes && event.eventRoutes.length}
+        contentType="text"
+      />
+      {authenticated && event.eventRoutes.map(route => (
         <ViewEventRoute
           key={`${event.eventId}${route.eventRouteURL}`}
           {...route}
