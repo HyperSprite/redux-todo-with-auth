@@ -17,13 +17,23 @@ exports.getActivities = (req, res) => {
 
 // TODO this is just starting but have tested it and it works to pull data.
 exports.getRoute = (req, res) => {
-  strava.routes.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+  strava.routes.get({ id: req.params.id, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
     if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
     hlpr.consLog(['getRoute', data]);
     res.send(data);
   });
 };
+
+// exports.getRoute = (req, res) => {
+//   strava.routes.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+//     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+//     if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
+//     hlpr.consLog(['getRoute', data]);
+//     res.send(data);
+//   });
+// };
+
 
 exports.getUser = (req, res) => {
   strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {

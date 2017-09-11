@@ -5,6 +5,7 @@ import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
+import ViewEventRoute from './view-event-route';
 
 import style from '../../styles/style';
 import Static from './../form/static';
@@ -25,7 +26,7 @@ const propTypes = {
   getWeather: PropTypes.bool,
   goal: PropTypes.bool,
   goalClick: PropTypes.func,
-  measurementPref: PropTypes.bool,
+  mPref: PropTypes.bool,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
 };
@@ -47,7 +48,7 @@ const renderViewEvent = ({
   getWeather,
   goal,
   goalClick,
-  measurementPref,
+  mPref,
   niceEventDate,
   subTitleName,
 }) => (
@@ -158,12 +159,10 @@ const renderViewEvent = ({
       />
 
       {event.eventRoutes.map(route => (
-        <Static
+        <ViewEventRoute
           key={`${event.eventId}${route.eventRouteURL}`}
-          contentLabel="Route Link"
-          content={route.eventRouteURL}
-          contentType="url"
-          baseURL="https://www.strava.com/routes/"
+          {...route}
+          mPref={mPref}
         />
       ))}
     </CardText>
@@ -175,7 +174,7 @@ const renderViewEvent = ({
           tzOffset={event.eventGeoTzRawOffset}
           date={new Date(event.eventDate)}
           eventDays={event.eventDays || 1}
-          measurementPref={measurementPref}
+          mPref={mPref}
           expanded={expanded}
           noShowExtender
         />
