@@ -1,0 +1,223 @@
+{
+    "athlete": {
+        "id": 100,
+        "username": "bikemonkey",
+        "resource_state": 2,
+        "firstname": "Bike",
+        "lastname": "Monkey",
+        "city": "Santa Rosa",
+        "state": "CA",
+        "country": "United States",
+        "sex": "M",
+        "premium": true,
+        "created_at": "2011-07-16T20:54:50Z",
+        "updated_at": "2017-06-19T17:06:36Z",
+        "badge_type_id": 1,
+        "profile_medium": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/110895/4953248/1/medium.jpg",
+        "profile": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/110895/4953248/1/large.jpg",
+        "friend": null,
+        "follower": null
+    },
+    "description": "An 8-mile piece of cake introductory ride for those of you who need to spin out the legs before returning to the festival for a day of fun in the sun.",
+    "distance": 13501.711238519092,
+    "elevation_gain": 30.68999999999999,
+    "id": 3899484,
+    "map": {
+        "id": "r3899484",
+        "summary_polyline": "slsiFlselVuCfDmGv@KrqBz`@JxJ|BTvbF}n@@eAg{@Zk}B\\mDlNqPrFqVHih@vDq`@pVqQxCiKm@wFmFoLWaW{C_MeGtDaPba@",
+        "resource_state": 3,
+        "polyline": "slsiFlselVi@dAu@v@u@h@{@ZyAPwBH@jRBtCWnE@~BCtI?xFFnUEjGBpKCxEDhJrU@`FDdCBvA`@xAt@tAZpBHDh`BCvWDx^AvNNby@i[CsRDC_H?@MeGKsBB{AKyISoJKiMXq}AAoAI]FmAD}X\\_C?m@z@a@JIxJuLj@oATu@jDsPXu@VqAHih@lCs[NmAXoAnAoB|@y@zOiJfA}@j@u@`@u@b@gA\\eCHoAIqBI_AYeAqCoEc@eAw@yCE}@H}@IuBFiBSuBF{@CmBIeCOm@Ku@WuAe@eB?@aAaD_ANaAZi@Zo@t@i@v@gEvKyIjT"
+    },
+    "name": "Levi's GranFondo Family Style",
+    "private": false,
+    "resource_state": 3,
+    "starred": false,
+    "sub_type": 1,
+    "timestamp": 1452113289,
+    "created_at": "2016-01-06T20:48:09Z",
+    "updated_at": "2016-01-06T20:48:09Z",
+    "type": 1,
+    "estimated_moving_time": 3186,
+    "segments": [
+        {
+            "id": 627760,
+            "resource_state": 2,
+            "name": "The Bike Path",
+            "activity_type": "Ride",
+            "distance": 6111.62,
+            "average_grade": 0.3,
+            "maximum_grade": 2.7,
+            "elevation_high": 38.5,
+            "elevation_low": 19.2,
+            "start_latlng": [
+                38.44538674983759,
+                -122.8067592490596
+            ],
+            "end_latlng": [
+                38.43889058695081,
+                -122.7425000572077
+            ],
+            "start_latitude": 38.44538674983759,
+            "start_longitude": -122.8067592490596,
+            "end_latitude": 38.43889058695081,
+            "end_longitude": -122.7425000572077,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "CA",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        },
+        {
+            "id": 746332,
+            "resource_state": 2,
+            "name": "Hall Rd sprint",
+            "activity_type": "Ride",
+            "distance": 3008.34,
+            "average_grade": 0,
+            "maximum_grade": 1.1,
+            "elevation_high": 29.9,
+            "elevation_low": 26.1,
+            "start_latlng": [
+                38.43808527617109,
+                -122.7711804485218
+            ],
+            "end_latlng": [
+                38.43785804190095,
+                -122.8056769858624
+            ],
+            "start_latitude": 38.43808527617109,
+            "start_longitude": -122.7711804485218,
+            "end_latitude": 38.43785804190095,
+            "end_longitude": -122.8056769858624,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "CA",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        },
+        {
+            "id": 746335,
+            "resource_state": 2,
+            "name": "Willowside to Fulton Bike Path",
+            "activity_type": "Ride",
+            "distance": 3306.57,
+            "average_grade": 0.3,
+            "maximum_grade": 0.7,
+            "elevation_high": 28.4,
+            "elevation_low": 19.2,
+            "start_latlng": [
+                38.44553882349102,
+                -122.8061311484619
+            ],
+            "end_latlng": [
+                38.44210057289187,
+                -122.7699446077076
+            ],
+            "start_latitude": 38.44553882349102,
+            "start_longitude": -122.8061311484619,
+            "end_latitude": 38.44210057289187,
+            "end_longitude": -122.7699446077076,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "CA",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        },
+        {
+            "id": 771683,
+            "resource_state": 2,
+            "name": "Levi's Gran Fondo – Final Straight",
+            "activity_type": "Ride",
+            "distance": 571.047,
+            "average_grade": -0.5,
+            "maximum_grade": -0.2,
+            "elevation_high": 41,
+            "elevation_low": 38.1,
+            "start_latlng": [
+                38.4395043,
+                -122.743205
+            ],
+            "end_latlng": [
+                38.4423818,
+                -122.7485632
+            ],
+            "start_latitude": 38.4395043,
+            "start_longitude": -122.743205,
+            "end_latitude": 38.4423818,
+            "end_longitude": -122.7485632,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "CA",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        },
+        {
+            "id": 5697398,
+            "resource_state": 2,
+            "name": "LGF Bike Trail",
+            "activity_type": "Ride",
+            "distance": 6103.9,
+            "average_grade": 0.2,
+            "maximum_grade": 4.6,
+            "elevation_high": 32.2,
+            "elevation_low": 19.8,
+            "start_latlng": [
+                38.445614,
+                -122.806661
+            ],
+            "end_latlng": [
+                38.438878,
+                -122.742464
+            ],
+            "start_latitude": 38.445614,
+            "start_longitude": -122.806661,
+            "end_latitude": 38.438878,
+            "end_longitude": -122.742464,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "CA",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        },
+        {
+            "id": 10646455,
+            "resource_state": 2,
+            "name": "Finish line sprint",
+            "activity_type": "Ride",
+            "distance": 542.4,
+            "average_grade": -0.5,
+            "maximum_grade": 0,
+            "elevation_high": 38.8,
+            "elevation_low": 36.3,
+            "start_latlng": [
+                38.438807,
+                -122.742957
+            ],
+            "end_latlng": [
+                38.441912,
+                -122.747474
+            ],
+            "start_latitude": 38.438807,
+            "start_longitude": -122.742957,
+            "end_latitude": 38.441912,
+            "end_longitude": -122.747474,
+            "climb_category": 0,
+            "city": "Santa Rosa",
+            "state": "California",
+            "country": "United States",
+            "private": false,
+            "hazardous": false,
+            "starred": false
+        }
+    ]
+}

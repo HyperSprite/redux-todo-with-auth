@@ -87,7 +87,7 @@ lib.mPrefLabel = (metric, mPref) => {
         { display: '°C', help: 'Celsius' };
     default:
       return mPref ?
-        { display: 'SAE', help: '' } :
+        { display: 'Imperial', help: '' } :
         { display: 'Metric', help: '' };
   }
 };

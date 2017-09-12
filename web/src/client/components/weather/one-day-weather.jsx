@@ -188,7 +188,6 @@ class OneDayWeather extends Component {
     if (dayWF.eventDayWF.length === 0) {
       return null;
     }
-    console.log('mPref', mPref);
 
     return (
       <div>
