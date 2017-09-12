@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Card } from 'material-ui/Card'
+import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
 import lib from '../../containers/lib';
 import Static from './../form/static';
+import ViewRouteMap from '../google-map';
 
 const axiosConfig = {
   headers: {
@@ -45,28 +46,34 @@ class ViewEventRoute extends React.Component {
   }
 // measurementPref
   render() {
-    const { mPref } = this.props;
+    const { mPref, adminMember } = this.props;
     const { routeData } = this.state;
     return (
-      <Card
-        title={routeData.name}
-      >
-        <Static
-          contentLabel={routeData.name}
-          content={routeData.id}
-          contentType="url"
-          baseURL="https://www.strava.com/routes/"
+      <Card style={{ marginBottom: 5 }}>
+        <CardHeader
+          title={routeData.name}
         />
-        <Static
-          contentLabel="Distance"
-          content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
-          contentType="text"
-        />
-        <Static
-          contentLabel="Elevation"
-          content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
-          contentType="text"
-        />
+        <div style={{ marginLeft: 20 }} >
+          {adminMember && routeData.map &&
+            <ViewRouteMap {...routeData} />
+          }
+          <Static
+            contentLabel="Strava Route Link"
+            content={routeData.id}
+            contentType="url"
+            baseURL="https://www.strava.com/routes/"
+          />
+          <Static
+            contentLabel="Distance"
+            content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
+            contentType="text"
+          />
+          <Static
+            contentLabel="Elevation"
+            content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
+            contentType="text"
+          />
+        </div>
       </Card>
     );
   }

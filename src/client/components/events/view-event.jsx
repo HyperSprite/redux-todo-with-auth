@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
+import lib from '../../containers/lib';
 import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
@@ -16,7 +17,6 @@ const propTypes = {
   canEdit: PropTypes.bool,
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
-  elevation: PropTypes.string,
   expanded: PropTypes.bool,
   eventFullURL: PropTypes.string,
   eventLink: PropTypes.string,
@@ -39,7 +39,6 @@ const renderViewEvent = ({
   canEdit,
   deleteClick,
   editClick,
-  elevation,
   eventLink,
   expanded,
   fav,
@@ -154,7 +153,7 @@ const renderViewEvent = ({
       />
       <Static
         contentLabel="Starting Elevation"
-        content={elevation}
+        content={`${lib.statsConversions('elev', null, event.eventGeoElevation, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
         contentType="text"
       />
       <Static
@@ -167,6 +166,7 @@ const renderViewEvent = ({
           key={`${event.eventId}${route.eventRouteURL}`}
           {...route}
           mPref={mPref}
+          adminMember={adminMember}
         />
       ))}
     </CardText>
