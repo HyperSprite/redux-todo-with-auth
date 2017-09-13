@@ -53,26 +53,28 @@ class ViewEventRoute extends React.Component {
         <CardHeader
           title={routeData.name}
         />
-        <div style={{ marginLeft: 20 }} >
+        <div  style={{ marginLeft: 20, marginRight: 20 }}>
           {adminMember && routeData.map &&
             <ViewRouteMap {...routeData} />
           }
-          <Static
-            contentLabel="Strava Route Link"
-            content={routeData.id}
-            contentType="url"
-            baseURL="https://www.strava.com/routes/"
-          />
-          <Static
-            contentLabel="Distance"
-            content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Elevation"
-            content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
-            contentType="text"
-          />
+          <div style={{ display: 'flex', flexWrap: 'wrap', margin: 20 }} >
+            <Static
+              contentLabel="Strava Route Link"
+              content={routeData.id}
+              contentType="url"
+              baseURL="https://www.strava.com/routes/"
+            />
+            <Static
+              contentLabel="Distance"
+              content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Elevation"
+              content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
+              contentType="text"
+            />
+          </div>
         </div>
       </Card>
     );

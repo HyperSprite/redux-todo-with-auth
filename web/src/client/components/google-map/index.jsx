@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import googlePolyline from 'google-polyline';
+import Dimensions from 'react-dimensions';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import ViewRouteMapFlag from './google-map-flag';
@@ -40,7 +41,7 @@ class GoogleMapWithPolyline extends React.Component {
     this.mapData = this.props.map && convertMapData(this.props.map.polyline);
 
     return (
-      <div style={{ backgroundColor: 'black', width: 500, height: 300, margin: 20 }}>
+      <div style={{ width: this.props.containerWidth, height: 400 }}>
         { this.props.map &&
           <GoogleMapReact
             onGoogleApiLoaded={({ map, maps }) => {
