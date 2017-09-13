@@ -49,15 +49,16 @@ class ViewEventRoute extends React.Component {
     const { mPref, adminMember } = this.props;
     const { routeData } = this.state;
     return (
-      <Card style={{ marginBottom: 5 }}>
+      <Card style={{ marginBottom: 5, marginTop: 5 }}>
+        {routeData.map &&
+          <ViewRouteMap {...routeData} />
+        }
         <CardHeader
           title={routeData.name}
         />
         <div  style={{ marginLeft: 20, marginRight: 20 }}>
-          {adminMember && routeData.map &&
-            <ViewRouteMap {...routeData} />
-          }
-          <div style={{ display: 'flex', flexWrap: 'wrap', margin: 20 }} >
+
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', margin: 20 }} >
             <Static
               contentLabel="Strava Route Link"
               content={routeData.id}

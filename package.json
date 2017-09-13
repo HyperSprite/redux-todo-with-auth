@@ -32,6 +32,8 @@
     "last 2 versions"
   ],
   "dependencies": {
+    "@turf/bbox": "^4.7.3",
+    "@turf/helpers": "^4.7.3",
     "autoprefixer": "^6.6.1",
     "axios": "^0.15.3",
     "babel-cli": "^6.24.1",
