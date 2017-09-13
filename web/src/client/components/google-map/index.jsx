@@ -6,7 +6,7 @@ import Dimensions from 'react-dimensions';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import ViewRouteMapFlag from './google-map-flag';
-import styles from './styles';
+import googleMapStyles from './map-styles';
 
 class GoogleMapWithPolyline extends React.Component {
 
@@ -42,7 +42,7 @@ class GoogleMapWithPolyline extends React.Component {
 
     return (
       <div style={{ width: this.props.containerWidth, height: 400 }}>
-        { this.props.map &&
+        { this.props.map ? (
           <GoogleMapReact
             onGoogleApiLoaded={({ map, maps }) => {
               this.setState({ map, maps, mapLoaded: true });
@@ -54,7 +54,7 @@ class GoogleMapWithPolyline extends React.Component {
               key: process.env.GOOGLE_MAPS_WEB,
               language: 'en',
             }}
-            options={{ styles }}
+            options={{ styles: googleMapStyles }}
           >
             {/* <ViewRouteMapFlag
               lat={this.mapData[0].lat}
@@ -67,7 +67,11 @@ class GoogleMapWithPolyline extends React.Component {
               text={'End'}
             /> */}
           </GoogleMapReact>
-        }
+        ) : (
+          <div style={{ width: 200, height: 400 }} >
+            loading...
+          </div>
+        )}
         { this.state.mapLoaded &&
           <ViewRouteMapPolylineDraw
             {...this.state}
