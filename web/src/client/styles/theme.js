@@ -8,6 +8,7 @@ import {
   grey400, // #BDBDBD
   grey500, // #9E9E9E
   grey900, // #212121
+  green800, // #2E7D32
 } from 'material-ui/styles/colors';
 import { fade } from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
@@ -31,6 +32,7 @@ export default {
     accent5Color: '#38414e',
     accent6Color: '#30393e',
     accent7Color: '#515c6d',
+    accent8Color: green800,
     canvasColor: grey50,
     disabledColor: fade(grey900, 0.3),
     pickerHeaderColor: red900,

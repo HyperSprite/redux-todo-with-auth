@@ -7,22 +7,22 @@ import turfHelpers from '@turf/helpers';
 import bbox from '@turf/bbox';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
-import ViewRouteMapFlag from './google-map-flag';
-import googleMapStyles from './map-styles';
+import MapPin from '../map-pin';
+import googleMapStyles, { palette } from './map-styles';
 
 class GoogleMapWithPolyline extends React.Component {
 
   static propTypes = {
-    map: PropTypes.shape({
-      polyline: PropTypes.string,
-    }), // supplied by google-map-react
-    zoom: PropTypes.number,
+    containerWidth: PropTypes.number,
+    mapPolyline: PropTypes.string,
+    // map: PropTypes.shape({
+    //   polyline: PropTypes.string,
+    // }), // supplied by google-map-react
   };
 
   static defaultProps = {
     map: undefined,
     // polyline: undefined,
-    zoom: 11,
   };
 
   constructor(props) {
@@ -48,7 +48,6 @@ class GoogleMapWithPolyline extends React.Component {
     };
 
     const getCenterAndZoom = (mapPolyline) => {
-      console.log('here');
       const routeDataLS = turfHelpers.lineString(convertMapData(mapPolyline)
         .map(rD => [rD.lat, rD.lng]));
       const newbounds = bbox(routeDataLS);
@@ -64,23 +63,19 @@ class GoogleMapWithPolyline extends React.Component {
         },
       };
 
-      console.log('\n\nbounds', bounds);
-
       const size = {
         width: 400, // Map width in pixels
         height: 400, // Map height in pixels
       };
       const result = fitBounds({ nw: bounds.nw, se: bounds.se }, size);
-      console.log('result', result);
       return result;
     };
 
     this.mapData = this.props.map.polyline && convertMapData(this.props.map.polyline);
     this.centerZoom = this.props.map.polyline && getCenterAndZoom(this.props.map.polyline);
-
     return (
       <div style={{ width: this.props.containerWidth, height: 400 }}>
-        { this.props.map && this.props.map.polyline ? (
+        { this.mapData ? (
           <GoogleMapReact
             onGoogleApiLoaded={({ map, maps }) => {
               this.setState({ map, maps, mapLoaded: true });
@@ -89,21 +84,25 @@ class GoogleMapWithPolyline extends React.Component {
             center={this.centerZoom.center}
             defaultZoom={this.centerZoom.zoom}
             bootstrapURLKeys={{
-              key: process.env.GOOGLE_MAPS_WEB,
+              key: process.env.REACT_APP_GOOGLE_MAPS_WEB,
               language: 'en',
             }}
             options={mapOptions}
           >
-            {/* <ViewRouteMapFlag
-              lat={this.mapData[0].lat}
-              lng={this.mapData[0].lng}
-              text={'Start'}
-            /> */}
-            {/* <ViewRouteMapFlag
-              lat={this.mapData[this.mapData.length - 1].lat}
-              lng={this.mapData[this.mapData.length - 1].lng}
-              text={'End'}
-            /> */}
+            { this.state.mapLoaded &&
+              <MapPin
+                lat={this.mapData[this.mapData.length - 1].lat}
+                lng={this.mapData[this.mapData.length - 1].lng}
+                color={palette.textColor}
+              />
+            }
+            { this.state.mapLoaded &&
+              <MapPin
+                lat={this.mapData[0].lat}
+                lng={this.mapData[0].lng}
+                color={palette.accent8Color}
+              />
+            }
           </GoogleMapReact>
         ) : (
           <div style={{ width: 200, height: 400 }} >

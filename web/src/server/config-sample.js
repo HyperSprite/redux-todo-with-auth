@@ -10,7 +10,7 @@ const config = {
   CERT: 'false', // string - For production certs example, Heroku CERT = true
   LOGGING: 'true', // string - turns on hlpr.consLog can be used in prod if needed.
   GOOGLE_MAPS: 'some_api_key', // server only
-  GOOGLE_MAPS_WEB: 'some_api_key', // user exposed/url restricted to registered domain
+  REACT_APP_GOOGLE_MAPS_WEB: 'some_api_key', // user exposed/url restricted to registered domain
   OPEN_WEATHER_MAP: 'some_api_key',
   PORT: 3080,
   ROOT_URL: 'http://localhost:3080',

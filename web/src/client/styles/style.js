@@ -86,7 +86,7 @@ export default {
   },
 
   toggleToolbarButtonOn: {
-    color: theme.palette.grey50,
+    color: theme.palette.alternateTextColor,
     margin: 0,
     padding: 0,
     height: 32,
@@ -94,7 +94,7 @@ export default {
   },
 
   toggleToolbarButtonOff: {
-    color: theme.palette.grey100,
+    color: theme.palette.accent2Color,
     margin: 0,
     padding: 0,
     height: 32,
