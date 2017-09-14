@@ -1,4 +1,3 @@
-// import React from 'react';
 import GoogleMapsPolyline from './google-map-polyline';
 
 class GoogleMapsPolylineDraw extends GoogleMapsPolyline {

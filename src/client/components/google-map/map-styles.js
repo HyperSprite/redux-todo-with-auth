@@ -1,6 +1,6 @@
 import theme from '../../styles/theme';
 
-const palette = theme.palette;
+export const palette = theme.palette;
 
 export default [
   { elementType: 'geometry', stylers: [{ color: palette.accent2Color }] },

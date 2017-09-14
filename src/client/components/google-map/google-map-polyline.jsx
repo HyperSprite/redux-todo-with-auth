@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 const propTypes = {
   map: PropTypes.object.isRequired, // supplied by google-map-react
   maps: PropTypes.object.isRequired, // supplied by google-map-react
+  mapData: PropTypes.array.isRequired,
 };
 
 class GoogleMapsPolyline extends React.PureComponent {

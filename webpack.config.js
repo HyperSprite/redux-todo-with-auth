@@ -31,7 +31,7 @@ function getPlugins() {
   plugins.push(new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      GOOGLE_MAPS_WEB: JSON.stringify(process.env.GOOGLE_MAPS_WEB),
+      REACT_APP_GOOGLE_MAPS_WEB: JSON.stringify(process.env.REACT_APP_GOOGLE_MAPS_WEB),
     }
   }));
   plugins.push(new webpack.optimize.CommonsChunkPlugin({
