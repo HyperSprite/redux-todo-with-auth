@@ -163,6 +163,10 @@ class ListEvent extends Component {
 
               const goal = true;
 
+              const urlPath = 'events';
+
+              const urlRoot = 'https://www.araceathlete.com';
+
               const canEdit = (eCreator = [], sId, aMember) => (eCreator.some(e=> e === sId) || aMember);
 
               if (forEdit.eventId === event.eventId) {
@@ -171,7 +175,7 @@ class ListEvent extends Component {
                 );
               }
               // ${window.location.href}
-              const eventFullURL = `https://www.araceathlete/events#${event.eventId}`;
+              // const eventFullURL = `${urlRoot}/${urlPath}#${event.eventId}`;
 
               // const eventLink = (
               //   <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
@@ -186,7 +190,7 @@ class ListEvent extends Component {
                     deleteClick={() => this.deleteThisEvent(event.eventId)}
                     editClick={() => this.editThisEvent(event.eventId, i)}
                     elevation={elevation}
-                    eventFullURL={eventFullURL}
+                    // eventFullURL={`${urlRoot}/${urlPath}#${event.eventId}`}
                     eventLink={event.eventTitle}
                     expanded={expanded}
                     fav={fav}
@@ -199,6 +203,8 @@ class ListEvent extends Component {
                     niceEventDate={niceEventDate}
                     mPref={mPref}
                     subTitleName={subTitleName}
+                    urlPath={urlPath}
+                    urlRoot={urlRoot}
                     {...event}
                   />
                 </div>

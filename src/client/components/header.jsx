@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { AppBar } from 'material-ui';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
+
 
 import * as actions from './../actions';
 
@@ -58,8 +60,13 @@ class Header extends Component {
   }
 
   render() {
+    const pageName = this.props.page.name ? `${this.props.page.name} : ` : '';
     return (
       <div className="site-header" >
+        <Helmet>
+          <title>{`${pageName}A Race athlete`}</title>
+          <link rel="canonical" href={`${window.location.host}`} />
+        </Helmet>
         <AppBar
           title={this.props.page.name}
           onLeftIconButtonTouchTap={this.handleToggle}
