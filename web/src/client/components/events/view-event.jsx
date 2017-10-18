@@ -20,7 +20,7 @@ const propTypes = {
   deleteClick: PropTypes.func,
   editClick: PropTypes.func,
   expanded: PropTypes.bool,
-  eventFullURL: PropTypes.string,
+  // eventFullURL: PropTypes.string,
   eventLink: PropTypes.string,
   fav: PropTypes.bool,
   favClick: PropTypes.func,
@@ -31,6 +31,8 @@ const propTypes = {
   mPref: PropTypes.bool,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
+  urlPath: PropTypes.string,
+  urlRoot: PropTypes.string,
 };
 
 // props are passed in from component/list-events
@@ -52,6 +54,8 @@ const renderViewEvent = ({
   mPref,
   niceEventDate,
   subTitleName,
+  urlPath,
+  urlRoot,
 }) => (
   <Card
     className="card"
@@ -71,8 +75,8 @@ const renderViewEvent = ({
     >
       <Helmet>
         <title>{`${event.eventTitle} : Events : A Race athlete`}</title>
-        <link rel="canonical" href={`${event.urlRoot}/${event.urlPath}#${event.urlHash}`} />
-        <meta property="og:url" content={`${event.urlRoot}/${event.urlPath}#${event.urlHash}`} />
+        <link rel="canonical" href={`${urlRoot}/${urlPath}#${event.urlHash}`} />
+        <meta property="og:url" content={`${urlRoot}/${urlPath}#${event.urlHash}`} />
         <meta property="og:title" content={event.eventTitle} />
         <meta property="og:image" content={araceathleteEventsBanner} />
       </Helmet>
@@ -81,8 +85,8 @@ const renderViewEvent = ({
         hashtags={event.eventHashtags.concat('ARaceathlete')}
         title={event.eventTitle}
         urlHash={event.eventId}
-        urlPath="events"
-        urlRoot="https://www.araceathlete.com"
+        urlPath={urlPath}
+        urlRoot={urlRoot}
       />
       {adminMember ? ( // hiding for adminMember only unitl this works
         <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
