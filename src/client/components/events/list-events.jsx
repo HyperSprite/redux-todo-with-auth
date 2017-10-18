@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { FloatingActionButton } from 'material-ui';
 import { ContentAdd } from 'material-ui/svg-icons';
+import Helmet from 'react-helmet';
 
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -91,6 +92,11 @@ class ListEvent extends Component {
     const { authenticated, events, forEdit, stravaId, adminMember, user } = this.props;
     return (
       <div>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{'Events : A Race athlete'}</title>
+          <link rel="canonical" href="https://www.araceathlete.com/events" />
+        </Helmet>
         <div className="main-flex-container" >
           <div className="side-lite left-pane" />
           <div className="main" >

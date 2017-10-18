@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import Helmet from 'react-helmet';
 import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
@@ -7,6 +8,7 @@ import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
 import ViewEventRoute from './view-event-route';
+import araceathleteEventsBanner from '../../assets/araceathlete-events-banner.png';
 
 import style from '../../styles/style';
 import Static from './../form/static';
@@ -55,6 +57,7 @@ const renderViewEvent = ({
     className="card"
     initiallyExpanded={expanded}
   >
+
     <CardHeader
       className="card-header"
       showExpandableButton
@@ -66,6 +69,13 @@ const renderViewEvent = ({
     <CardText
       expandable
     >
+      <Helmet>
+        <title>{`${event.eventTitle} : Events : A Race athlete`}</title>
+        <link rel="canonical" href={`${event.urlRoot}/${event.urlPath}#${event.urlHash}`} />
+        <meta property="og:url" content={`${event.urlRoot}/${event.urlPath}#${event.urlHash}`} />
+        <meta property="og:title" content={event.eventTitle} />
+        <meta property="og:image" content={araceathleteEventsBanner} />
+      </Helmet>
       <ShareButtons
         {...event}
         hashtags={event.eventHashtags.concat('ARaceathlete')}
