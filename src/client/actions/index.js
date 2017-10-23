@@ -29,6 +29,11 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   CLEAR_ACTIVITY_SEARCH: 'CLEAR_ACTIVITY_SEARCH',
   SET_ACTIVITY_SEARCH_CUSTOM: 'SET_ACTIVITY_SEARCH_CUSTOM',
   ACTIVITY_REMOVED: 'ACTIVITY_REMOVED',
+  FETCH_USER_ROUTES: 'FETCH_USER_ROUTES',
+  FETCH_ROUTES_SEARCH: 'FETCH_ROUTES_SEARCH',
+  CLEAR_ROUTES_SEARCH: 'CLEAR_ROUTES_SEARCH',
+  SET_ROUTE_SEARCH_CUSTOM: 'SET_ROUTE_SEARCH_CUSTOM',
+  ROUTE_REMOVED: 'ROUTE_REMOVED',
   SET_WEEKLY_STATS: 'SET_WEEKLY_STATS',
   FETCH_DATA: 'FETCH_DATA',
   FETCH_JSON: 'FETCH_JSON',
@@ -397,6 +402,68 @@ export function removeActivity(relURL, activityId) {
 }
 
 // end Activities
+// Routeplan
+
+export function clearRouteSearch() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.CLEAR_ROUTE_SEARCH,
+    });
+  };
+}
+
+export function setRouteSearchCustom() {
+  return (dispatch) => {
+    dispatch({
+      type: TYPES.SET_ROUTE_SEARCH_CUSTOM,
+    });
+  };
+}
+
+export function fetchRouteplanSearch(relURL, queryOptions) {
+  // axiosConfig.data = qs.stringify(queryOptions);
+  return (dispatch) => {
+    axios.get(`${relURL}?${qs.stringify(queryOptions)}`, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.FETCH_ROUTES_SEARCH,
+          payload: response.data,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function removeRouteplan(relURL, activityId) {
+  return (dispatch) => {
+    axios.post(`${relURL}`, { activityId }, axiosConfig)
+      .then((response) => {
+        dispatch({
+          type: TYPES.ROUTE_REMOVED,
+          payload: response.data,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+// end Routeplan
 
 export function fetchMessage() {
   return (dispatch) => {

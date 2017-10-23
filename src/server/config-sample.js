@@ -16,6 +16,7 @@ const config = {
   ROOT_URL: 'http://localhost:3080',
   SITE_PUBLIC: 'public', // static resources
   SITE_URL: '',
+  STRAVA_ROUTES_ACCESS_TOKEN: '', // Strava access token for routes.
   STRAVA_CLIENT_ID: 'YOUR_KEY', // Strava API Key holders ID
   STRAVA_CLIENT_SECRET: 'YOUR_STRAVA_SECRET',
   STRAVA_CLUB: 'number', //  Regular Users club
@@ -36,7 +37,7 @@ exports.loadConfig = () => {
   process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
   process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
   process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
-  process.env.STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN || undefined;
+  process.env.STRAVA_ROUTES_ACCESS_TOKEN = process.env.STRAVA_ROUTES_ACCESS_TOKEN || config.STRAVA_ROUTES_ACCESS_TOKEN;
   process.env.STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID || config.STRAVA_CLIENT_ID;
   process.env.STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET || config.STRAVA_CLIENT_SECRET;
   process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.STRAVA_CLUB;

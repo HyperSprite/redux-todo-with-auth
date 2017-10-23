@@ -21,6 +21,11 @@ const menuDrawerList = [
     access: ['user', 'admin'],
   },
   {
+    primaryText: 'Route Search (alpha)',
+    linkTo: '/route-search',
+    access: ['admin'],
+  },
+  {
     primaryText: 'Events',
     linkTo: '/events',
     access: ['anon', 'user', 'admin'],

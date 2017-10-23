@@ -12,6 +12,7 @@ const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
 const resourceRoutes = require('./resources');
+const rteRoutes = require('./routeplans');
 const jsonfile = require('jsonfile');
 
 let manifest;
@@ -87,6 +88,7 @@ router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/resource', resourceRoutes);
 // all requireAuth
 router.use('/apiv1/activities', rLib.requireAuth, activRoutes);
+router.use('/apiv1/routeplan', rLib.requireAuth, rteRoutes);
 router.use('/apiv1/strava', rLib.requireAuth, stravaRoutes);
 // all requireAdmin and requireAuth
 router.use('/apiv1/admin', rLib.requireAuth, rLib.requireAdmin, adminRoutes);

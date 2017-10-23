@@ -3,6 +3,7 @@ const schedule = require('node-schedule');
 
 const User = require('../models/user');
 const activ = require('./activities');
+const rts = require('./routeplans');
 const auth = require('./authentication');
 const hlpr = require('../lib/helpers');
 
@@ -15,6 +16,13 @@ exports.getActivities = (req, res) => {
   });
 };
 
+exports.getUserActivities = (req, res) => {
+  hlpr.consLog(['strava.getUserActivities start']);
+  const tmpReq = req;
+  tmpReq.pageCount = 1;
+  activ.getRecentActivities(tmpReq, res);
+};
+
 // TODO this is just starting but have tested it and it works to pull data.
 exports.getRoute = (req, res) => {
   strava.routes.get({ id: req.params.id, access_token: req.user.access_token }, (err, data) => {
@@ -25,15 +33,12 @@ exports.getRoute = (req, res) => {
   });
 };
 
-// exports.getRoute = (req, res) => {
-//   strava.routes.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
-//     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-//     if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
-//     hlpr.consLog(['getRoute', data]);
-//     res.send(data);
-//   });
-// };
-
+exports.getUserRouteplans = (req, res) => {
+  hlpr.consLog(['strava.getUserRouteplans start']);
+  const tmpReq = req;
+  tmpReq.pageCount = 1;
+  rts.getRecentRouteplans(tmpReq, res);
+};
 
 exports.getUser = (req, res) => {
   strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
@@ -47,18 +52,16 @@ exports.getUser = (req, res) => {
   });
 };
 
-exports.getUserActivities = (req, res) => {
-  hlpr.consLog(['strava.getUserActivities start']);
-  const tmpReq = req;
-  tmpReq.pageCount = 1;
-  activ.getRecentActivities(tmpReq, res);
+exports.getFriends = (req, res) => {
+  strava.athlete.listFriends({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+    const result = data.map(d => d.id);
+    res.json(result)
+  });
 };
 
 exports.nightlyUpdate = () => {
-  hlpr.consLog(['nightlyUpdate']);
   User.find({}, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
-      hlpr.consLog(['nightlyUpdate', fUser.stravaId, fUser.access_token]);
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
         hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
 
@@ -70,17 +73,25 @@ exports.nightlyUpdate = () => {
           hlpr.consLog([athlete, fUser.stravaId, fUser.access_token]);
           return null;
         }
-
-        hlpr.consLog(['nightlyUpdate.athlete', athlete.id]);
         auth.writeUser({ athlete: athlete }, fUser, (resUser) => {
           hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
+          const tmpRt = {
+            pageCount: 1,
+            routeplans: [],
+            cronjob: true,
+            user: fUser,
+          };
+          rts.getAllRouteplans(tmpRt, (result) => {
+            hlpr.consLog(['nightlyUpdate getAllRouteplans \n ________triggered', result]);
+          });
           if (resUser.clubMember === true) {
-            const tmpReq = {};
-            tmpReq.pageCount = 1;
-            tmpReq.activities = [];
-            tmpReq.cronjob = true;
-            tmpReq.user = fUser;
-            activ.getAllActivities(tmpReq, (result) => {
+            const tmpAct = {
+              pageCount: 1,
+              activities: [],
+              cronjob: true,
+              user: fUser,
+            };
+            activ.getAllActivities(tmpAct, (result) => {
               hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
             });
           } else {
@@ -107,3 +118,11 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
   hlpr.consLog(['dailyUserUpdate has started']);
   exports.nightlyUpdate();
 });
+
+let runOnce = true;
+const runOnStartup = () => {
+  console.log('strava.runOnStartup');
+  runOnce = false;
+  exports.nightlyUpdate();
+};
+if (runOnce) runOnStartup();

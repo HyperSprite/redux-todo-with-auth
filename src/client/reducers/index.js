@@ -8,6 +8,7 @@ import activities from './activities';
 import auth from './auth';
 import events from './events';
 import page from './page';
+import routeplans from './routeplan';
 import visibilityFilter from './visibility-filter';
 
 const appReducer = combineReducers({
@@ -16,6 +17,7 @@ const appReducer = combineReducers({
   events,
   page,
   form,
+  routeplans,
   visibilityFilter,
 });
 
