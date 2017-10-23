@@ -3,6 +3,7 @@ const strava = require('strava-v3');
 const moment = require('moment');
 
 const User = require('../models/user');
+const rts = require('./routeplans');
 const hlpr = require('../lib/helpers');
 const geocoder = require('../lib/geocoder');
 const resources = require('../lib/resources');
@@ -79,15 +80,15 @@ exports.writeUser = (userData, user, resultUser) => {
   athlete.clubMember = club;
 
   geocoder.userGeocoder(athlete, user, (err, toSave) => {
-    hlpr.consLog(['....................', 'auth.writeUser.callGeoCoder', 'user', user.stravaId, err]);
+    // hlpr.consLog(['....................', 'auth.writeUser.callGeoCoder', 'user', user.stravaId, err]);
     // get user elevation and timezone
     const inputElevation = {
       loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
       timestamp: user.updatedAt,
     };
-    hlpr.consLog(['....................', 'auth.writeUser.inputElevation', inputElevation]);
+    // hlpr.consLog(['....................', 'auth.writeUser.inputElevation', inputElevation]);
     resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
-      hlpr.consLog(['....................', 'geoElv', geoElv]);
+      // hlpr.consLog(['....................', 'geoElv', geoElv]);
       toSave.userGeoElevation = geoElv.elevation;
 
       resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
@@ -98,17 +99,31 @@ exports.writeUser = (userData, user, resultUser) => {
           toSave.userGeoTzRawOffset = geoTZ.timezone.rawOffset;
           toSave.userGeoTzDSTOffset = geoTZ.timezone.dstOffset;
         }
-        const options = { new: true };
-        User.findByIdAndUpdate(user._id, toSave, options, (err, editUser) => {
-          if (err || !editUser) {
-            hlpr.consLog(['....................', 'Error: auth.writeUser.findByIdAndUpdate', err, editUser.stravaId, user._id]);
-            return resultUser({ error: 'Error updating user' });
-          }
-          exports.pushMetrics(athlete, editUser, ['weight', 'ftp'], (resUser) => {
-            hlpr.consLog(['....................', 'auth.writeUser resultUser', editUser.stravaId]);
-            return resultUser(resUser);
+
+        const tmpRt = {
+          pageCount: 1,
+          routeplans: [],
+          cronjob: true,
+          user: user,
+        };
+
+        
+
+          // toSave.friends = strava.athlete.listFriends({ id: user.stravaId, access_token: user.access_token }, (err, data) => {
+          //   const friendsResult = data.map(d => d.id);
+
+          const options = { new: true };
+          User.findByIdAndUpdate(user._id, toSave, options, (err, editUser) => {
+            if (err || !editUser) {
+              hlpr.consLog(['....................', 'Error: auth.writeUser.findByIdAndUpdate', err, user._id]);
+              return resultUser({ error: 'Error updating user' });
+            }
+            exports.pushMetrics(athlete, editUser, ['weight', 'ftp'], (resUser) => {
+              hlpr.consLog(['....................', 'auth.writeUser resultUser', editUser.stravaId]);
+              return resultUser(resUser);
+            });
           });
-        });
+        // });
       });
     });
   });

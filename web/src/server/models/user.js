@@ -130,6 +130,8 @@ const userSchema = new Schema({
   ftpHistory: [ftpHistorySchema],
   weightHistory: [weightHistorySchema],
   tssGoals: [tssGoalSchema],
+  friends: [Number],
+  routeplans: [Number],
 },
   {
     timestamps: true,

@@ -38,7 +38,7 @@ exports.getAllActivities = (input, result) => {
       hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
       auth.stravaSignOut(input, result);
     }
-    if (!acts.length || !acts) {
+    if (!acts || !acts.length) {
       input.arrLength = 0;
       hlpr.consLog(['strava.getAllActivities arrLength = 0 or !acts']);
       return result(input);
