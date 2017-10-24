@@ -57,7 +57,7 @@ const activitiesSchema = new Schema(
     external_id: String, // 2012-12-12_21-40-32-80-29011.fit,
     upload_id: Number, // 361720,
     name: { type: String, text: true }, // Evening Ride,
-    description: { type: String, text: true }, // the best ride ever,
+    description: { type: String }, // the best ride ever,
     distance: Number, // 4475.4,
     moving_time: Number, // 1303,
     elapsed_time: Number, // 1333,
@@ -102,7 +102,7 @@ const activitiesSchema = new Schema(
 activitiesSchema.plugin(findOrCreate);
 
 // workaround: see https://github.com/Automattic/mongoose/issues/3824
-activitiesSchema.index({ name: 'text', description: 'text' });
+// activitiesSchema.index({ name: 'text' });
 
 const Activities = mongoose.model('activities', activitiesSchema);
 

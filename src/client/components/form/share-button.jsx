@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { IconButton } from 'material-ui';
 import FaFacebook from 'react-icons/lib/fa/facebook-official';
 import FaTwitter from 'react-icons/lib/fa/twitter';

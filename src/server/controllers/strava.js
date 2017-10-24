@@ -119,10 +119,9 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
   exports.nightlyUpdate();
 });
 
-let runOnce = true;
+
 const runOnStartup = () => {
   console.log('strava.runOnStartup');
-  runOnce = false;
   exports.nightlyUpdate();
 };
-if (runOnce) runOnStartup();
+// runOnStartup();

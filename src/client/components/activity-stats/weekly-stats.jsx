@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { addDays, eachDay, format } from 'date-fns';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 

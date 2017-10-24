@@ -30,7 +30,7 @@ const routeplanSchema = new Schema(
   {
     routeplanId: { type: Number, unique: true, index: true }, // 321934,
     stravaId: { type: [Number], index: true, sparse: true },
-    description: { type: String, text: true }, // the best ride ever,
+    description: { type: String }, // the best ride ever,
     distance: Number, // 4475.4,
     elevation_gain: Number, // 154.5,
     map: mapSchema,
@@ -62,7 +62,7 @@ const routeplanSchema = new Schema(
 routeplanSchema.plugin(findOrCreate);
 
 // workaround: see https://github.com/Automattic/mongoose/issues/3824
-routeplanSchema.index({ name: 'text', description: 'text' });
+// routeplanSchema.index({ name: 'text' });
 
 const Routeplan = mongoose.model('routeplan', routeplanSchema);
 

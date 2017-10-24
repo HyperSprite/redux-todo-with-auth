@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { FlatButton, IconButton, List, ListItem } from 'material-ui';
 import { ActionDeleteForever, ContentAddCircle } from 'material-ui/svg-icons';
