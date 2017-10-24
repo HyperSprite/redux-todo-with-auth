@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import lib from '../../containers/lib';

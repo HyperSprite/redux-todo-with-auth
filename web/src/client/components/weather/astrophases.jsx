@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 // import moment from 'moment';   //TODO replace this with date-fns, needs doing
 import { format, startOfDay } from 'date-fns';

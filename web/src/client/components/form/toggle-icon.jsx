@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FaToggleOff from 'react-icons/lib/fa/toggle-off';
 import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 

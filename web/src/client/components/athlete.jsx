@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { IconButton, Paper, Subheader } from 'material-ui';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';

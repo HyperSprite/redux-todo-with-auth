@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
@@ -7,7 +8,7 @@ import lib from '../../containers/lib';
 import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
-import ViewEventRoute from './view-event-route';
+import GetViewRoute from './get-route-view';
 import araceathleteEventsBanner from '../../assets/araceathlete-events-banner.png';
 
 import style from '../../styles/style';
@@ -176,7 +177,7 @@ const renderViewEvent = ({
         contentType="text"
       />
       {authenticated && event.eventRoutes.map(route => (
-        <ViewEventRoute
+        <GetViewRoute
           key={`${event.eventId}${route.eventRouteURL}`}
           {...route}
           mPref={mPref}

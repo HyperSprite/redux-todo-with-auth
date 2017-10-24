@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import FaChevronUp from 'react-icons/lib/fa/chevron-up';
 import FaChevronDown from 'react-icons/lib/fa/chevron-down';
 

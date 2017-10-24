@@ -112,7 +112,6 @@ exports.getRouteplansOnTimer = setInterval(async () => {
       getOneRoute(rPInput, done => hlpr.consLog([`getRouteplansOnTimer OneRoute: ${done.routeplanId}`]));
     });
   }
-  hlpr.consLog(['No new routeplans']);
 }, theInterval(minutes));
 
 /**
@@ -172,7 +171,34 @@ exports.getAllRouteplans = (input, result) => {
 
 // TODO build this first
 exports.getUserRouteplans = (req, res) => {
-  res.send({ message: 'getRouteplans' });
+  hlpr.consLog(['getUserRouteplans', req.params.stravaId]);
+  let stravaId = req.user.stravaId;
+  if (req.params.stravaId && req.params.stravaId !== 'default') {
+    stravaId = req.params.stravaId;
+  }
+  console.log(stravaId, req.user.stravaId);
+  UserCommon.findOne({ stravaId: stravaId }, (err, uComData) => {
+    if (err) return res.send({ message: 'User not found' });
+    Routeplans.find({ routeplanId: { $in: uComData.routeplans } }, {
+      _id: 0,
+      routeplanId: 1,
+      updatedAt: 1,
+      description: 1,
+      distance: 1,
+      elevation_gain: 1,
+      'map.polyline': 1,
+      name: 1,
+      type: 1,
+      sub_type: 1,
+      elevationStart: 1,
+      elevationEnd: 1,
+      coordinatesStart: 1,
+      coordinatesEnd: 1,
+      updated_at: 1,
+    }, { sort: { updated_at: -1 } }, (err, uComRP) => {
+      res.send(uComRP);
+    });
+  });
 };
 
 

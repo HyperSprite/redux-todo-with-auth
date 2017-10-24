@@ -66,12 +66,7 @@ if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
 }
 
 mongoose.connect(process.env.MONGODB_URI, {
-  server: {
-    socketOptions: {
-      socketTimeoutMS: 300000,
-      connectionTimeout: 300000,
-    },
-  },
+  useMongoClient: true,
 });
 
 function shouldCompress(req, res) {
