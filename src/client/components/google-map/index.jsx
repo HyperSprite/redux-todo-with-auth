@@ -15,6 +15,8 @@ class GoogleMapWithPolyline extends React.Component {
   static propTypes = {
     containerWidth: PropTypes.number,
     mapPolyline: PropTypes.string,
+    height: PropTypes.number,
+    width: PropTypes.number,
     // map: PropTypes.shape({
     //   polyline: PropTypes.string,
     // }), // supplied by google-map-react
@@ -22,6 +24,8 @@ class GoogleMapWithPolyline extends React.Component {
 
   static defaultProps = {
     map: undefined,
+    height: 400,
+    width: 400,
     // polyline: undefined,
   };
 
@@ -64,8 +68,8 @@ class GoogleMapWithPolyline extends React.Component {
       };
 
       const size = {
-        width: 400, // Map width in pixels
-        height: 400, // Map height in pixels
+        width: this.props.width, // Map width in pixels
+        height: this.props.height, // Map height in pixels
       };
       const result = fitBounds({ nw: bounds.nw, se: bounds.se }, size);
       return result;
@@ -74,7 +78,7 @@ class GoogleMapWithPolyline extends React.Component {
     this.mapData = this.props.map.polyline && convertMapData(this.props.map.polyline);
     this.centerZoom = this.props.map.polyline && getCenterAndZoom(this.props.map.polyline);
     return (
-      <div style={{ width: this.props.containerWidth, height: 400 }}>
+      <div style={{ width: this.props.containerWidth, height: this.props.height }}>
         { this.mapData ? (
           <GoogleMapReact
             onGoogleApiLoaded={({ map, maps }) => {
@@ -105,7 +109,7 @@ class GoogleMapWithPolyline extends React.Component {
             }
           </GoogleMapReact>
         ) : (
-          <div style={{ width: 200, height: 400 }} >
+          <div style={{ width: 200, height: this.props.height }} >
             loading...
           </div>
         )}

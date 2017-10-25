@@ -51,7 +51,7 @@ class RouteView extends React.Component {
     const { mPref } = this.props;
     const { routeData } = this.state;
     return (
-      <ViewRoute mPref={mPref} routeData={routeData} />
+      <ViewRoute mPref={mPref} routeData={routeData} height={400} />
     );
   }
 }

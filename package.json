@@ -91,6 +91,7 @@
     "react-router-dom": "^4.2.2",
     "react-tap-event-plugin": "^2.0.1",
     "react-transition-group": "^2.2.1",
+    "react-visibility-sensor": "^3.11.0",
     "react-widgets": "^3.5.0",
     "recharts": "^0.22.0",
     "redux": "^3.7.2",

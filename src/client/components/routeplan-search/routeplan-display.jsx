@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import CardSmall from '../card-small';
 import RouteView from '../route-view';
 
 const RouteplanDisplay = (props) => {
-
-  console.dir(props);
   return (
-    <div>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {props.routeplans.map(routeData => (
-        <RouteView
-          key={routeData.routeplanId}
-          routeData={routeData}
-          mPref={props.mPref}
-        />
+        <CardSmall key={routeData.routeplanId}>
+          <RouteView
+            routeData={routeData}
+            mPref={props.mPref}
+            height={200}
+          />
+        </CardSmall>
       ))}
     </div>
   );

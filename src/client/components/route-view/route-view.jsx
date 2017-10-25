@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
+import VisibilitySensorLock from '../../containers/visibility-sensor-lock';
 import lib from '../../containers/lib';
 import Static from './../form/static';
 import ViewRouteMap from '../google-map';
@@ -12,9 +13,20 @@ const RouteView = (props) => {
   const { routeData, mPref } = props;
   return (
     <Card style={{ marginBottom: 5, marginTop: 5 }}>
-      {routeData.map &&
-        <ViewRouteMap {...routeData} />
-      }
+      <VisibilitySensorLock >
+
+          <div>
+            { routeData.map ? (
+              <ViewRouteMap {...routeData} height={props.height} />
+            ) : (
+              <div style={{ height: props.height }}>
+                loading...
+              </div>
+            )}
+          </div>
+
+      </VisibilitySensorLock>
+
       <CardHeader
         title={routeData.name}
       />
