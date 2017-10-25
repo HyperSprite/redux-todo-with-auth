@@ -5,5 +5,6 @@ export default {
   },
   div: {
     margin: 20,
+    display: 'flex',
   },
 };
