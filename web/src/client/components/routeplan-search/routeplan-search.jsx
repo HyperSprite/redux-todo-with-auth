@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import RouteplanDisplay from './routeplan-display';
+import LoadingPage from '../loading-page';
 
 const relURL = 'apiv1/routeplan/';
 
@@ -62,17 +63,11 @@ class RouteSearch extends Component {
   render() {
 
     return (
-      <div>
+      <div style={{ marginTop: 80 }}>
         {this.state.isFetching ? (
-          <div style={{ marginTop: 80 }}>
-            Loading...
-            {this.state.message}
-            {this.state.user}
-          </div>
+          <LoadingPage />
         ) : (
-          <div style={{ marginTop: 80 }}>
-            <RouteplanDisplay {...this.state} />
-          </div>
+          <RouteplanDisplay {...this.state} />
         )}
       </div>
     );

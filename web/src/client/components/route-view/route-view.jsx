@@ -6,39 +6,36 @@ import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 import VisibilitySensorLock from '../../containers/visibility-sensor-lock';
 import lib from '../../containers/lib';
 import Static from './../form/static';
-import ViewRouteMap from '../google-map';
+import GoogleMapWithPolyline from '../google-map';
+
+const propTypes = {
+  height: PropTypes.number.isRequired,
+  mPref: PropTypes.bool.isRequired,
+  routeData: PropTypes.object.isRequired,
+};
 
 const RouteView = (props) => {
-
-  const { routeData, mPref } = props;
+  const { height, mPref, routeData } = props;
   return (
     <Card style={{ marginBottom: 5, marginTop: 5 }}>
+
       <VisibilitySensorLock >
-
-          <div>
-            { routeData.map ? (
-              <ViewRouteMap {...routeData} height={props.height} />
-            ) : (
-              <div style={{ height: props.height }}>
-                loading...
-              </div>
-            )}
-          </div>
-
+        { routeData.map && <GoogleMapWithPolyline {...routeData} height={height} /> }
       </VisibilitySensorLock>
 
       <CardHeader
         title={routeData.name}
+        subtitle={
+          <a href={`https://www.strava.com/routes/${routeData.routeplanId}`}>
+            {routeData.routeplanId}
+          </a>
+        }
       />
-      <div  style={{ marginLeft: 20, marginRight: 20 }}>
+
+      <div style={{ marginLeft: 20, marginRight: 20 }}>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', margin: 20 }} >
-          <Static
-            contentLabel="Strava Route Link"
-            content={routeData.routeplanId}
-            contentType="url"
-            baseURL="https://www.strava.com/routes/"
-          />
+
           <Static
             contentLabel="Distance"
             content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
@@ -55,6 +52,6 @@ const RouteView = (props) => {
   );
 };
 
-// RouteView.propTypes = propTypes;
+RouteView.propTypes = propTypes;
 
 export default RouteView;

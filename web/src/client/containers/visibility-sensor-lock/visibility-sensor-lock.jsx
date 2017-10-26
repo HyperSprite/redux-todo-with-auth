@@ -3,12 +3,20 @@ import PropTypes from 'prop-types';
 import VisibilitySensor from 'react-visibility-sensor';
 
 export default class VisibilitySensorLock extends React.Component {
+
+  static propTypes = {
+    children: PropTypes.node,
+    height: PropTypes.number,
+  }
+
+  static defaultProps = {
+    children: null,
+    height: 100,
+  }
+
   constructor(props) {
     super(props);
     this.onChange = this.onChange.bind(this);
-  }
-  static propTypes = {
-    // children: PropTypes.node.isRequired,
   }
 
   state = {
@@ -24,6 +32,7 @@ export default class VisibilitySensorLock extends React.Component {
   }
 
   render() {
+    const { children, height } = this.props;
     const { locked } = this.state;
     return (
       <VisibilitySensor
@@ -32,7 +41,7 @@ export default class VisibilitySensorLock extends React.Component {
         active={!locked}
         minTopValue={-50}
       >
-        {locked ? () => this.props.children : <div> loading... </div>}
+        {locked ? () => children : <div style={{ height }}> loading... </div>}
       </VisibilitySensor>
     );
   }
