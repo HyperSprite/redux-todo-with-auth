@@ -5,7 +5,7 @@ import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
 import lib from '../../containers/lib';
 import Static from './../form/static';
-import ViewRouteMap from '../google-map';
+import GoogleMapWithPolyline from '../google-map';
 
 const axiosConfig = {
   headers: {
@@ -51,7 +51,7 @@ class ViewEventRoute extends React.Component {
     return (
       <Card style={{ marginBottom: 5, marginTop: 5 }}>
         {routeData.map &&
-          <ViewRouteMap {...routeData} />
+          <GoogleMapWithPolyline {...routeData} />
         }
         <CardHeader
           title={routeData.name}

@@ -12,7 +12,7 @@ const RouteplanDisplay = (props) => {
           <RouteView
             routeData={routeData}
             mPref={props.mPref}
-            height={200}
+            height={300}
           />
         </CardSmall>
       ))}
