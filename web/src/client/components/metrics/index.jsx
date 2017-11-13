@@ -9,7 +9,6 @@ import * as actions from './../../actions';
 import lib from '../../containers/lib';
 
 import FtpWeight from './ftp-weight';
-import HelpCard from '../form/help-card';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
 import style from '../../styles/style';
@@ -98,11 +97,6 @@ class Athlete extends Component {
                 </IconButton>
               </div>
             </Card>
-            <HelpCard
-              src="/blog/power-and-weight"
-              iFrameId="power-and-weight"
-              title="Learn more about Power and Weight"
-            />
           </div>
           <div className="side-lite right-pane" />
         </div>

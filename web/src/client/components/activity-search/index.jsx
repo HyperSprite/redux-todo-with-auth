@@ -14,7 +14,6 @@ import * as actions from '../../actions';
 import Alert from '../form/alert';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
-import HelpCard from '../form/help-card';
 import SingleActivity from '../form/single-activity';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import validate from '../form/validate';
@@ -240,12 +239,6 @@ class ActivitySearch extends Component {
                 </Form>
               </div>
             </Paper>
-
-            <HelpCard
-              src="/blog/activity-search"
-              iFrameId="activity-search"
-              title={`Learn more about ${title}`}
-            />
           </div>
           <div className="side-lite right-pane" />
         </div>

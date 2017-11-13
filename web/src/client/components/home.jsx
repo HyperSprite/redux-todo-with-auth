@@ -35,30 +35,11 @@ class Home extends Component {
         />
         <div className="home-jumbotron">
           <div className="side-lite left-pane" />
-          <div className="brand">
-            <div>
-              {/* <img src={ARaceAthleteSVG} alt="A Race Athlete logo" /> */}
-            </div>
-          </div>
+          <div className="brand" />
           <div className="side-lite right-pane" />
         </div>
 
-          {/* <div >
-            {posts.map(p => (
-              <RaisedButton
-                key={`${p}link`}
-                label={p.replace(/-/g, ' ')}
-                href={`#${p}`}
-                // fullWidth
-              />
-            ))}
-          </div> */}
-
-        {posts.map(p => (
-          <div key={p} >
-            <Iframe src={`blog/${p}`} iFrameId={p} />
-          </div>
-        ))}
+        <Iframe src={'https://blog.araceathlete.com/features'} iFrameId="features" />
       </div>
     );
   }

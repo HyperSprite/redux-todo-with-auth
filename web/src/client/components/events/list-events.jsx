@@ -12,7 +12,6 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import ViewEvent from './view-event';
 import EditEvent from './edit-event';
-import HelpCard from '../form/help-card';
 
 import style from '../../styles/style';
 
@@ -211,11 +210,6 @@ class ListEvent extends Component {
                 </div>
               );
             })}
-            <HelpCard
-              src="/blog/events"
-              iFrameId="events"
-              title="Learn more about Events"
-            />
             { this.renderActionButton() }
           </div>
           <div className="side-lite right-pane" />
