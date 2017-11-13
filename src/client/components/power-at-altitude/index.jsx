@@ -16,7 +16,6 @@ import * as actions from './../../actions';
 import lib from '../../containers/lib';
 import FeatureNotice from '../form/feature-notice';
 import ToggleIcon from '../form/toggle-icon';
-import HelpCard from '../form/help-card';
 import Dialog from './dialog';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
@@ -178,11 +177,6 @@ class AltitudeTable extends Component {
                 />
               )}
             </Card>
-            <HelpCard
-              src="/blog/power-at-altitude"
-              iFrameId="power-at-altitude"
-              title={`Learn more about ${title}`}
-            />
           </div>
           <div className="side-lite right-pane" />
         </div>

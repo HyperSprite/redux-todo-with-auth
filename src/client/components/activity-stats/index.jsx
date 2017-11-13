@@ -6,7 +6,6 @@ import FaRefresh from 'react-icons/lib/fa/refresh';
 
 import * as actions from '../../actions';
 import WeeklyStats from './weekly-stats';
-import HelpCard from '../form/help-card';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import style from '../../styles/style';
 
@@ -137,11 +136,6 @@ class activeStats extends Component {
                 </div>
               )}
             </Paper>
-            <HelpCard
-              src="/blog/weekly-stats"
-              iFrameId="weekly-stats"
-              title="Learn more about Weekly Stats"
-            />
           </div>
           <div className="side-lite right-pane" />
         </div>
