@@ -15,7 +15,6 @@ const cors = require('cors');
 const router = require('./router');
 const hlpr = require('./lib/helpers');
 const compression = require('compression');
-const vhost = require('vhost');
 
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
@@ -88,10 +87,10 @@ app.use(compression({ filter: shouldCompress }));
 // app.use(cors());
 // parses everything that comes in as JSON
 app.use(bodyParser.json({ type: '*/*' }));
-// statics
-app.use(vhost('blog.*', express.static(blogStatic, { fallthrough: false })));
+
+app.use('/blog', express.static(`${rootDir}blog`, { maxAge: 0 }));
 app.use(express.static(rootDir, { maxAge: '30d' }));
-// everything else
+
 app.use('/', router);
 
 // 404 catch-all handler (middleware)

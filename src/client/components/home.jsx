@@ -39,7 +39,7 @@ class Home extends Component {
           <div className="side-lite right-pane" />
         </div>
 
-        <Iframe src={'https://blog.araceathlete.com/features'} iFrameId="features" />
+        <Iframe src={'blog/features'} iFrameId="features" />
       </div>
     );
   }
