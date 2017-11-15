@@ -13,7 +13,7 @@
   "scripts": {
     "test": "node_modules/.bin/nodemon src/server/index.js test=true",
     "test-postinstall": "webpack --progress --optimize-minimize",
-    "dev": "rm -f src/server/public/assets/* && node_modules/.bin/nodemon src/server/index.js",
+    "dev": "rm -f src/server/public/assets/* && node_modules/.bin/nodemon --ignore 'src/server/public/' src/server/index.js",
     "dev-api-only": "NODE_ENV=API-ONLY node_modules/.bin/nodemon src/server/index.js",
     "postinstall": "rm -f src/server/public/assets/* && NODE_ENV=production webpack -p --progress --optimize-minimize",
     "start": "NODE_ENV=production node src/server/index.js",

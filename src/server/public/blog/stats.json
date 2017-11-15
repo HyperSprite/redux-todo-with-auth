@@ -1,78 +1,86 @@
 {
   "assetsByChunkName": {
     "path---power-and-weight": [
-      "path---power-and-weight-9e42ec696ff33f7feb03.js",
-      "path---power-and-weight-9e42ec696ff33f7feb03.js.map"
+      "path---power-and-weight-318c7fdb49b7f5d2f87c.js",
+      "path---power-and-weight-318c7fdb49b7f5d2f87c.js.map"
     ],
     "component---src-pages-index-js": [
-      "component---src-pages-index-js-2a8a32de6548108c707f.js",
-      "component---src-pages-index-js-2a8a32de6548108c707f.js.map"
+      "component---src-pages-index-js-434d43d5a54594f9cc94.js",
+      "component---src-pages-index-js-434d43d5a54594f9cc94.js.map"
     ],
     "path---events": [
-      "path---events-85b5abe546096ab226ee.js",
-      "path---events-85b5abe546096ab226ee.js.map"
+      "path---events-9ba25b327eb82c9b9200.js",
+      "path---events-9ba25b327eb82c9b9200.js.map"
     ],
     "path---features": [
-      "path---features-e214aab7ad7ca8064af1.js",
-      "path---features-e214aab7ad7ca8064af1.js.map"
+      "path---features-4a3901bae46c9081a6d1.js",
+      "path---features-4a3901bae46c9081a6d1.js.map"
     ],
     "path---": [
       "path----131f9aef94525eeb6ecd.js",
       "path----131f9aef94525eeb6ecd.js.map"
     ],
     "component---src-pages-features-js": [
-      "component---src-pages-features-js-7a67118290369641ea45.js",
-      "component---src-pages-features-js-7a67118290369641ea45.js.map"
+      "component---src-pages-features-js-f99d9e6597fddcd0056b.js",
+      "component---src-pages-features-js-f99d9e6597fddcd0056b.js.map"
+    ],
+    "component---src-pages-tag-js": [
+      "component---src-pages-tag-js-cef811864ea180e433e6.js",
+      "component---src-pages-tag-js-cef811864ea180e433e6.js.map"
+    ],
+    "path---tag": [
+      "path---tag-903c180ad16109d10a4c.js",
+      "path---tag-903c180ad16109d10a4c.js.map"
     ],
     "component---src-templates-blog-post-js": [
-      "component---src-templates-blog-post-js-d8d6957ddabf1f86aaad.js",
-      "component---src-templates-blog-post-js-d8d6957ddabf1f86aaad.js.map"
+      "component---src-templates-blog-post-js-78ba65481f86de78da52.js",
+      "component---src-templates-blog-post-js-78ba65481f86de78da52.js.map"
     ],
     "component---src-layouts-index-js": [
-      "component---src-layouts-index-js-c0c209d00994d3ac03fe.js",
-      "component---src-layouts-index-js-c0c209d00994d3ac03fe.js.map"
+      "component---src-layouts-index-js-e31b22f578a0686dd038.js",
+      "component---src-layouts-index-js-e31b22f578a0686dd038.js.map"
     ],
     "path---index": [
-      "path---index-a47c764a3cdc23b5bd27.js",
-      "path---index-a47c764a3cdc23b5bd27.js.map"
+      "path---index-903c180ad16109d10a4c.js",
+      "path---index-903c180ad16109d10a4c.js.map"
     ],
     "path---power-at-altitude": [
-      "path---power-at-altitude-b2d98032854a7c4eac1b.js",
-      "path---power-at-altitude-b2d98032854a7c4eac1b.js.map"
+      "path---power-at-altitude-ef34103de6aceb5af361.js",
+      "path---power-at-altitude-ef34103de6aceb5af361.js.map"
     ],
     "path---how-do-i-get-started": [
-      "path---how-do-i-get-started-7c9c9c8e74a1a2e3af99.js",
-      "path---how-do-i-get-started-7c9c9c8e74a1a2e3af99.js.map"
+      "path---how-do-i-get-started-7b1cb9e81c5a0ca9c1fe.js",
+      "path---how-do-i-get-started-7b1cb9e81c5a0ca9c1fe.js.map"
     ],
     "component---src-pages-404-js": [
       "component---src-pages-404-js-395a01dbcea2c83d7cc8.js",
       "component---src-pages-404-js-395a01dbcea2c83d7cc8.js.map"
     ],
     "commons": [
-      "commons-0ff182e282b6c93a4e31.js",
-      "commons-0ff182e282b6c93a4e31.js.map"
+      "commons-6a817f0ee671759ab049.js",
+      "commons-6a817f0ee671759ab049.js.map"
     ],
     "path---404-html": [
       "path---404-html-1db04e5021b40904aca6.js",
       "path---404-html-1db04e5021b40904aca6.js.map"
     ],
     "app": [
-      "app-2337df7d50bb510d0220.js",
+      "app-efa4e3dcb464c51c223d.js",
       "build-js-styles.css",
-      "app-2337df7d50bb510d0220.js.map",
+      "app-efa4e3dcb464c51c223d.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-layouts-features-js": [
-      "component---src-layouts-features-js-55cb9feda62d20fa87d0.js",
-      "component---src-layouts-features-js-55cb9feda62d20fa87d0.js.map"
+      "component---src-layouts-features-js-6be28c2ae38f75233a35.js",
+      "component---src-layouts-features-js-6be28c2ae38f75233a35.js.map"
     ],
     "path---welcome-to-araceathlete": [
-      "path---welcome-to-araceathlete-e54aef81b41126bdd1f4.js",
-      "path---welcome-to-araceathlete-e54aef81b41126bdd1f4.js.map"
+      "path---welcome-to-araceathlete-820ffe9c850ed6306f76.js",
+      "path---welcome-to-araceathlete-820ffe9c850ed6306f76.js.map"
     ],
     "path---weekly-stats": [
-      "path---weekly-stats-395320efd372b675f685.js",
-      "path---weekly-stats-395320efd372b675f685.js.map"
+      "path---weekly-stats-59410b4072de72e5720d.js",
+      "path---weekly-stats-59410b4072de72e5720d.js.map"
     ],
     "path---404": [
       "path---404-1db04e5021b40904aca6.js",
