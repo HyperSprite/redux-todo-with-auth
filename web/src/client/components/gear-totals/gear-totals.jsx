@@ -53,14 +53,22 @@ class GearTotals extends Component {
     }
 
     const gearTotals = calcTotals(actNameAndId, activities);
+    const tableRows = (stl, i) => {
+
+      if (i % 2) {
+        const newStl = Object.assign({}, stl.row, stl.rowOdd);
+        return newStl;
+      }
+      return stl.row;
+    };
 
     return (
 
       <div>
         {gearTotals.length !== 0 && (
           <div>
-            {gearTotals.map(row => (
-              <div key={row.gearName} style={style.container}>
+            {gearTotals.map((row, index) => (
+              <div key={row.gearName} style={tableRows(style, index)}>
                 {returnValues.map(rV => (
                   <div key={`${row.gearName}${rV.activityType}`}>
                     {(rV.conversionMetric) ? (

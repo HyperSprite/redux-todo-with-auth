@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { addDays, eachDay, format } from 'date-fns';
-import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 
-import lib from '../../containers/lib';
 import BarChart from './bar-chart';
 import GearTotals from './../gear-totals';
 import SingleActivity from '../form/single-activity';
+import style from './style';
 
 const propTypes = {
   week: PropTypes.string.isRequired, // "2017-05-02"
@@ -20,105 +20,135 @@ const defaultProps = {
   measurementPref: false,
 };
 
-function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
+class weeklyStats extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    };
+  }
 
-  return (
-    <Card>
-      <CardHeader
-        title={`Week of ${week}`}
-        actAsExpander
-        showExpandableButton
-      />
-      <CardActions>
-        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+  handleExpandChange = (expanded) => {
+    this.setState({ expanded: expanded });
+  };
 
-          {stats.weeklyTotals.tss.total ? (
+  handleToggle = (event, toggle) => {
+    console.log('toggle', toggle);
+    this.setState({ expanded: toggle });
+  };
+
+  handleExpand = () => {
+    this.setState({ expanded: true });
+  };
+
+  handleReduce = () => {
+    this.setState({ expanded: false });
+  };
+
+  render() {
+    const { week, stats, measurementPref } = this.props;
+
+    return (
+      <Card expanded={this.state.expanded} >
+        <CardHeader
+          title={`Week of ${week}`}
+        />
+        <CardActions>
+          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+
+            {stats.weeklyTotals.tss.total ? (
+              <BarChart
+                contentLabel="TSS"
+                content={`${stats.weeklyTotals.tss.total}`}
+                contentType="text"
+                metric="tss"
+                weeklyTotals={stats.dayTotals}
+              />
+            ) : (null)}
+
+            {stats.weeklyTotals.kj.total ? (
+              <BarChart
+                contentLabel="Kilojoules"
+                content={`${stats.weeklyTotals.kj.total}`}
+                contentType="text"
+                metric="kj"
+                weeklyTotals={stats.dayTotals}
+              />
+            ) : (null)}
+
+            {stats.weeklyTotals.ss.total ? (
+              <BarChart
+                contentLabel="Suffer Score"
+                content={`${stats.weeklyTotals.ss.total}`}
+                contentType="text"
+                metric="ss"
+                weeklyTotals={stats.dayTotals}
+              />
+            ) : (null)}
+
+            {stats.weeklyTotals.cal.total ? (
+              <BarChart
+                contentLabel="Calories"
+                content={`${stats.weeklyTotals.cal.total}`}
+                contentType="text"
+                metric="cal"
+                weeklyTotals={stats.dayTotals}
+              />
+            ) : (null)}
+
             <BarChart
-              contentLabel="TSS"
-              content={`${stats.weeklyTotals.tss.total}`}
+              contentLabel="Moving Time"
+              content={`${stats.weeklyTotals.time.total}`}
               contentType="text"
-              metric="tss"
+              metric="time"
               weeklyTotals={stats.dayTotals}
             />
-          ) : (null)}
 
-          {stats.weeklyTotals.kj.total ? (
             <BarChart
-              contentLabel="Kilojoules"
-              content={`${stats.weeklyTotals.kj.total}`}
+              contentLabel="Distance"
+              content={`${stats.weeklyTotals.dst.total}`}
               contentType="text"
-              metric="kj"
+              metric="dst"
               weeklyTotals={stats.dayTotals}
+              mPref={measurementPref}
             />
-          ) : (null)}
 
-          {stats.weeklyTotals.ss.total ? (
             <BarChart
-              contentLabel="Suffer Score"
-              content={`${stats.weeklyTotals.ss.total}`}
+              contentLabel="Elevation"
+              content={`${stats.weeklyTotals.elev.total}`}
               contentType="text"
-              metric="ss"
+              metric="elev"
               weeklyTotals={stats.dayTotals}
+              mPref={measurementPref}
             />
-          ) : (null)}
 
-          {stats.weeklyTotals.cal.total ? (
-            <BarChart
-              contentLabel="Calories"
-              content={`${stats.weeklyTotals.cal.total}`}
-              contentType="text"
-              metric="cal"
-              weeklyTotals={stats.dayTotals}
-            />
-          ) : (null)}
-
-          <BarChart
-            contentLabel="Moving Time"
-            content={`${stats.weeklyTotals.time.total}`}
-            contentType="text"
-            metric="time"
-            weeklyTotals={stats.dayTotals}
-          />
-
-          <BarChart
-            contentLabel="Distance"
-            content={`${stats.weeklyTotals.dst.total}`}
-            contentType="text"
-            metric="dst"
-            weeklyTotals={stats.dayTotals}
-            mPref={measurementPref}
-          />
-
-          <BarChart
-            contentLabel="Elevation"
-            content={`${stats.weeklyTotals.elev.total}`}
-            contentType="text"
-            metric="elev"
-            weeklyTotals={stats.dayTotals}
-            mPref={measurementPref}
-          />
-
-        </div>
-      </CardActions>
-      <GearTotals actNameAndId={stats.weeklyTotals.names} />
-      <CardText
-        expandable
-      >
-
-
-
-        {stats.weeklyTotals.names.map(act => (
-          // TODO build a component to show each activity
-          <div key={act.activityId}>
-            <SingleActivity
-              {...act}
-            />
           </div>
-        ))}
+        </CardActions>
+        <GearTotals actNameAndId={stats.weeklyTotals.names} />
+        <Toggle
+          toggled={this.state.expanded}
+          onToggle={this.handleToggle}
+          labelPosition="right"
+          label="Show this weeks activities"
+          style={style.toggle}
+        />
+        <CardText
+          expandable
+        >
 
-      </CardText>
-    </Card>
-  );
+          {stats.weeklyTotals.names.map(act => (
+            // TODO build a component to show each activity
+            <div key={act.activityId}>
+              <SingleActivity
+                {...act}
+              />
+            </div>
+          ))}
+
+        </CardText>
+      </Card>
+    );
+  }
 }
 
 weeklyStats.propTypes = propTypes;
