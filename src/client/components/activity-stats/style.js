@@ -1,12 +1,9 @@
 import theme from '../../styles/theme';
 
 const style = {
-  title: {
-    display: 'flex',
-    verticalAlign: 'middle',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    fontWeight: 600,
+  toggle: {
+    padding: '10px 15px 10px 15px',
+
   },
   row: {
     padding: 15,
