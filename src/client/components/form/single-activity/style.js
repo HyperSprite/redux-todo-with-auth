@@ -7,11 +7,13 @@ const style = {
     alignItems: 'center',
     justifyContent: 'space-between',
     fontWeight: 600,
+    fontSize: 16,
   },
   delete: {
     marginRight: '3vw',
   },
   container: {
+    fontSize: 16,
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
@@ -22,10 +24,10 @@ const style = {
     display: 'flex',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
-    // border: `thin solid ${theme.palette.accent3Color}`,
   },
   boxLabel: {
-    color: theme.palette.accent1Color,
+    color: theme.palette.accent7Color,
+
     marginLeft: 10,
   },
   boxData: {

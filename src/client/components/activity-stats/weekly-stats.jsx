@@ -137,12 +137,10 @@ class weeklyStats extends React.Component {
         >
 
           {stats.weeklyTotals.names.map(act => (
-            // TODO build a component to show each activity
-            <div key={act.activityId}>
-              <SingleActivity
-                {...act}
-              />
-            </div>
+            <SingleActivity
+              key={act.activityId}
+              {...act}
+            />
           ))}
 
         </CardText>
