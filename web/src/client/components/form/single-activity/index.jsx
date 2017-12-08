@@ -34,12 +34,12 @@ class SingleActivity extends Component {
   }
 
   thisActivity() {
-    return this.props.activities.filter(activity => activity.activityId === this.props.activityId);
+    return this.props.activities.filter(activity => activity.activityId === this.props.activityId)[0];
   }
 
   render() {
     const { mPref } = this.props;
-    const activity = this.thisActivity()[0];
+    const activity = this.thisActivity();
 
     if (activity.deleted) {
       return (
@@ -101,6 +101,17 @@ class SingleActivity extends Component {
                   </div>
                   <div style={style.boxData}>
                     {activity[rV.activityType][rV.activityTypeSub]}
+                  </div>
+                </div>
+              );
+            } else if (rV.division && activity[rV.divideThis]) {
+              return (
+                <div key={rV.activityType} style={style.box} >
+                  <div style={style.boxLabel}>
+                    {rV.activityLabel}
+                  </div>
+                  <div style={style.boxData}>
+                    {rV.division(activity[rV.divideThis], activity[rV.byThis], 2)}
                   </div>
                 </div>
               );

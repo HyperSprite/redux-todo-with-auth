@@ -7,12 +7,23 @@ const returnValues = [
     activityLabel: 'TSS',
   },
   {
-    activityType: 'kilojoules',
-    activityLabel: 'Kilojoules',
+    activityType: 'variability_index',
+    activityLabel: 'Variability Index',
+    division: lib.divideAndRound,
+    divideThis: 'weighted_average_watts',
+    byThis: 'average_watts',
   },
   {
     activityType: 'weighted_average_watts',
     activityLabel: 'Nomalized Power',
+  },
+  {
+    activityType: 'average_watts',
+    activityLabel: 'Average Power',
+  },
+  {
+    activityType: 'kilojoules',
+    activityLabel: 'Kilojoules',
   },
   {
     activityType: 'suffer_score',
