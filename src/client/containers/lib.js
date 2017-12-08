@@ -2,7 +2,7 @@ import { addSeconds, startOfDay, format } from 'date-fns';
 
 const lib = {};
 
-lib.round = (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`);
+lib.round = (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`).toFixed(place);
 lib.secondsToTime = seconds => format(addSeconds(startOfDay(new Date()), seconds), 'H:mm');
 lib.kgToPounds = kg => kg * 2.20462;
 lib.kgToPoundsRound = (kg, p = 0) => lib.round(kg * 2.20462, p);
@@ -25,9 +25,9 @@ lib.statsConversions = (metric, yAxis, data, mPref) => {
       case 'time':
         return lib.secondsToTime(data);
       case 'dst':
-        return mPref ? lib.metersToMilesRound(data, 2) : lib.metersToKmRound(data, 1);
+        return mPref ? lib.metersToMilesRound(data, 1) : lib.metersToKmRound(data, 1);
       case 'elev':
-        return mPref ? lib.metersToFeetRound(data, 2) : lib.round(data, 0);
+        return mPref ? lib.metersToFeetRound(data, 0) : lib.round(data, 0);
       case 'cal':
       case 'kj':
         return lib.round(data, 0);
