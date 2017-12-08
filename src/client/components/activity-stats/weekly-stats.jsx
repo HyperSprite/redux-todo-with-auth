@@ -5,6 +5,7 @@ import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 
 import lib from '../../containers/lib';
 import BarChart from './bar-chart';
+import GearTotals from './../gear-totals';
 import SingleActivity from '../form/single-activity';
 
 const propTypes = {
@@ -99,9 +100,12 @@ function weeklyStats({ activities, week, stats, datePref, measurementPref }) {
 
         </div>
       </CardActions>
+      <GearTotals actNameAndId={stats.weeklyTotals.names} />
       <CardText
         expandable
       >
+
+
 
         {stats.weeklyTotals.names.map(act => (
           // TODO build a component to show each activity
