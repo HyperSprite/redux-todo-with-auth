@@ -33,7 +33,6 @@ class weeklyStats extends React.Component {
   };
 
   handleToggle = (event, toggle) => {
-    console.log('toggle', toggle);
     this.setState({ expanded: toggle });
   };
 
