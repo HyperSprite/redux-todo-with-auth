@@ -14,7 +14,7 @@ import * as actions from '../../actions';
 import Alert from '../form/alert';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
-import SingleActivity from '../form/single-activity';
+import SingleActivity from '../single-activity';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import validate from '../form/validate';
 

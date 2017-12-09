@@ -1,10 +1,17 @@
-import lib from '../../../containers/lib';
+import lib from '../../containers/lib';
 
 // this array will be mapped to display each metric for an activity.
 const returnValues = [
   {
     activityType: 'tssScore',
     activityLabel: 'TSS',
+  },
+  {
+    activityType: 'efficiency_factor',
+    activityLabel: 'Efficiency Factor',
+    division: lib.divideAndRound,
+    divideThis: 'weighted_average_watts',
+    byThis: 'average_heartrate',
   },
   {
     activityType: 'variability_index',
@@ -28,6 +35,10 @@ const returnValues = [
   {
     activityType: 'suffer_score',
     activityLabel: 'Suffer Score',
+  },
+  {
+    activityType: 'average_heartrate',
+    activityLabel: 'Avereage HR',
   },
   {
     activityType: 'calories',

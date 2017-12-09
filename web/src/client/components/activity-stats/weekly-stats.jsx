@@ -5,7 +5,7 @@ import Toggle from 'material-ui/Toggle';
 
 import BarChart from './bar-chart';
 import GearTotals from './../gear-totals';
-import SingleActivity from '../form/single-activity';
+import SingleActivity from '../single-activity';
 import style from './style';
 
 const propTypes = {
@@ -124,13 +124,15 @@ class weeklyStats extends React.Component {
           </div>
         </CardActions>
         <GearTotals actNameAndId={stats.weeklyTotals.names} />
-        <Toggle
-          toggled={this.state.expanded}
-          onToggle={this.handleToggle}
-          labelPosition="right"
-          label="Show this weeks activities"
-          style={style.toggle}
-        />
+        <div style={style.toggleContainer}>
+          <Toggle
+            toggled={this.state.expanded}
+            onToggle={this.handleToggle}
+            labelPosition="right"
+            label="Show this weeks activities"
+            style={style.toggle}
+          />
+        </div>  
         <CardText
           expandable
         >

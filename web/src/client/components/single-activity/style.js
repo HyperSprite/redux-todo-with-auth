@@ -1,4 +1,4 @@
-import theme from '../../../styles/theme';
+import theme from '../../styles/theme';
 
 const style = {
   title: {
@@ -10,7 +10,8 @@ const style = {
     fontSize: 16,
   },
   delete: {
-    marginRight: '3vw',
+    display: 'flex',
+    justifyContent: 'left',
   },
   container: {
     fontSize: 16,
@@ -20,18 +21,17 @@ const style = {
     maxWidth: 600,
   },
   box: {
-    width: 200,
+    width: 190,
     display: 'flex',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
   boxLabel: {
     color: theme.palette.accent7Color,
-
     marginLeft: 10,
   },
   boxData: {
-    marginRight: 10,
+    // marginRight: 10,
   },
 };
 
