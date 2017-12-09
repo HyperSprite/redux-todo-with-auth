@@ -2,7 +2,7 @@ import { addSeconds, startOfDay, format } from 'date-fns';
 
 const lib = {};
 
-lib.round = (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`).toFixed(place);
+lib.round = (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`).toFixed(place) * 1;
 lib.secondsToTime = seconds => format(addSeconds(startOfDay(new Date()), seconds), 'H:mm');
 lib.kgToPounds = kg => kg * 2.20462;
 lib.kgToPoundsRound = (kg, p = 0) => lib.round(kg * 2.20462, p);
