@@ -18,7 +18,7 @@ const style = {
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-    maxWidth: 600,
+    maxWidth: 800,
   },
   box: {
     width: 190,

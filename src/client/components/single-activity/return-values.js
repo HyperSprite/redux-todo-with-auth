@@ -7,18 +7,23 @@ const returnValues = [
     activityLabel: 'TSS',
   },
   {
-    activityType: 'efficiency_factor',
-    activityLabel: 'Efficiency Factor',
-    division: lib.divideAndRound,
-    divideThis: 'weighted_average_watts',
-    byThis: 'average_heartrate',
-  },
-  {
     activityType: 'variability_index',
     activityLabel: 'Variability Index',
     division: lib.divideAndRound,
     divideThis: 'weighted_average_watts',
     byThis: 'average_watts',
+  },
+  {
+    activityType: 'suffer_score',
+    activityLabel: 'Suffer Score',
+  },
+
+  {
+    activityType: 'efficiency_factor',
+    activityLabel: 'Efficiency Factor',
+    division: lib.divideAndRound,
+    divideThis: 'weighted_average_watts',
+    byThis: 'average_heartrate',
   },
   {
     activityType: 'weighted_average_watts',
@@ -32,10 +37,7 @@ const returnValues = [
     activityType: 'kilojoules',
     activityLabel: 'Kilojoules',
   },
-  {
-    activityType: 'suffer_score',
-    activityLabel: 'Suffer Score',
-  },
+
   {
     activityType: 'average_heartrate',
     activityLabel: 'Avereage HR',
