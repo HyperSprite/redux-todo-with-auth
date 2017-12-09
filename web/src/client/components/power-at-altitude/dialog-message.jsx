@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui';
 
 import lib from '../../containers/lib';
+import style from './style';
 
 import {
   Table,
@@ -33,18 +34,33 @@ const getZones = (low, high, data, percent) => {
   return `${tmpLow} - ${tmpHigh}`;
 };
 
+const tableRows = (stl, i) => {
+  if (i % 2) {
+    const newStl = Object.assign({}, stl.row, stl.rowOdd);
+    return newStl;
+  }
+  return stl.row;
+};
+
 
 const DialogMessage = props => (
   <div>
-    <h4>{`Relative FTP of ${props.data}`}</h4>
+    <h5 style={style.title}>
+      {`Relative FTP of ${props.data}`}
+    </h5>
     <div>
-      {powerZones.map(pZ => (
-        <div key={pZ[0]} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', marginTop: 10 }}>
-          <div style={{ width: '240px' }}>
-            {`${pZ[0]} - ${pZ[1]} - ${getZones(pZ[2], pZ[3], 100, true)}`}
+      {powerZones.map((row, index) => (
+        <div key={row[0]} style={tableRows(style, index)}>
+          <div style={style.boxLabel}>
+            {`Zone ${row[0]} - ${row[1]}`}
           </div>
-          <div style={{ width: '240px' }}>
-            {getZones(pZ[2], pZ[3], props.data, false)}
+          <div style={style.box}>
+            <div style={style.boxData}>
+              {`${getZones(row[2], row[3], 100, true)}`}
+            </div>
+            <div style={style.boxData}>
+              {getZones(row[2], row[3], props.data, false)}
+            </div>
           </div>
         </div>
       ))}
