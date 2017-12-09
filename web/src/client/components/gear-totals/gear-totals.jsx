@@ -46,7 +46,8 @@ class GearTotals extends Component {
         return acc;
       }, {});
       const results = Object.entries(totalsObj).map(([gearId, values]) => {
-        values.gearName = gear.filter(g => g.id === gearId)[0].name;
+        const tmpGear = gear.filter(g => g.id === gearId)[0];
+        values.gearName = tmpGear ? tmpGear.name : 'Unknown';
         return values;
       });
       return results;
@@ -114,7 +115,8 @@ GearTotals.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
-    gear: state.auth.user.bikes,
+    gear: [...state.auth.user.bikes, ...state.auth.user.shoes],
+    // gear: [state.auth.user.bikes],
     activities: state.activities.activities,
     mPref: state.auth.user.measurement_preference === 'feet',
   };
