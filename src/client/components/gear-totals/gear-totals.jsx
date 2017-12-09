@@ -54,7 +54,6 @@ class GearTotals extends Component {
 
     const gearTotals = calcTotals(actNameAndId, activities);
     const tableRows = (stl, i) => {
-
       if (i % 2) {
         const newStl = Object.assign({}, stl.row, stl.rowOdd);
         return newStl;
@@ -63,7 +62,6 @@ class GearTotals extends Component {
     };
 
     return (
-
       <div>
         {gearTotals.length !== 0 && (
           <div>

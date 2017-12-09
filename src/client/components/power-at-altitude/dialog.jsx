@@ -5,7 +5,7 @@ import Cancel from 'material-ui/svg-icons/navigation/cancel';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import DialogMessage from './dialog-message';
-
+import style from './style';
 
 const propTypes = {
   dialogData: PropTypes.number.isRequired,
@@ -47,6 +47,7 @@ class DialogAlert extends Component {
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
+          contentStyle={style.dialog}
         >
           <DialogMessage data={this.props.dialogData} />
         </Dialog>
