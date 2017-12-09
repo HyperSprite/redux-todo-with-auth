@@ -1,12 +1,14 @@
 import theme from '../../styles/theme';
 
 const style = {
+  toggleContainer: {
+    width: 300,
+  },
   toggle: {
-    padding: '10px 15px 10px 15px',
-
+    padding: '10px 0 10px 15px',
   },
   row: {
-    padding: 15,
+    padding: '15px 0 15px 15px',
     display: 'flex',
     justifyContent: 'flex-start',
     flexFlow: 'row wrap',

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IconButton } from 'material-ui';
 import { ActionDeleteForever } from 'material-ui/svg-icons';
 
-import * as actions from '../../../actions';
+import * as actions from '../../actions';
 import returnValues from './return-values';
 import style from './style';
 
@@ -54,14 +54,6 @@ class SingleActivity extends Component {
             <a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">
               {activity.name}
             </a>
-          </div>
-          <div style={style.delete}>
-            <IconButton
-              onClick={this.deleteActivity}
-              tooltip="Delete from A Race athlete (does not remove from Strava)"
-            >
-              <ActionDeleteForever />
-            </IconButton>
           </div>
         </div>
         <div style={style.container} >
@@ -129,6 +121,14 @@ class SingleActivity extends Component {
             }
             return null;
           })}
+        </div>
+        <div style={style.delete}>
+          <IconButton
+            onClick={this.deleteActivity}
+            tooltip="Delete from A Race athlete (does not remove from Strava)"
+          >
+            <ActionDeleteForever />
+          </IconButton>
         </div>
       </div>
     );
