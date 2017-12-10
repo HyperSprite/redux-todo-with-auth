@@ -6,32 +6,27 @@ import returnValues from './return-values';
 import lib from '../../containers/lib';
 import style from './style';
 
-const propTypes = {
-  // activityId: PropTypes.number.isRequired,
-  // activities: PropTypes.array.isRequired,
-  // mPref: PropTypes.bool,
-  // removeActivity: PropTypes.func.isRequired,
-  // setIsFetching: PropTypes.func.isRequired,
-};
-
-const defaultProps = {
-  mPref: false,
-};
-
-
-
 class GearTotals extends Component {
-  constructor(props) {
-    super(props);
+  static propTypes = {
+    activityIds: PropTypes.arrayOf(
+      PropTypes.number,
+    ),
+    activities: PropTypes.object.isRequired,
+    gear: PropTypes.object.isRequired,
+    mPref: PropTypes.bool,
   }
 
+  static defaultProps = {
+    mPref: false,
+    activityIds: [],
+  }
 
   render() {
-    const { actNameAndId, activities, gear, mPref } = this.props;
+    const { activityIds, activities, gear, mPref } = this.props;
 
     const calcTotals = (actNAI, acts) => {
       const totalsObj = actNAI.reduce((acc, act) => {
-        const thisAct = acts.filter(activity => activity.activityId === act.activityId)[0];
+        const thisAct = acts.filter(activity => activity.activityId === act)[0];
         if (thisAct && thisAct.gear) {
           acc[thisAct.gear.id] = acc[thisAct.gear.id] ?
             acc[thisAct.gear.id] : {
@@ -53,7 +48,7 @@ class GearTotals extends Component {
       return results;
     }
 
-    const gearTotals = calcTotals(actNameAndId, activities);
+    const gearTotals = calcTotals(activityIds, activities);
     const tableRows = (stl, i) => {
       if (i % 2) {
         const newStl = Object.assign({}, stl.row, stl.rowOdd);
@@ -110,8 +105,8 @@ class GearTotals extends Component {
   }
 }
 
-GearTotals.propTypes = propTypes;
-GearTotals.defaultProps = defaultProps;
+// GearTotals.propTypes = propTypes;
+// GearTotals.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
