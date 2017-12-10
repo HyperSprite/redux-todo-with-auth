@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import returnValues from './return-values';
-import lib from '../../containers/lib';
 import style from './style';
 
 class GearTotals extends Component {
@@ -105,13 +104,9 @@ class GearTotals extends Component {
   }
 }
 
-// GearTotals.propTypes = propTypes;
-// GearTotals.defaultProps = defaultProps;
-
 function mapStateToProps(state) {
   return {
     gear: [...state.auth.user.bikes, ...state.auth.user.shoes],
-    // gear: [state.auth.user.bikes],
     activities: state.activities.activities,
     mPref: state.auth.user.measurement_preference === 'feet',
   };
