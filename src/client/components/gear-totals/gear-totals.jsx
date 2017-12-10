@@ -32,7 +32,7 @@ class GearTotals extends Component {
     const calcTotals = (actNAI, acts) => {
       const totalsObj = actNAI.reduce((acc, act) => {
         const thisAct = acts.filter(activity => activity.activityId === act.activityId)[0];
-        if (thisAct.gear) {
+        if (thisAct && thisAct.gear) {
           acc[thisAct.gear.id] = acc[thisAct.gear.id] ?
             acc[thisAct.gear.id] : {
               moving_time: 0,
