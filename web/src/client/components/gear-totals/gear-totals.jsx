@@ -10,8 +10,8 @@ class GearTotals extends Component {
     activityIds: PropTypes.arrayOf(
       PropTypes.number,
     ),
-    activities: PropTypes.object.isRequired,
-    gear: PropTypes.object.isRequired,
+    activities: PropTypes.arrayOf(PropTypes.object).isRequired,
+    gear: PropTypes.arrayOf(PropTypes.object).isRequired,
     mPref: PropTypes.bool,
   }
 
