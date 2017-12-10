@@ -123,7 +123,7 @@ class weeklyStats extends React.Component {
 
           </div>
         </CardActions>
-        <GearTotals actNameAndId={stats.weeklyTotals.names} />
+        <GearTotals activityIds={stats.weeklyTotals.names.map(acts => acts.activityId)} />
         <div style={style.toggleContainer}>
           <Toggle
             toggled={this.state.expanded}
@@ -132,7 +132,7 @@ class weeklyStats extends React.Component {
             label="Show this weeks activities"
             style={style.toggle}
           />
-        </div>  
+        </div>
         <CardText
           expandable
         >
