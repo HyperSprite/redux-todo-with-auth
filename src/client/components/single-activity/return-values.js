@@ -9,9 +9,9 @@ const returnValues = [
   {
     activityType: 'variability_index',
     activityLabel: 'Variability Index',
-    division: lib.divideAndRound,
-    divideThis: 'weighted_average_watts',
-    byThis: 'average_watts',
+    compute: lib.divideAndRound,
+    firstArg: 'weighted_average_watts',
+    secondArg: 'average_watts',
   },
   {
     activityType: 'suffer_score',
@@ -21,9 +21,9 @@ const returnValues = [
   {
     activityType: 'efficiency_factor',
     activityLabel: 'Efficiency Factor',
-    division: lib.divideAndRound,
-    divideThis: 'weighted_average_watts',
-    byThis: 'average_heartrate',
+    compute: lib.divideAndRound,
+    firstArg: 'weighted_average_watts',
+    secondArg: 'average_heartrate',
   },
   {
     activityType: 'weighted_average_watts',
@@ -75,6 +75,13 @@ const returnValues = [
     conversionTypeSA: 'feet',
     conversionTypeMetric: 'meters',
     conversionmPref: true,
+  },
+  {
+    activityType: 'start_date_local',
+    activityLabel: 'Date',
+    compute: lib.dateFormat,
+    firstArg: 'start_date_local',
+    secondArg: 'datePref',
   },
   {
     activityType: 'type',

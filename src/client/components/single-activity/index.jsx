@@ -11,12 +11,14 @@ import style from './style';
 const propTypes = {
   activityId: PropTypes.number.isRequired,
   activities: PropTypes.array.isRequired,
+  datePref: PropTypes.string,
   mPref: PropTypes.bool,
   removeActivity: PropTypes.func.isRequired,
   setIsFetching: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
+  datePref: '%m/%d/%Y',
   mPref: false,
 };
 
@@ -38,9 +40,10 @@ class SingleActivity extends Component {
   }
 
   render() {
-    const { mPref } = this.props;
+    const { mPref, datePref } = this.props;
     const activity = this.thisActivity();
-
+    activity.datePref = datePref;
+    console.log('datePref', activity.datePref);
     if (activity.deleted) {
       return (
         <h4 style={style.h4}>{activity.name}</h4>
@@ -96,14 +99,14 @@ class SingleActivity extends Component {
                   </div>
                 </div>
               );
-            } else if (rV.division && activity[rV.divideThis]) {
+            } else if (rV.compute && activity[rV.firstArg]) {
               return (
                 <div key={rV.activityType} style={style.box} >
                   <div style={style.boxLabel}>
                     {rV.activityLabel}
                   </div>
                   <div style={style.boxData}>
-                    {rV.division(activity[rV.divideThis], activity[rV.byThis], 2)}
+                    {rV.compute(activity[rV.firstArg], activity[rV.secondArg], 2)}
                   </div>
                 </div>
               );
@@ -142,6 +145,7 @@ function mapStateToProps(state) {
   return {
     activities: state.activities.activities,
     mPref: state.auth.user.measurement_preference === 'feet',
+    datePref: state.auth.user.date_preference,
   };
 }
 

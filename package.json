@@ -12,8 +12,9 @@
   },
   "scripts": {
     "test": "node_modules/.bin/nodemon src/server/index.js test=true",
+    "test:client": "jest",
     "test-postinstall": "webpack --progress --optimize-minimize",
-    "dev": "rm -f src/server/public/assets/* && node_modules/.bin/nodemon --ignore 'src/server/public/' src/server/index.js",
+    "dev": "rm -f src/server/public/assets/* && node_modules/.bin/nodemon --ignore 'src/server/public/' --ignore '*.test.js' src/server/index.js",
     "dev-api-only": "NODE_ENV=API-ONLY node_modules/.bin/nodemon src/server/index.js",
     "postinstall": "rm -f src/server/public/assets/* && NODE_ENV=production webpack -p --progress --optimize-minimize",
     "start": "NODE_ENV=production node src/server/index.js",
@@ -118,7 +119,26 @@
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {
+    "babel-jest": "^21.2.0",
     "flow-bin": "^0.33.0",
+    "jest": "^21.2.1",
     "nodemon": "^1.12.1"
+  },
+  "jest": {
+    "verbose": true,
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "globals": {
+      "NODE_ENV": "test"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src/client"
+    ]
   }
 }
