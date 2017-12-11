@@ -4,6 +4,6 @@ export default {
     minWidth: 200,
   },
   div: {
-    margin: 20,
+    margin: 5,
   },
 };
