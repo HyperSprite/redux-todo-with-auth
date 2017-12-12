@@ -26,7 +26,7 @@ const title = 'Power at Altitude';
 const propTypes = {
   fetchData: PropTypes.func.isRequired,
   setPageName: PropTypes.func.isRequired,
-  measurementPref: PropTypes.bool.isRequired,
+  mPref: PropTypes.bool.isRequired,
 };
 
 style.cells = {
@@ -44,7 +44,7 @@ class AltitudeTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      measurementPref: false,
+      mPref: this.props.mPref,
     };
     this.switchMeasurementPref = this.switchMeasurementPref.bind(this);
   }
@@ -55,13 +55,13 @@ class AltitudeTable extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.measurementPref !== this.props.measurementPref) {
-      this.setState({ measurementPref: nextProps.measurementPref });
+    if (nextProps.mPref !== this.props.mPref) {
+      this.setState({ mPref: nextProps.mPref });
     }
   }
 
   switchMeasurementPref() {
-    this.setState({ measurementPref: !this.state.measurementPref });
+    this.setState({ mPref: !this.state.mPref });
   }
 
   render() {
@@ -95,7 +95,7 @@ class AltitudeTable extends Component {
                 <div>
                 <CardActions>
                   <FlatButton onClick={this.switchMeasurementPref} style={style.toggleIconButton} >
-                    F <ToggleIcon option={this.state.measurementPref} /> M
+                    M <ToggleIcon option={this.state.mPref} /> F
                   </FlatButton>
 
                 </CardActions>
@@ -114,10 +114,10 @@ class AltitudeTable extends Component {
                           style={style.cells}
                         >
                           Altitude<br />
-                          {this.state.measurementPref ? (
-                            `${lib.round(user.userGeoElevation, 0)} Meters`
-                          ) : (
+                          {this.state.mPref ? (
                             `${lib.metersToFeetRound(user.userGeoElevation, 0)} Feet`
+                          ) : (
+                            `${lib.round(user.userGeoElevation, 0)} Meters`
                           )}
                         </TableHeaderColumn>
                         <TableHeaderColumn
@@ -149,10 +149,10 @@ class AltitudeTable extends Component {
                       {ftpAtElv.map(ftpAE => (
                         <TableRow key={ftpAE.eachElvM}>
                           <TableRowColumn style={style.cells}>
-                            {this.state.measurementPref ? (
-                              lib.round(ftpAE.eachElvM, 0)
+                            {this.state.mPref ? (
+                              lib.metersToFeetRound(ftpAE.eachElvM, 0)
                             ) : (
-                                lib.metersToFeetRound(ftpAE.eachElvM, 0)
+                              lib.round(ftpAE.eachElvM, 0)
                             )}
                           </TableRowColumn>
                           <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>
@@ -190,7 +190,7 @@ AltitudeTable.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    measurementPref: state.auth.user.measurement_preference === 'metric',
+    mPref: state.auth.user.measurement_preference === 'feet',
   };
 }
 

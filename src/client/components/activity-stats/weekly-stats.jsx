@@ -12,12 +12,12 @@ const propTypes = {
   week: PropTypes.string.isRequired, // "2017-05-02"
   stats: PropTypes.object.isRequired,
   datePref: PropTypes.string,
-  measurementPref: PropTypes.bool,
+  mPref: PropTypes.bool,
 };
 
 const defaultProps = {
   datePref: '%m/%d/%Y',
-  measurementPref: false,
+  // mPref: false,
 };
 
 class weeklyStats extends React.Component {
@@ -45,15 +45,14 @@ class weeklyStats extends React.Component {
   };
 
   render() {
-    const { week, stats, measurementPref } = this.props;
-
+    const { week, stats, mPref } = this.props;
     return (
       <Card expanded={this.state.expanded} >
         <CardHeader
           title={`Week of ${week}`}
         />
         <CardActions>
-          <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+          {stats.weeklyTotals.names[0] && <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
 
             {stats.weeklyTotals.tss.total ? (
               <BarChart
@@ -109,7 +108,7 @@ class weeklyStats extends React.Component {
               contentType="text"
               metric="dst"
               weeklyTotals={stats.dayTotals}
-              mPref={measurementPref}
+              mPref={mPref}
             />
 
             <BarChart
@@ -118,13 +117,14 @@ class weeklyStats extends React.Component {
               contentType="text"
               metric="elev"
               weeklyTotals={stats.dayTotals}
-              mPref={measurementPref}
+              mPref={mPref}
             />
 
-          </div>
+          </div>}
         </CardActions>
         <GearTotals activityIds={stats.weeklyTotals.names.map(acts => acts.activityId)} />
-        <div style={style.toggleContainer}>
+
+        {stats.weeklyTotals.names[0] && <div style={style.toggleContainer}>
           <Toggle
             toggled={this.state.expanded}
             onToggle={this.handleToggle}
@@ -132,7 +132,7 @@ class weeklyStats extends React.Component {
             label="Show this weeks activities"
             style={style.toggle}
           />
-        </div>
+        </div>}
         <CardText
           expandable
         >

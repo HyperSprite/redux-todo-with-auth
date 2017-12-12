@@ -32,6 +32,40 @@ describe('round number to X place', () => {
   });
 });
 
+describe('isValid', () => {
+  test('strings: "a string", "s" - returns true', () => {
+    expect(lib.isValid('a string', 's')).toEqual(true);
+  });
+  test('strings: 100, "s" - returns false', () => {
+    expect(lib.isValid(100, 's')).toEqual(false);
+  });
+  test('strings: undefined, "s" - returns false', () => {
+    expect(lib.isValid(undefined, 's')).toEqual(false);
+  });
+
+  test('numbers: 100 - returns true', () => {
+    expect(lib.isValid(100)).toEqual(true);
+  });
+  test('numbers: 100, n - returns true', () => {
+    expect(lib.isValid(100, 'n')).toEqual(true);
+  });
+  test('numbers: -10 - returns true', () => {
+    expect(lib.isValid(-10)).toEqual(true);
+  });
+  test('numbers: 0.10 - returns true', () => {
+    expect(lib.isValid(0.10)).toEqual(true);
+  });
+  test('numbers: "100"(string) - returns false', () => {
+    expect(lib.isValid('100')).toEqual(false);
+  });
+  test('numbers: "a string" - returns false', () => {
+    expect(lib.isValid('a string')).toEqual(false);
+  });
+  test('numbers: undefined - returns false', () => {
+    expect(lib.isValid(undefined)).toEqual(false);
+  });
+});
+
 describe('secondsToTime takes unix seconds and returns H:mm', () => {
   test('1512947840 to 23:17', () => {
     expect(lib.secondsToTime(1512947840)).toEqual('23:17');
@@ -114,8 +148,23 @@ describe('divideAndRound', () => {
   test('240, 190, 4 to ', () => {
     expect(lib.divideAndRound(240, 190, 4)).toEqual(1.2632);
   });
+  test('190, 240, 2 to ', () => {
+    expect(lib.divideAndRound(190, 240, 2)).toEqual(0.79);
+  });
+  test('190, 240, 4 to ', () => {
+    expect(lib.divideAndRound(190, 240, 4)).toEqual(0.7917);
+  });
   test('24035, 190, 2 to ', () => {
     expect(lib.divideAndRound(240, 190, 1)).toEqual(1.3);
+  });
+  test('12345, 24 - no rounding arg', () => {
+    expect(lib.divideAndRound(12345, 24)).toEqual(514);
+  });
+  test('12345, 0', () => {
+    expect(lib.divideAndRound(12345, 0)).toEqual(0);
+  });
+  test('0, 25', () => {
+    expect(lib.divideAndRound(0, 25)).toEqual(0);
   });
 });
 

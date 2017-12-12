@@ -6,6 +6,7 @@ import { ActionDeleteForever } from 'material-ui/svg-icons';
 
 import * as actions from '../../actions';
 import returnValues from './return-values';
+import ActivityMetric from '../activity-metric';
 import style from './style';
 
 const propTypes = {
@@ -43,7 +44,6 @@ class SingleActivity extends Component {
     const { mPref, datePref } = this.props;
     const activity = this.thisActivity();
     activity.datePref = datePref;
-    console.log('datePref', activity.datePref);
     if (activity.deleted) {
       return (
         <h4 style={style.h4}>{activity.name}</h4>
@@ -61,69 +61,14 @@ class SingleActivity extends Component {
         </div>
         <div style={style.container} >
 
-          {returnValues.map((rV) => {
-            if (activity[rV.activityType] && rV.conversionMetric) {
-              return (
-                <div key={rV.activityType} style={style.box} >
-                  <div style={style.boxLabel}>
-                    {rV.activityLabel}
-                    {rV.conversionmPref ? (
-                      <span>
-                        {mPref ? (
-                          <span> {`(${rV.conversionTypeSA})`}</span>
-                        ) : (
-                          <span> {`(${rV.conversionTypeMetric})`}</span>
-                        )}
-                      </span>
-                    ) : (null)}
-                  </div>
-                  <div style={style.boxData}>
-                    {rV.conversionFunction(
-                      rV.conversionMetric,
-                      rV.conversionYAxis,
-                      activity[rV.conversionData],
-                      mPref,
-                    )}
-
-                  </div>
-                </div>
-              );
-            } else if (activity[rV.activityType] && activity[rV.activityType][rV.activityTypeSub]) {
-              return (
-                <div key={rV.activityType} style={style.box} >
-                  <div style={style.boxLabel}>
-                    {rV.activityLabel}
-                  </div>
-                  <div style={style.boxData}>
-                    {activity[rV.activityType][rV.activityTypeSub]}
-                  </div>
-                </div>
-              );
-            } else if (rV.compute && activity[rV.firstArg]) {
-              return (
-                <div key={rV.activityType} style={style.box} >
-                  <div style={style.boxLabel}>
-                    {rV.activityLabel}
-                  </div>
-                  <div style={style.boxData}>
-                    {rV.compute(activity[rV.firstArg], activity[rV.secondArg], 2)}
-                  </div>
-                </div>
-              );
-            } else if (activity[rV.activityType]) {
-              return (
-                <div key={rV.activityType} style={style.box} >
-                  <div style={style.boxLabel}>
-                    {rV.activityLabel}
-                  </div>
-                  <div style={style.boxData}>
-                    {activity[rV.activityType]}
-                  </div>
-                </div>
-              );
-            }
-            return null;
-          })}
+          {returnValues.map(rV => (
+            <ActivityMetric
+              key={rV.activityType}
+              data={activity}
+              rV={rV}
+              mPref={mPref}
+            />
+          ))}
         </div>
         <div style={style.delete}>
           <IconButton
