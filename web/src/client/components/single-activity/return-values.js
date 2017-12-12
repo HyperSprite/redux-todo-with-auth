@@ -37,7 +37,13 @@ const returnValues = [
     activityType: 'kilojoules',
     activityLabel: 'Kilojoules',
   },
-
+  {
+    activityType: 'difficulty_index',
+    activityLabel: 'Difficulty Index',
+    compute: lib.difficultyIndex,
+    firstArg: 'total_elevation_gain',
+    secondArg: 'distance',
+  },
   {
     activityType: 'average_heartrate',
     activityLabel: 'Avereage HR',

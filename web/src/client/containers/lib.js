@@ -3,21 +3,40 @@ import { addSeconds, startOfDay, format } from 'date-fns';
 const lib = {};
 
 lib.round = (val, place = 0) => Number(Math.round(val + `e${place}`) + `e-${place}`);
+
+lib.isValid = (val, type) => {
+  switch (type) {
+    case 's' :
+      return typeof val === 'string';
+    default:
+      return Number.isFinite(val);
+  }
+};
+
 lib.secondsToTime = seconds => format(addSeconds(startOfDay(new Date()), seconds), 'H:mm');
 lib.kgToPounds = kg => kg * 2.20462;
-lib.kgToPoundsRound = (kg, p = 0) => lib.round(kg * 2.20462, p);
+lib.kgToPoundsRound = (kg, p) => lib.round(kg * 2.20462, p);
 lib.metersToFeet = m => m * 3.28084;
-lib.metersToFeetRound = (m, p = 0) => lib.round(m * 3.28084, p);
+lib.metersToFeetRound = (m, p) => lib.round(m * 3.28084, p);
 lib.metersToMiles = m => m * 0.00062137121212121;
-lib.metersToMilesRound = (m, p = 0) => lib.round(m * 0.00062137121212121, p);
+lib.metersToMilesRound = (m, p) => lib.round(m * 0.00062137121212121, p);
 lib.metersToKm = m => m / 1000;
-lib.metersToKmRound = (m, p = 0) => lib.round(m / 1000, p);
-lib.divideAndRound = (divideThis, byThis, p) => lib.round(((divideThis * 1) / (byThis * 1)), p);
+lib.metersToKmRound = (m, p) => lib.round(m / 1000, p);
+lib.divideAndRound = (divideThis, byThis, p) => {
+  if (!lib.isValid(divideThis) || !lib.isValid(byThis || !byThis)) {
+    return 0;
+  }
+  return lib.round(((divideThis * 1) / (byThis * 1)), p);
+};
+
+lib.difficultyIndex = (totalEleGain, distance) => {
+  return lib.round(lib.divideAndRound(totalEleGain, distance, 6) * 200, 2);
+};
 
 /**
 * percentFTPAcc takes (elevation - user.elevation * 0.01) and returns acclimated power
 * percentFTPNAcc takes (elevation - user.elevation * 0.01) and returns non acclimated power
-* e.g adjustedElev would be .500 - .025 
+* e.g adjustedElev would be .500 - .025
 */
 lib.percentFTPAcc = adjustedElev => -1.12 * (Math.pow(adjustedElev, 2)) - 1.90 * adjustedElev + 99.9;
 lib.percentFTPNAcc = adjustedElev => 0.178 * (Math.pow(adjustedElev, 3)) - 1.43 * (Math.pow(adjustedElev, 2)) - (4.07 * adjustedElev) + 100;
@@ -66,24 +85,24 @@ lib.mPrefLabel = (metric, mPref) => {
   switch (metric) {
     case ('speedS'):
       return mPref ?
-      { display: 'fps', help: 'Feet per Second' } :
-      { display: 'm/s', help: 'Meters / Second' };
+        { display: 'fps', help: 'Feet per Second' } :
+        { display: 'm/s', help: 'Meters / Second' };
     case ('speedL'):
       return mPref ?
-      { display: 'mph', help: 'Miles per Hour' } :
-      { display: 'km/h', help: 'Kilometers / Hour' };
+        { display: 'mph', help: 'Miles per Hour' } :
+        { display: 'km/h', help: 'Kilometers / Hour' };
     case ('dstS'):
       return mPref ?
-      { display: 'ft', help: 'Feet' } :
-      { display: 'm', help: 'Meters' };
+        { display: 'ft', help: 'Feet' } :
+        { display: 'm', help: 'Meters' };
     case ('dstL'):
       return mPref ?
-        { display: 'mi', help: 'Miles' } :
-        { display: 'km', help: 'Kilometers' };
+          { display: 'mi', help: 'Miles' } :
+          { display: 'km', help: 'Kilometers' };
     case ('temp'):
       return mPref ?
-        { display: '°F', help: 'Fahrenheit' } :
-        { display: '°C', help: 'Celsius' };
+          { display: '°F', help: 'Fahrenheit' } :
+          { display: '°C', help: 'Celsius' };
     default:
       return mPref ?
         { display: 'Imperial', help: '' } :

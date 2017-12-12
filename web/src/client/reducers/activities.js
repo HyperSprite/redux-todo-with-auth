@@ -9,6 +9,7 @@ export default function (state = {
   activitySearch: [],
   activitySearchCount: 1,
   activitySearchCustom: false,
+  activitySearchEnd: false,
   weeklyStats: [],
   weeklyStatsCount: 0,
 }, action) {
@@ -53,6 +54,7 @@ export default function (state = {
           activities: action.payload.activities,
           activitySearch: action.payload.activitySearch,
           activitySearchCount: state.activitySearchCount + 1,
+          activitySearchEnd: !action.payload.activities.length,
         };
       }
       return {
@@ -60,6 +62,7 @@ export default function (state = {
         activities: [...state.activities.concat(action.payload.activities)],
         activitySearch: [...state.activitySearch.concat(action.payload.activitySearch)],
         activitySearchCount: state.activitySearchCount + 1,
+        activitySearchEnd: !action.payload.activities.length,
       };
 
     case TYPES.ACTIVITY_REMOVED:

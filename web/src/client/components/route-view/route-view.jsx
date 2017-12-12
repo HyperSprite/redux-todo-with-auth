@@ -5,6 +5,8 @@ import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
 import VisibilitySensorLock from '../../containers/visibility-sensor-lock';
 import lib from '../../containers/lib';
+import returnValues from './return-values';
+import ActivityMetric from '../activity-metric';
 import Static from './../form/static';
 import GoogleMapWithPolyline from '../google-map';
 
@@ -24,28 +26,24 @@ const RouteView = (props) => {
       </VisibilitySensorLock>
 
       <CardHeader
-        title={routeData.name}
-        subtitle={
+        title={
           <a href={`https://www.strava.com/routes/${routeData.routeplanId}`}>
-            {routeData.routeplanId}
+            {routeData.name}
           </a>
         }
       />
 
-      <div style={{ marginLeft: 20, marginRight: 20 }}>
+      <div style={{ padding: '0 20px 10px 20px' }}>
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', margin: 20 }} >
-
-          <Static
-            contentLabel="Distance"
-            content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
-            contentType="text"
-          />
-          <Static
-            contentLabel="Elevation"
-            content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
-            contentType="text"
-          />
+          {returnValues.map(rV => (
+            <ActivityMetric
+              key={rV.activityType}
+              rV={rV}
+              data={routeData}
+              mPref={mPref}
+            />
+          ))}
         </div>
       </div>
     </Card>

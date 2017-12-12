@@ -256,7 +256,7 @@ function mapStateToProps(state) {
     activitySearchCount: state.activities.activitySearchCount,
     activitySearchCustom: state.activities.activitySearchCustom,
     datePref: state.auth.user.date_preference,
-    measurementPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.auth.user.measurement_preference === 'feet',
     message: state.auth.message,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,

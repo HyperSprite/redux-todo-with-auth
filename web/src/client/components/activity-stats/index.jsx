@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, CircularProgress, LinearProgress, Paper, RaisedButton } from 'material-ui';
+import VisibilitySensor from 'react-visibility-sensor';
+import { CircularProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 import * as actions from '../../actions';
 import WeeklyStats from './weekly-stats';
+
 import ScrollIntoView from '../../containers/scroll-into-view';
 import style from '../../styles/style';
 
@@ -15,7 +17,7 @@ const propTypes = {
   fetchData: PropTypes.func.isRequired,
   fetchStrava: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  measurementPref: PropTypes.bool.isRequired,
+  mPref: PropTypes.bool.isRequired,
   stravaId: PropTypes.number,
   setIsFetching: PropTypes.func.isRequired,
   setPageName: PropTypes.func.isRequired,
@@ -37,6 +39,7 @@ class activeStats extends Component {
     super(props);
     this.fetchAnotherWeek = this.fetchAnotherWeek.bind(this);
     this.updateUserActivities = this.updateUserActivities.bind(this);
+    this.loadSensor = this.loadSensor.bind(this);
   }
 
   componentDidMount() {
@@ -47,6 +50,12 @@ class activeStats extends Component {
   fetchAnotherWeek() {
     this.props.setIsFetching();
     this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStats.length);
+  }
+
+  loadSensor(isVisible) {
+    if (isVisible) {
+      this.fetchAnotherWeek();
+    }
   }
 
   fetchWeeksActivities() {
@@ -63,8 +72,7 @@ class activeStats extends Component {
   }
 
   render() {
-    const { weeklyStats, datePref, isFetching, measurementPref } = this.props;
-
+    const { weeklyStats, datePref, isFetching, mPref } = this.props;
     return (
       <div>
         <div className="main-flex-container" >
@@ -108,7 +116,7 @@ class activeStats extends Component {
                       week={oneWeek.weeklyTotals.date}
                       stats={oneWeek}
                       datePref={datePref}
-                      measurementPref={measurementPref}
+                      mPref={mPref}
                     />
                   ))}
                 </div>
@@ -127,6 +135,9 @@ class activeStats extends Component {
                 </div>
               ) : (
                 <div>
+                  <VisibilitySensor
+                    onChange={this.loadSensor}
+                  />
                   <RaisedButton
                     label="Load Another Week"
                     primary
@@ -150,7 +161,7 @@ activeStats.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     datePref: state.auth.user.date_preference,
-    measurementPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.auth.user.measurement_preference === 'feet',
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
     weeklyStats: state.activities.weeklyStats,

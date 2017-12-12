@@ -78,7 +78,7 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     user: state.auth.user.stravaId,
-    mPref: !!state.auth.user.measurement_preference === 'feet',
+    mPref: state.auth.user.measurement_preference === 'feet',
   };
 }
 
