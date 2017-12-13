@@ -14,7 +14,7 @@ import * as actions from '../../actions';
 import Alert from '../form/alert';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
-import SingleActivity from '../single-activity';
+import ActivitySingle from '../activity-single';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import validate from '../form/validate';
 
@@ -221,7 +221,7 @@ class ActivitySearch extends Component {
                     <div>
                       { activities.map(act => (
                         <div key={act} style={style.div}>
-                          <SingleActivity
+                          <ActivitySingle
                             activityId={act}
                           />
                         </div>

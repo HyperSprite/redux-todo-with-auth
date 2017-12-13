@@ -25,7 +25,7 @@ const defaultProps = {
 
 const deleteActivityURL = 'apiv1/activities/delete-activity';
 
-class SingleActivity extends Component {
+class ActivitySingle extends Component {
   constructor(props) {
     super(props);
     this.deleteActivity = this.deleteActivity.bind(this);
@@ -83,8 +83,8 @@ class SingleActivity extends Component {
   }
 }
 
-SingleActivity.propTypes = propTypes;
-SingleActivity.defaultProps = defaultProps;
+ActivitySingle.propTypes = propTypes;
+ActivitySingle.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -94,4 +94,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(SingleActivity);
+export default connect(mapStateToProps, actions)(ActivitySingle);
