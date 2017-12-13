@@ -5,7 +5,7 @@ import Toggle from 'material-ui/Toggle';
 
 import BarChart from './bar-chart';
 import GearTotals from './../gear-totals';
-import SingleActivity from '../single-activity';
+import ActivitySingle from '../activity-single';
 import style from './style';
 
 const propTypes = {
@@ -138,7 +138,7 @@ class weeklyStats extends React.Component {
         >
 
           {stats.weeklyTotals.names.map(act => (
-            <SingleActivity
+            <ActivitySingle
               key={act.activityId}
               {...act}
             />

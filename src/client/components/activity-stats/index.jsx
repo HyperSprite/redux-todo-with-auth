@@ -29,7 +29,6 @@ const propTypes = {
 
 const defaultProps = {
   stravaId: null,
-  isFetching: true,
 };
 
 const relURL = 'apiv1/activities/weekly-stats';
@@ -56,14 +55,6 @@ class activeStats extends Component {
     if (isVisible) {
       this.fetchAnotherWeek();
     }
-  }
-
-  fetchWeeksActivities() {
-    setTimeout(() => {
-      if (!this.props.weeklyStats[0].name.length) {
-        this.fetchAnotherWeek();
-      }
-    }, 400);
   }
 
   updateUserActivities() {
@@ -110,9 +101,9 @@ class activeStats extends Component {
                 <p>Loading Activities</p>
               ) : (
                 <div>
-                  { weeklyStats.map(oneWeek => (
+                  { weeklyStats.map((oneWeek, i) => (
                     <WeeklyStats
-                      key={oneWeek.weeklyTotals.date}
+                      key={`week-${oneWeek.weeklyTotals.date}`}
                       week={oneWeek.weeklyTotals.date}
                       stats={oneWeek}
                       datePref={datePref}
@@ -136,6 +127,7 @@ class activeStats extends Component {
               ) : (
                 <div>
                   <VisibilitySensor
+                    delayedCall
                     onChange={this.loadSensor}
                   />
                   <RaisedButton

@@ -7,17 +7,16 @@ const returnValues = [
     activityLabel: 'TSS',
   },
   {
-    activityType: 'variability_index',
-    activityLabel: 'Variability Index',
-    compute: lib.divideAndRound,
-    firstArg: 'weighted_average_watts',
-    secondArg: 'average_watts',
+    activityType: 'difficulty_index',
+    activityLabel: 'Difficulty Index',
+    compute: lib.difficultyIndex,
+    firstArg: 'total_elevation_gain',
+    secondArg: 'distance',
   },
   {
     activityType: 'suffer_score',
     activityLabel: 'Suffer Score',
   },
-
   {
     activityType: 'efficiency_factor',
     activityLabel: 'Efficiency Factor',
@@ -26,27 +25,27 @@ const returnValues = [
     secondArg: 'average_heartrate',
   },
   {
-    activityType: 'weighted_average_watts',
-    activityLabel: 'Nomalized Power',
+    activityType: 'kilojoules',
+    activityLabel: 'Kilojoules',
+  },
+  {
+    activityType: 'variability_index',
+    activityLabel: 'Variability Index',
+    compute: lib.divideAndRound,
+    firstArg: 'weighted_average_watts',
+    secondArg: 'average_watts',
   },
   {
     activityType: 'average_watts',
     activityLabel: 'Average Power',
   },
   {
-    activityType: 'kilojoules',
-    activityLabel: 'Kilojoules',
-  },
-  {
-    activityType: 'difficulty_index',
-    activityLabel: 'Difficulty Index',
-    compute: lib.difficultyIndex,
-    firstArg: 'total_elevation_gain',
-    secondArg: 'distance',
-  },
-  {
     activityType: 'average_heartrate',
     activityLabel: 'Avereage HR',
+  },
+  {
+    activityType: 'weighted_average_watts',
+    activityLabel: 'Nomalized Power',
   },
   {
     activityType: 'calories',
