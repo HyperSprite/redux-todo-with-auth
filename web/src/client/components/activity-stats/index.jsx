@@ -52,7 +52,7 @@ class activeStats extends Component {
   }
 
   loadSensor(isVisible) {
-    if (isVisible) {
+    if (isVisible && !this.props.isFetching) {
       this.fetchAnotherWeek();
     }
   }
