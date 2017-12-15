@@ -1,3 +1,4 @@
+// Use: jest src/client/containers/lib.test.js --watch
 import lib from './lib';
 
 const validDateString = '2017-12-07T23:39:40Z';
@@ -288,13 +289,13 @@ describe('dateFormat accpts string date/time and returns user pref format', () =
 
 describe('dateStringFormat accpts string date/time and returns user pref format', () => {
   test('Returns MM-DD-YYYY (default)', () => {
-    expect(lib.dateStringFormat('2017-12-07T23:39:40Z')).toEqual('12-07-2017');
+    expect(lib.dateStringFormat(validDateString)).toEqual('12-07-2017');
   });
   test('Returns MM-DD-YYYY with datePref "MM-DD-YYYY"', () => {
-    expect(lib.dateStringFormat('2017-12-07T23:39:40Z', 'MM-DD-YYYY')).toEqual('12-07-2017');
+    expect(lib.dateStringFormat(validDateString, 'MM-DD-YYYY')).toEqual('12-07-2017');
   });
   test('Returns DD-MM-YYYY with datePref "DD-MM-YYYY"', () => {
-    expect(lib.dateStringFormat('2017-12-07T23:39:40Z', 'DD-MM-YYYY')).toEqual('07-12-2017');
+    expect(lib.dateStringFormat(validDateString, 'DD-MM-YYYY')).toEqual('07-12-2017');
   });
   test('Returns YYYY-MM-DD with uncommonDateString', () => {
     expect(lib.dateStringFormat(uncommonDateString)).toEqual('12-07-2017');
