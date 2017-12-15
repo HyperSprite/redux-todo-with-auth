@@ -1,1 +1,1 @@
-export { default } from './activity-search'; 
+export { default } from './activity-search';

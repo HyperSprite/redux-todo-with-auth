@@ -41,14 +41,14 @@ const ActivityMetric = ({ data, rV, mPref }) => {
         </div>
       </div>
     );
-  } else if (rV.compute && data[rV.firstArg]) {
+  } else if (rV.compute && data[rV.arg1]) {
     return (
       <div style={style.box} >
         <div style={style.boxLabel}>
           {rV.activityLabel}
         </div>
         <div style={style.boxData}>
-          {rV.compute(data[rV.firstArg], data[rV.secondArg], 2)}
+          {rV.compute(data[rV.arg1], data[rV.arg2], rV.arg3)}
         </div>
       </div>
     );
