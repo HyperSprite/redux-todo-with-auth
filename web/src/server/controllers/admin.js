@@ -70,6 +70,58 @@ exports.userList = (req, res) => {
   });
 };
 
+exports.getLogs = (req, res) => {
+  Logging.aggregate(
+    [
+      { $match: {} },
+      { $sort: { date: -1 } },
+      { $group: {
+        _id: {
+          stravaId: '$stravaId',
+          logType: '$logType',
+          error: '$error',
+        },
+        count: { $sum: 1 },
+        date: { $last: '$date' },
+      } },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id.stravaId',
+          foreignField: 'stravaId',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: {
+          path: '$user',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      { $project: {
+        _id: 0,
+        stravaId: '$_id.stravaId',
+        logType: '$_id.logType',
+        error: '$_id.error',
+        user: { $concat: ['$user.firstname', ' ', '$user.lastname'] },
+        count: 1,
+        date: 1,
+      } },
+    ], (err, result) => {
+    const logObj = {
+      stravaId: req.user.stravaId,
+      logType: 'admin',
+      level: 3,
+      error: err,
+      message: 'Controler/Admin: exports.userList',
+      page: req.originalUrl,
+    };
+    hlpr.logOut(logObj);
+    if (err) return err;
+    res.send(result);
+  });
+};
+
 // run nightlyUpdate
 exports.updateAllUsers = (req, res) => {
   stravaControl.nightlyUpdate();

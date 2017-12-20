@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { Form, formValueSelector, reduxForm } from 'redux-form';
+import { Redirect, BrowserRouter as Router } from 'react-router-dom';
+import { Form, reduxForm } from 'redux-form';
 import { CircularProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 import MdSearch from 'react-icons/lib/md/search';
@@ -15,15 +15,17 @@ import Alert from '../form/alert';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
 import ActivitySingle from '../activity-single';
+import RangeInput from '../form/edit/range-input';
 import ScrollIntoView from '../../containers/scroll-into-view';
+import SortSelect from '../form/edit/sort-select';
 import validate from '../form/validate';
 
 import style from './style';
-import { formValues, relURL, thisForm, title } from './values';
+import { formValues, relURL, thisForm, title } from './form-values';
 
 const propTypes = {
   activities: PropTypes.array,
-  activitySearchCount: PropTypes.number.isRequired,
+  searchCount: PropTypes.number.isRequired,
   eventSelector: PropTypes.object,
   errorMessage: PropTypes.object,
   form: PropTypes.string.isRequired,
@@ -40,14 +42,14 @@ const propTypes = {
 
 const defaultProps = {
   activities: [],
-  activitySearchCount: 0,
+  searchCount: 1,
   stravaId: null,
   isFetching: true,
   errorMessage: undefined,
   form: thisForm,
 };
 
-const queryOptions = {};
+let queryOptions = {};
 let lastSearch = {};
 
 class ActivitySearch extends Component {
@@ -68,9 +70,26 @@ class ActivitySearch extends Component {
     this.props.clearActivitySearch();
   }
 
+  // componentWillReceiveProps(nextProps) {
+  //   const { query } = this.props;
+  //   const { pathname, search } = this.props.location;
+  //   if (query !== search.slice(1)) {
+  //     this.props.history.push({
+  //       pathname,
+  //       search: `?${query}`,
+  //     });
+  //   }
+  // }
+
   activitiesSearch() {
     this.props.setIsFetching();
-    queryOptions.page = this.props.activitySearchCount;
+    queryOptions.page = this.props.searchCount;
+    if (this.props.location.search && this.props.searchCount === 1) {
+      this.props.setActivitySearchCustom();
+      this.props.clearActivitySearch();
+      queryOptions = qs.parse(this.props.location.search.slice(1));
+    }
+
     if (this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
@@ -80,8 +99,9 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
+    event.preventDefault();
     this.props.setIsFetching();
-    formProps.page = this.props.activitySearchCount;
+    formProps.page = this.props.searchCount;
     if (!this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
@@ -143,10 +163,12 @@ class ActivitySearch extends Component {
       isFetching,
       pristine,
       reset,
+      srchOpts,
       submit,
       submitting,
       contentName,
       pristineOnClick,
+      sortStrings,
       user
     } = this.props;
 
@@ -173,8 +195,11 @@ class ActivitySearch extends Component {
               zDepth={1}
             >
               <div style={style.div}>
-                <Form id={contentName} onSubmit={handleSubmit(this.handleFormSubmit)}>
-                  {formValues.map((fV) => (
+                <Form
+                  id={contentName}
+                  onSubmit={handleSubmit(this.handleFormSubmit)}
+                >
+                  {formValues.map(fV => (
                     <div key={fV.contentName}>
                       <EditSwitch
                         form={this.props.form}
@@ -182,38 +207,46 @@ class ActivitySearch extends Component {
                       />
                     </div>
                   ))}
+                  { sortStrings && (
+                    <RangeInput sortStrings={sortStrings} form={this.props.form} />
+                  )}
+                  { sortStrings && (
+                    <SortSelect sortStrings={sortStrings} form={this.props.form} />
+                  )}
                   <div>
-                    {isFetching ? (
+                    <div>
+                      {isFetching ? (
+                        <RaisedButton
+                          label="Searching"
+                          disabled
+                          primary
+                          style={style.button}
+                          icon={<CircularProgress size={22} />}
+                        />
+                      ) : (
+                        <RaisedButton
+                          label="Search"
+                          type={pristine ? 'button' : 'submit'}
+                          onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                          primary
+                          autoFocus
+                          style={style.button}
+                          icon={<MdSearch size={24} />}
+                        />
+                      )}
                       <RaisedButton
-                        label="Searching"
-                        disabled
+                        label="Clear Values"
+                        onClick={reset}
+                        style={style.button}
+                        disabled={pristine || submitting}
+                      />
+                      <RaisedButton
+                        label="Download Activities"
                         primary
                         style={style.button}
-                        icon={<CircularProgress size={22} />}
+                        onClick={handleSubmit(this.activitiesDownload)}
                       />
-                    ) : (
-                      <RaisedButton
-                        label="Search"
-                        type={pristine ? 'button' : 'submit'}
-                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                        primary
-                        autoFocus
-                        style={style.button}
-                        icon={<MdSearch size={24} />}
-                      />
-                    )}
-                    <RaisedButton
-                      label="Clear Values"
-                      onClick={reset}
-                      style={style.button}
-                      disabled={pristine || submitting}
-                    />
-                    <RaisedButton
-                      label="Download Activities"
-                      primary
-                      style={style.button}
-                      onClick={handleSubmit(this.activitiesDownload)}
-                    />
+                    </div>
                   </div>
                   {!activities ? (
                     <p>Loading Activities</p>
@@ -250,17 +283,25 @@ class ActivitySearch extends Component {
 ActivitySearch.propTypes = propTypes;
 ActivitySearch.defaultProps = defaultProps;
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  // console.log('ownProps', ownProps);
+  // const initialValues = (ownProps.location.search) ?
+  //   qs.parse(ownProps.location.search.slice(1)) :
+  //   null;
   return {
     activities: state.activities.activitySearch,
-    activitySearchCount: state.activities.activitySearchCount,
+    searchCount: state.search.searchCount,
     activitySearchCustom: state.activities.activitySearchCustom,
     datePref: state.auth.user.date_preference,
+    // initialValues,
     mPref: state.auth.user.measurement_preference === 'feet',
     message: state.auth.message,
+    srchOpts: state.activities.srchOpts,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
     isFetching: state.page.isFetching,
+    query: state.search.query,
+    sortStrings: state.search.sortStrings,
   };
 }
 
