@@ -561,6 +561,17 @@ exports.searchActivities = async (req, res) => {
   });
 
   /**
+  * This builds a $group object based on sortStrings
+  */
+  const aggregateMaxGroup = sortStrings.reduce((acc, sS) => {
+    acc[sS.value] = { $max: `$${sortOptions[sS.value]}` };
+    return acc;
+  }, {
+    _id: '$athlete.id',
+    count: { $sum: 1 },
+  });
+
+  /**
   * Sorts --------------------------------------------------------------------
   *
   * query value will be like: 'sort=movingTime-des'
@@ -587,22 +598,42 @@ exports.searchActivities = async (req, res) => {
   } else if (srchOpts.textsearch) {
     query.search.push({ $text: { $search: srchOpts.textsearch } });
   }
+  /*
+  * aggregateArr works because of 'by reference'
+  * Adding to the pipline in the right position and then going on to build the
+  * rest of the sort and limit.
+  */
+  const aggregateArr = [];
+
+  const activitySearchArr = [
+    // { $unwind: '$results' },
+    { $group: { _id: null, arr: { $push: '$activityId' } } },
+    { $project: { _id: 0, arr: 1 } },
+  ];
 
   aggregate.push({ $match: { $and: query.search } });
-  aggregate.push({ $sort: sortObj });
+  aggregate.push({ $facet: {
+    filterMax: [{ $group: aggregateMaxGroup }],
+    results: aggregateArr,
+    activitySearch: activitySearchArr,
+  } });
+
+  aggregateArr.push({ $sort: sortObj });
 
   if (srchOpts.page > 1) {
-    aggregate.push({ $skip: (srchOpts.page * srchOpts.limit) - srchOpts.limit });
+    aggregateArr.push({ $skip: (srchOpts.page * srchOpts.limit) - srchOpts.limit });
   }
 
-  aggregate.push({ $limit: srchOpts.limit });
+  aggregateArr.push({ $limit: srchOpts.limit });
+
+  activitySearchArr.unshift(...aggregateArr);
 
   console.log('agg', aggregate, 'srchOpts', srchOpts, 'qString', qString);
   /**
   * CSV projection
   */
   if (query.csv) {
-    aggregate.push({ $project: {
+    aggregateArr.push({ $project: {
       _id: 0,
       name: 1,
       description: 1,
@@ -649,15 +680,18 @@ exports.searchActivities = async (req, res) => {
     } });
   }
 
-  const statsAggregate = {
-    search: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }],
-  };
+  console.log('aggregateMax', aggregateMaxGroup);
 
+  const aggregateMax = [
+    { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
+    { $group: aggregateMaxGroup },
+  ];
 
-
-  let result;
+  let aggResult;
+  let athleteMax;
   try {
-    result = await Activities.aggregate(aggregate);
+    aggResult = await Activities.aggregate(aggregate);
+    athleteMax = await Activities.aggregate(aggregateMax);
   } catch (err) {
     hlpr.consLog(['searchActivities', err]);
     return res.status(500).send({ Error: 'Failed to Search Activities' });
@@ -666,7 +700,7 @@ exports.searchActivities = async (req, res) => {
     const filename = 'activity-data.csv';
     res.setHeader('Content-disposition', `attachment; filename=${filename}`);
     res.setHeader('content-type', 'text/csv');
-    csv.writeToString(result, {
+    csv.writeToString(aggResult.result, {
       headers: true,
       objectMode: true,
     }, (err, resultCsv) => {
@@ -674,8 +708,16 @@ exports.searchActivities = async (req, res) => {
       res.send(resultCsv);
     });
   } else {
-    const activitySearch = result.map(r => r.activityId);
-    res.send({ activities: result, activitySearch, query: qString, sortStrings, filterIEE });
+    // const activitySearch = result.map(r => r.activityId);
+    res.send({
+      activitySearch: aggResult[0].activitySearch[0].arr,
+      filterMax: aggResult[0].filterMax[0],
+      query: qString,
+      sortStrings,
+      filterIEE,
+      athleteMax,
+      activities: aggResult[0].results,
+    });
   }
 };
 
