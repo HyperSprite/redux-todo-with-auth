@@ -8,7 +8,16 @@ import * as actions from '../../../actions';
 import validate from '../../form/validate';
 
 const WizardInput = (props) => {
-  const { content, formValues, handleSubmit, auxButton, auxButtonLabel, pristine, submitting, submitLabel } = props;
+  const {
+    content,
+    formValues,
+    handleSubmit,
+    auxButton,
+    auxButtonLabel,
+    pristine,
+    submitting,
+    submitLabel
+  } = props;
 
   const buttonSet = (
     formValues.addButtonset ? (
@@ -46,6 +55,7 @@ const WizardInput = (props) => {
             checked={formValues.content}
             shouldFocus
             addedComps={buttonSet}
+            contentOptions={formValues.contentOptions}
           />
         </div>
       </Form>
@@ -61,6 +71,7 @@ const WizardInput = (props) => {
           checked={formValues.content}
           shouldFocus
           addedComps={buttonSet}
+          contentOptions={formValues.contentOptions}
         />
       </div>
     )}

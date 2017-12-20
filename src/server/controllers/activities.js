@@ -5,6 +5,7 @@ const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
 const getTime = require('date-fns/get_time');
 const qs = require('qs');
+const url = require('url');
 
 const Activities = require('../models/activities');
 const auth = require('./authentication');
@@ -430,59 +431,178 @@ const queryVar = (str) => {
 // }
 
 
-// Search Activities:
-// localhost:3080/apiv1/activities/search-activities?text=rock&sort={"total_elevation_gain":-1}&wildcard=true
-// with no query string, returns all
+/**
+* Search Activities: ----------------------------------------------------------
+* -----------------------------------------------------------------------------
+*/
+
+/**
+* No query string returns all
+* localhost:3080/apiv1/activities/search-activities
+* adding various options*
+* localhost:3080/apiv1/activities/search-activities?textsearch=ange&filter_trainer=1&wildcard=true&sortBy=maxHR-des
+*/
 exports.searchActivities = async (req, res) => {
-  const query = qs.parse(req.query);
+  const aggregate = [];
+  const qString = url.parse(req.url).query;
+  const q = qs.parse(req.query);
+  let sortObj = { start_date_local: -1 };
 
-  query.search = [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }];
+  const srchOpts = {
+    textsearch: q.textsearch || '',
+    limit: q.limit * 1 || 12,
+    page: q.page * 1 || 1,
+    wildcard: q.wildcard || '',
+  };
 
-  if (query.wildcard && query.textsearch) {
-    // slow but allows wildcard option
-    query.search.push({ name: { $regex: query.textsearch, $options: 'i' } });
-  } else if (query.textsearch) {
-    // fast but returns stemmed words, will not return partial matches
-    // also works with -not words
-    query.search.push({ $text: { $search: query.textsearch } });
-  }
-  if (query.trainer) {
-    query.search.push({ trainer: true });
-  }
-  if (query.commute) {
-    query.search.push({ commute: true });
-  }
-  // manual
-  // private
-  // flagged
-  // Put all search above this line
-  query.aggregate = [
-    { $match: { $and: query.search } },
+  /**
+  * To add a new sort option, add the query field as the key
+  * and the db field as the property to 'sortOptions'
+  * Then add the query field as the value and nice display name to
+  * 'sortStrings' array
+  * sortStrings array is sent to the client for the Filter Select population
+  * durring Select population client side, '-asc' and '-des' are added to the
+  * values.
+  *
+  * Also used for filter range but adds '-max' and '-min' on the client.
+  */
+  const sortOptions = {
+    date: 'start_date_local',
+    distance: 'distance',
+    movingTime: 'moving_time',
+    elevation: 'total_elevation_gain',
+    tssScore: 'tssScore',
+    sufferScore: 'suffer_score',
+  };
+
+  const sortStrings = [
+    { value: 'date', option: 'Date' },
+    { value: 'distance', option: 'Distance' },
+    { value: 'movingTime', option: 'Moving Time' },
+    { value: 'elevation', option: 'Elevation' },
+    { value: 'tssScore', option: 'TSS Score' },
+    { value: 'sufferScore', option: 'Suffer Score' },
   ];
-  query.sort = { start_date_local: -1 };
-  query.aggregate.push({ $sort: query.sort });
 
-  // query.aggregate.push({ $group: {
-  //   _id: null,
-  //   count: { $sum: 1 },
-  //   results: { $push: '$$ROOT' },
-  // } });
+  /**
+  * Initial query for athlete and fully formed activites.
+  * With no other options, returns all activites for athlete.
+  */
+  const query = {
+    search: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }],
+  };
 
-  query.limit = query.limit * 1 || 12;
+  /**
+  * qsValues is a lookup to convert submitted strings to usable values
+  */
+  const qsValue = {
+    des: -1,
+    asc: 1,
+    true: true,
+    false: false,
+    max: '$lt',
+    min: '$gt',
+  };
 
-  query.page = query.page || 1;
-  query.page *= 1;
-  console.log('query.page', query.page);
-  if (query.page > 1) {
-    query.skip = (query.page * query.limit) - query.limit;
-    query.aggregate.push({ $skip: query.skip });
+  /**
+  * Filters  ------------------------------------------------------------------
+  */
+
+  /**
+  * filterIEE (Inclusive, Exclusive, Excluded) options
+  * undefined is Inclusive
+  * true is Exclusive
+  * false is Excluded
+  * filterIEE sent to client
+  */
+  const filterIEE = [
+    { contentName: 'commute', contentLabel: 'Commute', value: q.filter_commute || '' },
+    { contentName: 'trainer', contentLabel: 'Trainer', value: q.filter_trainer || '' },
+  ];
+
+  filterIEE.forEach((fIEE) => {
+    switch (fIEE.value) {
+      case '1':
+        query.search.push({ [fIEE.contentName]: true });
+        break;
+      case '2':
+        query.search.push({ [fIEE.contentName]: false });
+        break;
+      default:
+    }
+  });
+
+  /**
+  * TODO filterRange ( $gt x, $lt y filters)
+  *
+  * Uses sortOptions for matches and client side field lables and valuse
+  * Walks through whole 'q' and looks for matches with min or max and sortOptions
+  * Adds to search.query array
+  * Date is special because it's not a number.
+  * Client side we will need to use the proper metric/imperial and date input
+  *
+  * url string: min-tssScore=100&max-tssScore=120&min-date=2017-05-03T16:17:31Z&max-date=2017-06-01
+  */
+
+  // form 'value'-min' 'value'-max
+  Object.keys(q).forEach((item) => {
+    const itemArr = item.split('-');
+
+    if (qsValue[itemArr[0]] && sortOptions[itemArr[1]]) {
+      if (itemArr[1] === 'date') {
+        const tmpDate = format(q[item], 'YYYY-MM-DD');
+        console.log('>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
+        query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
+      } else if (Number.isSafeInteger(q[item])) {
+        console.log('>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] } });
+        query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] * 1 } });
+      }
+    }
+  });
+
+  /**
+  * Sorts --------------------------------------------------------------------
+  *
+  * query value will be like: 'sort=movingTime-des'
+  * slit this and check they match the qsValue and sortOptions objects
+  * if they don't they are ignored and defaults to $sort: { date: -1 }
+  */
+  if (q.sortBy) {
+    const tmpSrt = q.sortBy.split('-');
+    if (qsValue[tmpSrt[1]] && sortOptions[tmpSrt[0]]) {
+      sortObj = { [sortOptions[tmpSrt[0]]]: qsValue[tmpSrt[1]] };
+    }
   }
-  query.aggregate.push({ $limit: query.limit });
 
-  console.dir(query.aggregate);
-  // projection for CSV
+  /**
+  * Text or Fuzzy search
+  * wildcard: true uses regex, else text index
+  *  fast but returns stemmed words, will not return partial matches
+  *  also works with -not words
+  */
+  if (srchOpts.wildcard && srchOpts.textsearch) {
+    srchOpts.textsearch.split(' ').forEach((tSrch) => {
+      query.search.push({ name: { $regex: tSrch, $options: 'i' } });
+    });
+  } else if (srchOpts.textsearch) {
+    query.search.push({ $text: { $search: srchOpts.textsearch } });
+  }
+
+  aggregate.push({ $match: { $and: query.search } });
+  aggregate.push({ $sort: sortObj });
+
+  if (srchOpts.page > 1) {
+    aggregate.push({ $skip: (srchOpts.page * srchOpts.limit) - srchOpts.limit });
+  }
+
+  aggregate.push({ $limit: srchOpts.limit });
+
+  console.log('agg', aggregate, 'srchOpts', srchOpts, 'qString', qString);
+  /**
+  * CSV projection
+  */
   if (query.csv) {
-    query.aggregate.push({ $project: {
+    aggregate.push({ $project: {
       _id: 0,
       name: 1,
       description: 1,
@@ -529,17 +649,15 @@ exports.searchActivities = async (req, res) => {
     } });
   }
 
-  // text: full text search of activity titles and descriptions
-  hlpr.consLog([query, query.text]);
+  const statsAggregate = {
+    search: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }],
+  };
+
+
+
   let result;
   try {
-    result = await Activities.aggregate(query.aggregate);
-    //   [
-    //     { $match: { $and: query.search } },
-    //     { $sort: query.sort },
-    //     query.project,
-    //   ]
-    // );
+    result = await Activities.aggregate(aggregate);
   } catch (err) {
     hlpr.consLog(['searchActivities', err]);
     return res.status(500).send({ Error: 'Failed to Search Activities' });
@@ -557,7 +675,7 @@ exports.searchActivities = async (req, res) => {
     });
   } else {
     const activitySearch = result.map(r => r.activityId);
-    res.send({ activities: result, activitySearch });
+    res.send({ activities: result, activitySearch, query: qString, sortStrings, filterIEE });
   }
 };
 
@@ -597,3 +715,11 @@ exports.getWeekOfActivities = (req, res) => {
     res.send({ [startDate]: week });
   });
 };
+
+// using for in instead of forEach
+// for (const item in q) {
+//   const itemArr = item.split('-');
+//   if (qsValue[itemArr[0]] && sortOptions[itemArr[1]]) {
+//     query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] } })
+//   }
+// }

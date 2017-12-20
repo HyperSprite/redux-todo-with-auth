@@ -6,4 +6,7 @@ export default {
   div: {
     margin: 5,
   },
+  toggleContainer: {
+    width: 300,
+  },
 };
