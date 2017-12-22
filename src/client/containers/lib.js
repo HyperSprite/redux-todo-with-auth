@@ -12,8 +12,15 @@ lib.isValid = (val, type) => {
       return Number.isFinite(val);
   }
 };
+lib.secondsToTime = (sec) => {
+  const nDays = Math.floor(sec / 86400);
+  const nHours = Math.floor((sec % 86400) / 3600);
+  const nMinutes = Math.floor(((sec % 86400) % 3600) / 60);
+  // const nSeconds = ((sec % 86400) % 3600) % 60;
+  return nDays ? `${nDays} days ${nHours}:${nMinutes}` : `${nHours}:${nMinutes}`;
+};
 
-lib.secondsToTime = seconds => format(addSeconds(startOfDay(new Date()), seconds), 'H:mm');
+// lib.secondsToTime = seconds => format(addSeconds(startOfDay(new Date()), seconds), 'H:mm');
 lib.kgToPounds = kg => kg * 2.20462;
 lib.kgToPoundsRound = (kg, p) => lib.round(kg * 2.20462, p);
 lib.metersToFeet = m => m * 3.28084;
@@ -22,6 +29,10 @@ lib.metersToMiles = m => m * 0.00062137121212121;
 lib.metersToMilesRound = (m, p) => lib.round(m * 0.00062137121212121, p);
 lib.metersToKm = m => m / 1000;
 lib.metersToKmRound = (m, p) => lib.round(m / 1000, p);
+lib.mpsToKPH = m => m * 3.6;
+lib.mpsToKPHRound = (m, p) => lib.round(m * 3.6, p);
+lib.mpsToMPH = m => m * 2.2369;
+lib.mpsToMPHRound = (m, p) => lib.round(m * 2.2369, p);
 lib.divideAndRound = (divideThis, byThis, p) => {
   if (!lib.isValid(divideThis) || !lib.isValid(byThis || !byThis)) {
     return 0;
@@ -54,6 +65,8 @@ lib.statsConversions = (metric, yAxis, data, mPref) => {
         return lib.secondsToTime(data);
       case 'dst':
         return mPref ? lib.metersToMilesRound(data, 1) : lib.metersToKmRound(data, 1);
+      case 'spd':
+        return mPref ? lib.mpsToMPHRound(data, 1) : lib.mpsToKPHRound(data, 1);
       case 'elev':
         return mPref ? lib.metersToFeetRound(data, 0) : lib.round(data, 0);
       case 'cal':

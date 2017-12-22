@@ -3,6 +3,18 @@ import PropTypes from 'prop-types';
 
 import style from './style';
 
+const propTypes = {
+  data: PropTypes.object,
+  rV: PropTypes.object,
+  mPref: PropTypes.bool,
+};
+
+const defaultProps = {
+  mPref: false,
+  data: null,
+  rV: null,
+};
+
 const ActivityMetric = ({ data, rV, mPref }) => {
   if (data[rV.activityType] && rV.conversionMetric) {
     return (
@@ -66,5 +78,8 @@ const ActivityMetric = ({ data, rV, mPref }) => {
   }
   return null;
 };
+
+ActivityMetric.propTypes = propTypes;
+ActivityMetric.defaultProps = defaultProps;
 
 export default ActivityMetric;

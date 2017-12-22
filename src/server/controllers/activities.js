@@ -473,6 +473,14 @@ exports.searchActivities = async (req, res) => {
     elevation: 'total_elevation_gain',
     tssScore: 'tssScore',
     sufferScore: 'suffer_score',
+    kilojoules: 'kilojoules',
+    calories: 'calories',
+    averageHeartrate: 'average_heartrate',
+    averageWatts: 'average_watts',
+    weightedAverageWatts: 'weighted_average_watts',
+    maxSpeed: 'max_speed',
+    maxHeartrate: 'max_heartrate',
+    maxWatts: 'max_watts',
   };
 
   const sortStrings = [
@@ -482,6 +490,14 @@ exports.searchActivities = async (req, res) => {
     { value: 'elevation', option: 'Elevation' },
     { value: 'tssScore', option: 'TSS Score' },
     { value: 'sufferScore', option: 'Suffer Score' },
+    { value: 'kilojoules', option: 'Kilojoules' },
+    { value: 'calories', option: 'Calories' },
+    { value: 'averageHeartrate', option: 'Average Heartrate' },
+    { value: 'averageWatts', option: 'Average Watts' },
+    { value: 'weightedAverageWatts', option: 'Weighted Average Watts' },
+    { value: 'maxSpeed', option: 'Max Speed' },
+    { value: 'maxHeartrate', option: 'Max Heartrate' },
+    { value: 'maxWatts', option: 'Max Watts' },
   ];
 
   /**
@@ -535,7 +551,7 @@ exports.searchActivities = async (req, res) => {
   /**
   * TODO filterRange ( $gt x, $lt y filters)
   *
-  * Uses sortOptions for matches and client side field lables and valuse
+  * Uses sortOptions for matches and client side field lables and values
   * Walks through whole 'q' and looks for matches with min or max and sortOptions
   * Adds to search.query array
   * Date is special because it's not a number.
@@ -551,10 +567,10 @@ exports.searchActivities = async (req, res) => {
     if (qsValue[itemArr[0]] && sortOptions[itemArr[1]]) {
       if (itemArr[1] === 'date') {
         const tmpDate = format(q[item], 'YYYY-MM-DD');
-        console.log('>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
+        hlpr.consLog(['>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } }]);
         query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
-      } else if (Number.isSafeInteger(q[item])) {
-        console.log('>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] } });
+      } else {
+        hlpr.consLog(['>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] } }]);
         query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] * 1 } });
       }
     }
@@ -562,9 +578,15 @@ exports.searchActivities = async (req, res) => {
 
   /**
   * This builds a $group object based on sortStrings
+  * Used for both activCalcAll and activCalcFilter
   */
-  const aggregateMaxGroup = sortStrings.reduce((acc, sS) => {
-    acc[sS.value] = { $max: `$${sortOptions[sS.value]}` };
+  const aggregateGroup = sortStrings.reduce((acc, sS) => {
+    if (sS.value !== 'date') {
+      acc[`${sS.value}Avg`] = { $avg: `$${sortOptions[sS.value]}` };
+      acc[`${sS.value}Sum`] = { $sum: `$${sortOptions[sS.value]}` };
+    }
+    acc[`${sS.value}Max`] = { $max: `$${sortOptions[sS.value]}` };
+    acc[`${sS.value}Min`] = { $min: `$${sortOptions[sS.value]}` };
     return acc;
   }, {
     _id: '$athlete.id',
@@ -613,7 +635,7 @@ exports.searchActivities = async (req, res) => {
 
   aggregate.push({ $match: { $and: query.search } });
   aggregate.push({ $facet: {
-    filterMax: [{ $group: aggregateMaxGroup }],
+    activCalcFilter: [{ $group: aggregateGroup }],
     results: aggregateArr,
     activitySearch: activitySearchArr,
   } });
@@ -628,11 +650,11 @@ exports.searchActivities = async (req, res) => {
 
   activitySearchArr.unshift(...aggregateArr);
 
-  console.log('agg', aggregate, 'srchOpts', srchOpts, 'qString', qString);
+
   /**
   * CSV projection
   */
-  if (query.csv) {
+  if (q.csv) {
     aggregateArr.push({ $project: {
       _id: 0,
       name: 1,
@@ -680,27 +702,29 @@ exports.searchActivities = async (req, res) => {
     } });
   }
 
-  console.log('aggregateMax', aggregateMaxGroup);
-
+  // console.log(activitySearchArr);
+  hlpr.consLog(['srchOpts', srchOpts, 'qString', qString]);
   const aggregateMax = [
     { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
-    { $group: aggregateMaxGroup },
+    { $group: aggregateGroup },
   ];
 
   let aggResult;
-  let athleteMax;
+  let activCalcAll;
+  let activitySearch;
   try {
     aggResult = await Activities.aggregate(aggregate);
-    athleteMax = await Activities.aggregate(aggregateMax);
+    activCalcAll = await Activities.aggregate(aggregateMax);
+    activitySearch = aggResult[0].activitySearch[0] && aggResult[0].activitySearch[0].arr;
   } catch (err) {
     hlpr.consLog(['searchActivities', err]);
     return res.status(500).send({ Error: 'Failed to Search Activities' });
   }
-  if (query.csv) {
+  if (q.csv) {
     const filename = 'activity-data.csv';
     res.setHeader('Content-disposition', `attachment; filename=${filename}`);
     res.setHeader('content-type', 'text/csv');
-    csv.writeToString(aggResult.result, {
+    csv.writeToString(aggResult[0].results, {
       headers: true,
       objectMode: true,
     }, (err, resultCsv) => {
@@ -710,12 +734,12 @@ exports.searchActivities = async (req, res) => {
   } else {
     // const activitySearch = result.map(r => r.activityId);
     res.send({
-      activitySearch: aggResult[0].activitySearch[0].arr,
-      filterMax: aggResult[0].filterMax[0],
+      activCalcAll: activCalcAll[0],
+      activCalcFilter: aggResult[0].activCalcFilter[0],
       query: qString,
       sortStrings,
       filterIEE,
-      athleteMax,
+      activitySearch,
       activities: aggResult[0].results,
     });
   }

@@ -22,11 +22,14 @@ const style = {
     width: 200,
     display: 'flex',
     justifyContent: 'space-between',
-    flexWrap: 'wrap',
+    // flexWrap: 'wrap',
   },
   boxMain: {
-    width: 200,
     fontWeight: 600,
+    marginLeft: 10,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   boxLabel: {
     color: theme.palette.accent7Color,

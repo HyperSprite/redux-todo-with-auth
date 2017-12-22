@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
+import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import Toggle from 'material-ui/Toggle';
 import { CircularProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 import MdSearch from 'react-icons/lib/md/search';
@@ -14,6 +16,7 @@ import * as actions from '../../actions';
 import Alert from '../form/alert';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
+import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
 import RangeInput from '../form/edit/range-input';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -55,6 +58,9 @@ let lastSearch = {};
 class ActivitySearch extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      expanded: false,
+    };
     this.activitiesSearch = this.activitiesSearch.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.activitiesDownload = this.activitiesDownload.bind(this);
@@ -81,6 +87,22 @@ class ActivitySearch extends Component {
   //   }
   // }
 
+  handleExpandChange = (expanded) => {
+    this.setState({ expanded: expanded });
+  };
+
+  handleToggle = (event, toggle) => {
+    this.setState({ expanded: toggle });
+  };
+
+  handleExpand = () => {
+    this.setState({ expanded: true });
+  };
+
+  handleReduce = () => {
+    this.setState({ expanded: false });
+  };
+
   activitiesSearch() {
     this.props.setIsFetching();
     queryOptions.page = this.props.searchCount;
@@ -99,7 +121,6 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
-    event.preventDefault();
     this.props.setIsFetching();
     formProps.page = this.props.searchCount;
     if (!this.props.activitySearchCustom) {
@@ -158,9 +179,12 @@ class ActivitySearch extends Component {
     const {
       activities,
       activitySearchCustom,
+      activCalcFilter,
+      adminMember,
       eventSelector,
       handleSubmit,
       isFetching,
+      mPref,
       pristine,
       reset,
       srchOpts,
@@ -199,76 +223,102 @@ class ActivitySearch extends Component {
                   id={contentName}
                   onSubmit={handleSubmit(this.handleFormSubmit)}
                 >
-                  {formValues.map(fV => (
-                    <div key={fV.contentName}>
+                  <Card expanded={this.state.expanded} >
+                    <div key={formValues[0].contentName}>
                       <EditSwitch
                         form={this.props.form}
-                        formValues={fV}
+                        formValues={formValues[0]}
                       />
                     </div>
-                  ))}
-                  { sortStrings && (
-                    <RangeInput sortStrings={sortStrings} form={this.props.form} />
-                  )}
-                  { sortStrings && (
-                    <SortSelect sortStrings={sortStrings} form={this.props.form} />
-                  )}
-                  <div>
+                    { sortStrings && (
+                      <SortSelect sortStrings={sortStrings} form={this.props.form} />
+                    )}
+                    { (activCalcFilter && adminMember) && (
+                      <ActivityCalc
+                        data={activCalcFilter}
+                        mPref={mPref}
+                        title="Filtered Results"
+                      />
+                    )}
+                    <Toggle
+                      toggled={this.state.expanded}
+                      onToggle={this.handleToggle}
+                      labelPosition="right"
+                      label="Filters"
+                      style={style.toggle}
+                    />
+                    <CardText
+                      expandable
+                    >
+                      {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
+                        <div key={fV.contentName}>
+                          <EditSwitch
+                            form={this.props.form}
+                            formValues={fV}
+                          />
+                        </div>
+                      ))}
+                      { (sortStrings && adminMember) && (
+                        <RangeInput sortStrings={sortStrings} form={this.props.form} />
+                      )}
+                    </CardText>
                     <div>
-                      {isFetching ? (
+                      <div>
+                        {isFetching ? (
+                          <RaisedButton
+                            label="Searching"
+                            disabled
+                            primary
+                            style={style.button}
+                            icon={<CircularProgress size={22} />}
+                          />
+                        ) : (
+                          <RaisedButton
+                            label="Search"
+                            type={pristine ? 'button' : 'submit'}
+                            onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                            primary
+                            autoFocus
+                            style={style.button}
+                            icon={<MdSearch size={24} />}
+                          />
+                        )}
                         <RaisedButton
-                          label="Searching"
-                          disabled
+                          label="Clear Values"
+                          onClick={reset}
+                          style={style.button}
+                          disabled={pristine || submitting}
+                        />
+                        <RaisedButton
+                          label="Download Activities"
                           primary
                           style={style.button}
-                          icon={<CircularProgress size={22} />}
+                          onClick={handleSubmit(this.activitiesDownload)}
                         />
-                      ) : (
+                      </div>
+                    </div>
+                    {!activities ? (
+                      <p>Loading Activities</p>
+                    ) : (
+                      <div>
+                        { activities.map(act => (
+                          <div key={act} style={style.div}>
+                            <ActivitySingle
+                              activityId={act}
+                            />
+                          </div>
+                        ))}
                         <RaisedButton
-                          label="Search"
+                          label="Load more"
                           type={pristine ? 'button' : 'submit'}
                           onClick={pristine ? this.activitiesSearch : () => 'submit'}
                           primary
                           autoFocus
                           style={style.button}
-                          icon={<MdSearch size={24} />}
                         />
-                      )}
-                      <RaisedButton
-                        label="Clear Values"
-                        onClick={reset}
-                        style={style.button}
-                        disabled={pristine || submitting}
-                      />
-                      <RaisedButton
-                        label="Download Activities"
-                        primary
-                        style={style.button}
-                        onClick={handleSubmit(this.activitiesDownload)}
-                      />
-                    </div>
-                  </div>
-                  {!activities ? (
-                    <p>Loading Activities</p>
-                  ) : (
-                    <div>
-                      { activities.map(act => (
-                        <div key={act} style={style.div}>
-                          <ActivitySingle
-                            activityId={act}
-                          />
-                        </div>
-                      ))}
-                      <RaisedButton
-                        label="Load more"
-                        type={pristine ? 'button' : 'submit'}
-                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                        primary
-                        autoFocus
-                        style={style.button}
-                      />
-                    </div>
-                  )}
+                      </div>
+                    )}
+                  </Card>
                 </Form>
               </div>
             </Paper>
@@ -292,6 +342,7 @@ function mapStateToProps(state, ownProps) {
     activities: state.activities.activitySearch,
     searchCount: state.search.searchCount,
     activitySearchCustom: state.activities.activitySearchCustom,
+    activCalcFilter: state.activities.activCalcFilter,
     datePref: state.auth.user.date_preference,
     // initialValues,
     mPref: state.auth.user.measurement_preference === 'feet',
@@ -302,6 +353,7 @@ function mapStateToProps(state, ownProps) {
     isFetching: state.page.isFetching,
     query: state.search.query,
     sortStrings: state.search.sortStrings,
+    adminMember: state.auth.user.adminMember,
   };
 }
 

@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import returnValues from './return-values';
-import style from './style';
+import ActivityTotals from '../activity-totals';
+// import returnValues from './return-values';
+// import style from './style';
 
-class GearTotals extends Component {
+class GearTotals extends React.Component {
   static propTypes = {
     activityIds: PropTypes.arrayOf(
       PropTypes.number,
@@ -32,72 +33,33 @@ class GearTotals extends Component {
               moving_time: 0,
               distance: 0,
               total_elevation_gain: 0,
+              count: 1,
             };
           acc[thisAct.gear.id].moving_time += thisAct.moving_time;
           acc[thisAct.gear.id].distance += thisAct.distance;
           acc[thisAct.gear.id].total_elevation_gain += thisAct.total_elevation_gain;
+          acc[thisAct.gear.id].count += 1;
         }
         return acc;
       }, {});
       const results = Object.entries(totalsObj).map(([gearId, values]) => {
         const tmpGear = gear.filter(g => g.id === gearId)[0];
-        values.gearName = tmpGear ? tmpGear.name : 'Unknown';
+        values.name = tmpGear ? tmpGear.name : 'Unknown';
         return values;
       });
       return results;
-    }
-
-    const gearTotals = calcTotals(activityIds, activities);
-    const tableRows = (stl, i) => {
-      if (i % 2) {
-        const newStl = Object.assign({}, stl.row, stl.rowOdd);
-        return newStl;
-      }
-      return stl.row;
     };
+
+    const totals = calcTotals(activityIds, activities);
+
 
     return (
       <div>
-        {gearTotals.length !== 0 && (
-          <div>
-            {gearTotals.map((row, index) => (
-              <div key={row.gearName} style={tableRows(style, index)}>
-                {returnValues.map(rV => (
-                  <div key={`${row.gearName}${rV.activityType}`}>
-                    {(rV.conversionMetric) ? (
-                      <div style={style.box} >
-                        <div style={style.boxLabel}>
-                          {rV.activityLabel}
-                          {rV.conversionmPref ? (
-                            <span>
-                              {mPref ? (
-                                <span> {`(${rV.conversionTypeSA})`}</span>
-                              ) : (
-                                <span> {`(${rV.conversionTypeMetric})`}</span>
-                              )}
-                            </span>
-                          ) : (null)}
-                        </div>
-                        <div style={style.boxData}>
-                          {rV.conversionFunction(
-                            rV.conversionMetric,
-                            rV.conversionYAxis,
-                            row[rV.conversionData],
-                            mPref,
-                          )}
-
-                        </div>
-                      </div>
-                    ) : (
-                      <div style={style.boxMain}>
-                        {row[rV.activityType]}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
+        {totals.length !== 0 && (
+          <ActivityTotals
+            totals={totals}
+            mPref={mPref}
+          />
         )}
       </div>
     );

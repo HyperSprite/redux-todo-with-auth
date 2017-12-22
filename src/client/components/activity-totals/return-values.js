@@ -3,7 +3,11 @@ import lib from '../../containers/lib';
 // this array will be mapped to display each metric for an activity.
 const returnValues = [
   {
-    activityType: 'gearName',
+    activityType: 'name',
+  },
+  {
+    activityType: 'count',
+    activityLabel: 'Count',
   },
   {
     activityType: 'moving_time',

@@ -10,6 +10,8 @@ export default function (state = {
   activitySearchCount: 1,
   activitySearchCustom: false,
   activitySearchEnd: false,
+  activCalcAll: {},
+  activCalcFilter: {},
   weeklyStats: [],
   weeklyStatsCount: 0,
 }, action) {
@@ -55,6 +57,8 @@ export default function (state = {
           activitySearch: action.payload.activitySearch,
           activitySearchCount: state.activitySearchCount + 1,
           activitySearchEnd: !action.payload.activities.length,
+          activCalcAll: action.payload.activCalcAll,
+          activCalcFilter: action.payload.activCalcFilter,
         };
       }
       return {
@@ -63,6 +67,8 @@ export default function (state = {
         activitySearch: [...state.activitySearch.concat(action.payload.activitySearch)],
         activitySearchCount: state.activitySearchCount + 1,
         activitySearchEnd: !action.payload.activities.length,
+        activCalcAll: action.payload.activCalcAll,
+        activCalcFilter: action.payload.activCalcFilter,
       };
 
     case TYPES.ACTIVITY_REMOVED:
