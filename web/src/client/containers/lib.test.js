@@ -68,8 +68,11 @@ describe('isValid', () => {
 });
 
 describe('secondsToTime takes unix seconds and returns H:mm', () => {
-  test('1512947840 to 23:17', () => {
-    expect(lib.secondsToTime(1512947840)).toEqual('23:17');
+  test('5847708 to 67 days 16:21', () => {
+    expect(lib.secondsToTime(5847708)).toEqual('67 days 16:21');
+  });
+  test('35005 to 9:43', () => {
+    expect(lib.secondsToTime(35005)).toEqual('9:43');
   });
 });
 
@@ -196,13 +199,19 @@ describe('percentFTPNAcc', () => {
 
 describe('statsConversions', () => {
   test('time, false, 1512947840', () => {
-    expect(lib.statsConversions('time', false, 1512947840)).toEqual('23:17');
+    expect(lib.statsConversions('time', false, 35005)).toEqual('9:43');
   });
   test('dst, false, 15129, false', () => {
     expect(lib.statsConversions('dst', false, 15129, false)).toEqual(15.1);
   });
   test('dst, false, 15129, true', () => {
     expect(lib.statsConversions('dst', false, 15129, true)).toEqual(9.4);
+  });
+  test('spd, false, 33.1, false', () => {
+    expect(lib.statsConversions('spd', false, 33.1, false)).toEqual(119.2);
+  });
+  test('spd, false, 33.1, true', () => {
+    expect(lib.statsConversions('spd', false, 33.1, true)).toEqual(74);
   });
   test('elev, false, 1512.9352, false', () => {
     expect(lib.statsConversions('elev', false, 1512.9352, false)).toEqual(1513);

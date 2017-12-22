@@ -1,0 +1,66 @@
+# Activity Calc component
+
+Used in Activity Search to display computed values for ```activCalcAll``` and ```activCalcFilter```
+
+> store: search.sortStrings are used for each metric.
+
+example data for this component:
+```json
+"activCalcAll": {
+  "count": 982,
+  "dateMax": "2017-12-20T14:55:47Z",
+  "dateMin": "2013-05-04T13:25:59Z",
+  "distanceAvg": 40424.8532586558,
+  "distanceSum": 39697205.9,
+  "distanceMax": 219546,
+  "distanceMin": 0,
+  "movingTimeAvg": 5951.586558044806,
+  "movingTimeSum": 5844458,
+  "movingTimeMax": 35005,
+  "movingTimeMin": 38,
+  "elevationAvg": 379.7346232179226,
+  "elevationSum": 372899.4,
+  "elevationMax": 4587,
+  "elevationMin": 0,
+  "tssScoreAvg": 97.86581096849476,
+  "tssScoreSum": 83871,
+  "tssScoreMax": 524,
+  "tssScoreMin": 0,
+  "sufferScoreAvg": 94.5305216426193,
+  "sufferScoreSum": 85172,
+  "sufferScoreMax": 545,
+  "sufferScoreMin": 0,
+  "kilojoulesAvg": 1030.9972164948454,
+  "kilojoulesSum": 1000067.3,
+  "kilojoulesMax": 5013.7,
+  "kilojoulesMin": 0.1,
+  "caloriesAvg": 1138.1875763747453,
+  "caloriesSum": 1117700.2,
+  "caloriesMax": 5590.3,
+  "caloriesMin": 0,
+  "averageHeartrateAvg": 150.4612652608213,
+  "averageHeartrateSum": 135565.6,
+  "averageHeartrateMax": 182.7,
+  "averageHeartrateMin": 37.4,
+  "averageWattsAvg": 177.19024640657082,
+  "averageWattsSum": 172583.3,
+  "averageWattsMax": 358,
+  "averageWattsMin": 0,
+  "weightedAverageWattsAvg": 204.5274212368728,
+  "weightedAverageWattsSum": 175280,
+  "weightedAverageWattsMax": 374,
+  "weightedAverageWattsMin": 2,
+  "maxSpeedAvg": 13.540224032586558,
+  "maxSpeedSum": 13296.5,
+  "maxSpeedMax": 33.1,
+  "maxSpeedMin": 0,
+  "maxHeartrateAvg": 176.57269700332964,
+  "maxHeartrateSum": 159092,
+  "maxHeartrateMax": 254,
+  "maxHeartrateMin": 63,
+  "maxWattsAvg": 605.2357059509918,
+  "maxWattsSum": 518687,
+  "maxWattsMax": 2276,
+  "maxWattsMin": 29
+}
+```
