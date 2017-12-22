@@ -33,7 +33,7 @@ class GearTotals extends React.Component {
               moving_time: 0,
               distance: 0,
               total_elevation_gain: 0,
-              count: 1,
+              count: 0,
             };
           acc[thisAct.gear.id].moving_time += thisAct.moving_time;
           acc[thisAct.gear.id].distance += thisAct.distance;
