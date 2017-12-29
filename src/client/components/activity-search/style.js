@@ -4,7 +4,8 @@ export default {
     minWidth: 200,
   },
   div: {
-    margin: 5,
+    padding: 5,
+    // margin: 5,
   },
   toggleContainer: {
     width: 300,
