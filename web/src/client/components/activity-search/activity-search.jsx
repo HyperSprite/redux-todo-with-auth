@@ -215,15 +215,13 @@ class ActivitySearch extends Component {
               id={location.hash}
               headerHeight={70}
             />
-            <Paper
-              zDepth={1}
-            >
-              <div style={style.div}>
+
+
                 <Form
                   id={contentName}
                   onSubmit={handleSubmit(this.handleFormSubmit)}
                 >
-                  <Card expanded={this.state.expanded} >
+                  <Card expanded={this.state.expanded} style={style.div} >
                     <div key={formValues[0].contentName}>
                       <EditSwitch
                         form={this.props.form}
@@ -320,8 +318,8 @@ class ActivitySearch extends Component {
                     )}
                   </Card>
                 </Form>
-              </div>
-            </Paper>
+
+
           </div>
           <div className="side-lite right-pane" />
         </div>
