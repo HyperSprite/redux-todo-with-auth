@@ -50,6 +50,8 @@ exports.logOut = (logObj) => {
   });
 };
 
+// const wattsOverFTP = waw / ftp;
+// const wattsByHour = ftp * 3600;
 
 exports.lib = {
   round: (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`),
@@ -87,6 +89,11 @@ exports.lib = {
     const weekEnd = dateFNS.format(dateFNS.addDays(weekStart, 6), 'YYYY-MM-DD');
     return weekEnd;
   },
+
+  /**
+  * data.elapsed_time, data.weighted_average_watts, ftp
+  */
+  calcTssScore: (et, waw, ftp) => Math.round(((et * waw * (waw / ftp)) / (ftp * 3600)) * 100, 2),
 
   weekArray: week => dateFNS.eachDay(week, exports.lib.oneWeek(week)).map(eDay => dateFNS.format(eDay, 'YYYY-MM-DD')),
 };

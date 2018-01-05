@@ -1,9 +1,11 @@
 const csv = require('fast-csv');
 const addDays = require('date-fns/add_days');
+const subDays = require('date-fns/sub_days');
 const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
 const getTime = require('date-fns/get_time');
+const eachDay = require('date-fns/each_day');
 const qs = require('qs');
 const url = require('url');
 
@@ -13,6 +15,20 @@ const User = require('../models/user');
 const stopwords = require('../lib/stopwords');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
+const lib = require('../lib/helpers').lib;
+
+/**
+* utility
+*/
+function weeksForward(weekStart, weeks) {
+  const weekEnd = format(addDays(weekStart, (weeks * 7)), 'YYYY-MM-DD');
+  return weekEnd;
+}
+
+function weeksBack(weekStart, weeks) {
+  const weekEnd = format(subDays(weekStart, (weeks * 7)), 'YYYY-MM-DD');
+  return weekEnd;
+}
 
 // This is a recursive fucntion that returns 200 (or input.perPage) resource_state: 2 activities
 // per pass (strava limit per request). It will keep going until is returns
@@ -76,10 +92,10 @@ const setExtendedActivityStats = (input, act, options, result) => {
             if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
             data.zones = aData;
             if (data.weighted_average_watts) {
-              const ftp = input.user.ftpHistory[input.user.ftpHistory.length -1].ftp;
-              const wattsOverFTP = data.weighted_average_watts / ftp;
-              const wattsByHour = ftp * 3600;
-              data.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+              const ftp = input.user.ftpHistory[input.user.ftpHistory.length - 1].ftp;
+              // const wattsOverFTP = data.weighted_average_watts / ftp;
+              // const wattsByHour = ftp * 3600;
+              data.tssScore = lib.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
             }
             hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
             Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
@@ -234,15 +250,6 @@ exports.getExtendedActivityStats = setInterval(() => {
 // sort: {"start_date_local": 1} // oldest first
 //
 
-function oneWeek(weekStart) {
-  const weekEnd = format(addDays(weekStart, 7), 'YYYY-MM-DD');
-  return weekEnd;
-}
-
-function fourWeek(weekStart) {
-  const weekEnd = format(addDays(weekStart, 28), 'YYYY-MM-DD');
-  return weekEnd;
-}
 
 const getOneWeek = async (startDate, stravaId) => {
   let data = [];
@@ -251,7 +258,7 @@ const getOneWeek = async (startDate, stravaId) => {
     resource_state: 3,
     start_date_local: {
       $gt: startDate,
-      $lt: oneWeek(startDate),
+      $lt: weeksForward(startDate, 1),
     },
   };
   const sort = { start_date_local: 1 };
@@ -759,6 +766,301 @@ exports.toggleClubNotice = async (req, res) => {
   return res.send({ clubNotice: result.clubNotice });
 };
 
+/**
+* Fitness
+*
+* Fitness / critical training load - exp average TSS for 42 days
+* Fatigue / ATL (Acute Training Load) - exp average TSS for 7 days
+* Form - difference between the two
+*
+* localhost:3080/apiv1/activities/fitness-today
+*
+* Returns one days worth of stats:
+
+  fitnessToday.daysArr.daysAggr.days: [
+    {
+        "ss": 129,
+        "dst": 41255.8,
+        "time": 8667,
+        "elev": 988,
+        "cal": 1709.9,
+        "kj": 1533.6,
+        "tss": 180,
+        "date": "2017-12-30",
+        "names": [
+            {
+                "name": "All over Coyote Lake",
+                "activityId": 1234567890
+            }
+        ],
+        "count": 1,
+        "fitnessTSS": 46.32581869868562,
+        "fatigueTSS": 107.21487383531463,
+        "fitnessSS": 40.218266586420015,
+        "fatigueSS": 82.04940948587117
+    },
+  ],
+
+*
+*/
+
+
+exports.fitnessToday = async (req, res) => {
+  const q = qs.parse(req.query);
+  const weeksPast = q.weeksPast * 1 || 0;
+  const startDate = q.startDate || req.user.created_at;
+  const endDate = q.endDate || format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
+
+  const daysArr = eachDay(startDate, addDays(endDate, 6)).map(d => ({
+    count: 0,
+    tss: 0,
+    ss: 0,
+    dst: 0,
+    time: 0,
+    elev: 0,
+    cal: 0,
+    kj: 0,
+    date: format(d, 'YYYY-MM-DD'),
+  }));
+
+  const aggregate = [
+    {
+      $match: { $and: [
+        { 'athlete.id': req.user.stravaId },
+        { resource_state: 3 },
+        { start_date_local: {
+          $gt: daysArr[0].date,
+          $lt: daysArr[daysArr.length - 1].date,
+        } },
+      ] },
+    },
+    {
+      $group: { // combines a days worth of activities
+        _id: { $substr: ['$start_date_local', 0, 10] }, // Date from date string
+        ss: { $sum: '$suffer_score' },
+        dst: { $sum: '$distance' },
+        time: { $sum: '$moving_time' },
+        elev: { $sum: '$total_elevation_gain' },
+        cal: { $sum: '$calories' },
+        kj: { $sum: '$kilojoules' },
+        tss: { $sum: '$tssScore' },
+        names: { $push: { name: '$name', activityId: '$activityId' } },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $group: { // builds usable array
+        _id: null,
+        metricsArr: { $push: {
+          ss: '$ss',
+          dst: '$dst',
+          time: '$time',
+          elev: '$elev',
+          cal: '$cal',
+          kj: '$kj',
+          tss: '$tss',
+          date: '$_id',
+          elapsedTime: '$elapsedTime',
+          weightedAverageWatts: '$weightedAverageWatts',
+          names: '$names',
+          count: '$count',
+        } },
+      },
+    },
+    {
+      $project: { // combines activity days array and empty days
+        fitnessMap: {
+          $map: {
+            input: daysArr,
+            as: 'sWDay',
+            in: {
+              $let: {
+                vars: {
+                  idx: { $indexOfArray: ['$metricsArr.date', '$$sWDay.date'] },
+                },
+                in: {
+                  $cond: [{ $ne: ['$$idx', -1] }, { $arrayElemAt: ['$metricsArr', '$$idx'] }, '$$sWDay'],
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $facet: {
+        daysArr: [
+          {
+            $project: {
+              date: '$date',
+              daysAggr: {
+                $reduce: {
+                  input: '$fitnessMap',
+                  initialValue: {
+                    fitnessTSS: 0,
+                    fatigueTSS: 0,
+                    fitnessSS: 0,
+                    fatigueSS: 0,
+                    days: [],
+                  },
+                  in: {
+                    days: {
+                      $concatArrays: [
+                        '$$value.days',
+                        [{ $mergeObjects: [
+                          '$$this',
+                          { fitnessTSS: {
+                            $add: [
+                              '$$value.fitnessTSS',
+                              {
+                                $divide: [
+                                  {
+                                    $subtract: [
+                                      '$$this.tss',
+                                      '$$value.fitnessTSS',
+                                    ],
+                                  },
+                                  42,
+                                ],
+                              },
+                            ],
+                          } },
+                          { fatigueTSS: {
+                            $add: [
+                              '$$value.fatigueTSS',
+                              {
+                                $divide: [
+                                  {
+                                    $subtract: [
+                                      '$$this.tss',
+                                      '$$value.fatigueTSS',
+                                    ],
+                                  },
+                                  7,
+                                ],
+                              },
+                            ],
+                          } },
+                          { fitnessSS: {
+                            $add: [
+                              '$$value.fitnessSS',
+                              {
+                                $divide: [
+                                  {
+                                    $subtract: [
+                                      '$$this.ss',
+                                      '$$value.fitnessSS',
+                                    ],
+                                  },
+                                  42,
+                                ],
+                              },
+                            ],
+                          } },
+                          { fatigueSS: {
+                            $add: [
+                              '$$value.fatigueSS',
+                              {
+                                $divide: [
+                                  {
+                                    $subtract: [
+                                      '$$this.ss',
+                                      '$$value.fatigueSS',
+                                    ],
+                                  },
+                                  7,
+                                ],
+                              },
+                            ],
+                          } },
+                        ] }],
+                      ],
+                    },
+                    fitnessTSS: {
+                      $add: [
+                        '$$value.fitnessTSS',
+                        {
+                          $divide: [
+                            {
+                              $subtract: [
+                                '$$this.tss',
+                                '$$value.fitnessTSS',
+                              ],
+                            },
+                            42,
+                          ],
+                        },
+                      ],
+                    },
+                    fatigueTSS: {
+                      $add: [
+                        '$$value.fatigueTSS',
+                        {
+                          $divide: [
+                            {
+                              $subtract: [
+                                '$$this.tss',
+                                '$$value.fatigueTSS',
+                              ],
+                            },
+                            7,
+                          ],
+                        },
+                      ],
+                    },
+                    fitnessSS: {
+                      $add: [
+                        '$$value.fitnessSS',
+                        {
+                          $divide: [
+                            {
+                              $subtract: [
+                                '$$this.ss',
+                                '$$value.fitnessSS',
+                              ],
+                            },
+                            42,
+                          ],
+                        },
+                      ],
+                    },
+                    fatigueSS: {
+                      $add: [
+                        '$$value.fatigueSS',
+                        {
+                          $divide: [
+                            {
+                              $subtract: [
+                                '$$this.ss',
+                                '$$value.fatigueSS',
+                              ],
+                            },
+                            7,
+                          ],
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  let result;
+  try {
+    result = await Activities.aggregate(aggregate);
+  } catch (err) {
+    hlpr.consLog(['fitnessToday err', err]);
+    return res.status(500).send({ Error: 'Failed to get todays fitness' });
+  }
+  return res.send({ fitnessToday: result });
+};
+
+
 // No longer useing this version
 // localhost:3080/apiv1/activities/one-week/100 (returns -40 weeks)
 // localhost:3080/apiv1/activities/one-week (no number returns current week)
@@ -770,7 +1072,7 @@ exports.getWeekOfActivities = (req, res) => {
     resource_state: 3,
     start_date_local: {
       $gt: startDate,
-      $lt: oneWeek(startDate),
+      $lt: weeksForward(startDate, 1),
     },
   };
   const sort = { start_date_local: 1 };
