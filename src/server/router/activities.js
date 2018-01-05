@@ -10,5 +10,6 @@ router.get('/weekly-stats', Activ.getWeeklyStats);
 router.post('/reset-activity', Activ.resetActivity);
 router.post('/delete-activity', Activ.deleteActivity);
 router.get('/search-activities', Activ.searchActivities);
+router.get('/fitness-today', Activ.fitnessToday);
 
 module.exports = router;
