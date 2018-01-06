@@ -12,8 +12,8 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 
+import justFns from 'just-fns';
 import * as actions from './../../actions';
-import lib from '../../containers/lib';
 import FeatureNotice from '../form/feature-notice';
 import ToggleIcon from '../form/toggle-icon';
 import Dialog from './dialog';
@@ -66,18 +66,18 @@ class AltitudeTable extends Component {
 
   render() {
     const { user } = this.props;
-    const currentFTP = lib.getLastInArray(user.ftpHistory, 'ftp');
+    const currentFTP = justFns.getLastInArray(user.ftpHistory, 'ftp');
     const ftpAtElv = elevations.map(e => {
       const adjustedElev = e - (user.userGeoElevation * 0.01);
-      const percentFTPAcc = lib.percentFTPAcc(adjustedElev);
-      const percentFTPNAcc = lib.percentFTPNAcc(adjustedElev);
+      const percentFTPAcc = justFns.percentFTPAcc(adjustedElev);
+      const percentFTPNAcc = justFns.percentFTPNAcc(adjustedElev);
       const tmpObj = {
         eachElvM: e * 1000,
         // returns xx.xx (%) to use, * by 100
-        ftpAcc: lib.round(percentFTPAcc, 2),
-        ftpAccCalc: lib.round((currentFTP * 0.01) * percentFTPAcc, 0),
-        ftpNAcc: lib.round(percentFTPNAcc, 2),
-        ftpNAccCalc: lib.round((currentFTP * 0.01) * percentFTPNAcc, 0),
+        ftpAcc: justFns.round(percentFTPAcc, 2),
+        ftpAccCalc: justFns.round((currentFTP * 0.01) * percentFTPAcc, 0),
+        ftpNAcc: justFns.round(percentFTPNAcc, 2),
+        ftpNAccCalc: justFns.round((currentFTP * 0.01) * percentFTPNAcc, 0),
       };
       return tmpObj;
     });
@@ -115,9 +115,9 @@ class AltitudeTable extends Component {
                         >
                           Altitude<br />
                           {this.state.mPref ? (
-                            `${lib.metersToFeetRound(user.userGeoElevation, 0)} Feet`
+                            `${justFns.metersToFeetRound(user.userGeoElevation, 0)} Feet`
                           ) : (
-                            `${lib.round(user.userGeoElevation, 0)} Meters`
+                            `${justFns.round(user.userGeoElevation, 0)} Meters`
                           )}
                         </TableHeaderColumn>
                         <TableHeaderColumn
@@ -150,9 +150,9 @@ class AltitudeTable extends Component {
                         <TableRow key={ftpAE.eachElvM}>
                           <TableRowColumn style={style.cells}>
                             {this.state.mPref ? (
-                              lib.metersToFeetRound(ftpAE.eachElvM, 0)
+                              justFns.metersToFeetRound(ftpAE.eachElvM, 0)
                             ) : (
-                              lib.round(ftpAE.eachElvM, 0)
+                              justFns.round(ftpAE.eachElvM, 0)
                             )}
                           </TableRowColumn>
                           <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>

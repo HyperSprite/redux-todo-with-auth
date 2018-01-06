@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import Static from '../form/static';
 
 const propTypes = {
@@ -26,12 +26,12 @@ const renderTooltipContent = (o) => {
       <p>{label}</p>
       <ul style={{ listStyle: 'none', marginLeft: 4, padding: 0 }}>
         <li>
-          {`Total: ${lib.statsConversions(metric, false, total, mPref)}`}
+          {`Total: ${justFns.statsConversions(metric, false, total, mPref)}`}
         </li>
         {
           payload.map(entry => (
             <li key={`item-${entry.value + entry.name}`} style={{ color: entry.color }}>
-              {`${entry.name}: ${lib.statsConversions(metric, false, entry.value, mPref)}`}
+              {`${entry.name}: ${justFns.statsConversions(metric, false, entry.value, mPref)}`}
             </li>
           ))
         }
@@ -44,7 +44,7 @@ const Chart = props => (
   <div>
     <Static
       contentLabel={props.contentLabel}
-      content={`${lib.statsConversions(props.metric, false, props.content, props.mPref)}`}
+      content={`${justFns.statsConversions(props.metric, false, props.content, props.mPref)}`}
     />
     <BarChart
       width={180}
@@ -53,7 +53,7 @@ const Chart = props => (
       margin={{ top: 5, right: 10, left: 2, bottom: 5 }}
     >
       <XAxis dataKey="day" />
-      <YAxis tickFormatter={lib.statsConversions(props.metric, true)} />
+      <YAxis tickFormatter={justFns.statsConversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
       <Tooltip content={renderTooltipContent} metric={props.metric} mPref={props.mPref} />
       <Bar name="Day" dataKey={`${props.metric}.day`} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />

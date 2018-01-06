@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';
 import theme from '../../styles/theme';
@@ -131,7 +131,7 @@ export default class UserList extends Component {
                     <CheckBox option={!!user.userGeoElevation} /> Elevation
                   </div>
                   <div style={style.box}>
-                    <CheckBox option={!!lib.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
+                    <CheckBox option={!!justFns.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
                   </div>
                   <div style={style.box}>
                     <CheckBox option={!!user.adminMember} /> Admin

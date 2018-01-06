@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { Chip } from 'material-ui';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
@@ -168,7 +168,7 @@ const renderViewEvent = ({
       />
       <Static
         contentLabel="Starting Elevation"
-        content={`${lib.statsConversions('elev', null, event.eventGeoElevation, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
+        content={`${justFns.statsConversions('elev', null, event.eventGeoElevation, mPref)} ${justFns.mPrefLabel('dstS', mPref).display}`}
         contentType="text"
       />
       <Static

@@ -1,4 +1,4 @@
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 
 // this array will be mapped to display each metric for an activity.
 const returnValues = [
@@ -12,7 +12,7 @@ const returnValues = [
   {
     activityType: 'moving_time',
     activityLabel: 'Moving Time',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'time',
     conversionYAxis: false,
     conversionData: 'moving_time',
@@ -20,7 +20,7 @@ const returnValues = [
   {
     activityType: 'distance',
     activityLabel: 'Distance',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'dst',
     conversionYAxis: false,
     conversionData: 'distance',
@@ -31,7 +31,7 @@ const returnValues = [
   {
     activityType: 'total_elevation_gain',
     activityLabel: 'Elevation',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',
     conversionYAxis: false,
     conversionData: 'total_elevation_gain',

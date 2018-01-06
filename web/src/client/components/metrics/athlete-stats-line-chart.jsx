@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import Areachart from './areaChart';
 
 const propTypes = {
@@ -25,7 +25,7 @@ const ChartStack = ({ data, hasFTP, mPref }) => (
     {hasFTP ? (
       <Areachart
         contentLabel="Watts per Kg"
-        content={lib.getLastInArray(data, 'wPKG')}
+        content={justFns.getLastInArray(data, 'wPKG')}
         contentType="text"
         id="wPKGChart"
         data={data}
@@ -39,7 +39,7 @@ const ChartStack = ({ data, hasFTP, mPref }) => (
     <Areachart
       contentLabel="Weight"
       contentLabelLink="https://www.strava.com/settings/profile"
-      content={lib.getLastInArray(data, mPref ? 'saWeight' : 'weight')}
+      content={justFns.getLastInArray(data, mPref ? 'saWeight' : 'weight')}
       contentType="text"
       id="weightChart"
       data={data}
@@ -53,7 +53,7 @@ const ChartStack = ({ data, hasFTP, mPref }) => (
       <Areachart
         contentLabel="FTP"
         contentLabelLink="https://www.strava.com/settings/performance"
-        content={lib.getLastInArray(data, 'ftp')}
+        content={justFns.getLastInArray(data, 'ftp')}
         contentType="text"
         id="ftpChart"
         data={data}

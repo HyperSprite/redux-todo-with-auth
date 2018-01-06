@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardText } from 'material-ui';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import style from './style';
 
 import {
@@ -29,8 +29,8 @@ const powerZones = [
 
 const getZones = (low, high, data, percent) => {
   const tmpPercent = percent ? '%' : '';
-  const tmpLow = low ? `${lib.round(low * data, 0)}${tmpPercent}` : '<';
-  const tmpHigh = high ? `${lib.round(high * data, 0)}${tmpPercent}` : '+';
+  const tmpLow = low ? `${justFns.round(low * data, 0)}${tmpPercent}` : '<';
+  const tmpHigh = high ? `${justFns.round(high * data, 0)}${tmpPercent}` : '+';
   return `${tmpLow} - ${tmpHigh}`;
 };
 
