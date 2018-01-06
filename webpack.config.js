@@ -3,6 +3,7 @@ const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
 const WebpackChunkHash = require('webpack-chunk-hash');
+const UglifyJs = require('uglifyjs-webpack-plugin');
 
 const isProd = (process.env.NODE_ENV === 'production');
 const isLogging = (process.env.LOGGING === 'true');
@@ -45,10 +46,10 @@ function getPlugins() {
   plugins.push(new WebpackChunkHash());
   console.log('isProd', isProd, 'isLogging', isLogging);
   if (isProd && isLogging) {
-    plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+    plugins.push(new UglifyJs({ sourceMap: true }));
   } else if (isProd) {
     console.log('Loading prod plugins');
-    plugins.push(new webpack.optimize.UglifyJsPlugin({
+    plugins.push(new UglifyJs({
       compress: compress,
       output: {
         comments: false,
