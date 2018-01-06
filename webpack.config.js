@@ -13,16 +13,16 @@ const useBundleAnalyzerPlugin = false;
 // const useBundleAnalyzerPlugin = true;
 
 const compress = {
-  warnings: false,
-  screw_ie8: true,
-  conditionals: true,
-  unused: true,
-  comparisons: true,
-  sequences: true,
-  dead_code: true,
-  evaluate: true,
-  if_return: true,
-  join_vars: true,
+  // warnings: false,
+  // screw_ie8: true,
+  // conditionals: true,
+  // unused: true,
+  // comparisons: true,
+  // sequences: true,
+  // dead_code: true,
+  // evaluate: true,
+  // if_return: true,
+  // join_vars: true,
 };
 
 console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging);
@@ -46,19 +46,14 @@ function getPlugins() {
   plugins.push(new WebpackChunkHash());
   console.log('isProd', isProd, 'isLogging', isLogging);
   if (isProd && isLogging) {
-    plugins.push(new UglifyJs({ sourceMap: true }));
+    plugins.push(new UglifyJs({ uglifyOptions: { sourceMap: true } }));
   } else if (isProd) {
     console.log('Loading prod plugins');
-    plugins.push(new UglifyJs({
-      compress: compress,
-      output: {
-        comments: false,
-      },
-    }));
+    plugins.push(new UglifyJs());
   } else {
     console.log('Loading non-prod plugins');
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    // plugins.push(new webpack.optimize.UglifyJsPlugin({ sourceMap: true }));
+    // plugins.push(new UglifyJs());
     if (useBundleAnalyzerPlugin) plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
