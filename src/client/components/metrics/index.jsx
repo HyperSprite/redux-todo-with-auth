@@ -5,8 +5,8 @@ import { Card } from 'material-ui/Card';
 import { connect } from 'react-redux';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
+import justFns from 'just-fns';
 import * as actions from './../../actions';
-import lib from '../../containers/lib';
 
 import FtpWeight from './ftp-weight';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -73,7 +73,7 @@ class Athlete extends Component {
             <Card
               className="card"
             >
-              {lib.getLastInArray(ftpHistory, 'ftp') && lib.getLastInArray(weightHistory, 'weight') ? (
+              {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
                 <FtpWeight
                   ftpHistory={ftpHistory}
                   weightHistory={weightHistory}
@@ -82,7 +82,7 @@ class Athlete extends Component {
               ) : (
                 <div>
                   {/* TODO - this is all ugly */}
-                  {lib.getLastInArray(weightHistory, 'weight') ? (
+                  {justFns.getLastInArray(weightHistory, 'weight') ? (
                     <FtpWeight
                       ftpHistory={[]}
                       weightHistory={weightHistory}

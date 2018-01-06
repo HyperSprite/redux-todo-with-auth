@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
+import { Card, CardHeader } from 'material-ui/Card';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import Static from './../form/static';
 import GoogleMapWithPolyline from '../google-map';
 
@@ -56,7 +56,7 @@ class ViewEventRoute extends React.Component {
         <CardHeader
           title={routeData.name}
         />
-        <div  style={{ marginLeft: 20, marginRight: 20 }}>
+        <div style={{ marginLeft: 20, marginRight: 20 }}>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', margin: 20 }} >
             <Static
@@ -67,12 +67,12 @@ class ViewEventRoute extends React.Component {
             />
             <Static
               contentLabel="Distance"
-              content={`${lib.statsConversions('dst', null, routeData.distance, mPref)} ${lib.mPrefLabel('dstL', mPref).display}`}
+              content={`${justFns.statsConversions('dst', null, routeData.distance, mPref)} ${justFns.mPrefLabel('dstL', mPref).display}`}
               contentType="text"
             />
             <Static
               contentLabel="Elevation"
-              content={`${lib.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${lib.mPrefLabel('dstS', mPref).display}`}
+              content={`${justFns.statsConversions('elev', null, routeData.elevation_gain, mPref)} ${justFns.mPrefLabel('dstS', mPref).display}`}
               contentType="text"
             />
           </div>

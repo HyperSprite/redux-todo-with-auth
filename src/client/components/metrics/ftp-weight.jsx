@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { eachDay, format, min } from 'date-fns';
 
-import lib from '../../containers/lib';
+import justFns from 'just-fns';
 import AthleteStatsLineChart from './athlete-stats-line-chart';
 
 const propTypes = {
@@ -54,8 +54,8 @@ function consolidateData(ftp = [], weight) {
         day: dR,
         date: tmpVals.dateSet[dR].date,
         ftp: null,
-        weight: lib.round(acc.lastWeight, 2),
-        saWeight: lib.kgToPoundsRound(acc.lastWeight, 1),
+        weight: justFns.round(acc.lastWeight, 2),
+        saWeight: justFns.kgToPoundsRound(acc.lastWeight, 1),
         wPKG: null,
       });
       return acc;
@@ -72,9 +72,9 @@ function consolidateData(ftp = [], weight) {
         day: dR,
         date: tmpVals.dateSet[dR].date,
         ftp: acc.lastFTP,
-        weight: lib.round(acc.lastWeight, 2),
-        saWeight: lib.kgToPoundsRound(acc.lastWeight, 1),
-        wPKG: lib.round((acc.lastFTP / acc.lastWeight), 2),
+        weight: justFns.round(acc.lastWeight, 2),
+        saWeight: justFns.kgToPoundsRound(acc.lastWeight, 1),
+        wPKG: justFns.round((acc.lastFTP / acc.lastWeight), 2),
       });
       return acc;
     }

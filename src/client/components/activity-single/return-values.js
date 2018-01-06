@@ -1,3 +1,4 @@
+import justFns from 'just-fns';
 import lib from '../../containers/lib';
 
 // this array will be mapped to display each metric for an activity.
@@ -9,7 +10,7 @@ const returnValues = [
   {
     activityType: 'difficulty_index',
     activityLabel: 'Difficulty Index',
-    compute: lib.difficultyIndex,
+    compute: justFns.difficultyIndex,
     arg1: 'total_elevation_gain',
     arg2: 'distance',
     arg3: 2,
@@ -21,7 +22,7 @@ const returnValues = [
   {
     activityType: 'efficiency_factor',
     activityLabel: 'Efficiency Factor',
-    compute: lib.divideAndRound,
+    compute: justFns.divideAndRound,
     arg1: 'weighted_average_watts',
     arg2: 'average_heartrate',
     arg3: 2,
@@ -33,7 +34,7 @@ const returnValues = [
   {
     activityType: 'variability_index',
     activityLabel: 'Variability Index',
-    compute: lib.divideAndRound,
+    compute: justFns.divideAndRound,
     arg1: 'weighted_average_watts',
     arg2: 'average_watts',
     arg3: 2,
@@ -57,7 +58,7 @@ const returnValues = [
   {
     activityType: 'moving_time',
     activityLabel: 'Moving Time',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'time',
     conversionYAxis: false,
     conversionData: 'moving_time',
@@ -65,7 +66,7 @@ const returnValues = [
   {
     activityType: 'distance',
     activityLabel: 'Distance',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'dst',
     conversionYAxis: false,
     conversionData: 'distance',
@@ -76,7 +77,7 @@ const returnValues = [
   {
     activityType: 'total_elevation_gain',
     activityLabel: 'Elevation',
-    conversionFunction: lib.statsConversions,
+    conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',
     conversionYAxis: false,
     conversionData: 'total_elevation_gain',

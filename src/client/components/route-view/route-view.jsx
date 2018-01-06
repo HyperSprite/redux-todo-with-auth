@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
 import VisibilitySensorLock from '../../containers/visibility-sensor-lock';
-import lib from '../../containers/lib';
+// import lib from '../../containers/lib';
 import returnValues from './return-values';
 import ActivityMetric from '../activity-metric';
 import Static from './../form/static';

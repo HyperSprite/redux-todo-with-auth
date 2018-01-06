@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
 
-import lib from '../../containers/lib';
+// import lib from '../../containers/lib';
 import Static from './../form/static';
 import ViewRoute from '../route-view';
 import ViewRouteMap from '../google-map';
