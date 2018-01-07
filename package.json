@@ -1,6 +1,6 @@
 {
   "name": "araceathlete",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "araceathlete is a training goal tracker",
   "main": "main.js",
   "engines": {

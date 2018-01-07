@@ -53,7 +53,7 @@ function getPlugins() {
   } else {
     console.log('Loading non-prod plugins');
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    plugins.push(new UglifyJs({ sourceMap: true, uglifyOptions: { warnings: true } }));
+    // plugins.push(new UglifyJs({ sourceMap: true, uglifyOptions: { warnings: true } }));
     if (useBundleAnalyzerPlugin) plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;
