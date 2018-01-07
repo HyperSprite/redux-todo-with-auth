@@ -9,7 +9,7 @@ import { CircularProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
-import fileDownload from 'react-file-download';
+import fileDownload from 'js-file-download';
 import qs from 'qs';
 // eslint-disable-next-line
 import * as actions from '../../actions';
