@@ -69,7 +69,7 @@ class Header extends Component {
         </Helmet>
         <AppBar
           title={this.props.page.name}
-          onLeftIconButtonTouchTap={this.handleToggle}
+          onLeftIconButtonClick={this.handleToggle}
           showMenuIconButton
           iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}
           iconElementRight={this.renderRightMenu()}

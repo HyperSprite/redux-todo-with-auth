@@ -46,14 +46,14 @@ function getPlugins() {
   plugins.push(new WebpackChunkHash());
   console.log('isProd', isProd, 'isLogging', isLogging);
   if (isProd && isLogging) {
-    plugins.push(new UglifyJs({ uglifyOptions: { sourceMap: true } }));
+    plugins.push(new UglifyJs({ sourceMap: true, uglifyOptions: { warnings: true } }));
   } else if (isProd) {
     console.log('Loading prod plugins');
     plugins.push(new UglifyJs());
   } else {
     console.log('Loading non-prod plugins');
     plugins.push(new webpack.HotModuleReplacementPlugin());
-    // plugins.push(new UglifyJs());
+    plugins.push(new UglifyJs({ sourceMap: true, uglifyOptions: { warnings: true } }));
     if (useBundleAnalyzerPlugin) plugins.push(new BundleAnalyzerPlugin());
   }
   return plugins;

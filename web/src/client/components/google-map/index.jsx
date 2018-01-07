@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import googlePolyline from 'google-polyline';
 import { fitBounds } from 'google-map-react/utils';
-import turfHelpers from '@turf/helpers';
+import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
@@ -52,7 +52,7 @@ class GoogleMapWithPolyline extends React.Component {
     };
 
     const getCenterAndZoom = (mapPolyline) => {
-      const routeDataLS = turfHelpers.lineString(convertMapData(mapPolyline)
+      const routeDataLS = lineString(convertMapData(mapPolyline)
         .map(rD => [rD.lat, rD.lng]));
       const newbounds = bbox(routeDataLS);
 
