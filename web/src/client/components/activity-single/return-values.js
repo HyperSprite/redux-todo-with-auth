@@ -6,6 +6,9 @@ const returnValues = [
   {
     activityType: 'tssScore',
     activityLabel: 'TSS',
+    compute: justFns.round,
+    arg1: 'tssScore',
+    arg2: 1,
   },
   {
     activityType: 'difficulty_index',

@@ -8,6 +8,7 @@ const getTime = require('date-fns/get_time');
 const eachDay = require('date-fns/each_day');
 const qs = require('qs');
 const url = require('url');
+const justFns = require('just-fns');
 
 const Activities = require('../models/activities');
 const auth = require('./authentication');
@@ -15,7 +16,6 @@ const User = require('../models/user');
 const stopwords = require('../lib/stopwords');
 const strava = require('strava-v3');
 const hlpr = require('../lib/helpers');
-const lib = require('../lib/helpers').lib;
 
 /**
 * utility
@@ -95,7 +95,7 @@ const setExtendedActivityStats = (input, act, options, result) => {
               const ftp = input.user.ftpHistory[input.user.ftpHistory.length - 1].ftp;
               // const wattsOverFTP = data.weighted_average_watts / ftp;
               // const wattsByHour = ftp * 3600;
-              data.tssScore = lib.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
+              data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
             }
             hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
             Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
@@ -140,9 +140,7 @@ exports.getRecentActivities = (req, res) => {
           data.zones = aData;
           if (data.weighted_average_watts) {
             const ftp = opts.user.ftpHistory[opts.user.ftpHistory.length -1].ftp;
-            const wattsOverFTP = data.weighted_average_watts / ftp;
-            const wattsByHour = ftp * 3600;
-            data.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+            data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
           }
           hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
           Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
@@ -217,7 +215,7 @@ exports.getExtendedActivityStats = setInterval(() => {
                 const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
                 const wattsOverFTP = data.weighted_average_watts / ftp;
                 const wattsByHour = ftp * 3600;
-                tmpData.tssScore = Math.round(((data.elapsed_time * data.weighted_average_watts * wattsOverFTP) / wattsByHour) * 100, 2);
+                tmpData.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
               }
               hlpr.consLog(['pushActivities listZones', , tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
               Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
