@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Dimensions from 'react-dimensions';
 import GoogleMapReact from 'google-map-react';
 import googlePolyline from 'google-polyline';
 import { fitBounds } from 'google-map-react/utils';
@@ -9,6 +10,7 @@ import bbox from '@turf/bbox';
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import MapPin from '../map-pin';
 import googleMapStyles, { palette } from './map-styles';
+import Vignette from '../vignette';
 
 class GoogleMapWithPolyline extends React.Component {
 
@@ -107,6 +109,12 @@ class GoogleMapWithPolyline extends React.Component {
                 color={palette.accent8Color}
               />
             }
+            { this.state.mapLoaded && (
+              <Vignette
+                width={this.props.containerWidth}
+                height={this.props.height}
+              />)
+            }
           </GoogleMapReact>
         ) : (
           <div style={{ width: 200, height: this.props.height }} >
@@ -126,4 +134,4 @@ class GoogleMapWithPolyline extends React.Component {
   }
 }
 
-export default GoogleMapWithPolyline;
+export default Dimensions()(GoogleMapWithPolyline);
