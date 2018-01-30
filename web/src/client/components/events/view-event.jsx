@@ -9,9 +9,7 @@ import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
 import ToggleIconButton from './../form/toggle-icon-button';
 import GetViewRoute from './get-route-view';
-import araceathleteEventsBanner from '../../assets/araceathlete-events-banner.png';
 
-import style from '../../styles/style';
 import Static from './../form/static';
 
 const propTypes = {
@@ -79,7 +77,7 @@ const renderViewEvent = ({
         <link rel="canonical" href={`${urlRoot}/${urlPath}#${event.urlHash}`} />
         <meta property="og:url" content={`${urlRoot}/${urlPath}#${event.urlHash}`} />
         <meta property="og:title" content={event.eventTitle} />
-        <meta property="og:image" content={araceathleteEventsBanner} />
+        <meta property="og:image" content={`${urlRoot}/images/logo-192x192.png`} />
       </Helmet>
       <ShareButtons
         {...event}
