@@ -6,11 +6,11 @@ import googlePolyline from 'google-polyline';
 import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
+import Vignette from '@hypersprite/react-vignette';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import MapPin from '../map-pin';
 import googleMapStyles, { palette } from './map-styles';
-import Vignette from '../vignette';
 
 class GoogleMapWithPolyline extends React.Component {
 

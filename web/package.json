@@ -33,6 +33,7 @@
     "last 2 versions"
   ],
   "dependencies": {
+    "@hypersprite/react-vignette": "^1.0.1",
     "@turf/bbox": "^5.1.5",
     "@turf/helpers": "^5.1.5",
     "autoprefixer": "^7.2.4",
