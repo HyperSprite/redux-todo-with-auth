@@ -79,7 +79,7 @@ const returnValues = [
   },
   {
     activityType: 'total_elevation_gain',
-    activityLabel: 'Elevation',
+    activityLabel: 'Total Ascent',
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',
     conversionYAxis: false,

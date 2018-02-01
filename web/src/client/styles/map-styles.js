@@ -1,4 +1,4 @@
-import theme from '../../styles/theme';
+import theme from './theme';
 
 export const palette = theme.palette;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dimensions from 'react-dimensions';
 import GoogleMapReact from 'google-map-react';
-import googlePolyline from 'google-polyline';
+import mbPolyline from 'polyline';
 import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
@@ -10,7 +10,7 @@ import Vignette from '@hypersprite/react-vignette';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import MapPin from '../map-pin';
-import googleMapStyles, { palette } from './map-styles';
+import googleMapStyles, { palette } from '../../styles/map-styles';
 
 class GoogleMapWithPolyline extends React.Component {
 
@@ -48,7 +48,7 @@ class GoogleMapWithPolyline extends React.Component {
       fullscreenControl: false,
     };
     const convertMapData = (encodedPolyline) => {
-      return googlePolyline.decode(encodedPolyline).map((eP) => {
+      return mbPolyline.decode(encodedPolyline).map((eP) => {
         return { lat: eP[0], lng: eP[1] };
       });
     };

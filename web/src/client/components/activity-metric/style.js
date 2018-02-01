@@ -14,7 +14,7 @@ const style = {
     justifyContent: 'left',
   },
   container: {
-    fontSize: 16,
+    fontSize: 14,
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
