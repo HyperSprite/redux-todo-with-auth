@@ -1,4 +1,5 @@
 import justFns from 'just-fns';
+import lib from '../../containers/lib';
 
 // this array will be mapped to display each metric for an activity.
 const returnValues = [
@@ -6,16 +7,9 @@ const returnValues = [
     activityType: 'difficulty_index',
     activityLabel: 'Difficulty Index',
     compute: justFns.difficultyIndex,
-    firstArg: 'elevation_gain',
-    secondArg: 'distance',
-  },
-  {
-    activityType: 'estimated_moving_time',
-    activityLabel: 'Est. Moving Time',
-    conversionFunction: justFns.statsConversions,
-    conversionMetric: 'time',
-    conversionYAxis: false,
-    conversionData: 'estimated_moving_time',
+    arg1: 'total_elevation_gain',
+    arg2: 'distance',
+    arg3: 2,
   },
   {
     activityType: 'distance',
@@ -30,7 +24,7 @@ const returnValues = [
   },
   {
     activityType: 'elevation_gain',
-    activityLabel: 'Elevation',
+    activityLabel: 'Total Ascent',
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',
     conversionYAxis: false,
@@ -39,6 +33,35 @@ const returnValues = [
     conversionTypeMetric: 'meters',
     conversionmPref: true,
   },
+  {
+    activityType: 'elevationStart',
+    activityLabel: 'Starting Elev.',
+    conversionFunction: justFns.statsConversions,
+    conversionMetric: 'elev',
+    conversionYAxis: false,
+    conversionData: 'elevationStart',
+    conversionTypeSA: 'feet',
+    conversionTypeMetric: 'meters',
+    conversionmPref: true,
+  },
+  {
+    activityType: 'geoStart',
+    activityLabel: 'Open Start in Google Maps',
+    link: lib.googlemapbylnglat,
+    arg1: 'geoStart',
+  },
+  {
+    activityType: 'TZName',
+    activityLabel: 'Time Zone',
+  },
+  {
+    activityType: 'updated_at',
+    activityLabel: 'Last Updated',
+    compute: lib.dateFormat,
+    arg1: 'updated_at',
+    arg2: 'datePref',
+  },
+
 ];
 
 export default returnValues;

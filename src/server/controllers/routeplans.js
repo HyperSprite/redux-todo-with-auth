@@ -11,6 +11,27 @@ const enhancePolylineLocation = require('../lib/enhancePolylineLocation');
 const stopwords = require('../lib/stopwords');
 const hlpr = require('../lib/helpers');
 
+const routePlanProjection = {
+  _id: 0,
+  routeplanId: 1,
+  updatedAt: 1,
+  description: 1,
+  distance: 1,
+  elevation_gain: 1,
+  'map.polyline': 1,
+  name: 1,
+  type: 1,
+  sub_type: 1,
+  coordinatesStart: 1,
+  coordinatesEnd: 1,
+  geoStart: 1,
+  geoEnd: 1,
+  elevationStart: 1,
+  elevationEnd: 1,
+  elevatoinPath: 1,
+  updated_at: 1,
+};
+
 /**
 * This is basically a Routeplan cache
 * If the id is in the db, it returs that.
@@ -39,7 +60,7 @@ const getOneRoute = (input, result) => {
       }
       hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute.id]);
 
-      enhancePolylineLocation(oneRoute.map.summary_polyline, (enhancedData) => {
+      enhancePolylineLocation(oneRoute.map.summary_polyline, oneRoute.distance, (enhancedData) => {
         const oneRouteEnhanced = Object.assign(
           oneRoute, enhancedData, { routeplanId: oneRoute.id }
         );
@@ -54,6 +75,7 @@ const getOneRoute = (input, result) => {
           new: true, // returns the new doc
           upsert: true, // creates a new one if none is found
           runValidators: true, // runs the schema validators
+          projection: routePlanProjection,
         };
         Routeplans.findOneAndUpdate({ routeplanId: input.routeplanId }, oneRouteEnhanced, opts, (
           err, updatedRouteplan) => {
@@ -179,23 +201,12 @@ exports.getUserRouteplans = (req, res) => {
   console.log(stravaId, req.user.stravaId);
   UserCommon.findOne({ stravaId: stravaId }, (err, uComData) => {
     if (err) return res.send({ message: 'User not found' });
-    Routeplans.find({ routeplanId: { $in: uComData.routeplans } }, {
-      _id: 0,
-      routeplanId: 1,
-      updatedAt: 1,
-      description: 1,
-      distance: 1,
-      elevation_gain: 1,
-      'map.polyline': 1,
-      name: 1,
-      type: 1,
-      sub_type: 1,
-      elevationStart: 1,
-      elevationEnd: 1,
-      coordinatesStart: 1,
-      coordinatesEnd: 1,
-      updated_at: 1,
-    }, { sort: { updated_at: -1 } }, (err, uComRP) => {
+    Routeplans.find({
+      routeplanId: { $in: uComData.routeplans },
+    },
+    routePlanProjection,
+    { sort: { updated_at: -1 } },
+    (err, uComRP) => {
       res.send(uComRP);
     });
   });

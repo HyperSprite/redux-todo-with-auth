@@ -64,6 +64,16 @@ const ActivityMetric = ({ data, rV, mPref }) => {
         </div>
       </div>
     );
+  } else if (rV.link && data[rV.arg1]) {
+    return (
+      <div style={style.box} >
+        <div style={style.boxLabel}>
+          <a href={rV.link(data[rV.arg1])} target="new" >
+            {rV.activityLabel}
+          </a>
+        </div>
+      </div>
+    );
   } else if (data[rV.activityType]) {
     return (
       <div style={style.box} >

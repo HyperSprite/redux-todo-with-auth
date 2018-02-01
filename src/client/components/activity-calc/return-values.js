@@ -134,7 +134,7 @@ const returnValues = [
   },
   {
     activityType: 'elevation',
-    activityLabel: 'Elevation',
+    activityLabel: 'Total Ascent',
     displayType: [0, 1, 2],
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',

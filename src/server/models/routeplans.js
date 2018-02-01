@@ -4,21 +4,6 @@ const findOrCreate = require('mongoose-findorcreate');
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
-const mapSchema = new Schema(
-  {
-    id: String, // a32193479,
-    polyline: String, // kiteFpCBCD],
-    summary_polyline: String, // {cteFjcaBkCx@gEz@,
-    resource_state: Number, // 3
-  });
-
-const segmentSchema = new Schema(
-  {
-    id: Number,
-    resource_state: Number,
-    name: String,
-  });
-
 const directionSchema = new Schema(
   {
     distance: Number,
@@ -33,23 +18,46 @@ const routeplanSchema = new Schema(
     description: { type: String }, // the best ride ever,
     distance: Number, // 4475.4,
     elevation_gain: Number, // 154.5,
-    map: mapSchema,
+    map: {
+      _id: false,
+      id: String, // a32193479,
+      polyline: String, // kiteFpCBCD],
+      summary_polyline: String, // {cteFjcaBkCx@gEz@,
+      resource_state: Number, // 3
+    },
     name: { type: String, text: true }, // Evening Ride,
     private: Boolean, // false,
     resource_state: { type: Number, index: true }, // 3,
-    starred: Boolean,
     sub_type: Number,
     timestamp: Number,
     created_at: String,
     updated_at: String,
     type: Number,
-    estimated_moving_time: Number,
-    segments: [segmentSchema],
+    segments: [
+      {
+        _id: false,
+        id: { type: Number, index: true },
+        resource_state: Number,
+        name: String,
+      },
+    ],
     directions: [directionSchema],
     coordinatesStart: [Number, Number], // lat, lng
     coordinatesEnd: [Number, Number], // lat, lng
+    geoStart: { type: [Number], index: '2dsphere' }, // type: [lng,lat]
+    geoEnd: [Number], // type: [lng,lat]
     elevationStart: Number, // meters
     elevationEnd: Number, // meters
+    elevatoinPath: [
+      {
+        _id: false,
+        elevation: Number,
+        location: {
+          lat: Number,
+          lng: Number,
+        },
+      },
+    ],
     TZId: String,
     TZName: String,
     TZrawOffset: Number,
@@ -60,9 +68,6 @@ const routeplanSchema = new Schema(
   });
 
 routeplanSchema.plugin(findOrCreate);
-
-// workaround: see https://github.com/Automattic/mongoose/issues/3824
-// routeplanSchema.index({ name: 'text' });
 
 const Routeplan = mongoose.model('routeplan', routeplanSchema);
 

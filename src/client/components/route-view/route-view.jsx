@@ -33,9 +33,9 @@ const RouteView = (props) => {
         }
       />
 
-      <div style={{ padding: '0 20px 10px 20px' }}>
+      <div style={{ padding: '0 5px 10px 5px' }}>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', margin: 20 }} >
+        <div style={{ display: 'flex', flexWrap: 'wrap', margin: 5 }} >
           {returnValues.map(rV => (
             <ActivityMetric
               key={rV.activityType}

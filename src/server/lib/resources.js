@@ -5,10 +5,10 @@ const hlpr = require('./helpers');
 const OwmAPIKey = process.env.OPEN_WEATHER_MAP;
 const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
-// target: 'weatherforcast', 'elevation', 'timezone', astrophases
-// input.loc: '-122.1439698,37.426941'
+// target: 'weatherforcast', 'elevation', elevationpath, 'timezone', astrophases
+// input.loc: '-122.1439698,37.426941' or polyline
 exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
-  const sLoc = loc.split(',');
+  const sLoc = target === 'elevationpath' ? loc : loc.split(',');
   hlpr.consLog(['resources.rLonLat', date, typeof date]);
   const timestamp = moment(date).format('X');
   let timeOffset = 0;
@@ -16,8 +16,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     timeOffset = ((tzOffset * 1) + (dstOffset * 1)) / 3600;
   }
 
-
-  hlpr.consLog(['input.date', date, 'timeOffset', timeOffset, 'tzOffset', tzOffset, 'dstOffset', dstOffset, 'timestamp', timestamp, 'datestamp']);
+  hlpr.consLog(['sLoc', sLoc.toString().substring(0, 30), 'input.date', date, 'timeOffset', timeOffset, 'tzOffset', tzOffset, 'dstOffset', dstOffset, 'timestamp', timestamp, 'datestamp']);
   // TODO remove sample date from astrophases and set real date
   const resourceMap = {
     weatherforcast: {
@@ -26,6 +25,10 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     elevation: {
       url: `https://maps.googleapis.com/maps/api/elevation/json?locations=${sLoc[1]},${sLoc[0]}&key=${gMapsAPIKey}`,
     }, // body: {results: [ { elevation: 10.85572719573975, location: { lat: 37.426941, lng: -122.1439698 }, resolution: 4.771975994110107 } ], status: OK }
+    elevationpath: {
+      url: `https://maps.googleapis.com/maps/api/elevation/json?samples=500&path=enc:${sLoc}&key=${gMapsAPIKey}`,
+    }, // body: {results: [ { elevation: 10.85572719573975, location: { lat: 37.426941, lng: -122.1439698 }, resolution: 4.771975994110107 } ], status: OK }
+
     distance: {
       url: `https://maps.googleapis.com/maps/api/distance/json?location=${loc}&key=${gMapsAPIKey}`,
     },
@@ -62,18 +65,24 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
     }
 
     if (result.outputParsed.status === 'OK') {
-      // hlpr.consLog(['lib: result:', result]);
-      if (target === 'elevation') {
-        result.output.elevation = result.outputParsed.results[0].elevation;
-        // hlpr.consLog(['result', result]);
-      } else if (target === 'timezone') {
-        result.output.timezone = result.outputParsed;
+      switch (target) {
+        case 'elevation':
+          result.output.elevation = result.outputParsed.results[0].elevation;
+          break;
+        case 'elevationpath':
+          result.output.elevationpath = result.outputParsed.results;
+          break;
+        case 'timezone':
+          result.output.timezone = result.outputParsed;
+          break;
+        default:
+          break;
       }
       return output(result.output);
     }
     return output({ [target]: null });
   }).fail((response) => {
-    hlpr.consLog(['Error resources.rLonLat', response]);
+    hlpr.consLog(['Error resources.rLonLat', 'URL', response, resourceMap[target].url]);
     return output({ [target]: null });
   });
 };

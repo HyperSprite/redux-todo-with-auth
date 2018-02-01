@@ -94,15 +94,26 @@ const activitiesSchema = new Schema(
     max_heartrate: Number, // 179.0,
     suffer_score: Number, // 342,
     tssScore: Number, // 154, calculated
+    geoStart: { type: [Number], index: '2dsphere' }, // type: [lng,lat]
+    geoEnd: [Number], // type: [lng,lat]
+    elevationStart: Number, // meters
+    elevationEnd: Number, // meters
+    elevatoinPath: [
+      {
+        _id: false,
+        elevation: Number,
+        location: {
+          lat: Number,
+          lng: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
   });
 
 activitiesSchema.plugin(findOrCreate);
-
-// workaround: see https://github.com/Automattic/mongoose/issues/3824
-// activitiesSchema.index({ name: 'text' });
 
 const Activities = mongoose.model('activities', activitiesSchema);
 

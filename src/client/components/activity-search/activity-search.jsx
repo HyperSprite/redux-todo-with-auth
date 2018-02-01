@@ -18,6 +18,7 @@ import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
 import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
+import GoogleMapLocation from '../google-map-location';
 import RangeInput from '../form/edit/range-input';
 import ScrollIntoView from '../../containers/scroll-into-view';
 import SortSelect from '../form/edit/sort-select';
@@ -65,6 +66,7 @@ class ActivitySearch extends Component {
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.activitiesDownload = this.activitiesDownload.bind(this);
     this.cancelFormEdit = this.cancelFormEdit.bind(this);
+    this.handleMapPinDrop = this.handleMapPinDrop.bind(this);
   }
   // TODO clear old search on entry to this page
   componentDidMount() {
@@ -102,6 +104,10 @@ class ActivitySearch extends Component {
   handleReduce = () => {
     this.setState({ expanded: false });
   };
+
+  handleMapPinDrop(lat, lng) {
+    this.setState({ lat, lng });
+  }
 
   activitiesSearch() {
     this.props.setIsFetching();
@@ -206,6 +212,9 @@ class ActivitySearch extends Component {
       );
     }
 
+    const lat = this.state.lat || this.props.lat || user.userGeoLatitude;
+    const lng = this.state.lng || this.props.lng || user.userGeoLongitude;
+
     return (
       <div>
         <div className="main-flex-container" >
@@ -248,6 +257,11 @@ class ActivitySearch extends Component {
                     <CardText
                       expandable
                     >
+                      <GoogleMapLocation
+                        lat={lat}
+                        lng={lng}
+                        handleClick={this.handleMapPinDrop}
+                      />
                       {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
                         <div key={fV.contentName}>
                           <EditSwitch

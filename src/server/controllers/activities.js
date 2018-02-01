@@ -492,7 +492,7 @@ exports.searchActivities = async (req, res) => {
     { value: 'date', option: 'Date' },
     { value: 'distance', option: 'Distance' },
     { value: 'movingTime', option: 'Moving Time' },
-    { value: 'elevation', option: 'Elevation' },
+    { value: 'elevation', option: 'Total Ascent' },
     { value: 'tssScore', option: 'TSS Score' },
     { value: 'sufferScore', option: 'Suffer Score' },
     { value: 'kilojoules', option: 'Kilojoules' },
@@ -512,6 +512,23 @@ exports.searchActivities = async (req, res) => {
   const query = {
     search: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }],
   };
+
+  // localhost:3080/apiv1/activities/search-activities?lnglatstart=-122.1439698,37.426941
+  if (q.lnglatstart || q.lnglatend) {
+    const point = q.lnglatstart ? 'start' : 'end';
+    console.log('point', point);
+    query.search.push({
+      [`${point}GeoCoordinates`]: {
+        near: {
+          type: 'Point',
+          coordinates: q[`lnglat${point}`].split(',').map(Number),
+        },
+        distanceField: 'distance',
+        maxDistance: q.maxDist * 1 || 321869, // 200 miles in meters
+        spherical: true,
+      },
+    });
+  }
 
   /**
   * qsValues is a lookup to convert submitted strings to usable values
@@ -739,6 +756,8 @@ exports.searchActivities = async (req, res) => {
   } else {
     // const activitySearch = result.map(r => r.activityId);
     res.send({
+      q,
+      searchQuery: query,
       activCalcAll: activCalcAll[0],
       activCalcFilter: aggResult[0].activCalcFilter[0],
       query: qString,
