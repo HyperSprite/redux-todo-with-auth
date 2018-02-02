@@ -6,6 +6,7 @@ const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
 const getTime = require('date-fns/get_time');
 const eachDay = require('date-fns/each_day');
+const isAfter = require('date-fns/is_after');
 const qs = require('qs');
 const url = require('url');
 const justFns = require('just-fns');
@@ -92,9 +93,13 @@ const setExtendedActivityStats = (input, act, options, result) => {
             if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
             data.zones = aData;
             if (data.weighted_average_watts) {
-              const ftp = input.user.ftpHistory[input.user.ftpHistory.length - 1].ftp;
-              // const wattsOverFTP = data.weighted_average_watts / ftp;
-              // const wattsByHour = ftp * 3600;
+              let indx = input.user.ftpHistory.length - 1;
+              let ftp = input.user.ftpHistory[input.user.ftpHistory.length - 1].ftp;
+              while (isAfter(input.user.ftpHistory[indx].date, data.start_date) || indx === 0) {
+                ftp = input.user.ftpHistory[indx - 1].ftp;
+                indx -= 1;
+              }
+              data.ftp = ftp;
               data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
             }
             hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
@@ -139,7 +144,13 @@ exports.getRecentActivities = (req, res) => {
           if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
           data.zones = aData;
           if (data.weighted_average_watts) {
-            const ftp = opts.user.ftpHistory[opts.user.ftpHistory.length -1].ftp;
+            let indx = opts.user.ftpHistory.length - 1;
+            let ftp = opts.user.ftpHistory[opts.user.ftpHistory.length - 1].ftp;
+            while (isAfter(opts.user.ftpHistory[indx].date, data.start_date) || indx === 0) {
+              ftp = opts.user.ftpHistory[indx - 1].ftp;
+              indx -= 1;
+            }
+            data.ftp = ftp;
             data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
           }
           hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
@@ -212,9 +223,14 @@ exports.getExtendedActivityStats = setInterval(() => {
               if (err) hlpr.consLog(['strava..activities.listZones', err]);
               tmpData.zones = aData;
               if (tmpData.weighted_average_watts) {
-                const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
-                const wattsOverFTP = data.weighted_average_watts / ftp;
-                const wattsByHour = ftp * 3600;
+                // const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
+                let indx = user.ftpHistory.length - 1;
+                let ftp = user.ftpHistory[user.ftpHistory.length - 1].ftp;
+                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx === 0) {
+                  ftp = user.ftpHistory[indx - 1].ftp;
+                  indx -= 1;
+                }
+                tmpData.ftp = ftp;
                 tmpData.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
               }
               hlpr.consLog(['pushActivities listZones', , tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
@@ -476,6 +492,7 @@ exports.searchActivities = async (req, res) => {
     distance: 'distance',
     movingTime: 'moving_time',
     elevation: 'total_elevation_gain',
+    ftp: 'ftp',
     tssScore: 'tssScore',
     sufferScore: 'suffer_score',
     kilojoules: 'kilojoules',
@@ -493,6 +510,7 @@ exports.searchActivities = async (req, res) => {
     { value: 'distance', option: 'Distance' },
     { value: 'movingTime', option: 'Moving Time' },
     { value: 'elevation', option: 'Total Ascent' },
+    { value: 'ftp', option: 'FTP' },
     { value: 'tssScore', option: 'TSS Score' },
     { value: 'sufferScore', option: 'Suffer Score' },
     { value: 'kilojoules', option: 'Kilojoules' },
@@ -696,6 +714,7 @@ exports.searchActivities = async (req, res) => {
       suffer_score: 1,
       calories: 1,
       device_watts: 1,
+      ftp: 1,
       tssScore: 1,
       average_watts: 1,
       max_watts: 1,

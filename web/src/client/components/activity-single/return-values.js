@@ -89,6 +89,10 @@ const returnValues = [
     conversionmPref: true,
   },
   {
+    activityType: 'ftp',
+    activityLabel: 'FTP',
+  },
+  {
     activityType: 'start_date_local',
     activityLabel: 'Date',
     compute: lib.dateFormat,
