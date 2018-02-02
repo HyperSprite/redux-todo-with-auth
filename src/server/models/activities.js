@@ -93,6 +93,7 @@ const activitiesSchema = new Schema(
     average_heartrate: Number, // 138.8,
     max_heartrate: Number, // 179.0,
     suffer_score: Number, // 342,
+    ftp: Number,
     tssScore: Number, // 154, calculated
     geoStart: { type: [Number], index: '2dsphere' }, // type: [lng,lat]
     geoEnd: [Number], // type: [lng,lat]
