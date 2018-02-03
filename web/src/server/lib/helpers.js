@@ -43,9 +43,7 @@ exports.consLog = (arr) => {
 //   page: req.originalUrl,
 // };
 exports.logOut = (logObj) => {
-  const log = logObj;
-  log.date = exports.getDate(gD => gD);
-  Logs.create(log, (err, logging) => {
+  Logs.create(Object.assign(logObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
     exports.consLog([logging]);
   });
 };
@@ -54,17 +52,6 @@ exports.logOut = (logObj) => {
 // const wattsByHour = ftp * 3600;
 
 exports.lib = {
-  round: (val, place) => Number(Math.round(val + `e${place}`) + `e-${place}`),
-  secondsToTime: seconds => dateFNS.format(dateFNS.addSeconds(dateFNS.startOfDay(new Date()), seconds), 'H:mm'),
-  kgToPounds: kg => kg * 2.20462,
-  kgToPoundsRound: (kg, p = 0) => exports.lib.round(kg * 2.20462, p),
-  metersToFeet: m => m * 3.28084,
-  metersToFeetRound: (m, p = 0) => exports.lib.round(m * 3.28084, p),
-  metersToMiles: m => m * 0.00062137121212121,
-  metersToMilesRound: (m, p = 0) => exports.lib.round(m * 0.00062137121212121, p),
-  metersToKm: m => m * 1000,
-  metersToKmRound: (m, p = 0) => exports.lib.round(m * 1000, p),
-
   // Only one type of date format on Strava as far as I can tell
   // Have not found a setting to change date pref
   // if I find more, will add them to this object
@@ -89,11 +76,6 @@ exports.lib = {
     const weekEnd = dateFNS.format(dateFNS.addDays(weekStart, 6), 'YYYY-MM-DD');
     return weekEnd;
   },
-
-  /**
-  * data.elapsed_time, data.weighted_average_watts, ftp
-  */
-  calcTssScore: (et, waw, ftp) => Math.round(((et * waw * (waw / ftp)) / (ftp * 3600)) * 100, 2),
 
   weekArray: week => dateFNS.eachDay(week, exports.lib.oneWeek(week)).map(eDay => dateFNS.format(eDay, 'YYYY-MM-DD')),
 };
