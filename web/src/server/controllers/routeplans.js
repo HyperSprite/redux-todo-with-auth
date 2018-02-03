@@ -7,7 +7,7 @@ const strava = require('strava-v3');
 const Routeplans = require('../models/routeplans');
 const UserCommon = require('../models/user-common');
 const auth = require('./authentication');
-const enhancePolylineLocation = require('../lib/enhancePolylineLocation');
+const enhancePolylineLocation = require('../lib/enhance-polyline-location');
 const stopwords = require('../lib/stopwords');
 const hlpr = require('../lib/helpers');
 
@@ -60,7 +60,7 @@ const getOneRoute = (input, result) => {
       }
       hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute.id]);
 
-      enhancePolylineLocation(oneRoute.map.summary_polyline, oneRoute.distance, (enhancedData) => {
+      enhancePolylineLocation(oneRoute.map.summary_polyline, (enhancedData) => {
         const oneRouteEnhanced = Object.assign(
           oneRoute, enhancedData, { routeplanId: oneRoute.id }
         );
