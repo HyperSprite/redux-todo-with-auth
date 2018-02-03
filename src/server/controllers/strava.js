@@ -65,6 +65,15 @@ exports.nightlyUpdate = () => {
 
         if (err || !athlete) {
           hlpr.consLog(['error: Error or no data found']);
+          const logObj = {
+            stravaId: fUser.stravaId,
+            logType: 'admin',
+            level: 3,
+            error: err,
+            message: 'Controler/Strava: exports.nightlyUpdate',
+            page: 'nightlyUpdate',
+          };
+          hlpr.logOut(logObj);
           return null;
         }
         if (athlete.message === 'Authorization Error') {
