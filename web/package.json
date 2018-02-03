@@ -1,7 +1,7 @@
 {
   "name": "araceathlete",
-  "version": "1.1.0",
-  "description": "araceathlete is a training goal tracker",
+  "version": "3.0.0",
+  "description": "Search and Visualize Strava cycling data",
   "main": "main.js",
   "engines": {
     "node": "8.1.4"
