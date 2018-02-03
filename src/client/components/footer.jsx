@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paper } from 'material-ui';
+import pckg from '../../../package.json';
 
 
 import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
@@ -21,7 +22,7 @@ const Footer = () => (
         </div>
         <div>
           <p className="footer-text" >
-            &copy; {today} araceathlete.com
+            v{pckg.version} - &copy; {today} araceathlete.com
           </p>
         </div>
       </div>
