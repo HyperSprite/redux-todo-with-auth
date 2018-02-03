@@ -7,7 +7,7 @@ const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
 // target: 'weatherforcast', 'elevation', elevationpath, 'timezone', astrophases
 // input.loc: '-122.1439698,37.426941' or polyline
-exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
+exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
   const sLoc = target === 'elevationpath' ? loc : loc.split(',');
   hlpr.consLog(['resources.rLonLat', date, typeof date]);
   const timestamp = moment(date).format('X');
@@ -26,7 +26,7 @@ exports.rLonLat = ({ loc, date, tzOffset = 0, dstOffset = 0 }, target, output) =
       url: `https://maps.googleapis.com/maps/api/elevation/json?locations=${sLoc[1]},${sLoc[0]}&key=${gMapsAPIKey}`,
     }, // body: {results: [ { elevation: 10.85572719573975, location: { lat: 37.426941, lng: -122.1439698 }, resolution: 4.771975994110107 } ], status: OK }
     elevationpath: {
-      url: `https://maps.googleapis.com/maps/api/elevation/json?samples=500&path=enc:${sLoc}&key=${gMapsAPIKey}`,
+      url: `https://maps.googleapis.com/maps/api/elevation/json?samples=${samples}&path=enc:${sLoc}&key=${gMapsAPIKey}`,
     }, // body: {results: [ { elevation: 10.85572719573975, location: { lat: 37.426941, lng: -122.1439698 }, resolution: 4.771975994110107 } ], status: OK }
 
     distance: {
