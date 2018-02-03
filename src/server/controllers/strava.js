@@ -18,9 +18,7 @@ exports.getActivities = (req, res) => {
 
 exports.getUserActivities = (req, res) => {
   hlpr.consLog(['strava.getUserActivities start']);
-  const tmpReq = req;
-  tmpReq.pageCount = 1;
-  activ.getRecentActivities(tmpReq, res);
+  activ.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
 };
 
 // TODO this is just starting but have tested it and it works to pull data.
