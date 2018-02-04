@@ -86,6 +86,8 @@ const setExtendedActivityStats = (input, act, options, result) => {
     // This can also be useful if an activity is updated in strava and needs to be re-fetched
     if (created) {
       hlpr.consLog(['setExtendedActivityStats findOrCreate created', dbActivity.activityId]);
+
+
       strava.activities.get({ id: dbActivity.activityId, access_token: options.access_token }, (err, data) => {
         if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
         if (input.user.premium) {
@@ -94,8 +96,8 @@ const setExtendedActivityStats = (input, act, options, result) => {
             data.zones = aData;
             if (data.weighted_average_watts) {
               let indx = input.user.ftpHistory.length - 1;
-              let ftp = input.user.ftpHistory[input.user.ftpHistory.length - 1].ftp;
-              while (isAfter(input.user.ftpHistory[indx].date, data.start_date) || indx === 0) {
+              let ftp = input.user.ftpHistory[indx].ftp;
+              while (isAfter(input.user.ftpHistory[indx].date, data.start_date) || indx < 0) {
                 ftp = input.user.ftpHistory[indx - 1].ftp;
                 indx -= 1;
               }
@@ -126,6 +128,44 @@ const setExtendedActivityStats = (input, act, options, result) => {
   });
 };
 
+const getActivityDetails = (activity, opts, index, created, cb) => {
+  if (!created) return cb(index);
+  strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data) => {
+    if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
+    if (opts.user.premium) {
+      strava.activities.listZones({ id: activity.activityId, access_token: opts.access_token }, (err, aData) => {
+        if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
+        data.zones = aData;
+        if (data.weighted_average_watts) {
+          let indx = opts.user.ftpHistory.length - 1;
+          let ftp = opts.user.ftpHistory[opts.user.ftpHistory.length - 1].ftp;
+          while (isAfter(opts.user.ftpHistory[indx].date, data.start_date) || indx < 0) {
+            ftp = opts.user.ftpHistory[indx - 1].ftp;
+            indx -= 1;
+          }
+          data.ftp = ftp;
+          data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
+        }
+        hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
+        Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
+          if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
+          hlpr.consLog(['strava..activities premium']);
+          if (fullActivity) {
+            return cb(index);
+          }
+          // return cb(fullActivity);
+        });
+      });
+    } else {
+      Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
+        if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
+        hlpr.consLog(['strava..activities !premium']);
+        return cb(index);
+      });
+    }
+  });
+}
+
 exports.getRecentActivities = (req, res) => {
   const options = {
     id: req.user.stravaId,
@@ -134,44 +174,6 @@ exports.getRecentActivities = (req, res) => {
     page: req.pageCount,
     user: req.user,
   };
-
-  function getActivityDetails(activity, opts, index, created, cb) {
-    if (!created) return cb(index);
-    strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data) => {
-      if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
-      if (opts.user.premium) {
-        strava.activities.listZones({ id: activity.activityId, access_token: opts.access_token }, (err, aData) => {
-          if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
-          data.zones = aData;
-          if (data.weighted_average_watts) {
-            let indx = opts.user.ftpHistory.length - 1;
-            let ftp = opts.user.ftpHistory[opts.user.ftpHistory.length - 1].ftp;
-            while (isAfter(opts.user.ftpHistory[indx].date, data.start_date) || indx === 0) {
-              ftp = opts.user.ftpHistory[indx - 1].ftp;
-              indx -= 1;
-            }
-            data.ftp = ftp;
-            data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
-          }
-          hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
-          Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
-            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
-            hlpr.consLog(['strava..activities premium']);
-            if (fullActivity) {
-              return cb(index);
-            }
-            // return cb(fullActivity);
-          });
-        });
-      } else {
-        Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
-          if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
-          hlpr.consLog(['strava..activities !premium']);
-          return cb(index);
-        });
-      }
-    });
-  }
 
   strava.athlete.listActivities(options, (err, acts) => {
     if (acts.message === 'Authorization Error') {
@@ -223,9 +225,9 @@ exports.getExtendedActivityStats = setInterval(() => {
               if (err) hlpr.consLog(['strava..activities.listZones', err]);
               tmpData.zones = aData;
               if (tmpData.weighted_average_watts) {
-                // const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
                 let indx = user.ftpHistory.length - 1;
-                let ftp = user.ftpHistory[user.ftpHistory.length - 1].ftp;
+           // const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
+                let ftp = user.ftpHistory[indx].ftp;
                 while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx === 0) {
                   ftp = user.ftpHistory[indx - 1].ftp;
                   indx -= 1;

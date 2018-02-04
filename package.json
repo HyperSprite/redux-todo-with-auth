@@ -1,10 +1,10 @@
 {
   "name": "araceathlete",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Search and Visualize Strava cycling data",
   "main": "main.js",
   "engines": {
-    "node": "8.1.4"
+    "node": "8.9.1"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,8 @@
     "postinstall": "rm -f src/server/public/assets/* && NODE_ENV=production webpack -p --progress --optimize-minimize",
     "start": "NODE_ENV=production node src/server/index.js",
     "deploy-test": "cd ../ && git subtree push --prefix web origin deploy-heroku-test",
-    "deploy": "cd ../ && git subtree push --prefix web origin deploy-heroku-prod"
+    "deploy": "cd ../ && git subtree push --prefix web origin deploy-heroku-prod",
+    "version:patch": "npm version patch && npm add ."
   },
   "author": "Chris Dunavan",
   "license": "Apache-2.0",
