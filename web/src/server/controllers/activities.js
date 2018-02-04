@@ -226,9 +226,9 @@ exports.getExtendedActivityStats = setInterval(() => {
               tmpData.zones = aData;
               if (tmpData.weighted_average_watts) {
                 let indx = user.ftpHistory.length - 1;
-           // const ftp = user.ftpHistory[user.ftpHistory.length -1].ftp;
                 let ftp = user.ftpHistory[indx].ftp;
-                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx === 0) {
+                hlpr.consLog(['getExtendedActivityStats ftp while', user.stravaId, indx]);
+                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx < 0)
                   ftp = user.ftpHistory[indx - 1].ftp;
                   indx -= 1;
                 }
