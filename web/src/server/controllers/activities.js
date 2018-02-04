@@ -228,14 +228,14 @@ exports.getExtendedActivityStats = setInterval(() => {
                 let indx = user.ftpHistory.length - 1;
                 let ftp = user.ftpHistory[indx].ftp;
                 hlpr.consLog(['getExtendedActivityStats ftp while', user.stravaId, indx]);
-                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx < 0)
+                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx < 0) {
                   ftp = user.ftpHistory[indx - 1].ftp;
                   indx -= 1;
                 }
                 tmpData.ftp = ftp;
                 tmpData.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
               }
-              hlpr.consLog(['pushActivities listZones', , tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
+              hlpr.consLog(['pushActivities listZones', tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
               Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
                 if (err) hlpr.consLog(['strava..activities premium', err]);
                 hlpr.consLog(['strava..activities premium', fullActivity]);
