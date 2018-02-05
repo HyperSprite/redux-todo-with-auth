@@ -80,56 +80,7 @@ exports.getAllActivities = (input, result) => {
   });
 };
 
-const setExtendedActivityStats = (input, act, options, result) => {
-  const superReturn = Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
-    // By using findOrCreate here, we are only adding new if they do not yet exist.
-    // This can also be useful if an activity is updated in strava and needs to be re-fetched
-    if (created) {
-      hlpr.consLog(['setExtendedActivityStats findOrCreate created', dbActivity.activityId]);
-
-
-      strava.activities.get({ id: dbActivity.activityId, access_token: options.access_token }, (err, data) => {
-        if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
-        if (input.user.premium) {
-          strava.activities.listZones({ id: dbActivity.activityId, access_token: options.access_token }, (err, aData) => {
-            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities.listZones', err]);
-            data.zones = aData;
-            if (data.weighted_average_watts) {
-              let indx = input.user.ftpHistory.length - 1;
-              let ftp = input.user.ftpHistory[indx].ftp;
-              while (isAfter(input.user.ftpHistory[indx].date, data.start_date) || indx < 0) {
-                ftp = input.user.ftpHistory[indx - 1].ftp;
-                indx -= 1;
-              }
-              data.ftp = ftp;
-              data.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
-            }
-            hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
-            Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
-              if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
-              // hlpr.consLog(['strava..activities premium', fullActivity]);
-              return fullActivity;
-            });
-          });
-        } else {
-          Activities.findOneAndUpdate({ activityId: data.id }, data, options, (err, fullActivity) => {
-            if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
-            // hlpr.consLog(['strava..activities !premium', fullActivity]);
-            return fullActivity;
-          });
-        }
-      });
-    } else {
-      hlpr.consLog(['setExtendedActivityStats findOrCreate not created', dbActivity.activityId]);
-      return { notUpdated: dbActivity.activityId };
-    }
-    hlpr.consLog(['superReturn', superReturn]);
-    return result(superReturn);
-  });
-};
-
-const getActivityDetails = (activity, opts, index, created, cb) => {
-  if (!created) return cb(index);
+const getActivityDetails = (activity, opts, cb) => {
   strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data) => {
     if (err) hlpr.consLog(['setExtendedActivityStats strava.activities.get', err]);
     if (opts.user.premium) {
@@ -149,22 +100,19 @@ const getActivityDetails = (activity, opts, index, created, cb) => {
         hlpr.consLog(['setExtendedActivityStats pushActivities listZones', , data.id, data.resource_state, data.tssScore]);
         Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
           if (err) hlpr.consLog(['setExtendedActivityStats strava..activities premium', err]);
-          hlpr.consLog(['strava..activities premium']);
-          if (fullActivity) {
-            return cb(index);
-          }
-          // return cb(fullActivity);
+          hlpr.consLog(['strava..activities premium 103']);
+          return cb(fullActivity);
         });
       });
     } else {
       Activities.findOneAndUpdate({ activityId: data.id }, data, opts, (err, fullActivity) => {
         if (err) hlpr.consLog(['setExtendedActivityStats strava..activities !premium', err]);
         hlpr.consLog(['strava..activities !premium']);
-        return cb(index);
+        return cb(fullActivity);
       });
     }
   });
-}
+};
 
 exports.getRecentActivities = (req, res) => {
   const options = {
@@ -184,12 +132,19 @@ exports.getRecentActivities = (req, res) => {
     acts.forEach((act, index) => {
       Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
         if (err) return { error: err };
-        getActivityDetails(dbActivity, options, index, created, (done) => {
-          counter.push(done);
+        if (!created) {
+          counter.push(index);
           if (counter.length === acts.length) {
             exports.getWeeklyStats(req, res);
           }
-        });
+        } else {
+          getActivityDetails(dbActivity, options, (done) => {
+            counter.push(done.activityId);
+            if (counter.length === acts.length) {
+              exports.getWeeklyStats(req, res);
+            }
+          });
+        }
       });
     });
   });
@@ -207,49 +162,22 @@ const limitCount = 40;
 exports.getExtendedActivityStats = setInterval(() => {
   // hlpr.consLog(['getExtendedActivityStats has run']);
   const options = { new: true };
-  Activities.find({ resource_state: 2 }).limit(limitCount).sort({ start_date: -1 }).exec((err, tmpActs) => {
+  Activities.find({ resource_state: 2 }).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
-      hlpr.consLog(['getExtendedActivityStats err tmpActs', err]);
+      hlpr.consLog(['getExtendedActivityStats err activities', err]);
       return err;
     }
-    tmpActs.forEach((tmpAct) => {
-      hlpr.consLog(['getExtendedActivityStats tmpAct.activityId', tmpAct.activityId]);
-      User.findOne({ stravaId: tmpAct.athlete.id}, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
-        hlpr.consLog(['getExtendedActivityStats token', user]);
-        strava.activities.get({ id: tmpAct.activityId, access_token: user.access_token }, (err, data) => {
-          if (err) hlpr.consLog(['strava.activities.get', err]);
-          const tmpData = data;
-          tmpData.activityId = tmpData.id;
-          if (user.premium && user.ftpHistory.length !== 0) {
-            strava.activities.listZones({ id: tmpAct.activityId, access_token: user.access_token }, (err, aData) => {
-              if (err) hlpr.consLog(['strava..activities.listZones', err]);
-              tmpData.zones = aData;
-              if (tmpData.weighted_average_watts) {
-                let indx = user.ftpHistory.length - 1;
-                let ftp = user.ftpHistory[indx].ftp;
-                hlpr.consLog(['getExtendedActivityStats ftp while', user.stravaId, indx]);
-                while (isAfter(user.ftpHistory[indx].date, data.start_date) || indx < 0) {
-                  ftp = user.ftpHistory[indx - 1].ftp;
-                  indx -= 1;
-                }
-                tmpData.ftp = ftp;
-                tmpData.tssScore = justFns.calcTssScore(data.elapsed_time, data.weighted_average_watts, ftp);
-              }
-              hlpr.consLog(['pushActivities listZones', tmpData.activityId, tmpData.resource_state, tmpData.tssScore]);
-              Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
-                if (err) hlpr.consLog(['strava..activities premium', err]);
-                hlpr.consLog(['strava..activities premium', fullActivity]);
-                return fullActivity;
-              });
-            });
-          } else {
-            Activities.findOneAndUpdate({ activityId: tmpData.activityId }, tmpData, options, (err, fullActivity) => {
-              if (err) hlpr.consLog(['strava..activities !premium', err]);
-              hlpr.consLog(['strava..activities !premium', fullActivity]);
-              return fullActivity;
-            });
-          }
-        });
+    activities.forEach((dbActivity) => {
+      hlpr.consLog(['getExtendedActivityStats dbActivity.activityId', dbActivity.activityId]);
+      User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
+        hlpr.consLog(['getExtendedActivityStats token', user.stravaId]);
+        const gADOptions = {
+          id: user.stravaId,
+          access_token: user.access_token,
+          user: user,
+        };
+        //
+        getActivityDetails(dbActivity, gADOptions, done => done);
       });
     });
   });

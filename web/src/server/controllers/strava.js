@@ -89,7 +89,7 @@ exports.nightlyUpdate = () => {
             user: fUser,
           };
           rts.getAllRouteplans(tmpRt, (result) => {
-            hlpr.consLog(['nightlyUpdate getAllRouteplans \n ________triggered', result]);
+            hlpr.consLog(['nightlyUpdate getAllRouteplans \n ___ triggered result.length', result.length]);
           });
           if (resUser.clubMember === true) {
             const tmpAct = {
