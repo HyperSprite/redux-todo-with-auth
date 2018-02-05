@@ -60,7 +60,7 @@ const getOneRoute = (input, result) => {
       }
       hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute.id]);
 
-      enhancePolylineLocation(oneRoute.map.summary_polyline, (enhancedData) => {
+      enhancePolylineLocation(oneRoute.map.summary_polyline, true, (enhancedData) => {
         const oneRouteEnhanced = Object.assign(
           oneRoute, enhancedData, { routeplanId: oneRoute.id }
         );
@@ -137,7 +137,7 @@ exports.getRouteplansOnTimer = setInterval(async () => {
 }, theInterval(minutes));
 
 /**
-* Writes creaets or updates usercommons routeplans array
+* Creates or updates usercommons routeplans array
 */
 const userCommonRouteUpdate = (input, result) => {
   const optsFOAU = {
@@ -180,7 +180,7 @@ exports.getAllRouteplans = (input, result) => {
     if (err) return new Error(err);
     if (!rtsReturn || !rtsReturn.length) {
       input.arrLength = 0;
-      hlpr.consLog(['getAllRouteplans arrLength = 0 or !rts', input.user.routeplans]);
+      hlpr.consLog(['getAllRouteplans arrLength = 0 or !rts', input.user.routeplans.length]);
     } else {
       hlpr.consLog(['rtsReturn', rtsReturn]);
       const rtsIdArr = rtsReturn.filter(rF => !rF.private).map(rM => rM.id);
@@ -198,7 +198,7 @@ exports.getUserRouteplans = (req, res) => {
   if (req.params.stravaId && req.params.stravaId !== 'default') {
     stravaId = req.params.stravaId;
   }
-  console.log(stravaId, req.user.stravaId);
+  hlpr.consLog(['getUserRouteplans', stravaId, req.user.stravaId]);
   UserCommon.findOne({ stravaId: stravaId }, (err, uComData) => {
     if (err) return res.send({ message: 'User not found' });
     Routeplans.find({
