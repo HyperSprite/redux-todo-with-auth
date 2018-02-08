@@ -11,6 +11,7 @@ import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import qs from 'qs';
+import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 import Alert from '../form/alert';
@@ -106,7 +107,10 @@ class ActivitySearch extends Component {
   };
 
   handleMapPinDrop(lat, lng) {
+    console.log('handleMapPinDrop state', lat, lng);
     this.setState({ lat, lng });
+    this.props.change('lng', justFNS.round(lng, 5));
+    this.props.change('lat', justFNS.round(lat, 5));
   }
 
   activitiesSearch() {
@@ -127,17 +131,21 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
+
+    Object.assign(formProps);
+    console.log('handleFormSubmit', formProps);
     this.props.setIsFetching();
-    formProps.page = this.props.searchCount;
+    let page = this.props.searchCount;
     if (!this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
-      formProps.page = 1;
+      page = 1;
     } else if (JSON.stringify(lastSearch) !== JSON.stringify(formProps)) {
       this.props.clearActivitySearch();
-      formProps.page = 1;
+      page = 1;
     }
-    lastSearch = formProps;
+    console.log('formProps', formProps);
+    lastSearch = Object.assign(formProps, { page });
     this.props.fetchActivitiesSearch(relURL, formProps);
   }
 
@@ -262,6 +270,14 @@ class ActivitySearch extends Component {
                         lng={lng}
                         handleClick={this.handleMapPinDrop}
                       />
+                      {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
+                        <div key={fV.contentName}>
+                          <EditSwitch
+                            form={this.props.form}
+                            formValues={fV}
+                          />
+                        </div>
+                      ))}
                       {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
                         <div key={fV.contentName}>
                           <EditSwitch
@@ -270,7 +286,7 @@ class ActivitySearch extends Component {
                           />
                         </div>
                       ))}
-                      { (sortStrings && adminMember) && (
+                      { (!sortStrings && adminMember) && (
                         <RangeInput sortStrings={sortStrings} form={this.props.form} />
                       )}
                     </CardText>
