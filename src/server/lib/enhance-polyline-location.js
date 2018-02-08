@@ -34,7 +34,7 @@ const resources = require('./resources');
 */
 module.exports = (polyline, extended, result) => {
   if (!polyline) {
-    result({});
+    return result({});
   }
   const cooArr = mbPolyline.decode(polyline);
   const geoStart = [cooArr[0][1], cooArr[0][0]];

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton } from 'material-ui';
-import { ActionDeleteForever } from 'material-ui/svg-icons';
+import { ActionDeleteForever, NavigationRefresh } from 'material-ui/svg-icons';
 
 import * as actions from '../../actions';
 import returnValues from './return-values';
@@ -14,7 +14,7 @@ const propTypes = {
   activities: PropTypes.array.isRequired,
   datePref: PropTypes.string,
   mPref: PropTypes.bool,
-  removeActivity: PropTypes.func.isRequired,
+  manageActivity: PropTypes.func.isRequired,
   setIsFetching: PropTypes.func.isRequired,
 };
 
@@ -23,17 +23,15 @@ const defaultProps = {
   mPref: false,
 };
 
-const deleteActivityURL = 'apiv1/activities/delete-activity';
-
 class ActivitySingle extends Component {
   constructor(props) {
     super(props);
-    this.deleteActivity = this.deleteActivity.bind(this);
+    this.manageActivity = this.manageActivity.bind(this);
   }
 
-  deleteActivity() {
+  manageActivity(action) {
     this.props.setIsFetching();
-    this.props.removeActivity(deleteActivityURL, this.props.activityId);
+    this.props.manageActivity(action, this.props.activityId);
   }
 
   thisActivity() {
@@ -72,12 +70,17 @@ class ActivitySingle extends Component {
         </div>
         <div style={style.delete}>
           <IconButton
-            onClick={this.deleteActivity}
-            tooltip="Delete from A Race athlete (does not remove from Strava)"
+            onClick={() => this.manageActivity('delete')}
           >
             <ActionDeleteForever />
           </IconButton>
+          <IconButton
+            onClick={() => this.manageActivity('refresh')}
+          >
+            <NavigationRefresh />
+          </IconButton>
         </div>
+
       </div>
     );
   }

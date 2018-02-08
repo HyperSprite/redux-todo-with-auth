@@ -33,7 +33,6 @@ const ActivityCalc = ({
   title,
   labels,
 }) => {
-  console.log('labels', labels);
   return (
     <div>
       <div style={style.title}>

@@ -23,7 +23,11 @@ export default function (state = {
         weeklyStats: lib.replaceArrayItem(state.weeklyStats, action.payload, 'stats'),
         weeklyStatsCount: state.weeklyStats.length + 1,
       };
-
+    case TYPES.ACTIVITY_REFRESHED:
+      return {
+        ...state,
+        activities: lib.insertOrReplaceArrayItem(state.activities, action.payload, null, 'activityId'),
+      };
     case TYPES.SET_WEEKLY_STATS:
       return {
         ...state,

@@ -61,7 +61,7 @@ exports.userList = (req, res) => {
       logType: 'admin',
       level: 3,
       error: err,
-      message: 'Controler/Admin: exports.userList',
+      message: 'Controllers/Admin: exports.userList',
       page: req.originalUrl,
     };
     hlpr.logOut(logObj);
@@ -113,7 +113,7 @@ exports.getLogs = (req, res) => {
       logType: 'admin',
       level: 3,
       error: err,
-      message: 'Controler/Admin: exports.userList',
+      message: 'Controllers/Admin: exports.userList',
       page: req.originalUrl,
     };
     hlpr.logOut(logObj);

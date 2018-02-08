@@ -8,6 +8,7 @@ const config = {
   },
   AUTH_SECRET: 'YOUR_AUTH_STRING_HERE',  // Needed for bcrypt
   CERT: 'false', // string - For production certs example, Heroku CERT = true
+  CURRENT_SCHEMA: '4.0',
   LOGGING: 'true', // string - turns on hlpr.consLog can be used in prod if needed.
   GOOGLE_MAPS: 'some_api_key', // server only
   REACT_APP_GOOGLE_MAPS_WEB: 'some_api_key', // user exposed/url restricted to registered domain
@@ -31,8 +32,12 @@ const localMongoURI = !hlpr.isProd() ?
 exports.loadConfig = () => {
   process.env.AUTH_SECRET = process.env.AUTH_SECRET || config.AUTH_SECRET;
   process.env.CERT = process.env.CERT || config.CERT;
+  process.env.CURRENT_SCHEMA = process.env.CURRENT_SCHEMA || config.CURRENT_SCHEMA;
+  process.env.GOOGLE_MAPS = process.env.GOOGLE_MAPS || config.GOOGLE_MAPS;
+  process.env.REACT_APP_GOOGLE_MAPS_WEB = process.env.REACT_APP_GOOGLE_MAPS_WEB || config.GOOGLE_MAPS;
   process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
   process.env.LOGGING = process.env.LOGGING || config.LOGGING;
+  process.env.OPEN_WEATHER_MAP = process.env.OPEN_WEATHER_MAP || config.OPEN_WEATHER_MAP;
   process.env.PORT = process.env.PORT || config.PORT;
   process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
   process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
@@ -43,4 +48,5 @@ exports.loadConfig = () => {
   process.env.STRAVA_CLUB = process.env.STRAVA_CLUB || config.STRAVA_CLUB;
   process.env.STRAVA_MOD_CLUB = process.env.STRAVA_MOD_CLUB || config.STRAVA_MOD_CLUB;
   process.env.STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI || config.STRAVA_REDIRECT_URI;
+  process.env.STRAVA_VERIFY_TOKEN = process.env.STRAVA_VERIFY_TOKEN || config.STRAVA_VERIFY_TOKEN;
 };

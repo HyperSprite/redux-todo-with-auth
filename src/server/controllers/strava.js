@@ -16,6 +16,7 @@ exports.getActivities = (req, res) => {
   });
 };
 
+// http://localhost:3080/apiv1/strava/user-activities
 exports.getUserActivities = (req, res) => {
   hlpr.consLog(['strava.getUserActivities start']);
   activ.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
@@ -70,7 +71,7 @@ exports.nightlyUpdate = () => {
             logType: 'admin',
             level: 3,
             error: err,
-            message: 'Controler/Strava: exports.nightlyUpdate',
+            message: 'Controllers/Strava: exports.nightlyUpdate',
             page: 'nightlyUpdate',
           };
           hlpr.logOut(logObj);

@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs');
 
+const pckg = require('../../../package.json');
+
+const currentVersion = pckg.version.slice(0, 3) * 1;
+
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
@@ -39,7 +43,7 @@ const shoeSchema = Schema({
 });
 
 const clubSchema = Schema({
-  id:	Number,
+  id: Number,
   resource_state: Number, // indicates level of detail
   name: String,
   profile_medium: String, // URL to a 60x60 pixel profile picture
@@ -132,6 +136,7 @@ const userSchema = new Schema({
   tssGoals: [tssGoalSchema],
   friends: [Number],
   routeplans: [Number],
+  currentSchema: { type: Number, default: currentVersion },
 },
   {
     timestamps: true,
