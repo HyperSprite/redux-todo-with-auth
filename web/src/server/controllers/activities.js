@@ -14,6 +14,7 @@ const url = require('url');
 
 
 const Activities = require('../models/activities');
+const ActivityStreams = require('../models/activity-streams');
 const auth = require('./authentication');
 const User = require('../models/user');
 const enhancePolylineLocation = require('../lib/enhance-polyline-location');
@@ -117,8 +118,11 @@ const getStreams = (activityId, accessToken, done) => {
       hlpr.logOut(logObj);
       return done([]);
     }
-    hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
-    return done(streams);
+    const newStreams = Object.assign({}, { streams }, { activityId });
+    ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
+      hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
+      return done(streamDB.streams);
+    });
   });
 };
 
@@ -222,7 +226,7 @@ const getActivityDetails = (activity, opts, cb) => {
             {},
             data,
             geoData,
-            { streams: strmArr },
+            { streamData: !!strmArr.length },
             { streamTime: strmTmArr },
             { currentSchema: currentVersion } //eslint-disable-line
           );
@@ -304,18 +308,18 @@ exports.getRecentActivities = (req, res) => {
 // There is no user triger for this.
 const minutes = 3;
 const theInterval = min => min * 60 * 1000;
-const limitCount = 22;
+
 
 // It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
 // and Zone info.
 exports.getExtendedActivityStats = setInterval(() => {
   // hlpr.consLog(['getExtendedActivityStats has run']);
-
+  const limitCount = 22;
   const toUpdate = {
     $or: [
       { resource_state: 2 },
       // { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
-      { currentSchema: { $exists: false } },
+      // { currentSchema: { $exists: false } },
     ],
   };
 
@@ -340,6 +344,39 @@ exports.getExtendedActivityStats = setInterval(() => {
     });
   });
 }, theInterval(minutes));
+
+/**
+* db maintenace
+*/
+const updateDB = setInterval(() => {
+  console.log('time', new Date());
+  const limitCount = 30;
+  const toUpdate = { $and: [
+    { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+  ] };
+  Activities.find(toUpdate).limit(limitCount).exec((err, activities) => {
+    if (err) {
+      hlpr.consLog(['updateDB err activities', err, ]);
+      return err;
+    }
+
+    activities.forEach((dbActivity) => {
+      const activityId = dbActivity.activityId;
+      const insertable = {
+        activityId: dbActivity.activityId,
+        streams: dbActivity.streams,
+      };
+      hlpr.consLog(['updateDB dbActivity.activityId', insertable.activityId]);
+      ActivityStreams.findOrCreate({ activityId }, insertable, (err, actstm, created) => {
+        Activities.findOneAndUpdate({ activityId }, { $set: { streams: undefined } }, { new: true }, (err, noStream) => {
+          console.log(' dbActivity.streams.length noStream', activityId, created, noStream.currentSchema);
+          return null;
+        });
+      });
+    });
+  });
+}, theInterval(minutes / 6));
+
 
 // Get one week worth of activities
 // {
@@ -585,7 +622,7 @@ exports.searchActivities = async (req, res) => {
   const aggregate = [];
   const qString = url.parse(req.url).query;
   const q = qs.parse(req.query);
-  let sortObj = { start_date_local: -1 };
+  let sortObj;
 
   const srchOpts = {
     textsearch: q.textsearch || '',
@@ -649,21 +686,26 @@ exports.searchActivities = async (req, res) => {
     search: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }],
   };
 
-  // localhost:3080/apiv1/activities/search-activities?lnglatstart=-122.1439698,37.426941
-  if (q.lnglatstart || q.lnglatend) {
-    const point = q.lnglatstart ? 'start' : 'end';
-    console.log('point', point);
-    query.search.push({
-      [`${point}GeoCoordinates`]: {
+  let geoData;
+
+  // localhost:3080/apiv1/activities/search-activities?lng=-122.1439698&lon=37.426941
+  if (q.lng && q.lat) {
+    const coords = [q.lng * 1, q.lat * 1];
+    console.log('coords', coords);
+    const maxDist = q.maxDist * 1 || 321869; // 200 miles
+    geoData = {
+      $geoNear: {
         near: {
           type: 'Point',
-          coordinates: q[`lnglat${point}`].split(',').map(Number),
-        },
+          coordinates: coords },
         distanceField: 'distance',
-        maxDistance: q.maxDist * 1 || 321869, // 200 miles in meters
+        maxDistance: maxDist, // 200 miles in meters
         spherical: true,
       },
-    });
+    };
+  } else {
+    // Default sort
+    sortObj = { start_date_local: -1 };
   }
 
   /**
@@ -790,15 +832,20 @@ exports.searchActivities = async (req, res) => {
     { $group: { _id: null, arr: { $push: '$activityId' } } },
     { $project: { _id: 0, arr: 1 } },
   ];
-
+  if (geoData) {
+    console.log('geoData', geoData);
+    aggregate.push(geoData);
+  }
   aggregate.push({ $match: { $and: query.search } });
+
   aggregate.push({ $facet: {
     activCalcFilter: [{ $group: aggregateGroup }],
     results: aggregateArr,
     activitySearch: activitySearchArr,
   } });
-
-  aggregateArr.push({ $sort: sortObj });
+  if (sortObj) {
+    aggregateArr.push({ $sort: sortObj });
+  }
 
   if (srchOpts.page > 1) {
     aggregateArr.push({ $skip: (srchOpts.page * srchOpts.limit) - srchOpts.limit });
@@ -867,7 +914,7 @@ exports.searchActivities = async (req, res) => {
     { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
     { $group: aggregateGroup },
   ];
-
+  console.log('aggregate', aggregate);
   let aggResult;
   let activCalcAll;
   let activitySearch;

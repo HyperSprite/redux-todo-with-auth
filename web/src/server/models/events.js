@@ -2,12 +2,9 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const uuid = require('uuid');
 
-const pckg = require('../../../package.json');
-
-const currentVersion = pckg.version.slice(0, 3) * 1;
+mongoose.plugin(require('./middleware-current-schema'));
 
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
 
 const uuidNow = () => {
   const u = uuid();
@@ -79,7 +76,6 @@ const eventSchema = new Schema(
     eventRoutes: [eventRoutesSchema],
     eventFavorites: [Number],
     eventHashtags: [String],
-    currentSchema: { type: Number, default: currentVersion },
   },
   {
     timestamps: true,

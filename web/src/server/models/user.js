@@ -2,12 +2,9 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs');
 
-const pckg = require('../../../package.json');
-
-const currentVersion = pckg.version.slice(0, 3) * 1;
+mongoose.plugin(require('./middleware-current-schema'));
 
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
 
 const tssGoalSchema = new Schema({
   week_of: String, // time string "2012-12-13T03:43:19Z"
@@ -136,7 +133,6 @@ const userSchema = new Schema({
   tssGoals: [tssGoalSchema],
   friends: [Number],
   routeplans: [Number],
-  currentSchema: { type: Number, default: currentVersion },
 },
   {
     timestamps: true,

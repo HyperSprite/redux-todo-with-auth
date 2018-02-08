@@ -1,5 +1,10 @@
 const qs = require('qs');
+const requestify = require('requestify'); // ? or axios...
 const hlpr = require('../lib/helpers');
+
+const Activities = require('./activities');
+const Users = require('./authentication');
+
 
 exports.stravaSubscriber = (req, res) => {
   const subURL = 'https://api.strava.com/api/v3/push_subscriptions'
@@ -47,6 +52,26 @@ exports.stravaGetReceiver = (req, res) => {
 * };
 */
 exports.stravaPostReceiver = (req, res) => {
+  const b = req.body;
   console.log(req.body);
+  if (b.object_type === 'activity') {
+    Users.getUser(b.owner_id, (user) => {
+      const options = {
+        id: user.stravaId,
+        access_token: user.access_token,
+        user: user,
+      }
+      Activities.getActivityDetails(b.object_id, options, (done) => {
+        const logObj = {
+          stravaId: null,
+          logType: 'webhooks',
+          level: 3, // 1 = high, 2 = med, 3 = low
+          message: 'Controllers/Webhooks: stravaPostReceiver done',
+        };
+        hlpr.logOut(logObj);
+        return done;
+      });
+    });
+  }
   res.send(req.body);
 };

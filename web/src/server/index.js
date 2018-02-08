@@ -5,6 +5,11 @@ if (fs.existsSync(`${__dirname}/config.js`)) {
   config.loadConfig();
 }
 
+const pckg = require('../../package.json');
+
+const currentVersion = pckg.version.slice(0, 3) * 1;
+process.env.CURRENT_SCHEMA = process.env.CURRENT_SCHEMA || currentVersion;
+
 const http = require('http');
 const https = require('https');
 const express = require('express');
@@ -29,9 +34,6 @@ const contStrava = require('./controllers/strava');
 const dailyUserUpdate = contStrava.dailyUserUpdate;
 const contActivities = require('./controllers/activities');
 const timerUpdateUserActivities = contActivities.getExtendedActivityStats;
-// const nightlyUpdate = contStrava.nightlyUpdate();
-
-// hlpr.consLog(['process.env', process.env]);
 
 isSSL ?
   console.log('**** Using local SSL certs') :
@@ -66,6 +68,9 @@ if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
   // app.use(morgan('combined'));
 }
 
+mongoose.plugin(require('./models/middleware-current-schema'));
+
+mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI, {
   useMongoClient: true,
 });
@@ -112,13 +117,13 @@ if (isSSL) {
     key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
     cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
   }, app).listen(portS, () => {
-    console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS}`);
+    console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS} v${process.env.CURRENT_SCHEMA}`);
   });
   const insecureServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${port} v${process.env.CURRENT_SCHEMA}`);
   });
 } else {
   httpServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port}`);
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${port} v${process.env.CURRENT_SCHEMA}`);
   });
 }

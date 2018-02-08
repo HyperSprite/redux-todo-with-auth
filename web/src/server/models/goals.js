@@ -3,14 +3,8 @@ const findOrCreate = require('mongoose-findorcreate');
 const serialize = require('serialize-javascript');
 const uuidv4 = require('uuid/v4');
 
-const pckg = require('../../../package.json');
-
-const currentVersion = pckg.version.slice(0, 3) * 1;
-
-const hlpr = require('../lib/helpers');
-
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
+
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const goalNotesSchema = new Schema(
@@ -38,7 +32,6 @@ const goalSchema = new Schema(
     goalPrivate: { type: Boolean, default: false },
     goalDeleted: { type: Boolean, default: false },
     goalNotes: [goalNotesSchema],
-    currentSchema: { type: Number, default: currentVersion },
   },
   {
     timestamps: true,

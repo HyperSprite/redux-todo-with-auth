@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 
-const pckg = require('../../../package.json');
-
-const currentVersion = pckg.version.slice(0, 3) * 1;
+mongoose.plugin(require('./middleware-current-schema'));
 
 const Schema = mongoose.Schema;
-mongoose.Promise = global.Promise;
 
 const loggingSchema = new Schema({
   stravaId: Number,
@@ -15,7 +12,6 @@ const loggingSchema = new Schema({
   message: String,
   page: String,
   date: String,
-  currentSchema: { type: Number, default: currentVersion },
 },
   {
     timestamps: true,
