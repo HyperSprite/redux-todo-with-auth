@@ -313,6 +313,7 @@ const theInterval = min => min * 60 * 1000;
 // It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
 // and Zone info.
 exports.getExtendedActivityStats = setInterval(() => {
+  console.log('getExtendedActivityStats', new Date());
   // hlpr.consLog(['getExtendedActivityStats has run']);
   const limitCount = 22;
   const toUpdate = {
@@ -349,14 +350,14 @@ exports.getExtendedActivityStats = setInterval(() => {
 * db maintenace
 */
 const updateDB = setInterval(() => {
-  console.log('time', new Date());
+  console.log('updateDB', new Date());
   const limitCount = 30;
   const toUpdate = { $and: [
     { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
   ] };
   Activities.find(toUpdate).limit(limitCount).exec((err, activities) => {
     if (err) {
-      hlpr.consLog(['updateDB err activities', err, ]);
+      hlpr.consLog(['updateDB err activities', err]);
       return err;
     }
 
@@ -370,7 +371,6 @@ const updateDB = setInterval(() => {
       ActivityStreams.findOrCreate({ activityId }, insertable, (err, actstm, created) => {
         Activities.findOneAndUpdate({ activityId }, { $set: { streams: undefined } }, { new: true }, (err, noStream) => {
           console.log(' dbActivity.streams.length noStream', activityId, created, noStream.currentSchema);
-          return null;
         });
       });
     });
