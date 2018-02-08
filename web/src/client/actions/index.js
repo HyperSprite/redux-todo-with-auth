@@ -29,6 +29,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   CLEAR_ACTIVITY_SEARCH: 'CLEAR_ACTIVITY_SEARCH',
   SET_ACTIVITY_SEARCH_CUSTOM: 'SET_ACTIVITY_SEARCH_CUSTOM',
   ACTIVITY_REMOVED: 'ACTIVITY_REMOVED',
+  ACTIVITY_REFRESHED: 'ACTIVITY_REFRESHED',
   FETCH_USER_ROUTES: 'FETCH_USER_ROUTES',
   FETCH_ROUTES_SEARCH: 'FETCH_ROUTES_SEARCH',
   CLEAR_ROUTES_SEARCH: 'CLEAR_ROUTES_SEARCH',
@@ -367,6 +368,40 @@ export function fetchActivitiesSearch(relURL, queryOptions) {
           type: TYPES.FETCH_ACTIVITIES_SEARCH,
           payload: response.data,
         });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: TYPES.FETCH_DATA,
+          payload: error.data,
+        });
+      });
+  };
+}
+
+export function manageActivity(action, activityId) {
+  return (dispatch) => {
+    axios.post(`apiv1/activity/${activityId}/${action}`, { activityId }, axiosConfig)
+      .then((response) => {
+        switch (action) {
+          case 'delete':
+            dispatch({
+              type: TYPES.ACTIVITY_REMOVED,
+              payload: response.data,
+            });
+            break;
+          case 'refresh':
+            dispatch({
+              type: TYPES.ACTIVITY_REFRESHED,
+              payload: response.data,
+            });
+            break;
+          default:
+            break;
+        }
+
         dispatch({
           type: TYPES.SET_IS_FETCHING_OFF,
         });

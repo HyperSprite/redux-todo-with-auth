@@ -173,7 +173,7 @@ exports.user = (req, res, next) => {
       logType: 'auth',
       level: 3,
       error: err,
-      message: 'Controler/Authentication: exports.user',
+      message: 'Controllers/Authentication: exports.user',
       page: req.originalUrl,
     };
     hlpr.logOut(logObj);

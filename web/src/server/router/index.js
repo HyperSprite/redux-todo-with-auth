@@ -6,13 +6,15 @@ const passportService = require('./../services/passport');
 const hlpr = require('../lib/helpers');
 const rLib = require('./router-lib');
 
-const activRoutes = require('./activities');
+const activitiesRoutes = require('./activities');
+const activityRoutes = require('./activity');
 const adminRoutes = require('./admin');
 const authRoutes = require('./auth');
 const eventsRoutes = require('./events');
 const stravaRoutes = require('./strava');
 const resourceRoutes = require('./resources');
 const rteRoutes = require('./routeplans');
+const webhooks = require('./webhooks');
 const jsonfile = require('jsonfile');
 
 let manifest;
@@ -56,6 +58,7 @@ const indexHTML = `
       <link rel="image_src" href="https://www.araceathlete.com/images/wide-banner.png">
       <meta name="msapplication-config" content="/favicons/browserconfig.xml">
       <meta name="theme-color" content="#cc0000">
+      <meta property="og:image" content="/images/logo-512x512.png" />
       <link rel="stylesheet" type="text/css" href="/styles/main.css">
     </head>
     <body>
@@ -86,8 +89,10 @@ router.use('/auth', authRoutes);
 // some open routes
 router.use('/apiv1/events', eventsRoutes);
 router.use('/apiv1/resource', resourceRoutes);
+router.use('/apiv1/webhooks', webhooks);
 // all requireAuth
-router.use('/apiv1/activities', rLib.requireAuth, activRoutes);
+router.use('/apiv1/activities', rLib.requireAuth, activitiesRoutes);
+router.use('/apiv1/activity', rLib.requireAuth, activityRoutes);
 router.use('/apiv1/routeplan', rLib.requireAuth, rteRoutes);
 router.use('/apiv1/strava', rLib.requireAuth, stravaRoutes);
 // all requireAdmin and requireAuth

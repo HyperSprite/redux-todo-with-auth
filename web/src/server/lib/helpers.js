@@ -1,3 +1,4 @@
+const { performance } = require('perf_hooks'); // eslint-disable-line
 const moment = require('moment');
 const dateFNS = require('date-fns');
 
@@ -34,12 +35,40 @@ exports.consLog = (arr) => {
   }
 };
 
+exports.perfNowStart = (label) => {
+  if (process.env.LOGGING === 'true') {
+    const perfNSName = `perfNS${label}`;
+    process.env[perfNSName] = performance.now();
+    console.log(`\n ${perfNSName} \n`);
+  }
+};
+
+exports.perfNowEnd = (label) => {
+  const perfNSName = `perfNS${label}`;
+  if (process.env.LOGGING === 'true' && process.env[perfNSName]) {
+    const perfNowEnd = performance.now();
+    const result = Math.floor(perfNowEnd - process.env[perfNSName]);
+    const output = `${perfNSName} ran for ${result}`;
+    if (process.env.NODE_ENV === 'production') {
+      exports.logOut({
+        stravaId: id,
+        logType: 'perfNow',
+        level: 3, // 1 = high, 2 = med, 3 = low
+        message: output,
+      });
+    } else {
+      console.log(`\n perfNowEnd >>>>>>> ${output} \n`);
+    }
+    process.env[perfNSName] = null;
+  }
+};
+
 // const logObj = {
 //   stravaId: req.user.stravaId,
 //   logType: 'auth',
 //   level: 3, // 1 = high, 2 = med, 3 = low
 //   error: err,
-//   message: `Controler/Authentication: exports.user`,
+//   message: `Controllers/Authentication: exports.user`,
 //   page: req.originalUrl,
 // };
 exports.logOut = (logObj) => {

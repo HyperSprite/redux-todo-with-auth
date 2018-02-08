@@ -7,9 +7,8 @@ const Activ = require('./../controllers/activities');
 // All routes require Auth, see indexRoutes
 router.get('/weekly-stats/:weeksPast', Activ.getWeeklyStats);
 router.get('/weekly-stats', Activ.getWeeklyStats);
-router.post('/reset-activity', Activ.resetActivity);
-router.post('/delete-activity', Activ.deleteActivity);
 router.get('/search-activities', Activ.searchActivities);
 router.get('/fitness-today', Activ.fitnessToday);
+router.post('/delete-activity', Activ.deleteActivity); // to be removed
 
 module.exports = router;

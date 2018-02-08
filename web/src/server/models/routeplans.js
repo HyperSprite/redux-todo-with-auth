@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
+const pckg = require('../../../package.json');
+
+const currentVersion = pckg.version.slice(0, 3) * 1;
+
 const Schema = mongoose.Schema;
 mongoose.Promise = global.Promise;
 
@@ -62,6 +66,7 @@ const routeplanSchema = new Schema(
     TZName: String,
     TZrawOffset: Number,
     TZdstOffset: Number,
+    currentSchema: { type: Number, default: currentVersion },
   },
   {
     timestamps: true,
