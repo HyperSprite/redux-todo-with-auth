@@ -339,11 +339,13 @@ exports.getExtendedActivityStats = () => {
 
   const limitCount = 22;
   const toUpdate = {
-    $or: [
-      { resource_state: 2 },
-      { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
-      { currentSchema: { $exists: false } },
+    $and: [
       { authorizationError: { $ne: true } },
+      { $or: [
+        { resource_state: 2 },
+        { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+        { currentSchema: { $exists: false } },
+      ] },
     ],
   };
 
@@ -365,16 +367,17 @@ exports.getExtendedActivityStats = () => {
           };
           //
           getActivityDetails(dbActivity, options, done => done);
+        } else {
+          Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
+            const logObj = {
+              logType: 'activity',
+              level: 1, // 1 = high, 2 = med, 3 = low
+              error: err,
+              message: `Controllers/Activity: getExtendedActivityStats No User ${authError.activityId}`,
+            };
+            hlpr.logOut(logObj);
+          });
         }
-        Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
-          const logObj = {
-            logType: 'activity',
-            level: 1, // 1 = high, 2 = med, 3 = low
-            error: err,
-            message: `Controllers/Activity: getExtendedActivityStats No User ${authError.activityId}`,
-          };
-          hlpr.logOut(logObj);
-        });
       });
     });
   });
