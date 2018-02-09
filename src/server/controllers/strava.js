@@ -142,4 +142,4 @@ const runOnStartup = () => {
   console.log('strava.runOnStartup');
   exports.nightlyUpdate();
 };
-runOnStartup();
+// runOnStartup();
