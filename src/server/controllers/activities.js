@@ -357,7 +357,7 @@ exports.getExtendedActivityStats = () => {
     activities.forEach((dbActivity) => {
       hlpr.consLog(['getExtendedActivityStats dbActivity.activityId', dbActivity.activityId]);
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
-        if (!err || user) {
+        if (user && !err) {
           hlpr.consLog(['getExtendedActivityStats token', user.stravaId]);
           const options = {
             id: user.stravaId,
