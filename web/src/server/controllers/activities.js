@@ -11,6 +11,7 @@ const justFns = require('just-fns');
 const qs = require('qs');
 const strava = require('strava-v3');
 const url = require('url');
+const _ = require('lodash');
 
 
 const Activities = require('../models/activities');
@@ -107,7 +108,7 @@ const getStreams = (activityId, accessToken, done) => {
   ];
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
-    if (err || !streams || !streams.length) {
+    if (err || !_.isArray(streams)) {
       const logObj = {
         stravaId: null,
         logType: 'activity',
@@ -303,20 +304,27 @@ exports.getRecentActivities = (req, res) => {
   });
 };
 
-// This function runs every three minutes to process 22 activities to ensure
-// the 600 requests per 15 min rate limit is not exceeded.
-// There is no user triger for this.
-const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 5; // 5 min failsafe
+/**
+*
+*  This function runs every three minutes to process 22 activities to ensure
+*  the daily rate never exceeds 30000 requests, works out to under 300 requests
+*  per day. Use ACTIVITY_UPDATE_INTERVAL to adjust.
+*
+*  It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
+*  and Zone info.
+*
+*  The activityStreamsCache is cleared every X minutes of ACTIVITY_STREAM_CACHE
+*  the default is two weeks or 20160 minutes
+*/
+const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 3; // 3 min failsafe
 const theInterval = min => min * 60 * 1000;
 
-
-// It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
-// and Zone info.
-exports.getExtendedActivityStats = setInterval(() => {
+exports.getExtendedActivityStats = () => {
   const newDate = new Date();
-  hlpr.consLog(['getExtendedActivityStats', newDate]);
-  const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes - two weeks failsafe
-  const cacheQuery = { updatedAt: { $lt: new Date(newDate.getTime() - theInterval(activityStreamsCache)) } };
+  const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
+  const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
+  hlpr.consLog([`getExtendedActivityStats ${minutes} ${newDate}`]);
+  const cacheQuery = { updatedAt: { $lt: backDate } };
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
       const logObj = {
@@ -358,6 +366,15 @@ exports.getExtendedActivityStats = setInterval(() => {
       });
     });
   });
+};
+
+const runOnStartup = () => {
+  exports.getExtendedActivityStats();
+};
+runOnStartup();
+
+const runGetExtendedActivityStats = setInterval(() => {  // eslint-disable-line
+  exports.getExtendedActivityStats();
 }, theInterval(minutes));
 
 /**
