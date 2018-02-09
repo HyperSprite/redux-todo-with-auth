@@ -134,7 +134,31 @@ exports.updateAllUsers = (req, res) => {
 exports.removeUser = (req, res) => {
   const userToRemove = req.params.userToRemove; // stravaId
   UserCommon.findOneAndRemove({ stravaId: userToRemove }, (err, userCommonRemoved) => {
-    Activities.findOneAndRemove({ stravaId: userToRemove }, (err, activitiesRemoved) => {
+    if (err) {
+      const logObj = {
+        stravaId: userToRemove,
+        logType: 'admin',
+        level: 1,
+        error: err,
+        message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved}`,
+        page: req.originalUrl,
+      };
+      hlpr.logOut(logObj);
+      return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
+    }
+    Activities.remove({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
+      if (err) {
+        const logObj = {
+          stravaId: userToRemove,
+          logType: 'admin',
+          level: 1,
+          error: err,
+          message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`,
+          page: req.originalUrl,
+        };
+        hlpr.logOut(logObj);
+        return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
+      }
       User.findOneAndRemove({ stravaId: userToRemove }, (err, userRemoved) => {
         if (err) {
           const logObj = {
@@ -146,7 +170,7 @@ exports.removeUser = (req, res) => {
             page: req.originalUrl,
           };
           hlpr.logOut(logObj);
-          res.send({ data: { userToRemove, success: false } });
+          return res.send({ userToRemove, success: false });
         }
         const logObj = {
           stravaId: userToRemove,
@@ -157,7 +181,7 @@ exports.removeUser = (req, res) => {
           page: req.originalUrl,
         };
         hlpr.logOut(logObj);
-        res.send({ data: { userToRemove, success: true } });
+        return res.send({ userToRemove, success: true });
       });
     });
   });
