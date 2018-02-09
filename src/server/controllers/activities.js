@@ -118,13 +118,11 @@ const getStreams = (activityId, accessToken, done) => {
       hlpr.logOut(logObj);
       return done([]);
     }
-    return (streams);
-    // Save this for later
-    // const newStreams = Object.assign({}, { streams }, { activityId });
-    // ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
-    //   hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
-    //   return done(streamDB.streams);
-    // });
+    const newStreams = Object.assign({}, { streams }, { activityId });
+    ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
+      hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
+      return done(streamDB.streams);
+    });
   });
 };
 
@@ -308,20 +306,33 @@ exports.getRecentActivities = (req, res) => {
 // This function runs every three minutes to process 22 activities to ensure
 // the 600 requests per 15 min rate limit is not exceeded.
 // There is no user triger for this.
-const minutes = 3;
+const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1;
 const theInterval = min => min * 60 * 1000;
 
 
 // It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
 // and Zone info.
 exports.getExtendedActivityStats = setInterval(() => {
-  hlpr.consLog(['getExtendedActivityStats', new Date()]);
-  // hlpr.consLog(['getExtendedActivityStats has run']);
+  const newDate = new Date();
+  hlpr.consLog(['getExtendedActivityStats', newDate]);
+  const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1;  // miuntes
+  const cacheQuery = { updatedAt: { $lt: new Date(newDate.getTime() - theInterval(activityStreamsCache)) } };
+  console.log('time', new Date(newDate.getTime() - theInterval(activityStreamsCache)));
+  ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
+    const logObj = {
+      logType: 'activity',
+      level: 3, // 1 = high, 2 = med, 3 = low
+      error: err,
+      message: `Controllers/Activity: activityStreamsCache \n cacheQuery ${cacheQuery} \n removed ${removed}`,
+    };
+    hlpr.logOut(logObj);
+  });
+
   const limitCount = 22;
   const toUpdate = {
     $or: [
       { resource_state: 2 },
-      // { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+      { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
       { currentSchema: { $exists: false } },
     ],
   };

@@ -13,6 +13,8 @@ const config = {
   GOOGLE_MAPS: 'some_api_key', // server only
   REACT_APP_GOOGLE_MAPS_WEB: 'some_api_key', // user exposed/url restricted to registered domain
   OPEN_WEATHER_MAP: 'some_api_key',
+  ACTIVITY_STREAM_CACHE: 20160, // two weeks in minutes: adjust for tuning
+  ACTIVITY_UPDATE_INTERVAL: 3, // three minutes: adjust for tuning
   PORT: 3080,
   ROOT_URL: 'http://localhost:3080',
   SITE_PUBLIC: 'public', // static resources
@@ -32,12 +34,12 @@ const localMongoURI = !hlpr.isProd() ?
 exports.loadConfig = () => {
   process.env.AUTH_SECRET = process.env.AUTH_SECRET || config.AUTH_SECRET;
   process.env.CERT = process.env.CERT || config.CERT;
-  process.env.CURRENT_SCHEMA = process.env.CURRENT_SCHEMA || config.CURRENT_SCHEMA;
   process.env.GOOGLE_MAPS = process.env.GOOGLE_MAPS || config.GOOGLE_MAPS;
   process.env.REACT_APP_GOOGLE_MAPS_WEB = process.env.REACT_APP_GOOGLE_MAPS_WEB || config.GOOGLE_MAPS;
   process.env.MONGODB_URI = process.env.MONGODB_URI || localMongoURI;
   process.env.LOGGING = process.env.LOGGING || config.LOGGING;
   process.env.OPEN_WEATHER_MAP = process.env.OPEN_WEATHER_MAP || config.OPEN_WEATHER_MAP;
+  process.env.ACTIVITY_STREAM_CACHE = process.env.ACTIVITY_STREAM_CACHE || config.ACTIVITY_STREAM_CACHE;
   process.env.PORT = process.env.PORT || config.PORT;
   process.env.ROOT_URL = process.env.ROOT_URL || config.ROOT_URL;
   process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
