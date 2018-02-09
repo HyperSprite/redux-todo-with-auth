@@ -343,6 +343,7 @@ exports.getExtendedActivityStats = () => {
       { resource_state: 2 },
       { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
       { currentSchema: { $exists: false } },
+      { authorizationError: { $ne: true } },
     ],
   };
 
@@ -354,15 +355,26 @@ exports.getExtendedActivityStats = () => {
     activities.forEach((dbActivity) => {
       hlpr.consLog(['getExtendedActivityStats dbActivity.activityId', dbActivity.activityId]);
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
-        hlpr.consLog(['getExtendedActivityStats token', user.stravaId]);
-        const options = {
-          id: user.stravaId,
-          access_token: user.access_token,
-          user: user,
-          cronjob: true,
-        };
-        //
-        getActivityDetails(dbActivity, options, done => done);
+        if (!err || user) {
+          hlpr.consLog(['getExtendedActivityStats token', user.stravaId]);
+          const options = {
+            id: user.stravaId,
+            access_token: user.access_token,
+            user: user,
+            cronjob: true,
+          };
+          //
+          getActivityDetails(dbActivity, options, done => done);
+        }
+        Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
+          const logObj = {
+            logType: 'activity',
+            level: 1, // 1 = high, 2 = med, 3 = low
+            error: err,
+            message: `Controllers/Activity: getExtendedActivityStats No User ${authError.activityId}`,
+          };
+          hlpr.logOut(logObj);
+        });
       });
     });
   });
