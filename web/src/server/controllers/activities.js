@@ -118,11 +118,13 @@ const getStreams = (activityId, accessToken, done) => {
       hlpr.logOut(logObj);
       return done([]);
     }
-    const newStreams = Object.assign({}, { streams }, { activityId });
-    ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
-      hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
-      return done(streamDB.streams);
-    });
+    return (streams);
+    // Save this for later
+    // const newStreams = Object.assign({}, { streams }, { activityId });
+    // ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
+    //   hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
+    //   return done(streamDB.streams);
+    // });
   });
 };
 
@@ -368,10 +370,8 @@ const updateDB = setInterval(() => {
         streams: dbActivity.streams,
       };
       hlpr.consLog(['updateDB dbActivity.activityId', insertable.activityId]);
-      ActivityStreams.findOrCreate({ activityId }, insertable, (err, actstm, created) => {
-        Activities.findOneAndUpdate({ activityId }, { $set: { streams: undefined } }, { new: true }, (err, noStream) => {
-          console.log(' dbActivity.streams.length noStream', activityId, created, noStream.currentSchema);
-        });
+      Activities.findOneAndUpdate({ activityId }, { $set: { streams: undefined } }, { new: true }, (err, noStream) => {
+        console.log(' dbActivity.streams.length noStream', activityId, noStream.currentSchema);
       });
     });
   });
