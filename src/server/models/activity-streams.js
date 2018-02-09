@@ -13,6 +13,7 @@ const activitiesStreamSchema = new Schema(
   });
 
 activitiesStreamSchema.plugin(findOrCreate);
+activitiesStreamSchema.index({ updatedAt: 1 });
 
 const ActivityStreams = mongoose.model('activityStreams', activitiesStreamSchema);
 
