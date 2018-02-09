@@ -49,16 +49,7 @@ exports.perfNowEnd = (label) => {
     const perfNowEnd = performance.now();
     const result = Math.floor(perfNowEnd - process.env[perfNSName]);
     const output = `${perfNSName} ran for ${result}`;
-    if (process.env.NODE_ENV === 'production') {
-      exports.logOut({
-        stravaId: id,
-        logType: 'perfNow',
-        level: 3, // 1 = high, 2 = med, 3 = low
-        message: output,
-      });
-    } else {
-      console.log(`\n perfNowEnd >>>>>>> ${output} \n`);
-    }
+    console.log(`\n perfNowEnd >>>>>>> ${output} \n`);
     process.env[perfNSName] = null;
   }
 };
