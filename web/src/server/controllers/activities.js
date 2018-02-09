@@ -218,8 +218,8 @@ const getActivityDetails = (activity, opts, cb) => {
   strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data, rateLimit) => {
     if (err || !data) hlpr.consLog(['getActivityDetails strava.activities.get', err]);
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
-
-    enhancePolylineLocation(data.map.summary_polyline || data.map.polyline, true, (geoData) => {
+    const polyline = data.map && (data.map.summary_polyline || data.map.polyline);
+    enhancePolylineLocation(polyline, true, (geoData) => {
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(
