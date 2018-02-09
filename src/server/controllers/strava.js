@@ -69,7 +69,7 @@ exports.nightlyUpdate = () => {
           const logObj = {
             stravaId: fUser.stravaId,
             logType: 'admin',
-            level: 3,
+            level: 2,
             error: err,
             message: 'Controllers/Strava: exports.nightlyUpdate',
             page: 'nightlyUpdate',
@@ -79,6 +79,15 @@ exports.nightlyUpdate = () => {
         }
         if (athlete.message === 'Authorization Error') {
           hlpr.consLog([athlete, fUser.stravaId, fUser.access_token]);
+          const logObj = {
+            stravaId: fUser.stravaId,
+            logType: 'admin',
+            level: 1,
+            error: err,
+            message: 'Controllers/Strava: exports.nightlyUpdate Authorization Error',
+            page: 'nightlyUpdate',
+          };
+          hlpr.logOut(logObj);
           return null;
         }
         auth.writeUser({ athlete: athlete }, fUser, (resUser) => {
@@ -132,4 +141,4 @@ const runOnStartup = () => {
   console.log('strava.runOnStartup');
   exports.nightlyUpdate();
 };
-// runOnStartup();
+runOnStartup();
