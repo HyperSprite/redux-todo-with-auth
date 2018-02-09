@@ -315,14 +315,14 @@ const theInterval = min => min * 60 * 1000;
 // It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
 // and Zone info.
 exports.getExtendedActivityStats = setInterval(() => {
-  console.log('getExtendedActivityStats', new Date());
+  hlpr.consLog(['getExtendedActivityStats', new Date()]);
   // hlpr.consLog(['getExtendedActivityStats has run']);
   const limitCount = 22;
   const toUpdate = {
     $or: [
       { resource_state: 2 },
       // { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
-      // { currentSchema: { $exists: false } },
+      { currentSchema: { $exists: false } },
     ],
   };
 
@@ -351,11 +351,12 @@ exports.getExtendedActivityStats = setInterval(() => {
 /**
 * db maintenace
 */
-const updateDB = setInterval(() => {
+const updateDB = () => {
   console.log('updateDB', new Date());
   const limitCount = 30;
   const toUpdate = { $and: [
-    { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+    // { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+    // { currentSchema: { $exists: false } },
   ] };
   Activities.find(toUpdate).limit(limitCount).exec((err, activities) => {
     if (err) {
@@ -375,8 +376,9 @@ const updateDB = setInterval(() => {
       });
     });
   });
-}, theInterval(minutes / 6));
+};
 
+// const runUpdateDB = setInterval(() => { updateDB(); }, theInterval(minutes));
 
 // Get one week worth of activities
 // {
