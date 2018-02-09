@@ -15,6 +15,7 @@ import theme from '../../styles/theme';
 import styleMain from '../../styles/style';
 import CheckBox from './checkbox-icon';
 import RemoveUser from '../admin/remove-user';
+import InputRemoveUser from '../admin/input-remove-user';
 
 const style = {
   button: styleMain.button,
@@ -109,6 +110,8 @@ export default class UserList extends Component {
           label="Refresh List"
           secondary
         />
+
+        <InputRemoveUser />
 
         <Static
           content={this.state.userList.length}
