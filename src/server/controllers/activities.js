@@ -219,7 +219,7 @@ const getActivityDetails = (activity, opts, cb) => {
     if (err || !data) hlpr.consLog(['getActivityDetails strava.activities.get', err]);
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
 
-    enhancePolylineLocation(data.map.summary_polyline, true, (geoData) => {
+    enhancePolylineLocation(data.map.summary_polyline || data.map.polyline, true, (geoData) => {
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(
@@ -306,7 +306,7 @@ exports.getRecentActivities = (req, res) => {
 // This function runs every three minutes to process 22 activities to ensure
 // the 600 requests per 15 min rate limit is not exceeded.
 // There is no user triger for this.
-const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1;
+const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 5; // 5 min failsafe
 const theInterval = min => min * 60 * 1000;
 
 
@@ -315,17 +315,18 @@ const theInterval = min => min * 60 * 1000;
 exports.getExtendedActivityStats = setInterval(() => {
   const newDate = new Date();
   hlpr.consLog(['getExtendedActivityStats', newDate]);
-  const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1;  // miuntes
+  const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes - two weeks failsafe
   const cacheQuery = { updatedAt: { $lt: new Date(newDate.getTime() - theInterval(activityStreamsCache)) } };
-  console.log('time', new Date(newDate.getTime() - theInterval(activityStreamsCache)));
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
-    const logObj = {
-      logType: 'activity',
-      level: 3, // 1 = high, 2 = med, 3 = low
-      error: err,
-      message: `Controllers/Activity: activityStreamsCache \n cacheQuery ${cacheQuery} \n removed ${removed}`,
-    };
-    hlpr.logOut(logObj);
+    if (removed.n) {
+      const logObj = {
+        logType: 'activity',
+        level: 3, // 1 = high, 2 = med, 3 = low
+        error: err,
+        message: `Controllers/Activity: activityStreamsCache removed ${removed.n}`,
+      };
+      hlpr.logOut(logObj);
+    }
   });
 
   const limitCount = 22;
