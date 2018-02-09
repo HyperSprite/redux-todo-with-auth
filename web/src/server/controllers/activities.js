@@ -604,7 +604,6 @@ exports.deleteActivity = (req, res) => {
   });
 };
 
-
 // TODO work this into query
 // make a trie function for stopwords,
 // load the array on startup into a trie for faster resolution,

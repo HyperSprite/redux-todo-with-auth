@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const Events = require('../models/events');
 const Activities = require('../models/activities');
+const Routeplans = require('../models/routeplans');
+const UserCommon = require('../models/user-common');
 const Logging = require('../models/logging');
 
 const stravaControl = require('./strava');
@@ -48,6 +50,7 @@ exports.userList = (req, res) => {
         updatedAt: 1,
         adminMember: 1,
         clubMember: 1,
+        authorizationErrors: 1,
         // activityCount: { $size: '$useractivities' },
         eventCount: { $size: '$userevents' },
         logCount: { $size: '$userlogs' },
@@ -126,4 +129,36 @@ exports.getLogs = (req, res) => {
 exports.updateAllUsers = (req, res) => {
   stravaControl.nightlyUpdate();
   res.send('update started');
+};
+
+exports.removeUser = (req, res) => {
+  const userToRemove = req.params.userToRemove; // stravaId
+  UserCommon.findOneAndRemove({ stravaId: userToRemove }, (err, userCommonRemoved) => {
+    Activities.findOneAndRemove({ stravaId: userToRemove }, (err, activitiesRemoved) => {
+      User.findOneAndRemove({ stravaId: userToRemove }, (err, userRemoved) => {
+        if (err) {
+          const logObj = {
+            stravaId: userToRemove,
+            logType: 'admin',
+            level: 1,
+            error: err,
+            message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`,
+            page: req.originalUrl,
+          };
+          hlpr.logOut(logObj);
+          res.send({ data: { userToRemove, success: false } });
+        }
+        const logObj = {
+          stravaId: userToRemove,
+          logType: 'admin',
+          level: 1,
+          error: err,
+          message: `Controllers/Admin: removeUser Success ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`,
+          page: req.originalUrl,
+        };
+        hlpr.logOut(logObj);
+        res.send({ data: { userToRemove, success: true } });
+      });
+    });
+  });
 };

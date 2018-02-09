@@ -14,6 +14,7 @@ import GetUpdateAllUsers from '../admin/get-update-all-users';
 import theme from '../../styles/theme';
 import styleMain from '../../styles/style';
 import CheckBox from './checkbox-icon';
+import RemoveUser from '../admin/remove-user';
 
 const style = {
   button: styleMain.button,
@@ -119,6 +120,17 @@ export default class UserList extends Component {
                 title={`${user.firstname} ${user.lastname}`}
                 subtitle={AthleteLink(user)}
               />
+              <RemoveUser stravaId={user.stravaId} />
+              {user.authorizationErrors && (
+                <div style={style.box}>
+                  <div style={style.boxLabel}>
+                    Authorization Errors
+                  </div>
+                  <div style={style.boxData}>
+                    {` ${user.authorizationErrors}`}
+                  </div>
+                </div>
+              )}
               <CardText>
                 <div style={style.container}>
                   <div style={style.box}>
