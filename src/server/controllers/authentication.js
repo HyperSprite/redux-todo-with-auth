@@ -107,7 +107,7 @@ exports.writeUser = (userData, user, resultUser) => {
           user: user,
         };
 
-        
+
 
           // toSave.friends = strava.athlete.listFriends({ id: user.stravaId, access_token: user.access_token }, (err, data) => {
           //   const friendsResult = data.map(d => d.id);
@@ -194,4 +194,18 @@ exports.toggleClubNotice = async (req, res) => {
     return res.status(500).send({ Error: 'Failed to update' });
   }
   return res.send({ clubNotice: result.clubNotice });
+};
+
+exports.updateAuthorizationError = (stravaId) => {
+  User.findOneAndUpdate({ stravaId }, { $inc: { authorizationErrors: 1 } }, { new: true }, (err, update) => {
+    const logObj = {
+      stravaId,
+      logType: 'admin',
+      level: 1,
+      error: err,
+      message: `Controllers/Auth: updateAuthorizationError count ${update.authorizationErrors}`,
+      page: 'nightlyUpdate',
+    };
+    hlpr.logOut(logObj);
+  });
 };

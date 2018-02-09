@@ -96,6 +96,7 @@ const userSchema = new Schema({
   adminMember: Boolean,
   clubMember: Boolean,
   clubNotice: Boolean,
+  authorizationErrors: { type: Number, default: 0 },  
   week_start_day: Number, // 0 - Sun, 1 - Mon...
   activitiesCollected: Boolean,
   bikes: [bikeSchema],

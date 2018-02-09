@@ -2,15 +2,15 @@ const strava = require('strava-v3');
 const schedule = require('node-schedule');
 
 const User = require('../models/user');
-const activ = require('./activities');
-const rts = require('./routeplans');
-const auth = require('./authentication');
+const activitiesCtrlr = require('./activities');
+const routeplansCtrlr = require('./routeplans');
+const authCtrlr = require('./authentication');
 const hlpr = require('../lib/helpers');
 
 exports.getActivities = (req, res) => {
   strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
+    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
     hlpr.consLog(['getActivity', data]);
     res.send(data);
   });
@@ -19,14 +19,14 @@ exports.getActivities = (req, res) => {
 // http://localhost:3080/apiv1/strava/user-activities
 exports.getUserActivities = (req, res) => {
   hlpr.consLog(['strava.getUserActivities start']);
-  activ.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
+  activitiesCtrlr.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
 };
 
 // TODO this is just starting but have tested it and it works to pull data.
 exports.getRoute = (req, res) => {
   strava.routes.get({ id: req.params.id, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
+    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
     hlpr.consLog(['getRoute', data]);
     res.send(data);
   });
@@ -36,15 +36,15 @@ exports.getUserRouteplans = (req, res) => {
   hlpr.consLog(['strava.getUserRouteplans start']);
   const tmpReq = req;
   tmpReq.pageCount = 1;
-  rts.getRecentRouteplans(tmpReq, res);
+  routeplansCtrlr.getRecentRouteplans(tmpReq, res);
 };
 
 exports.getUser = (req, res) => {
   strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-    if (data.message === 'Authorization Error') auth.stravaSignOut(req, res);
+    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
     // controllers/authentication.writeUser(userData, user, resultUser)
-    auth.writeUser({ athlete: data }, req.user, (resultUser) => {
+    authCtrlr.writeUser({ athlete: data }, req.user, (resultUser) => {
       hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
       res.json({ user: resultUser });
     });
@@ -87,10 +87,11 @@ exports.nightlyUpdate = () => {
             message: 'Controllers/Strava: exports.nightlyUpdate Authorization Error',
             page: 'nightlyUpdate',
           };
+          authCtrlr.updateAuthorizationError(fUser.stravaId);
           hlpr.logOut(logObj);
           return null;
         }
-        auth.writeUser({ athlete: athlete }, fUser, (resUser) => {
+        authCtrlr.writeUser({ athlete: athlete }, fUser, (resUser) => {
           hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
           const tmpRt = {
             pageCount: 1,
@@ -98,7 +99,7 @@ exports.nightlyUpdate = () => {
             cronjob: true,
             user: fUser,
           };
-          rts.getAllRouteplans(tmpRt, (result) => {
+          routeplansCtrlr.getAllRouteplans(tmpRt, (result) => {
             hlpr.consLog(['nightlyUpdate getAllRouteplans \n ___ triggered result.length', result.length]);
           });
           if (resUser.clubMember === true) {
@@ -108,7 +109,7 @@ exports.nightlyUpdate = () => {
               cronjob: true,
               user: fUser,
             };
-            activ.getAllActivities(tmpAct, (result) => {
+            activitiesCtrlr.getAllActivities(tmpAct, (result) => {
               hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
             });
           } else {
