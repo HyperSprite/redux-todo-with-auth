@@ -111,6 +111,7 @@ const activitiesSchema = new Schema(
     streamTime: [],
     streams: [],
     authorizationError: Boolean,
+    failedUpdate: Boolean,
   },
   {
     timestamps: true,

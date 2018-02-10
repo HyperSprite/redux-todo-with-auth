@@ -37,6 +37,12 @@ function weeksBack(weekStart, weeks) {
   return weekEnd;
 }
 
+const logObj = {
+  stravaId: null,
+  logType: 'activity',
+  level: 3, // 1 = high, 2 = med, 3 = low
+};
+
 // This is a recursive fucntion that returns 200 (or input.perPage) resource_state: 2 activities
 // per pass (strava limit per request). It will keep going until is returns
 // all activities for a user. Input.pageCount is used to track pagination.
@@ -109,14 +115,11 @@ const getStreams = (activityId, accessToken, done) => {
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
     if (err || !_.isArray(streams)) {
-      const logObj = {
-        stravaId: null,
-        logType: 'activity',
-        level: 2, // 1 = high, 2 = med, 3 = low
+      hlpr.logOut(Object.assign(logObj, {
+        level: 2,
         error: err,
         message: `Controllers/Activity: getStreams err for ${activityId}`,
-      };
-      hlpr.logOut(logObj);
+      }));
       return done([]);
     }
     const newStreams = Object.assign({}, { streams }, { activityId });
@@ -133,7 +136,7 @@ const getStreams = (activityId, accessToken, done) => {
 const getStreamTimeAverages = (streamsArr, done) => {
   const streamTime = [];
   if (!streamsArr || !streamsArr.length) {
-    return done(streamTime);
+    return done([]);
   }
   /*
   * Streams to convert to Time Averages
@@ -172,14 +175,11 @@ const getListZones = (activityId, accessToken, done) => {
   strava.activities.listZones({ id: activityId, access_token: accessToken }, (err, listZonesArr, rateLimit) => {
     hlpr.consLog(['getListZones rateLimit', rateLimit]);
     if (err) {
-      const logObj = {
-        stravaId: null,
-        logType: 'activity',
-        level: 2, // 1 = high, 2 = med, 3 = low
+      hlpr.logOut(Object.assign(logObj, {
+        level: 1,
         error: err,
         message: `Controllers/Activity: getListZones err for ${activityId}`,
-      };
-      hlpr.logOut(logObj);
+      }));
       return done([]);
     }
     return done(listZonesArr);
@@ -187,19 +187,16 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId: activityId }, data, options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId }, Object.assign(data, { failedUpdate: false }), options, (err, fullActivity) => {
     if (err) {
-      const logObj = {
-        stravaId: null,
-        logType: 'activity',
-        level: 2, // 1 = high, 2 = med, 3 = low
+      hlpr.logOut(Object.assign(logObj, {
+        level: 2,
         error: err,
-        message: `Controllers/Activity: findActivityAndUpdate err for ${activityId}`,
-      };
-      hlpr.logOut(logObj);
+        message: `Controllers/Activity: findActivityAndUpdate err for ${activityId}`
+      }));
       return done([]);
     }
-    hlpr.consLog(['strava..activities premium return']);
+    hlpr.consLog(['findActivityAndUpdate return', fullActivity.activityId]);
     return done(fullActivity);
   });
 };
@@ -217,8 +214,19 @@ const getActivityDetails = (activity, opts, cb) => {
   const perfLabel = `getActivityDetails${activity.activityId}`;
   hlpr.perfNowStart(perfLabel);
   strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data, rateLimit) => {
-    if (err || !data) hlpr.consLog(['getActivityDetails strava.activities.get', err]);
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
+    if (err || !data) {
+      if (err) {
+        hlpr.logOut(Object.assign(logObj, {
+          level: 1,
+          error: err,
+          message: `Controllers/Activity: getActivityDetails failedUpdate for ${activity.activityId}`,
+        }));
+        findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, (fullActivity) => {
+          return cb(fullActivity);
+        });
+      }
+    }
     const polyline = data.map && (data.map.summary_polyline || data.map.polyline);
     enhancePolylineLocation(polyline, true, (geoData) => {
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
@@ -323,17 +331,15 @@ exports.getExtendedActivityStats = () => {
   const newDate = new Date();
   const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
-  hlpr.consLog([`getExtendedActivityStats ${minutes} ${newDate}`]);
+  hlpr.consLog([`>>>>>>>>>>>>>>>>>>>>>>>> getExtendedActivityStats ${minutes} ${newDate}`]);
   const cacheQuery = { updatedAt: { $lt: backDate } };
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
-      const logObj = {
-        logType: 'activity',
-        level: 3, // 1 = high, 2 = med, 3 = low
+      hlpr.logOut(Object.assign(logObj, {
+        level: 4,
         error: err,
         message: `Controllers/Activity: activityStreamsCache removed ${removed.n}`,
-      };
-      hlpr.logOut(logObj);
+      }));
     }
   });
 
@@ -355,27 +361,29 @@ exports.getExtendedActivityStats = () => {
       return err;
     }
     activities.forEach((dbActivity) => {
-      hlpr.consLog(['getExtendedActivityStats dbActivity.activityId', dbActivity.activityId]);
-      User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, _id: 0 }, (err, user) => {
+      hlpr.consLog(['getExtendedActivityStats activityId - currentSchema', dbActivity.activityId, dbActivity.currentSchema]);
+      User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
-          hlpr.consLog(['getExtendedActivityStats token', user.stravaId]);
+          hlpr.consLog([]);
+          hlpr.logOut(Object.assign(logObj, {
+            level: 5,
+            error: err,
+            message: `getExtendedActivityStats token dbActivity.athlete.id ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
+          }));
           const options = {
             id: user.stravaId,
             access_token: user.access_token,
             user: user,
             cronjob: true,
           };
-          //
           getActivityDetails(dbActivity, options, done => done);
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
-            const logObj = {
-              logType: 'activity',
-              level: 1, // 1 = high, 2 = med, 3 = low
+            hlpr.logOut(Object.assign(logObj, {
+              level: 1,
               error: err,
               message: `Controllers/Activity: getExtendedActivityStats No User ${authError.activityId}`,
-            };
-            hlpr.logOut(logObj);
+            }));
           });
         }
       });
