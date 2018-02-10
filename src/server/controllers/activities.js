@@ -267,7 +267,7 @@ const getActivityDetails = (activity, opts, cb) => {
               findActivityAndUpdate(enhancedData.id, enhancedData, opts, fullActivity => cb(fullActivity));
             });
           } else {
-            hlpr.consLog(['getActivityDetails pushActivities listZones not premium', enhancedData.id, enhancedData.resource_state, enhancedData.tssScore]);
+            hlpr.consLog(['getActivityDetails pushActivities listZones not premium', enhancedData.id, enhancedData.resource_state]);
 
             findActivityAndUpdate(enhancedData.id, enhancedData, opts, fullActivity => cb(fullActivity));
           }
@@ -352,7 +352,7 @@ exports.getExtendedActivityStats = () => {
   const limitCount = 22;
   const toUpdate = {
     $and: [
-      { authorizationError: { $ne: true } },
+      { authorizationError: { $exists: false } },
       { $or: [
         { resource_state: 2 },
         { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
