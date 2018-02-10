@@ -187,7 +187,7 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId: activityId }, Object.assign(data, { failedUpdate: false }), options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId: activityId }, data, options, (err, fullActivity) => {
     if (err) {
       hlpr.logOut(Object.assign(logObj, {
         level: 2,
@@ -195,6 +195,14 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
         message: `Controllers/Activity: findActivityAndUpdate err for ${activityId}`,
       }));
       return done([]);
+    }
+    if (!fullActivity) {
+      hlpr.logOut(Object.assign(logObj, {
+        level: 1,
+        error: err,
+        message: `Controllers/Activity: findActivityAndUpdate !fullActivity for ${activityId}`,
+      }));
+      return done(fullActivity);
     }
     hlpr.consLog(['findActivityAndUpdate return', fullActivity.activity.id]);
     return done(fullActivity);
