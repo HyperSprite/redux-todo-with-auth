@@ -187,7 +187,7 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId: activityId }, data, options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId }, data, options, (err, fullActivity) => {
     if (err) {
       hlpr.logOut(Object.assign(logObj, {
         level: 2,
@@ -204,7 +204,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       }));
       return done(fullActivity);
     }
-    hlpr.consLog(['findActivityAndUpdate return', fullActivity.activity.id]);
+    hlpr.consLog(['findActivityAndUpdate return', fullActivity.activityId]);
     return done(fullActivity);
   });
 };
@@ -262,16 +262,14 @@ const getActivityDetails = (activity, opts, cb) => {
                 enhancedData.ftp = ftp;
                 enhancedData.tssScore = justFns.calcTssScore(enhancedData.elapsed_time, enhancedData.weighted_average_watts, ftp);
               }
-              hlpr.consLog(['getActivityDetails pushActivities listZones', enhancedData.id, enhancedData.resource_state, enhancedData.tssScore]);
+              hlpr.consLog(['getActivityDetails pushActivities listZones premium', enhancedData.id, enhancedData.resource_state, enhancedData.tssScore]);
 
-              findActivityAndUpdate(enhancedData.id, enhancedData, opts, (fullActivity) => {
-                return cb(fullActivity);
-              });
+              findActivityAndUpdate(enhancedData.id, enhancedData, opts, fullActivity => cb(fullActivity));
             });
           } else {
-            findActivityAndUpdate(enhancedData.id, enhancedData, opts, (fullActivity) => {
-              return cb(fullActivity);
-            });
+            hlpr.consLog(['getActivityDetails pushActivities listZones not premium', enhancedData.id, enhancedData.resource_state, enhancedData.tssScore]);
+
+            findActivityAndUpdate(enhancedData.id, enhancedData, opts, fullActivity => cb(fullActivity));
           }
           hlpr.perfNowEnd(perfLabel);
         });
