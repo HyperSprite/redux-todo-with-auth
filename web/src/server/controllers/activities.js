@@ -200,7 +200,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       hlpr.logOut(Object.assign(logObj, {
         level: 1,
         error: err,
-        message: `Controllers/Activity: findActivityAndUpdate !fullActivity for ${activityId}`,
+        message: `Controllers/Activity: findActivityAndUpdate !fullActivity for: ${activityId} data: ${data}`,
       }));
       return done(fullActivity);
     }
