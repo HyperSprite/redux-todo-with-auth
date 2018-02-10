@@ -187,7 +187,7 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId }, Object.assign(data, { failedUpdate: false }), options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId: activityId }, Object.assign(data, { failedUpdate: false }), options, (err, fullActivity) => {
     if (err) {
       hlpr.logOut(Object.assign(logObj, {
         level: 2,
