@@ -94,6 +94,12 @@ exports.getAllActivities = (input, result) => {
 
 const getStreams = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: 'Controllers/Activity: getStreams',
+      logSubType: 'err',
+      level: 0,
+      message: '!activityId || !accessToken',
+    }));
     return done([]);
   }
   /*
@@ -114,21 +120,21 @@ const getStreams = (activityId, accessToken, done) => {
   ];
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
-    if (err || !_.isArray(streams)) {
-      hlpr.logOut(Object.assign(logObj, {
-        func: 'Controllers/Activity: getStreams',
-        logSubType: 'err',
-        level: 2,
-        error: err,
-        message: ` err for ${activityId}`,
-      }));
-      return done([]);
+    if (_.isArray(streams)) {
+      const newStreams = Object.assign({}, { streams }, { activityId });
+      ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
+        hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
+        return done(streamDB.streams);
+      });
     }
-    const newStreams = Object.assign({}, { streams }, { activityId });
-    ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
-      hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
-      return done(streamDB.streams);
-    });
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: 'Controllers/Activity: getStreams',
+      logSubType: 'err',
+      level: 2,
+      error: err,
+      message: ` err for ${activityId}`,
+    }));
+    return done([]);
   });
 };
 
@@ -137,37 +143,37 @@ const getStreams = (activityId, accessToken, done) => {
 */
 const getStreamTimeAverages = (streamsArr, done) => {
   const streamTime = [];
-  if (!streamsArr || !streamsArr.length) {
-    return done([]);
-  }
-  /*
-  * Streams to convert to Time Averages
-  */
-  const streamTimeAverages = [
-    'cadence',
-    'heartrate',
-    'watts',
-    'altitude',
-  ];
+  if (_.isArray(streamsArr)) {
+    /*
+    * Streams to convert to Time Averages
+    */
+    const streamTimeAverages = [
+      'cadence',
+      'heartrate',
+      'watts',
+      'altitude',
+    ];
 
-  streamTimeAverages.forEach((sTA) => {
-    const stream = streamsArr.filter(s => s.type === sTA);
-    if (stream.length) {
-      streamTime.push(
-        { [sTA]: {
-          [`${sTA}1`]: justFns.hiConsAvg(stream[0].data, 1),
-          [`${sTA}15`]: justFns.hiConsAvg(stream[0].data, 15),
-          [`${sTA}60`]: justFns.hiConsAvg(stream[0].data, 60),
-          [`${sTA}300`]: justFns.hiConsAvg(stream[0].data, 300),
-          [`${sTA}1200`]: justFns.hiConsAvg(stream[0].data, 1200),
-          [`${sTA}1800`]: justFns.hiConsAvg(stream[0].data, 1800),
-          [`${sTA}3600`]: justFns.hiConsAvg(stream[0].data, 3600),
-          [`${sTA}All`]: justFns.hiConsAvg(stream[0].data, stream[0].data.length),
-        } },
-      );
-    }
-  });
-  return done(streamTime);
+    streamTimeAverages.forEach((sTA) => {
+      const stream = streamsArr.filter(s => s.type === sTA);
+      if (stream.length) {
+        streamTime.push(
+          { [sTA]: {
+            [`${sTA}1`]: justFns.hiConsAvg(stream[0].data, 1),
+            [`${sTA}15`]: justFns.hiConsAvg(stream[0].data, 15),
+            [`${sTA}60`]: justFns.hiConsAvg(stream[0].data, 60),
+            [`${sTA}300`]: justFns.hiConsAvg(stream[0].data, 300),
+            [`${sTA}1200`]: justFns.hiConsAvg(stream[0].data, 1200),
+            [`${sTA}1800`]: justFns.hiConsAvg(stream[0].data, 1800),
+            [`${sTA}3600`]: justFns.hiConsAvg(stream[0].data, 3600),
+            [`${sTA}All`]: justFns.hiConsAvg(stream[0].data, stream[0].data.length),
+          } },
+        );
+      }
+    });
+    return done(streamTime);
+  }
+  return done([]);
 };
 
 const getListZones = (activityId, accessToken, done) => {
@@ -176,24 +182,28 @@ const getListZones = (activityId, accessToken, done) => {
   }
   strava.activities.listZones({ id: activityId, access_token: accessToken }, (err, listZonesArr, rateLimit) => {
     hlpr.consLog(['getListZones rateLimit', rateLimit]);
-    if (err) {
-      hlpr.logOut(Object.assign(logObj, {
-        func: 'Controllers/Activity: getListZones ',
-        logSubType: 'err',
-        level: 1,
-        error: err,
-        message: `err for ${activityId}`,
-      }));
-      return done([]);
+    if (_.isArray(listZonesArr)) {
+      return done(listZonesArr);
     }
-    return done(listZonesArr);
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: 'Controllers/Activity: getListZones ',
+      logSubType: 'err',
+      level: 1,
+      error: err,
+      message: `listZonesArr not Array for ${activityId}`,
+    }));
+    return done([]);
   });
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
   Activities.findOneAndUpdate({ activityId }, data, options, (err, fullActivity) => {
+    if (fullActivity) {
+      hlpr.consLog(['findActivityAndUpdate return', fullActivity.activityId]);
+      return done(fullActivity);
+    }
     if (err) {
-      hlpr.logOut(Object.assign(logObj, {
+      hlpr.logOut(Object.assign({}, logObj, {
         func: 'Controllers/Activity: findActivityAndUpdate ',
         logSubType: 'err',
         level: 2,
@@ -202,18 +212,14 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       }));
       return done([]);
     }
-    if (!fullActivity) {
-      hlpr.logOut(Object.assign(logObj, {
-        func: 'Controllers/Activity: findActivityAndUpdate ',
-        logSubType: 'err',
-        level: 1,
-        error: err,
-        message: `!fullActivity for: ${activityId} data: ${JSON.stringify(data)}`,
-      }));
-      return done(fullActivity);
-    }
-    hlpr.consLog(['findActivityAndUpdate return', fullActivity.activityId]);
-    return done(fullActivity);
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: 'Controllers/Activity: findActivityAndUpdate ',
+      logSubType: 'err',
+      level: 1,
+      error: err,
+      message: `!fullActivity for: ${activityId} data: ${JSON.stringify(data)}`,
+    }));
+    return done(null);
   });
 };
 
@@ -233,7 +239,7 @@ const getActivityDetails = (activity, opts, cb) => {
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
     if (err || !data || data.errors) {
       if (err) {
-        hlpr.logOut(Object.assign(logObj, {
+        hlpr.logOut(Object.assign({}, logObj, {
           func: 'Controllers/Activity: getActivityDetails ',
           logSubType: 'failure',
           level: 1,
@@ -277,7 +283,7 @@ const getActivityDetails = (activity, opts, cb) => {
           ${JSON.stringify(strmTmArr)},  ___________________________________________
           currentVersion = ${currentVersion}`;
 
-          hlpr.logOut(Object.assign(logObj, {
+          hlpr.logOut(Object.assign({}, logObj, {
             level: 0,
             error: err,
             message: mssg,
@@ -376,7 +382,7 @@ exports.getExtendedActivityStats = () => {
   const cacheQuery = { updatedAt: { $lt: backDate } };
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
-      hlpr.logOut(Object.assign(logObj, {
+      hlpr.logOut(Object.assign({}, logObj, {
         func: 'Controllers/Activity: getExtendedActivityStats activityStreamsCache',
         logSubType: 'info',
         level: 4,
@@ -408,7 +414,7 @@ exports.getExtendedActivityStats = () => {
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
           hlpr.consLog([]);
-          hlpr.logOut(Object.assign(logObj, {
+          hlpr.logOut(Object.assign({}, logObj, {
             func: 'Controllers/Activity: getExtendedActivityStats User.findOne',
             logSubType: 'info',
             level: 5,
@@ -424,7 +430,7 @@ exports.getExtendedActivityStats = () => {
           getActivityDetails(dbActivity, options, done => done);
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
-            hlpr.logOut(Object.assign(logObj, {
+            hlpr.logOut(Object.assign({}, logObj, {
               level: 1,
               error: err,
               message: `Controllers/Activity: getExtendedActivityStats No User ${authError.activityId}`,
