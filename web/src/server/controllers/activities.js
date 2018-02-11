@@ -130,7 +130,7 @@ const getStreams = (activityId, accessToken, done) => {
     hlpr.logOut(Object.assign({}, logObj, {
       func: 'Controllers/Activity: getStreams',
       logSubType: 'err',
-      level: 2,
+      level: 7,
       error: err,
       message: ` err for ${activityId}`,
     }));
