@@ -243,8 +243,17 @@ const getActivityDetails = (activity, opts, cb) => {
         findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
       }
     }
-    const polyline = data.map && (data.map.summary_polyline || data.map.polyline);
-    enhancePolylineLocation(polyline, true, (geoData) => {
+
+    const getPolyline = (map) => {
+      if (map) {
+        console.log('getPolyline', !!map);
+        return map.summary_polyline || map.polyline || null;
+      }
+      console.log('getPolyline', !!map);
+      return null;
+    };
+
+    enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(

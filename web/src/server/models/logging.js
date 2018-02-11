@@ -6,7 +6,9 @@ const Schema = mongoose.Schema;
 
 const loggingSchema = new Schema({
   stravaId: Number,
+  func: String,
   logType: String,
+  logSubType: String,
   level: Number,
   error: String,
   message: String,
