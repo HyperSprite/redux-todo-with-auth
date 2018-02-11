@@ -67,7 +67,13 @@ exports.perfNowEnd = (label) => {
 
 exports.logOut = (logObj) => {
   Logs.create(Object.assign(logObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
-    exports.consLog([logging]);
+    if (process.env.LOGGING !== 'true') {
+      if (logObj.level < 4) {
+        exports.consLog([logging]);
+      }
+    } else {
+      exports.consLog([logging]);
+    }
   });
 };
 
