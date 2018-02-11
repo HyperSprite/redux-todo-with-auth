@@ -223,12 +223,12 @@ const getActivityDetails = (activity, opts, cb) => {
   hlpr.perfNowStart(perfLabel);
   strava.activities.get({ id: activity.activityId, access_token: opts.access_token }, (err, data, rateLimit) => {
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
-    if (err || !data) {
+    if (err || !data || data.errors) {
       if (err) {
         hlpr.logOut(Object.assign(logObj, {
           level: 1,
           error: err,
-          message: `Controllers/Activity: getActivityDetails failedUpdate for ${activity.activityId}`,
+          message: `Controllers/Activity: getActivityDetails failedUpdate for ${activity.activityId} message: ${data.message} errors: ${data.errors}`,
         }));
         findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, (fullActivity) => {
           return cb(fullActivity);
@@ -249,7 +249,9 @@ const getActivityDetails = (activity, opts, cb) => {
           );
 
           const mssg = `Controllers/Activity:
-          getActivityDetails data  ___________________________________________
+          getActivityDetails
+          activityId ${activity.activityId} ______________
+          data  ___________________________________________
           ${JSON.stringify(data.id)},
           geoData ___________________________________________
           ${JSON.stringify(geoData)},
