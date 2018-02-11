@@ -116,9 +116,11 @@ const getStreams = (activityId, accessToken, done) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
     if (err || !_.isArray(streams)) {
       hlpr.logOut(Object.assign(logObj, {
+        func: 'Controllers/Activity: getStreams',
+        logSubType: 'err',
         level: 2,
         error: err,
-        message: `Controllers/Activity: getStreams err for ${activityId}`,
+        message: ` err for ${activityId}`,
       }));
       return done([]);
     }
@@ -176,9 +178,11 @@ const getListZones = (activityId, accessToken, done) => {
     hlpr.consLog(['getListZones rateLimit', rateLimit]);
     if (err) {
       hlpr.logOut(Object.assign(logObj, {
+        func: 'Controllers/Activity: getListZones ',
+        logSubType: 'err',
         level: 1,
         error: err,
-        message: `Controllers/Activity: getListZones err for ${activityId}`,
+        message: `err for ${activityId}`,
       }));
       return done([]);
     }
@@ -190,17 +194,21 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
   Activities.findOneAndUpdate({ activityId }, data, options, (err, fullActivity) => {
     if (err) {
       hlpr.logOut(Object.assign(logObj, {
+        func: 'Controllers/Activity: findActivityAndUpdate ',
+        logSubType: 'err',
         level: 2,
         error: err,
-        message: `Controllers/Activity: findActivityAndUpdate err for ${activityId}`,
+        message: `err for ${activityId}`,
       }));
       return done([]);
     }
     if (!fullActivity) {
       hlpr.logOut(Object.assign(logObj, {
+        func: 'Controllers/Activity: findActivityAndUpdate ',
+        logSubType: 'err',
         level: 1,
         error: err,
-        message: `Controllers/Activity: findActivityAndUpdate !fullActivity for: ${activityId} data: ${JSON.stringify(data)}`,
+        message: `!fullActivity for: ${activityId} data: ${JSON.stringify(data)}`,
       }));
       return done(fullActivity);
     }
@@ -226,13 +234,13 @@ const getActivityDetails = (activity, opts, cb) => {
     if (err || !data || data.errors) {
       if (err) {
         hlpr.logOut(Object.assign(logObj, {
+          func: 'Controllers/Activity: getActivityDetails ',
+          logSubType: 'failure',
           level: 1,
           error: err,
-          message: `Controllers/Activity: getActivityDetails failedUpdate for ${activity.activityId} message: ${data.message} errors: ${data.errors}`,
+          message: `failedUpdate for ${activity.activityId} message: ${data.message} errors: ${data.errors}`,
         }));
-        findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, (fullActivity) => {
-          return cb(fullActivity);
-        });
+        findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
       }
     }
     const polyline = data.map && (data.map.summary_polyline || data.map.polyline);
@@ -360,9 +368,11 @@ exports.getExtendedActivityStats = () => {
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
       hlpr.logOut(Object.assign(logObj, {
+        func: 'Controllers/Activity: getExtendedActivityStats activityStreamsCache',
+        logSubType: 'info',
         level: 4,
         error: err,
-        message: `Controllers/Activity: activityStreamsCache removed ${removed.n}`,
+        message: `removed ${removed.n}`,
       }));
     }
   });
@@ -390,9 +400,11 @@ exports.getExtendedActivityStats = () => {
         if (user && !err) {
           hlpr.consLog([]);
           hlpr.logOut(Object.assign(logObj, {
+            func: 'Controllers/Activity: getExtendedActivityStats User.findOne',
+            logSubType: 'info',
             level: 5,
             error: err,
-            message: `getExtendedActivityStats token dbActivity.athlete.id ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
+            message: `athleteId: ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
           }));
           const options = {
             id: user.stravaId,

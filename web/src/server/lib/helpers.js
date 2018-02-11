@@ -56,12 +56,15 @@ exports.perfNowEnd = (label) => {
 
 // const logObj = {
 //   stravaId: req.user.stravaId,
-//   logType: 'auth',
+//   func: 'Controllers/Activity: findActivityAndUpdate'
+//   logType: 'activity',
+//   logSubType: 'failure',
 //   level: 3, // 1 = high, 2 = med, 3 = low
 //   error: err,
 //   message: `Controllers/Authentication: exports.user`,
 //   page: req.originalUrl,
 // };
+
 exports.logOut = (logObj) => {
   Logs.create(Object.assign(logObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
     exports.consLog([logging]);
