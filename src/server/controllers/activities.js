@@ -241,12 +241,28 @@ const getActivityDetails = (activity, opts, cb) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(
             {},
-            data,
+            data, // raw Strava data
             geoData,
             { streamData: !!strmArr.length },
             { streamTime: strmTmArr },
             { currentSchema: currentVersion } //eslint-disable-line
           );
+
+          const mssg = `Controllers/Activity:
+          getActivityDetails data  ___________________________________________
+          ${JSON.stringify(data.id)},
+          geoData ___________________________________________
+          ${JSON.stringify(geoData)},
+          streamData  ___________________________________________
+          ${!!strmArr.length}, streamTime  ___________________________________________
+          ${JSON.stringify(strmTmArr)},  ___________________________________________
+          currentVersion = ${currentVersion}`;
+
+          hlpr.logOut(Object.assign(logObj, {
+            level: 0,
+            error: err,
+            message: mssg,
+          }));
 
           if (opts.user.premium) {
             getListZones(activity.activityId, opts.access_token, (listZonesArr) => {
