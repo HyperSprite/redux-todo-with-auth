@@ -405,7 +405,12 @@ exports.getExtendedActivityStats = () => {
   const newDate = new Date();
   const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
-  hlpr.consLog([`>>>>>>>>>>>>>>>>>>>>>>>> getExtendedActivityStats ${minutes} ${newDate}`]);
+  hlpr.logOut(Object.assign({}, logObj, {
+    func: 'Controllers/Activity: getExtendedActivityStats',
+    logSubType: 'info',
+    level: 10,
+    message: `minutes: ${minutes} newDate ${newDate}`,
+  }));
   const cacheQuery = { updatedAt: { $lt: backDate } };
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
@@ -445,7 +450,7 @@ exports.getExtendedActivityStats = () => {
             logSubType: 'info',
             level: 5,
             error: err,
-            message: `athleteId: ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
+            message: `activityId: ${dbActivity.activityId}, athleteId: ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
           }));
           const options = {
             id: user.stravaId,
