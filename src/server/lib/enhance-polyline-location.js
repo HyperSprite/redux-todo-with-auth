@@ -1,5 +1,12 @@
 const mbPolyline = require('polyline');
 const resources = require('./resources');
+const hlpr = require('./helpers');
+
+const logObj = {
+  file: 'lib/enhancePolylineLocation',
+  logType: 'enhancePolylineLocation',
+  level: 10,
+};
 
 /**
 *
@@ -34,6 +41,11 @@ const resources = require('./resources');
 */
 module.exports = (polyline, extended, result) => {
   if (!polyline) {
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file} default`,
+      logSubType: 'info',
+      message: '!polyline',
+    }));
     return result({});
   }
   const cooArr = mbPolyline.decode(polyline);

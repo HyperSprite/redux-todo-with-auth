@@ -5,18 +5,28 @@ const hlpr = require('./helpers');
 const OwmAPIKey = process.env.OPEN_WEATHER_MAP;
 const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
+const logObj = {
+  file: 'lib/resources',
+  logType: 'resources',
+  level: 10,
+};
+
 // target: 'weatherforcast', 'elevation', elevationpath, 'timezone', astrophases
 // input.loc: '-122.1439698,37.426941' or polyline
 exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
   const sLoc = target === 'elevationpath' ? loc : loc.split(',');
-  hlpr.consLog(['resources.rLonLat', date, typeof date]);
   const timestamp = moment(date).format('X');
   let timeOffset = 0;
   if (tzOffset) {
     timeOffset = ((tzOffset * 1) + (dstOffset * 1)) / 3600;
   }
 
-  hlpr.consLog(['sLoc', sLoc.toString().substring(0, 30), 'input.date', date, 'timeOffset', timeOffset, 'tzOffset', tzOffset, 'dstOffset', dstOffset, 'timestamp', timestamp, 'datestamp']);
+  hlpr.logOut(Object.assign({}, logObj, {
+    func: `${logObj.file} default args setup`,
+    logSubType: 'info',
+    message: `sLoc: ${sLoc.toString().substring(0, 30)} input.date: ${date} timeOffset: ${timeOffset} tzOffset: ${tzOffset} dstOffset ${dstOffset} timestamp: ${timestamp}`,
+  }));
+
   // TODO remove sample date from astrophases and set real date
   const resourceMap = {
     weatherforcast: {
@@ -40,7 +50,6 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     }, // body: "astrophases": {  ...see this http://aa.usno.navy.mil/data/docs/api.php#phase }
   };
 
-  // hlpr.consLog(['rLonLat', resourceMap[target].url]);
   requestify.request(resourceMap[target].url, {
     method: 'GET',
     cache: {
@@ -48,10 +57,14 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
       expires: 3.6e+6, // (1 hour = 3.6e+6) Time for cache to expire in milliseconds
     },
   }).then((response) => {
-    // hlpr.consLog(['lib.resources.then', response.getBody()]);
     const result = {
       output: {},
     };
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file} default response`,
+      logSubType: 'info',
+      message: `target ${target} target.url: ${resourceMap[target].url}`,
+    }));
     result.outputParsed = response.getBody();
     if (target === 'weatherforcast' && result.outputParsed.cod === '200') {
       result.output.location = loc;
@@ -65,6 +78,8 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     }
 
     if (result.outputParsed.status === 'OK') {
+      hlpr.logOut(Object.assign({}, logObj, {
+      }));
       switch (target) {
         case 'elevation':
           result.output.elevation = result.outputParsed.results[0].elevation;
@@ -82,7 +97,12 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     }
     return output({ [target]: null });
   }).fail((response) => {
-    hlpr.consLog(['Error resources.rLonLat', 'URL', response, resourceMap[target].url]);
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file} default`,
+      level: 5,
+      logSubType: 'error',
+      message: `Error resources.rLonLat - URL: ${response} target.url: ${resourceMap[target].url}`,
+    }));
     return output({ [target]: null });
   });
 };
