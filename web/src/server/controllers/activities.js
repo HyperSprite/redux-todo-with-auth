@@ -120,21 +120,37 @@ const getStreams = (activityId, accessToken, done) => {
   ];
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
-    if (_.isArray(streams)) {
+    if (err) {
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: 'Controllers/Activity: getStreams',
+        logSubType: 'err',
+        level: 3,
+        error: err,
+        message: `err for ${activityId} streams: ${streams.message}`,
+      }));
+      return done([]);
+    } else if (_.isArray(streams)) {
       const newStreams = Object.assign({}, { streams }, { activityId });
       ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
-        hlpr.consLog(['streams', activityId, streams.map(s => s.type)]);
-        return done(streamDB.streams);
+        hlpr.logOut(Object.assign({}, logObj, {
+          func: 'Controllers/Activity: getStreams',
+          logSubType: 'info',
+          level: 8,
+          error: err,
+          message: `${activityId} streams: ${streams.map(s => s.type)}`,
+        }));
+        return done(streams);
       });
+    } else {
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: 'Controllers/Activity: getStreams',
+        logSubType: 'err',
+        level: 6,
+        error: err,
+        message: ` err for ${activityId} message ${streams.message}`,
+      }));
+      return done([]);
     }
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: 'Controllers/Activity: getStreams',
-      logSubType: 'err',
-      level: 7,
-      error: err,
-      message: ` err for ${activityId}`,
-    }));
-    return done([]);
   });
 };
 
@@ -178,6 +194,12 @@ const getStreamTimeAverages = (streamsArr, done) => {
 
 const getListZones = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: 'Controllers/Activity: getListZones',
+      logSubType: 'err',
+      level: 1,
+      message: `!activityId || !accessToken for ${activityId}`,
+    }));
     return done([]);
   }
   strava.activities.listZones({ id: activityId, access_token: accessToken }, (err, listZonesArr, rateLimit) => {
@@ -186,20 +208,26 @@ const getListZones = (activityId, accessToken, done) => {
       return done(listZonesArr);
     }
     hlpr.logOut(Object.assign({}, logObj, {
-      func: 'Controllers/Activity: getListZones ',
+      func: 'Controllers/Activity: getListZones',
       logSubType: 'err',
       level: 1,
       error: err,
-      message: `listZonesArr not Array for ${activityId}`,
+      message: `activity ${activityId} Not an Array listZonesArr ${listZonesArr}`,
     }));
     return done([]);
   });
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId }, data, options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId: options.activityId }, data, options, (err, fullActivity) => {
     if (fullActivity) {
-      hlpr.consLog(['findActivityAndUpdate return', fullActivity.activityId]);
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: 'Controllers/Activity: findActivityAndUpdate',
+        logSubType: 'err',
+        level: 8,
+        error: err,
+        message: `Successful save of Activity ${fullActivity.activityId}`,
+      }));
       return done(fullActivity);
     }
     if (err) {
@@ -208,7 +236,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
         logSubType: 'err',
         level: 2,
         error: err,
-        message: `err for ${options.activityId}`,
+        message: `err for ${options.activityId} data: ${data} ${options}`,
       }));
       return done([]);
     }
@@ -282,7 +310,7 @@ const getActivityDetails = (activity, opts, cb) => {
           hlpr.logOut(Object.assign({}, logObj, {
             func: 'Controllers/Activity: getActivityDetails',
             logSubType: 'info',
-            level: 6,
+            level: 8,
             error: err,
             message: mssg,
           }));
@@ -345,7 +373,6 @@ exports.getRecentActivities = (req, res) => {
           }
         } else {
           options.activityId = dbActivity.activityId;
-          hlpr.consLog(['optoins', options]);
           getActivityDetails(dbActivity, options, (done) => {
             counter.push(done.activityId);
             if (counter.length === acts.length) {
