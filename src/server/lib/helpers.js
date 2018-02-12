@@ -37,7 +37,7 @@ exports.correctedTZDate = (stringDate) => {
 // For every element of the array,
 // a console.log message is generated.
 exports.consLog = (arr) => {
-  if (logLevel[process.env.LOGGING] > 6 * 1) {
+  if (logLevel[process.env.LOGGING] * 1 > 6) {
     [].slice.call(arr).forEach((arg) => {
       console.log(exports.getDate(r => r), arg);
     });
@@ -45,7 +45,7 @@ exports.consLog = (arr) => {
 };
 
 exports.perfNowStart = (label) => {
-  if (logLevel[process.env.LOGGING] > 6 * 1) {  // verbose logLevel
+  if (logLevel[process.env.LOGGING] * 1 > 6) {  // verbose logLevel
     const perfNSName = `perfNS${label}`;
     process.env[perfNSName] = performance.now();
     console.log(`\n ${perfNSName} \n`);
@@ -54,7 +54,7 @@ exports.perfNowStart = (label) => {
 
 exports.perfNowEnd = (label) => {
   const perfNSName = `perfNS${label}`;
-  if (logLevel[process.env.LOGGING] > 6 * 1) { // verbose logLevel
+  if (logLevel[process.env.LOGGING] * 1 > 6) { // verbose logLevel
     const perfNowEnd = performance.now();
     const result = Math.floor(perfNowEnd - process.env[perfNSName]);
     const output = `${perfNSName} ran for ${result}`;
@@ -83,7 +83,7 @@ const loggit = (logObj) => {
 exports.logOut = (logObj) => {
 
   if (logLevel[process.env.LOGGING] !== '') {
-    if (logObj.level <= logLevel[process.env.LOGGING]) {
+    if (logObj.level <= logLevel[process.env.LOGGING] * 1) {
       loggit(logObj);
     }
   }

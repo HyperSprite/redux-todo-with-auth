@@ -3,6 +3,8 @@ const findOrCreate = require('mongoose-findorcreate');
 const uuid = require('uuid');
 
 mongoose.Promise = global.Promise;
+mongoose.plugin(require('./middleware-current-schema'));
+
 const Schema = mongoose.Schema;
 
 const uuidNow = () => {
