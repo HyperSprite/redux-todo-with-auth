@@ -274,6 +274,15 @@ const getActivityDetails = (activity, opts, cb) => {
         message: `failedUpdate for ${activity.activityId} message: ${data ? data.message : 'No data'} errors: ${data.errors}`,
       }));
       findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
+    } else if (data.elapsed_time === 0) {
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: 'Controllers/Activity: getActivityDetails ',
+        logSubType: 'failure',
+        level: 6,
+        error: err,
+        message: `data.elapsed_time === 0 for ${activity.activityId}`,
+      }));
+      findActivityAndUpdate(activity.activityId, data, opts, fullActivity => cb(fullActivity));
     }
 
     const getPolyline = (map) => {
