@@ -3,6 +3,9 @@ const findOrCreate = require('mongoose-findorcreate');
 const serialize = require('serialize-javascript');
 const uuidv4 = require('uuid/v4');
 
+mongoose.Promise = global.Promise;
+mongoose.plugin(require('./middleware-current-schema'));
+
 const Schema = mongoose.Schema;
 
 const ObjectId = mongoose.Schema.Types.ObjectId;

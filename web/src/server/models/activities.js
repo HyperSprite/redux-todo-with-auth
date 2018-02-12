@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 
+mongoose.Promise = global.Promise;
+mongoose.plugin(require('./middleware-current-schema'));
+
 const Schema = mongoose.Schema;
 
 const athleteSchema = new Schema(

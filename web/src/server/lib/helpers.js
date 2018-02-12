@@ -5,6 +5,15 @@ const dateFNS = require('date-fns');
 const Logs = require('../models/logging');
 // Helper functions
 
+const logLevel = {
+  everything: 10, // bug testing
+  verbose: 7,     // not for production
+  normal: 4,      // important
+  true: 1,        // clritical
+  minimal: 1,     // critical
+  none: -1,
+};
+
 exports.isProd = () => {
   if (process.env.NODE_ENV === 'production') {
     return 'production';
@@ -28,7 +37,7 @@ exports.correctedTZDate = (stringDate) => {
 // For every element of the array,
 // a console.log message is generated.
 exports.consLog = (arr) => {
-  if (process.env.LOGGING === 'true') {
+  if (logLevel[process.env.LOGGING] > 6 * 1) {
     [].slice.call(arr).forEach((arg) => {
       console.log(exports.getDate(r => r), arg);
     });
@@ -36,7 +45,7 @@ exports.consLog = (arr) => {
 };
 
 exports.perfNowStart = (label) => {
-  if (process.env.LOGGING === 'true') {
+  if (logLevel[process.env.LOGGING] > 6 * 1) {  // verbose logLevel
     const perfNSName = `perfNS${label}`;
     process.env[perfNSName] = performance.now();
     console.log(`\n ${perfNSName} \n`);
@@ -45,7 +54,7 @@ exports.perfNowStart = (label) => {
 
 exports.perfNowEnd = (label) => {
   const perfNSName = `perfNS${label}`;
-  if (process.env.LOGGING === 'true' && process.env[perfNSName]) {
+  if (logLevel[process.env.LOGGING] > 6 * 1) { // verbose logLevel
     const perfNowEnd = performance.now();
     const result = Math.floor(perfNowEnd - process.env[perfNSName]);
     const output = `${perfNSName} ran for ${result}`;
@@ -59,22 +68,25 @@ exports.perfNowEnd = (label) => {
 //   func: 'Controllers/Activity: findActivityAndUpdate'
 //   logType: 'activity',
 //   logSubType: 'failure',
-//   level: 3, // 1 = high, 2 = med, 3 = low
+//   level: 3, // 0 & 1 = critical, 2~4  = important, 5~9 low
 //   error: err,
 //   message: `Controllers/Authentication: exports.user`,
 //   page: req.originalUrl,
 // };
 
-exports.logOut = (logObj) => {
+const loggit = (logObj) => {
   Logs.create(Object.assign(logObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
-    if (process.env.LOGGING !== 'true') {
-      if (logObj.level < 4) {
-        exports.consLog([logging]);
-      }
-    } else {
-      exports.consLog([logging]);
-    }
+    exports.consLog([logging]);
   });
+};
+
+exports.logOut = (logObj) => {
+
+  if (logLevel[process.env.LOGGING] !== '') {
+    if (logObj.level <= logLevel[process.env.LOGGING]) {
+      loggit(logObj);
+    }
+  }
 };
 
 // const wattsOverFTP = waw / ftp;
