@@ -6,7 +6,7 @@ const WebpackChunkHash = require('webpack-chunk-hash');
 const UglifyJs = require('uglifyjs-webpack-plugin');
 
 const isProd = (process.env.NODE_ENV === 'production');
-const isLogging = (process.env.LOGGING === 'true');
+const isLogging = (process.env.LOGGING !== '');
 
 // process.traceDeprecation = true;
 const useBundleAnalyzerPlugin = false;
@@ -25,7 +25,7 @@ const compress = {
   // join_vars: true,
 };
 
-console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging);
+console.log('webpack', process.env.NODE_ENV, 'isLogging', isLogging, process.env.LOGGING);
 
 function getPlugins() {
   const plugins = [];

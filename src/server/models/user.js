@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const findOrCreate = require('mongoose-findorcreate');
 const bcrypt = require('bcrypt-nodejs');
 
+mongoose.Promise = global.Promise;
 mongoose.plugin(require('./middleware-current-schema'));
 
 const Schema = mongoose.Schema;
@@ -96,7 +97,7 @@ const userSchema = new Schema({
   adminMember: Boolean,
   clubMember: Boolean,
   clubNotice: Boolean,
-  authorizationErrors: { type: Number, default: 0 },  
+  authorizationErrors: { type: Number, default: 0 },
   week_start_day: Number, // 0 - Sun, 1 - Mon...
   activitiesCollected: Boolean,
   bikes: [bikeSchema],

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+mongoose.Promise = global.Promise;
 mongoose.plugin(require('./middleware-current-schema'));
 
 const Schema = mongoose.Schema;

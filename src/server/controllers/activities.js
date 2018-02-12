@@ -250,10 +250,8 @@ const getActivityDetails = (activity, opts, cb) => {
 
     const getPolyline = (map) => {
       if (map) {
-        console.log('getPolyline', !!map);
         return map.summary_polyline || map.polyline || null;
       }
-      console.log('getPolyline', !!map);
       return null;
     };
 
