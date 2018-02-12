@@ -110,19 +110,20 @@ app.use((err, req, res) => {
   res.status(500).render('500');
 });
 
+const runtimeSettings = `${port} v${process.env.CURRENT_SCHEMA} logging:${process.env.LOGGING}`
 // HTTPS
 if (isSSL) {
   httpServer = https.createServer({
     key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
     cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
   }, app).listen(portS, () => {
-    console.log(`**** HTTPS ${app.get('env')} https://localhost:${portS} v${process.env.CURRENT_SCHEMA}`);
+    console.log(`**** HTTPS ${app.get('env')} https://localhost${runtimeSettings}`);
   });
   const insecureServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port} v${process.env.CURRENT_SCHEMA}`);
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${runtimeSettings}`);
   });
 } else {
   httpServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${port} v${process.env.CURRENT_SCHEMA}`);
+    console.log(`**** HTTP ${app.get('env')} http://localhost:${runtimeSettings}`);
   });
 }
