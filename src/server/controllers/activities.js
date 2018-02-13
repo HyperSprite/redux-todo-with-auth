@@ -39,8 +39,7 @@ function weeksBack(weekStart, weeks) {
 
 const logObj = {
   file: 'controllers/activities',
-  stravaId: null,
-  logType: 'activity',
+  logType: 'controller',
   level: 10,
 };
 
@@ -419,28 +418,18 @@ const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 3; // 3 min failsafe
 const theInterval = min => min * 60 * 1000;
 
 exports.getExtendedActivityStats = () => {
+  const limitCount = 22;
   const newDate = new Date();
   const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
-  hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file}.getExtendedActivityStats`,
-    logSubType: 'info',
-    message: `minutes: ${minutes} backDate ${backDate}`,
-  }));
+  hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats start`, logObj.logType, 'info', 9, null, 'no_page', `Get ${limitCount} activities every ${minutes} minutes with backDate ${backDate}`, null);
   const cacheQuery = { updatedAt: { $lt: backDate } };
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.getExtendedActivityStats activityStreamsCache`,
-        logSubType: 'info',
-        level: 4,
-        error: err,
-        message: `removed ${removed.n}`,
-      }));
+      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats activityStreamsCache`, logObj.logType, 'info', 5, err, 'no_page', `removed ${removed.n}`, null);
     }
   });
 
-  const limitCount = 22;
   const toUpdate = {
     $and: [
       { authorizationError: { $exists: false } },
@@ -454,34 +443,15 @@ exports.getExtendedActivityStats = () => {
 
   Activities.find(toUpdate).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.getExtendedActivityStats Activities.find err`,
-        logSubType: 'err',
-        level: 3,
-        error: err,
-        message: `Error finding activities ${JSON.stringify(toUpdate)}`,
-      }));
-      hlpr.consLog(['getExtendedActivityStats err activities', err]);
+      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find err`, logObj.logType, 'err', 3, err, 'no_page', `Error finding activities ${JSON.stringify(toUpdate)}`, null);
       return err;
     }
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}.getExtendedActivityStats Activities.find list`,
-      logSubType: 'info',
-      level: 10,
-      error: err,
-      message: JSON.stringify(activities.map(a => a.activityId)),
-    }));
+    hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find info`, logObj.logType, 'info', 10, err, 'no_page', `activities ${JSON.stringify(toUpdate)}`, null);
     activities.forEach((dbActivity) => {
-      hlpr.consLog(['getExtendedActivityStats activityId - currentSchema', dbActivity.activityId, dbActivity.currentSchema]);
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
-          hlpr.logOut(Object.assign({}, logObj, {
-            func: `${logObj.file}.getExtendedActivityStats User.findOne`,
-            logSubType: 'info',
-            level: 5,
-            error: err,
-            message: `activityId: ${dbActivity.activityId}, athleteId: ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`,
-          }));
+          const message = `activityId: ${dbActivity.activityId}, athleteId: ${dbActivity.athlete.id}, id: ${user.stravaId}, access_token: ${user.access_token}`;
+          hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats User.findOne info`, logObj.logType, 'info', 5, err, 'no_page', message, null);
           const options = {
             id: user.stravaId,
             activityId: dbActivity.activityId,
@@ -492,13 +462,7 @@ exports.getExtendedActivityStats = () => {
           getActivityDetails(dbActivity, options, done => done);
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
-            hlpr.logOut(Object.assign({}, logObj, {
-              func: `${logObj.file}.getExtendedActivityStats Activities.findOneAndUpdate`,
-              logSubType: 'failure',
-              level: 1,
-              error: err,
-              message: `No User ${authError.activityId}`,
-            }));
+            hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats User.findOne failure`, logObj.logType, 'failure', 1, err, 'no_page', `No User ${authError.activityId}`, null);
           });
         }
       });
@@ -538,7 +502,7 @@ const updateDB = () => {
       };
       hlpr.consLog(['updateDB dbActivity.activityId', insertable.activityId]);
       Activities.findOneAndUpdate({ activityId }, { $set: { streams: undefined } }, { new: true }, (err, noStream) => {
-        console.log(' dbActivity.streams.length noStream', activityId, noStream.currentSchema);
+        hlpr.logOutArgs(`${logObj.file}.updateDB Activities.findOneAndUpdate info`, logObj.logType, 'info', 5, err, 'no_page', `Activity: ${activityId}: No Stream ${noStream.currentSchema}`, null);
       });
     });
   });
@@ -666,9 +630,9 @@ exports.getWeeklyStats = async (req, res) => {
     result.week = await getOneWeek(startDate, req.user.stravaId);
     result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
   } catch (error) {
-    hlpr.consLog(['getWeeklyStats error', error]);
+    hlpr.logOutArgs(`${logObj.file}.getWeeklyStats error`, logObj.logType, 'error', 3, error, req.originalUrl, `Error ${error}`, req.user.stravaId);
   }
-  hlpr.consLog(['getWeeklyStats sending result']);
+  hlpr.logOutArgs(`${logObj.file}.getWeeklyStats info`, logObj.logType, 'info', 9, null, req.originalUrl, 'Sending result', req.user.stravaId);
   res.send(result);
 };
 
@@ -683,20 +647,20 @@ exports.refreshActivity = (req, res) => {
     activityId: req.params.id * 1,
     'athlete.id': req.user.stravaId,
   };
-  hlpr.consLog(['refreshActivity', q.activityId, q.athlete]);
+  hlpr.logOutArgs(`${logObj.file}.refreshActivity info`, logObj.logType, 'info', 9, null, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
 
   strava.activities.get({ id: q.activityId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) {
-      hlpr.consLog(['getActivityDetails strava.activities.get', err]);
+      hlpr.logOutArgs(`${logObj.file}.refreshActivity strava.activities.get 404`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
       return res.status(404).send({ error: true, message: 'Activity not found on Strava' });
     }
-    hlpr.consLog(['refreshActivity', data]);
     Activities.findOneAndUpdate(q, data, { new: true }, (err, activity) => {
       hlpr.consLog([activity]);
       if (err || !activity) {
-        hlpr.consLog(['refreshActivity err', err]);
+        hlpr.logOutArgs(`${logObj.file}.refreshActivity Activities.findOneAndUpdate err`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
         return res.status(404).send({ error: true, message: 'Activity not found' });
       }
+      hlpr.logOutArgs(`${logObj.file}.refreshActivity Activities.findOneAndUpdate info`, logObj.logType, 'info', 9, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
       return res.send([activity]);
     });
   });
@@ -719,7 +683,7 @@ exports.resetActivity = (req, res) => {
   Activities.findOneAndUpdate(query, data, { new: true }, (err, activity) => {
     hlpr.consLog([query, activity]);
     if (err || !activity) {
-      hlpr.consLog(['favEvent err', err]);
+      hlpr.logOutArgs(`${logObj.file}.refreshActivity Activities.findOneAndUpdate err`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
       res.status(404).send({ resetActivity: 'Activity not found' });
     }
     res.send({ activityId: activity.activityId, resetActivity: activity.resource_state });
@@ -727,17 +691,18 @@ exports.resetActivity = (req, res) => {
 };
 
 exports.deleteActivity = (req, res) => {
-  const query = {
+  const q = {
     activityId: req.body.activityId,
     'athlete.id': req.user.stravaId,
   };
-  Activities.remove(query, (err) => {
-    hlpr.consLog(['remove', query]);
+  Activities.remove(q, (err) => {
+    hlpr.consLog(['remove', q]);
     if (err) {
-      hlpr.consLog(['favEvent err', err]);
+      hlpr.logOutArgs(`${logObj.file}.deleteActivity err`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
       res.status(404).send({ type: 'MESSAGE_FOR_USER', payload: 'Activity not found or not removed' });
     }
-    res.send([{ activityId: query.activityId, deleted: true }]);
+    hlpr.logOutArgs(`${logObj.file}.deleteActivity info`, logObj.logType, 'info', 9, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
+    res.send([{ activityId: q.activityId, deleted: true }]);
   });
 };
 
@@ -858,7 +823,6 @@ exports.searchActivities = async (req, res) => {
   // localhost:3080/apiv1/activities/search-activities?lng=-122.1439698&lon=37.426941
   if (q.lng && q.lat) {
     const coords = [q.lng * 1, q.lat * 1];
-    console.log('coords', coords);
     const maxDist = q.maxDist * 1 || 321869; // 200 miles
     geoData = {
       $geoNear: {
@@ -1000,7 +964,6 @@ exports.searchActivities = async (req, res) => {
     { $project: { _id: 0, arr: 1 } },
   ];
   if (geoData) {
-    console.log('geoData', geoData);
     aggregate.push(geoData);
   }
   aggregate.push({ $match: { $and: query.search } });
@@ -1081,7 +1044,6 @@ exports.searchActivities = async (req, res) => {
     { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
     { $group: aggregateGroup },
   ];
-  console.log('aggregate', aggregate);
   let aggResult;
   let activCalcAll;
   let activitySearch;
@@ -1090,7 +1052,7 @@ exports.searchActivities = async (req, res) => {
     activCalcAll = await Activities.aggregate(aggregateMax);
     activitySearch = aggResult[0].activitySearch[0] && aggResult[0].activitySearch[0].arr;
   } catch (err) {
-    hlpr.consLog(['searchActivities', err]);
+    hlpr.logOutArgs(`${logObj.file}.searchActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, '500 - Failed to Search Activities', req.user.stravaId);
     return res.status(500).send({ Error: 'Failed to Search Activities' });
   }
   if (q.csv) {
@@ -1101,7 +1063,10 @@ exports.searchActivities = async (req, res) => {
       headers: true,
       objectMode: true,
     }, (err, resultCsv) => {
-      if (err) return console.log(err);
+      if (err) {
+        hlpr.logOutArgs(`${logObj.file}.searchActivities csv err`, logObj.logType, 'error', 5, err, req.originalUrl, 'Something went wrong at CSV creation', req.user.stravaId);
+        res.status(500).send({ error: 'Something went wrong at CSV creation' });
+      }
       res.send(resultCsv);
     });
   } else {
@@ -1121,16 +1086,16 @@ exports.searchActivities = async (req, res) => {
 };
 
 exports.toggleClubNotice = async (req, res) => {
-  hlpr.consLog(['toggleClubNotice', req.body.clubNotice]);
   let result;
   try {
     result = await User.findOneAndUpdate(
       { stravaId: req.user.stravaId }, { clubNotice: req.body.clubNotice }, { new: true }
     );
   } catch (err) {
-    hlpr.consLog(['toggleClubNotice', err]);
+    hlpr.logOutArgs(`${logObj.file}.toggleClubNotice err`, logObj.logType, 'error', 5, err, req.originalUrl, 'Something went wrong toggeling the Club Notice', req.user.stravaId);
     return res.status(500).send({ Error: 'Failed to update' });
   }
+  hlpr.logOutArgs(`${logObj.file}.toggleClubNotice info`, logObj.logType, 'info', 9, null, req.originalUrl, 'Club Notice Toggled', req.user.stravaId);
   return res.send({ clubNotice: result.clubNotice });
 };
 
@@ -1422,9 +1387,10 @@ exports.fitnessToday = async (req, res) => {
   try {
     result = await Activities.aggregate(aggregate);
   } catch (err) {
-    hlpr.consLog(['fitnessToday err', err]);
+    hlpr.logOutArgs(`${logObj.file}.fitnessToday err`, logObj.logType, 'error', 5, err, req.originalUrl, 'Failed to get todays fitness', req.user.stravaId);
     return res.status(500).send({ Error: 'Failed to get todays fitness' });
   }
+  hlpr.logOutArgs(`${logObj.file}.fitnessToday info`, logObj.logType, 'info', 9, null, req.originalUrl, 'Success getting todays fitness', req.user.stravaId);
   return res.send({ fitnessToday: result });
 };
 

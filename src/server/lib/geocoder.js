@@ -1,6 +1,13 @@
 const NodeGeocoder = require('node-geocoder');
 const hlpr = require('./helpers');
 
+const logObj = {
+  file: 'lib/geocoder',
+  logType: 'lib',
+  logSubType: 'info',
+  level: 10,
+};
+
 const geoOptions = {
   provider: 'google',
   apiKey: process.env.GOOGLE_MAPS, // see Config file

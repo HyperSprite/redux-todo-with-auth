@@ -7,6 +7,12 @@ const geocoder = require('../lib/geocoder');
 const markdown = require('../lib/markdown');
 const resources = require('../lib/resources');
 
+const logObj = {
+  file: 'controllers/events',
+  logType: 'controller',
+  level: 10,
+};
+
 const getDate = (result) => {
   const newDate = moment().add(-1, 'days').format();
   newDate.toString();

@@ -7,7 +7,7 @@ const Logs = require('../models/logging');
 
 const logObj = {
   file: 'lib/helpers',
-  logType: 'helpers',
+  logType: 'lib',
   level: 10,
 };
 
@@ -45,8 +45,9 @@ exports.correctedTZDate = (stringDate) => {
 exports.consLog = (arr) => {
   if (logLevel[process.env.LOGGING] * 1 > 6) {
     [].slice.call(arr).forEach((arg) => {
-      console.log(exports.getDate(r => r), arg);
+      console.log(`${exports.getDate(r => r)} - ${arg}`);
     });
+    console.log('');
   }
 };
 
@@ -96,6 +97,12 @@ exports.logOut = (incLogObj) => {
       loggit(Object.assign({}, incLogObj, { err: errString.slice(0, 40) }));
     }
   }
+};
+
+// hlpr.logOutArgs(func, logType, logSubType, level, error, page, message, stravaId);
+// hlpr.logOutArgs(`${logObj.file}.functionName`, logObj.logType, 'admin', 9, err, req.originalUrl, message, req.user.stravaId);
+exports.logOutArgs = (func, logType, logSubType, level, error, page, message, stravaId) => {
+  exports.logOut({ func, logType, logSubType, level, error, page, message, stravaId });
 };
 
 // const wattsOverFTP = waw / ftp;

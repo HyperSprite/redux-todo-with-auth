@@ -7,27 +7,37 @@ const routeplansCtrlr = require('./routeplans');
 const authCtrlr = require('./authentication');
 const hlpr = require('../lib/helpers');
 
+const logObj = {
+  file: 'controllers/strava',
+  stravaId: null,
+  logType: 'controller',
+  level: 10,
+};
+
 exports.getActivities = (req, res) => {
   strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
     if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
-    hlpr.consLog(['getActivity', data]);
+    hlpr.logOutArgs(`${logObj.file}.getActivities`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${data.message}`, req.user.stravaId);
     res.send(data);
   });
 };
 
 // http://localhost:3080/apiv1/strava/user-activities
 exports.getUserActivities = (req, res) => {
-  hlpr.consLog(['strava.getUserActivities start']);
+  hlpr.logOutArgs(`${logObj.file}.getUserActivities`, logObj.logType, 'info', 9, null, req.originalUrl, 'status pageCount: 1', req.user.stravaId);
   activitiesCtrlr.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
 };
 
 // TODO this is just starting but have tested it and it works to pull data.
 exports.getRoute = (req, res) => {
   strava.routes.get({ id: req.params.id, access_token: req.user.access_token }, (err, data) => {
-    if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    if (err || !data) {
+      hlpr.logOutArgs(`${logObj.file}.getRoute`, logObj.logType, 'failure', 3, err, req.originalUrl, `status 401 ${data.message} ${data.id}`, req.user.stravaId);
+      res.status(401).send({ error: 'Error or no data found' });
+    }
     if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
-    hlpr.consLog(['getRoute', data]);
+    hlpr.logOutArgs(`${logObj.file}.getRoute`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${data.message} ${data.id}`, req.user.stravaId);
     res.send(data);
   });
 };
@@ -41,11 +51,14 @@ exports.getUserRouteplans = (req, res) => {
 
 exports.getUser = (req, res) => {
   strava.athlete.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
-    if (err || !data) res.status(401).send({ error: 'Error or no data found' });
+    if (err || !data) {
+      hlpr.logOutArgs(`${logObj.file}.getUser err`, logObj.logType, 'failure', 3, err, req.originalUrl, `status 401 ${data.message} ${data.id}`, req.user.stravaId);
+      res.status(401).send({ error: 'Error or no data found' });
+    }
     if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
     // controllers/authentication.writeUser(userData, user, resultUser)
     authCtrlr.writeUser({ athlete: data }, req.user, (resultUser) => {
-      hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
+      hlpr.logOutArgs(`${logObj.file}.getUser`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${resultUser.id}`, req.user.stravaId);
       res.json({ user: resultUser });
     });
   });
@@ -63,32 +76,14 @@ exports.nightlyUpdate = () => {
     foundUsers.forEach((fUser) => {
       strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
         hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
-
         if (err || !athlete) {
+          hlpr.logOutArgs(`${logObj.file}.nightlyUpdate err`, logObj.logType, 'failure', 2, err, 'cron_no_page', 'status error or no athlete', fUser.stravaId);
           hlpr.consLog(['error: Error or no data found']);
-          const logObj = {
-            stravaId: fUser.stravaId,
-            logType: 'admin',
-            level: 2,
-            error: err,
-            message: 'Controllers/Strava: exports.nightlyUpdate',
-            page: 'nightlyUpdate',
-          };
-          hlpr.logOut(logObj);
           return null;
         }
         if (athlete.message === 'Authorization Error') {
-          hlpr.consLog([athlete, fUser.stravaId, fUser.access_token]);
-          const logObj = {
-            stravaId: fUser.stravaId,
-            logType: 'admin',
-            level: 1,
-            error: err,
-            message: 'Controllers/Strava: exports.nightlyUpdate Authorization Error',
-            page: 'nightlyUpdate',
-          };
+          hlpr.logOutArgs(`${logObj.file}.nightlyUpdate Authorization Error`, logObj.logType, 'failure', 1, err, 'cron_no_page', `status Authorization Error for ${fUser.stravaId}`, fUser.stravaId);
           authCtrlr.updateAuthorizationError(fUser.stravaId);
-          hlpr.logOut(logObj);
           return null;
         }
         authCtrlr.writeUser({ athlete: athlete }, fUser, (resUser) => {
@@ -100,7 +95,7 @@ exports.nightlyUpdate = () => {
             user: fUser,
           };
           routeplansCtrlr.getAllRouteplans(tmpRt, (result) => {
-            hlpr.consLog(['nightlyUpdate getAllRouteplans \n ___ triggered result.length', result.length]);
+            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllRouteplans`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered routeplan count ${result.length}`, fUser.stravaId);
           });
           if (resUser.clubMember === true) {
             const tmpAct = {
@@ -110,10 +105,10 @@ exports.nightlyUpdate = () => {
               user: fUser,
             };
             activitiesCtrlr.getAllActivities(tmpAct, (result) => {
-              hlpr.consLog(['nightlyUpdate getAllActivities', result.activities.length]);
+              hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result.activities.length}`, fUser.stravaId);
             });
           } else {
-            hlpr.consLog(['nightlyUpdate getAllActivities not a club member', resUser.stravaId]);
+            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities non club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result.activities.length}`, fUser.stravaId);
           }
         });
       });
@@ -133,13 +128,13 @@ exports.nightlyUpdate = () => {
 
 // Cron jobs for updating users stats and collecting new activities if the user has not visited.
 exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
-  hlpr.consLog(['dailyUserUpdate has started']);
+  hlpr.logOutArgs(`${logObj.file}.dailyUserUpdate`, logObj.logType, 'system', 9, null, 'cron_no_page', 'User update started', null);
   exports.nightlyUpdate();
 });
 
 
 const runOnStartup = () => {
-  console.log('strava.runOnStartup');
-  exports.nightlyUpdate();
+  hlpr.logOutArgs(`${logObj.file}.runOnStartup`, logObj.logType, 'system', 1, null, 'cron_no_page', 'Starting up', null);
+  // exports.nightlyUpdate();
 };
-// runOnStartup();
+runOnStartup();

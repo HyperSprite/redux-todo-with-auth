@@ -4,6 +4,12 @@ const strava = require('strava-v3');
 const User = require('../models/user');
 const hlpr = require('../lib/helpers');
 
+const logObj = {
+  file: 'controllers/training',
+  logType: 'controller',
+  level: 10,
+};
+
 
 exports.stravaSignin = (req, res, next) => {
   hlpr.consLog([

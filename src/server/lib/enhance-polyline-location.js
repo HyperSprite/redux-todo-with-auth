@@ -4,7 +4,7 @@ const hlpr = require('./helpers');
 
 const logObj = {
   file: 'lib/enhancePolylineLocation',
-  logType: 'enhancePolylineLocation',
+  logType: 'lib',
   logSubType: 'info',
   level: 10,
 };
