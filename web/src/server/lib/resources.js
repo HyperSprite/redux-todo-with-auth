@@ -7,7 +7,7 @@ const gMapsAPIKey = process.env.GOOGLE_MAPS;
 
 const logObj = {
   file: 'lib/resources',
-  logType: 'resources',
+  logType: 'lib',
   level: 10,
 };
 

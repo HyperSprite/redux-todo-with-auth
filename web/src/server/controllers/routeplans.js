@@ -11,6 +11,12 @@ const enhancePolylineLocation = require('../lib/enhance-polyline-location');
 const stopwords = require('../lib/stopwords');
 const hlpr = require('../lib/helpers');
 
+const logObj = {
+  file: 'controllers/Routeplans',
+  logType: 'controller',
+  level: 10,
+};
+
 const routePlanProjection = {
   _id: 0,
   routeplanId: 1,

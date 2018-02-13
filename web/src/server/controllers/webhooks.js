@@ -5,6 +5,11 @@ const hlpr = require('../lib/helpers');
 const Activities = require('./activities');
 const Users = require('./authentication');
 
+const logObj = {
+  file: 'controllers/webhooks',
+  logType: 'controller',
+  level: 10,
+};
 
 exports.stravaSubscriber = (req, res) => {
   const subURL = 'https://api.strava.com/api/v3/push_subscriptions'
@@ -27,16 +32,11 @@ exports.stravaSubscriber = (req, res) => {
 exports.stravaGetReceiver = (req, res) => {
   const q = qs.parse(req.query);
   if (q['hub.verify_token'] === process.env.STRAVA_VERIFY_TOKEN) {
-    const logObj = {
-      stravaId: null,
-      logType: 'webhooks',
-      level: 3, // 1 = high, 2 = med, 3 = low
-      message: 'Controllers/Webhooks: stravaGetReceiver subscribing',
-    };
-    hlpr.logOut(logObj);
+    hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver`, logObj.logType, 'success', 4, null, null, 'stravaGetReceiver subscribing success');
     return res.send({ 'hub.challenge': q['hub.challenge'] });
   }
-  return res.status(404).send({ error: 'Faild to verify token' });
+  hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, `stravaGetReceiver subscribing failure ${q}`);
+  return res.status(403).send({ error: 'Faild to verify token' });
 };
 
 /**
@@ -53,22 +53,15 @@ exports.stravaGetReceiver = (req, res) => {
 */
 exports.stravaPostReceiver = (req, res) => {
   const b = req.body;
-  console.log(req.body);
   if (b.object_type === 'activity') {
     Users.getUser(b.owner_id, (user) => {
       const options = {
         id: user.stravaId,
         access_token: user.access_token,
-        user: user,
-      }
+        user,
+      };
       Activities.getActivityDetails(b.object_id, options, (done) => {
-        const logObj = {
-          stravaId: null,
-          logType: 'webhooks',
-          level: 3, // 1 = high, 2 = med, 3 = low
-          message: 'Controllers/Webhooks: stravaPostReceiver done',
-        };
-        hlpr.logOut(logObj);
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${b}`);
         return done;
       });
     });

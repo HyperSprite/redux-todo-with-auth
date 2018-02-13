@@ -8,6 +8,13 @@ const Logging = require('../models/logging');
 const stravaControl = require('./strava');
 const hlpr = require('../lib/helpers');
 
+const logObj = {
+  file: 'controllers/admin',
+  stravaId: null,
+  logType: 'admin',
+  level: 10,
+};
+
 // Aggregation that returns a list of users and coungs of activities and events
 exports.userList = (req, res) => {
   User.aggregate(
@@ -59,15 +66,7 @@ exports.userList = (req, res) => {
       } },
       { $sort: { firstname: 1, lastname: 1 } },
     ], (err, result) => {
-    const logObj = {
-      stravaId: req.user.stravaId,
-      logType: 'admin',
-      level: 3,
-      error: err,
-      message: 'Controllers/Admin: exports.userList',
-      page: req.originalUrl,
-    };
-    hlpr.logOut(logObj);
+    hlpr.logOutArgs(`${logObj.file}.userList err`, 'admin', 'status now', 5, err, req.originalUrl, 'admin status', req.user.stravaId);
     if (err) return err;
     res.send(result);
   });
@@ -111,15 +110,7 @@ exports.getLogs = (req, res) => {
         date: 1,
       } },
     ], (err, result) => {
-    const logObj = {
-      stravaId: req.user.stravaId,
-      logType: 'admin',
-      level: 3,
-      error: err,
-      message: 'Controllers/Admin: exports.userList',
-      page: req.originalUrl,
-    };
-    hlpr.logOut(logObj);
+    hlpr.logOutArgs(`${logObj.file}.getLogs err`, 'admin', 'info', 5, err, req.originalUrl, 'admin status', req.user.stravaId);
     if (err) return err;
     res.send(result);
   });
@@ -135,52 +126,24 @@ exports.removeUser = (req, res) => {
   const userToRemove = req.params.userToRemove; // stravaId
   UserCommon.findOneAndRemove({ stravaId: userToRemove }, (err, userCommonRemoved) => {
     if (err) {
-      const logObj = {
-        stravaId: userToRemove,
-        logType: 'admin',
-        level: 1,
-        error: err,
-        message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved}`,
-        page: req.originalUrl,
-      };
-      hlpr.logOut(logObj);
+      const logMessage = `removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} adminId: ${req.user.stravaId}`;
+      hlpr.logOutArgs(`${logObj.file}.removeUser UserCommon err`, 'admin', 'err', 2, err, req.originalUrl, logMessage, req.user.stravaId);
       return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
     }
     Activities.remove({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
       if (err) {
-        const logObj = {
-          stravaId: userToRemove,
-          logType: 'admin',
-          level: 1,
-          error: err,
-          message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`,
-          page: req.originalUrl,
-        };
-        hlpr.logOut(logObj);
+        const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`;
+        hlpr.logOutArgs(`${logObj.file}.removeUser Activities err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
         return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
       }
       User.findOneAndRemove({ stravaId: userToRemove }, (err, userRemoved) => {
         if (err) {
-          const logObj = {
-            stravaId: userToRemove,
-            logType: 'admin',
-            level: 1,
-            error: err,
-            message: `Controllers/Admin: removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`,
-            page: req.originalUrl,
-          };
-          hlpr.logOut(logObj);
+          const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`;
+          hlpr.logOutArgs(`${logObj.file}.removeUser User err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
           return res.send({ userToRemove, success: false });
         }
-        const logObj = {
-          stravaId: userToRemove,
-          logType: 'admin',
-          level: 1,
-          error: err,
-          message: `Controllers/Admin: removeUser Success ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`,
-          page: req.originalUrl,
-        };
-        hlpr.logOut(logObj);
+        const logMessage = `Remove User Success ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`;
+        hlpr.logOutArgs(`${logObj.file}.removeUser User removed`, 'admin', 'info', 5, err, req.originalUrl, logMessage, req.user.stravaId);
         return res.send({ userToRemove, success: true });
       });
     });
