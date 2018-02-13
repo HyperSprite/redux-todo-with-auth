@@ -5,6 +5,12 @@ const dateFNS = require('date-fns');
 const Logs = require('../models/logging');
 // Helper functions
 
+const logObj = {
+  file: 'lib/helpers',
+  logType: 'helpers',
+  level: 10,
+};
+
 const logLevel = {
   everything: 10, // bug testing
   verbose: 7,     // not for production
@@ -48,7 +54,6 @@ exports.perfNowStart = (label) => {
   if (logLevel[process.env.LOGGING] * 1 > 6) {  // verbose logLevel
     const perfNSName = `perfNS${label}`;
     process.env[perfNSName] = performance.now();
-    console.log(`\n ${perfNSName} \n`);
   }
 };
 
@@ -58,7 +63,11 @@ exports.perfNowEnd = (label) => {
     const perfNowEnd = performance.now();
     const result = Math.floor(perfNowEnd - process.env[perfNSName]);
     const output = `${perfNSName} ran for ${result}`;
-    console.log(`\n perfNowEnd >>>>>>> ${output} \n`);
+    exports.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file}.perfNowEnd`,
+      logSubType: 'timers',
+      message: `perfNowEnd >>>>>>> ${output}`,
+    }));
     process.env[perfNSName] = null;
   }
 };
@@ -74,17 +83,17 @@ exports.perfNowEnd = (label) => {
 //   page: req.originalUrl,
 // };
 
-const loggit = (logObj) => {
-  Logs.create(Object.assign(logObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
+const loggit = (enhncdLogObj) => {
+  Logs.create(Object.assign(enhncdLogObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
     exports.consLog([logging]);
   });
 };
 
-exports.logOut = (logObj) => {
-
+exports.logOut = (incLogObj) => {
   if (logLevel[process.env.LOGGING] !== '') {
-    if (logObj.level <= logLevel[process.env.LOGGING] * 1) {
-      loggit(logObj);
+    if (incLogObj.level <= logLevel[process.env.LOGGING] * 1) {
+      const errString = `${JSON.stringify(incLogObj.err)}`;
+      loggit(Object.assign({}, incLogObj, { err: errString.slice(0, 40) }));
     }
   }
 };

@@ -5,6 +5,7 @@ const hlpr = require('./helpers');
 const logObj = {
   file: 'lib/enhancePolylineLocation',
   logType: 'enhancePolylineLocation',
+  logSubType: 'info',
   level: 10,
 };
 
@@ -43,7 +44,6 @@ module.exports = (polyline, extended, result) => {
   if (!polyline) {
     hlpr.logOut(Object.assign({}, logObj, {
       func: `${logObj.file} default`,
-      logSubType: 'info',
       message: '!polyline',
     }));
     return result({});
@@ -62,10 +62,22 @@ module.exports = (polyline, extended, result) => {
           elevationStart: rslt.elevationpath[0] && rslt.elevationpath[0].elevation,
           elevationEnd: rslt.elevationpath[rsltElLen - 1] && rslt.elevationpath[rsltElLen - 1].elevation,
         };
+        hlpr.logOut(Object.assign({}, logObj, {
+          func: `${logObj.file} default resources.rLonLat`,
+          message: `rslt.elevationpath && rslt.elevationpath.length ${resultData.elevationStart}`,
+        }));
         return result(resultData);
       }
-      return { geoStart, geoEnd };
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: `${logObj.file} default extended but no rslt.elevationpath`,
+        message: `geoStart: ${geoStart}, geoEnd: ${geoEnd}`,
+      }));
+      return result({ geoStart, geoEnd });
     });
   }
-  return { geoStart, geoEnd };
+  hlpr.logOut(Object.assign({}, logObj, {
+    func: `${logObj.file} default no extended`,
+    message: `geoStart: ${geoStart}, geoEnd: ${geoEnd}`,
+  }));
+  return result({ geoStart, geoEnd });
 };
