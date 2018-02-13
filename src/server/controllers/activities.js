@@ -38,7 +38,7 @@ function weeksBack(weekStart, weeks) {
 }
 
 const logObj = {
-  file: 'controllers/activities.',
+  file: 'controllers/activities',
   stravaId: null,
   logType: 'activity',
   level: 10,
@@ -96,7 +96,7 @@ exports.getAllActivities = (input, result) => {
 const getStreams = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}getStreams !activityId || !accessToken`,
+      func: `${logObj.file}.getStreams !activityId || !accessToken`,
       logSubType: 'err',
       level: 0,
       message: '!activityId || !accessToken',
@@ -104,7 +104,7 @@ const getStreams = (activityId, accessToken, done) => {
     return done([]);
   }
   hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file}getStreams`,
+    func: `${logObj.file}.getStreams`,
     logSubType: 'err',
     level: 10,
     message: 'In getStreams',
@@ -129,7 +129,7 @@ const getStreams = (activityId, accessToken, done) => {
     hlpr.consLog(['getStreams rateLimit', rateLimit]);
     if (err) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getStreams strava.streams.activity`,
+        func: `${logObj.file}.getStreams strava.streams.activity`,
         logSubType: 'err',
         level: 3,
         error: err,
@@ -140,7 +140,7 @@ const getStreams = (activityId, accessToken, done) => {
       const newStreams = Object.assign({}, { streams }, { activityId });
       ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
         hlpr.logOut(Object.assign({}, logObj, {
-          func: `${logObj.file}getStreams ActivityStreams.findOrCreate`,
+          func: `${logObj.file}.getStreams ActivityStreams.findOrCreate`,
           logSubType: 'info',
           level: 8,
           error: err,
@@ -150,7 +150,7 @@ const getStreams = (activityId, accessToken, done) => {
       });
     } else {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getStreams ActivityStreams.findOrCreate err`,
+        func: `${logObj.file}.getStreams ActivityStreams.findOrCreate err`,
         logSubType: 'err',
         level: 6,
         error: err,
@@ -202,7 +202,7 @@ const getStreamTimeAverages = (streamsArr, done) => {
 const getListZones = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}getListZones`,
+      func: `${logObj.file}.getListZones`,
       logSubType: 'err',
       level: 1,
       message: `!activityId || !accessToken for ${activityId}`,
@@ -215,7 +215,7 @@ const getListZones = (activityId, accessToken, done) => {
       return done(listZonesArr);
     }
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}getListZones`,
+      func: `${logObj.file}.getListZones`,
       logSubType: 'err',
       level: 1,
       error: err,
@@ -229,8 +229,8 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
   Activities.findOneAndUpdate({ activityId: options.activityId }, data, options, (err, fullActivity) => {
     if (fullActivity) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}findActivityAndUpdate`,
-        logSubType: 'err',
+        func: `${logObj.file}.findActivityAndUpdate`,
+        logSubType: 'info',
         level: 8,
         error: err,
         message: `Successful save of Activity ${fullActivity.activityId}`,
@@ -239,7 +239,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
     }
     if (err) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}findActivityAndUpdate`,
+        func: `${logObj.file}.findActivityAndUpdate`,
         logSubType: 'err',
         level: 2,
         error: err,
@@ -248,7 +248,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       return done([]);
     }
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}findActivityAndUpdate`,
+      func: `${logObj.file}.findActivityAndUpdate`,
       logSubType: 'err',
       level: 1,
       error: err,
@@ -272,7 +272,7 @@ const getActivityDetails = (activity, opts, cb) => {
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getActivityDetails`,
+        func: `${logObj.file}.getActivityDetails`,
         logSubType: 'failure',
         level: 1,
         error: err,
@@ -281,7 +281,7 @@ const getActivityDetails = (activity, opts, cb) => {
       findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
     } else if (data.elapsed_time === 0) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getActivityDetails`,
+        func: `${logObj.file}.getActivityDetails`,
         logSubType: 'failure',
         level: 6,
         error: err,
@@ -298,11 +298,8 @@ const getActivityDetails = (activity, opts, cb) => {
     };
 
     enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
-      console.log('geoData ++++++++++++', geoData.toString().slice(0, 30));
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
-        console.log('strmArr +++++++++++++++', strmArr.toString().slice(0, 30));
         getStreamTimeAverages(strmArr, (strmTmArr) => {
-          console.log(strmTmArr.toString().slice(0, 30));
           const enhancedData = Object.assign(
             {},
             data, // raw Strava data
@@ -323,7 +320,7 @@ const getActivityDetails = (activity, opts, cb) => {
           currentVersion = ${currentVersion}`;
 
           hlpr.logOut(Object.assign({}, logObj, {
-            func: `${logObj.file}getActivityDetails`,
+            func: `${logObj.file}.getActivityDetails`,
             logSubType: 'info',
             level: 8,
             error: err,
@@ -345,7 +342,7 @@ const getActivityDetails = (activity, opts, cb) => {
                 enhancedData.tssScore = justFns.calcTssScore(enhancedData.elapsed_time, enhancedData.weighted_average_watts, ftp);
               }
               hlpr.logOut(Object.assign({}, logObj, {
-                func: `${logObj.file}getActivityDetails pushActivities premium`,
+                func: `${logObj.file}.getActivityDetails pushActivities premium`,
                 logSubType: 'info',
                 level: 10,
                 error: err,
@@ -355,7 +352,7 @@ const getActivityDetails = (activity, opts, cb) => {
             });
           } else {
             hlpr.logOut(Object.assign({}, logObj, {
-              func: `${logObj.file}getActivityDetails pushActivities not premium`,
+              func: `${logObj.file}.getActivityDetails pushActivities not premium`,
               logSubType: 'info',
               level: 10,
               error: err,
@@ -426,7 +423,7 @@ exports.getExtendedActivityStats = () => {
   const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
   hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file}getExtendedActivityStats`,
+    func: `${logObj.file}.getExtendedActivityStats`,
     logSubType: 'info',
     message: `minutes: ${minutes} backDate ${backDate}`,
   }));
@@ -434,7 +431,7 @@ exports.getExtendedActivityStats = () => {
   ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
     if (removed.n) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getExtendedActivityStats activityStreamsCache`,
+        func: `${logObj.file}.getExtendedActivityStats activityStreamsCache`,
         logSubType: 'info',
         level: 4,
         error: err,
@@ -458,7 +455,7 @@ exports.getExtendedActivityStats = () => {
   Activities.find(toUpdate).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getExtendedActivityStats Activities.find err`,
+        func: `${logObj.file}.getExtendedActivityStats Activities.find err`,
         logSubType: 'err',
         level: 3,
         error: err,
@@ -468,7 +465,7 @@ exports.getExtendedActivityStats = () => {
       return err;
     }
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}getExtendedActivityStats Activities.find list`,
+      func: `${logObj.file}.getExtendedActivityStats Activities.find list`,
       logSubType: 'info',
       level: 10,
       error: err,
@@ -479,7 +476,7 @@ exports.getExtendedActivityStats = () => {
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
           hlpr.logOut(Object.assign({}, logObj, {
-            func: `${logObj.file}getExtendedActivityStats User.findOne`,
+            func: `${logObj.file}.getExtendedActivityStats User.findOne`,
             logSubType: 'info',
             level: 5,
             error: err,
@@ -496,7 +493,7 @@ exports.getExtendedActivityStats = () => {
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
             hlpr.logOut(Object.assign({}, logObj, {
-              func: `${logObj.file}getExtendedActivityStats Activities.findOneAndUpdate`,
+              func: `${logObj.file}.getExtendedActivityStats Activities.findOneAndUpdate`,
               logSubType: 'failure',
               level: 1,
               error: err,
