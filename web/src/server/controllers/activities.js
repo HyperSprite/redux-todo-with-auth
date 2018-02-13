@@ -96,13 +96,19 @@ exports.getAllActivities = (input, result) => {
 const getStreams = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
     hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}getStreams`,
+      func: `${logObj.file}getStreams !activityId || !accessToken`,
       logSubType: 'err',
       level: 0,
       message: '!activityId || !accessToken',
     }));
     return done([]);
   }
+  hlpr.logOut(Object.assign({}, logObj, {
+    func: `${logObj.file}getStreams`,
+    logSubType: 'err',
+    level: 10,
+    message: 'In getStreams',
+  }));
   /*
   * Streams to attempt to return from Strava
   */
@@ -262,8 +268,6 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
 * }
 */
 const getActivityDetails = (activity, opts, cb) => {
-  const perfLabel = `getActivityDetails${activity.activityId}`;
-  hlpr.perfNowStart(perfLabel);
   strava.activities.get({ id: opts.activityId, access_token: opts.access_token }, (err, data, rateLimit) => {
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
     if (err || !data || data.errors) {
@@ -294,8 +298,11 @@ const getActivityDetails = (activity, opts, cb) => {
     };
 
     enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
+      console.log('geoData ++++++++++++', geoData.toString().slice(0, 30));
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
+        console.log('strmArr +++++++++++++++', strmArr.toString().slice(0, 30));
         getStreamTimeAverages(strmArr, (strmTmArr) => {
+          console.log(strmTmArr.toString().slice(0, 30));
           const enhancedData = Object.assign(
             {},
             data, // raw Strava data
@@ -305,9 +312,7 @@ const getActivityDetails = (activity, opts, cb) => {
             { currentSchema: currentVersion } //eslint-disable-line
           );
 
-          const mssg = `Controllers/Activity:
-          getActivityDetails Enhancing Data
-          activityId ${activity.activityId} ______________
+          const mssg = `Controllers/Activity.getActivityDetails Enhancing Data activityId ${activity.activityId}
           data  ___________________________________________
           ${JSON.stringify(data.id)},
           geoData ___________________________________________
@@ -339,16 +344,25 @@ const getActivityDetails = (activity, opts, cb) => {
                 enhancedData.ftp = ftp;
                 enhancedData.tssScore = justFns.calcTssScore(enhancedData.elapsed_time, enhancedData.weighted_average_watts, ftp);
               }
-              hlpr.consLog(['getActivityDetails pushActivities listZones premium', enhancedData.activityId, enhancedData.resource_state, enhancedData.tssScore]);
-
+              hlpr.logOut(Object.assign({}, logObj, {
+                func: `${logObj.file}getActivityDetails pushActivities premium`,
+                logSubType: 'info',
+                level: 10,
+                error: err,
+                message: `activityId: ${opts.activityId} resource_state: ${enhancedData.resource_state}`,
+              }));
               findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
             });
           } else {
-            hlpr.consLog(['getActivityDetails pushActivities listZones not premium', enhancedData.activityId, enhancedData.resource_state]);
-
+            hlpr.logOut(Object.assign({}, logObj, {
+              func: `${logObj.file}getActivityDetails pushActivities not premium`,
+              logSubType: 'info',
+              level: 10,
+              error: err,
+              message: `activityId: ${opts.activityId} resource_state: ${enhancedData.resource_state}`,
+            }));
             findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
           }
-          hlpr.perfNowEnd(perfLabel);
         });
       });
     });
@@ -356,8 +370,6 @@ const getActivityDetails = (activity, opts, cb) => {
 };
 
 exports.getRecentActivities = (req, res) => {
-  const perfLabel = `getRecentActivities_${req.user.stravaId}`;
-  hlpr.perfNowStart(perfLabel);
   const options = {
     id: req.user.stravaId,
     access_token: req.user.access_token,
@@ -378,7 +390,6 @@ exports.getRecentActivities = (req, res) => {
         if (!created) {
           counter.push(dbActivity.activityId);
           if (counter.length === acts.length) {
-            hlpr.perfNowEnd(perfLabel);
             exports.getWeeklyStats(req, res);
           }
         } else {
@@ -386,7 +397,6 @@ exports.getRecentActivities = (req, res) => {
           getActivityDetails(dbActivity, options, (done) => {
             counter.push(done.activityId);
             if (counter.length === acts.length) {
-              hlpr.perfNowEnd(perfLabel);
               exports.getWeeklyStats(req, res);
             }
           });
@@ -448,7 +458,7 @@ exports.getExtendedActivityStats = () => {
   Activities.find(toUpdate).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
       hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}getExtendedActivityStats Activities.find`,
+        func: `${logObj.file}getExtendedActivityStats Activities.find err`,
         logSubType: 'err',
         level: 3,
         error: err,
@@ -457,6 +467,13 @@ exports.getExtendedActivityStats = () => {
       hlpr.consLog(['getExtendedActivityStats err activities', err]);
       return err;
     }
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file}getExtendedActivityStats Activities.find list`,
+      logSubType: 'info',
+      level: 10,
+      error: err,
+      message: JSON.stringify(activities.map(a => a.activityId)),
+    }));
     activities.forEach((dbActivity) => {
       hlpr.consLog(['getExtendedActivityStats activityId - currentSchema', dbActivity.activityId, dbActivity.currentSchema]);
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {

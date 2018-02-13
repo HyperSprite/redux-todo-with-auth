@@ -24,7 +24,7 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
   hlpr.logOut(Object.assign({}, logObj, {
     func: `${logObj.file} default args setup`,
     logSubType: 'info',
-    message: `sLoc: ${sLoc.toString().substring(0, 30)} input.date: ${date} timeOffset: ${timeOffset} tzOffset: ${tzOffset} dstOffset ${dstOffset} timestamp: ${timestamp}`,
+    message: `${target} sLoc: ${sLoc.toString().substring(0, 30)} input.date: ${date} timeOffset: ${timeOffset} tzOffset: ${tzOffset} dstOffset ${dstOffset} timestamp: ${timestamp}`,
   }));
 
   // TODO remove sample date from astrophases and set real date
@@ -101,7 +101,7 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
       func: `${logObj.file} default`,
       level: 5,
       logSubType: 'error',
-      message: `Error resources.rLonLat - URL: ${response} target.url: ${resourceMap[target].url}`,
+      message: `Error resources.rLonLat - ${sLoc.toString().substring(0, 30)} response ${response} target.url: ${resourceMap[target].url}`,
     }));
     return output({ [target]: null });
   });
