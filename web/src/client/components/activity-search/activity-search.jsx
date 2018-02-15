@@ -237,22 +237,31 @@ class ActivitySearch extends Component {
 
     const SearchTextForm = (
       <div>
-        <div key={formValues[0].contentName}>
-          <EditSwitch
-            form={this.props.form}
-            formValues={formValues[0]}
-          />
+        <GoogleMapLocation
+          {...geoData}
+          pinDrops={this.props.pinDrops}
+          handleClick={this.handleMapPinDrop}
+          noClick
+        />
+        <div style={style.flexcontainer} >
+          <div key={formValues[0].contentName}>
+            <EditSwitch
+              form={this.props.form}
+              formValues={formValues[0]}
+            />
+          </div>
+          { sortStrings && (
+            <SortSelect sortStrings={sortStrings} form={this.props.form} />
+          )}
         </div>
-        { sortStrings && (
-          <SortSelect sortStrings={sortStrings} form={this.props.form} />
-        )}
       </div>
     );
 
     const SearchMapForm = (
       <div>
         <GoogleMapLocation
-          {...geoData}  pinDrops={this.props.pinDrops}
+          {...geoData}
+          pinDrops={this.props.pinDrops}
           handleClick={this.handleMapPinDrop}
         />
         <div style={style.flexcontainer} >
@@ -338,7 +347,7 @@ class ActivitySearch extends Component {
                       />
                     ) : (
                       <RaisedButton
-                        label="Search"
+                        label={pristine ? 'Load More' : 'Search'}
                         type={pristine ? 'button' : 'submit'}
                         onClick={pristine ? this.activitiesSearch : () => 'submit'}
                         primary
@@ -401,7 +410,7 @@ class ActivitySearch extends Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   // console.log('ownProps', ownProps);
   // const initialValues = (ownProps.location.search) ?
   //   qs.parse(ownProps.location.search.slice(1)) :
@@ -412,7 +421,12 @@ function mapStateToProps(state, ownProps) {
     activitySearchCustom: state.activities.activitySearchCustom,
     activCalcFilter: state.activities.activCalcFilter,
     datePref: state.auth.user.date_preference,
-    pinDrops: state.activities.activities.filter(aF => aF.geoStart).map(aM => aM.geoStart),
+    pinDrops: state.activities.activities.filter(aF => aF.geoStart).map(aM => ({
+      lat: aM.geoStart[1],
+      lng: aM.geoStart[0],
+      name: aM.name,
+      id: aM.activityId,
+    })),
     // initialValues,
     message: state.auth.message,
     srchOpts: state.activities.srchOpts,
