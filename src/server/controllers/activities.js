@@ -56,7 +56,6 @@ exports.getAllActivities = (input, result) => {
   };
 
   if (input.arrLength === 0) {
-    hlpr.consLog(['strava.getAllActivities arrLength === 0']);
     return result(input);
   }
   strava.athlete.listActivities(options, (err, acts) => {
@@ -227,32 +226,14 @@ const getListZones = (activityId, accessToken, done) => {
 const findActivityAndUpdate = (activityId, data, options, done) => {
   Activities.findOneAndUpdate({ activityId: options.activityId }, data, options, (err, fullActivity) => {
     if (fullActivity) {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.findActivityAndUpdate`,
-        logSubType: 'info',
-        level: 8,
-        error: err,
-        message: `Successful save of Activity ${fullActivity.activityId}`,
-      }));
+      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'success', 9, err, 'no_page', 'Success fullActivity', options.user.stravaId);
       return done(fullActivity);
     }
     if (err) {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.findActivityAndUpdate`,
-        logSubType: 'err',
-        level: 2,
-        error: err,
-        message: `err for ${options.activityId} data: ${data} ${options}`,
-      }));
+      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'error', 3, err, 'no_page', 'Error getting fullActivity', options.user.stravaId);
       return done([]);
     }
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}.findActivityAndUpdate`,
-      logSubType: 'err',
-      level: 1,
-      error: err,
-      message: `!fullActivity for: ${options.activityId} data: ${JSON.stringify(data)}`,
-    }));
+    hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'error', 1, err, 'no_page', `!fullActivity for: ${options.activityId} data: ${JSON.stringify(data)}`, options.user.stravaId);
     return done(null);
   });
 };
@@ -373,32 +354,35 @@ exports.getRecentActivities = (req, res) => {
     page: req.pageCount,
     user: req.user,
   };
-
-  strava.athlete.listActivities(options, (err, acts) => {
-    if (acts.message === 'Authorization Error') {
-      hlpr.consLog(['listActivities Authorization Error', req.user.stravaId]);
-      return auth.stravaSignOut(req, res);
-    }
-    const counter = [];
-    acts.forEach((act, index) => {
-      Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
-        if (err) return { error: err };
-        if (!created) {
-          counter.push(dbActivity.activityId);
-          if (counter.length === acts.length) {
-            exports.getWeeklyStats(req, res);
+  strava.athlete.listActivities({ id: req.user.stravaId, access_token: req.user.access_token }, (err, acts) => {
+    if (_.isArray(acts)) {
+      const counter = [];
+      acts.forEach((act, index) => {
+        Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
+          if (err) {
+            hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)}`, req.user.stravaId);
+            return { error: err };
           }
-        } else {
-          options.activityId = dbActivity.activityId;
-          getActivityDetails(dbActivity, options, (done) => {
-            counter.push(done.activityId);
+          if (!created) {
+            counter.push(dbActivity.activityId);
             if (counter.length === acts.length) {
-              exports.getWeeklyStats(req, res);
+              return exports.getWeeklyStats(req, res);
             }
-          });
-        }
+          } else {
+            options.activityId = dbActivity.activityId;
+            getActivityDetails(dbActivity, options, (done) => {
+              counter.push(done.activityId);
+              if (counter.length === acts.length) {
+                return exports.getWeeklyStats(req, res);
+              }
+            });
+          }
+        });
       });
-    });
+    }
+    const message = 'Unable to update your activities at this time. Strava may be down or some other error has occurred. Here is what we already have';
+    hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)} or !isArray ${JSON.stringify(acts).slice(0, 50)}`, req.user.stravaId);
+    return exports.getWeeklyStats(Object.assign({}, req, { serverMessage: { error: message } }), res);
   });
 };
 
@@ -625,6 +609,7 @@ exports.getWeeklyStats = async (req, res) => {
   const result = {
     index: weeksPast,
     startDate,
+    serverMessage: req.serverMessage,
   };
   try {
     result.week = await getOneWeek(startDate, req.user.stravaId);
@@ -823,7 +808,10 @@ exports.searchActivities = async (req, res) => {
   // localhost:3080/apiv1/activities/search-activities?lng=-122.1439698&lon=37.426941
   if (q.lng && q.lat) {
     const coords = [q.lng * 1, q.lat * 1];
-    const maxDist = q.maxDist * 1 || 321869; // 200 miles
+    let maxDist = 80000; // 50'ish miles
+    if (q.maxDist) {
+      maxDist = q.mPref === true ? justFns.milesToMeters(q.maxDist * 1) : q.maxDist * 1000;
+    }
     geoData = {
       $geoNear: {
         near: {
@@ -898,10 +886,8 @@ exports.searchActivities = async (req, res) => {
     if (qsValue[itemArr[0]] && sortOptions[itemArr[1]]) {
       if (itemArr[1] === 'date') {
         const tmpDate = format(q[item], 'YYYY-MM-DD');
-        hlpr.consLog(['>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } }]);
         query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
       } else {
-        hlpr.consLog(['>>>', { [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] } }]);
         query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] * 1 } });
       }
     }
@@ -948,7 +934,7 @@ exports.searchActivities = async (req, res) => {
     srchOpts.textsearch.split(' ').forEach((tSrch) => {
       query.search.push({ name: { $regex: tSrch, $options: 'i' } });
     });
-  } else if (srchOpts.textsearch) {
+  } else if (srchOpts.textsearch && !q.lat) {
     query.search.push({ $text: { $search: srchOpts.textsearch } });
   }
   /*
@@ -1039,7 +1025,6 @@ exports.searchActivities = async (req, res) => {
   }
 
   // console.log(activitySearchArr);
-  hlpr.consLog(['srchOpts', srchOpts, 'qString', qString]);
   const aggregateMax = [
     { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
     { $group: aggregateGroup },
@@ -1410,7 +1395,6 @@ exports.getWeekOfActivities = (req, res) => {
     },
   };
   const sort = { start_date_local: 1 };
-  hlpr.consLog(['getWeekOfActivities', req.user.stravaId, startDate, query, sort]);
 
   Activities.find(query).sort(sort).exec((err, week) => {
     if (err) res.send({ [weeksPast]: [{ error: 'no data' }] });

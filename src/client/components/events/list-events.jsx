@@ -89,7 +89,7 @@ class ListEvent extends Component {
   }
 
   render() {
-    const { authenticated, events, forEdit, stravaId, adminMember, user } = this.props;
+    const { authenticated, events, forEdit, stravaId, mPref, adminMember, user } = this.props;
     return (
       <div>
         <Helmet>
@@ -180,7 +180,6 @@ class ListEvent extends Component {
               // const eventLink = (
               //   <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
               // );
-              const mPref = user.measurement_preference === 'feet';
               return (
                 <div key={event.eventId} id={`${event.eventId}`} >
                   <ViewEvent
@@ -245,6 +244,7 @@ function mapStateToProps(state) {
     adminMember: state.auth.user.adminMember,
     user: state.auth.user,
     events: getVisibleEvents(state.events.events, state.visibilityFilter, state.auth.user.stravaId),
+    mPref: state.page.mPref,
     forEdit: state.events.event,
   };
 }

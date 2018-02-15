@@ -92,7 +92,7 @@ ActivitySingle.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     activities: state.activities.activities,
-    mPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.page.mPref,
     datePref: state.auth.user.date_preference,
   };
 }

@@ -15,6 +15,7 @@ import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 import Alert from '../form/alert';
+import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../form/feature-notice';
 import ActivityCalc from '../activity-calc';
@@ -56,6 +57,7 @@ const defaultProps = {
 
 let queryOptions = {};
 let lastSearch = {};
+let lastmPref = false;
 
 class ActivitySearch extends Component {
   constructor(props) {
@@ -131,11 +133,14 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
+    this.setState({
+      lat: formProps.lat,
+      lng: formProps.lng,
+    });
 
-    Object.assign(formProps);
-    console.log('handleFormSubmit', formProps);
     this.props.setIsFetching();
     let page = this.props.searchCount;
+    const mPref = this.props.mPref;
     if (!this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
@@ -143,9 +148,16 @@ class ActivitySearch extends Component {
     } else if (JSON.stringify(lastSearch) !== JSON.stringify(formProps)) {
       this.props.clearActivitySearch();
       page = 1;
+      console.log('>---------------------- no match');
+    } else if (formProps.maxDist && lastmPref !== this.props.mPref) {
+      this.props.clearActivitySearch();
+      page = 1;
+      console.log('>---------------------- no match');
     }
-    console.log('formProps', formProps);
-    lastSearch = Object.assign(formProps, { page });
+    console.log('formProps ---->>>', formProps);
+    lastmPref = this.props.mPref;
+    lastSearch = Object.assign(formProps, { page }, { mPref });
+    console.log('\n formProps ------>>>>', lastSearch, formProps);
     this.props.fetchActivitiesSearch(relURL, formProps);
   }
 
@@ -220,8 +232,61 @@ class ActivitySearch extends Component {
       );
     }
 
-    const lat = this.state.lat || this.props.lat || user.userGeoLatitude;
-    const lng = this.state.lng || this.props.lng || user.userGeoLongitude;
+    // const lat = this.state.lat || this.props.lat || user.userGeoLatitude;
+    // const lng = this.state.lng || this.props.lng || user.userGeoLongitude;
+
+    const geoData = {
+      lat: this.state.lat || this.props.lat || user.userGeoLatitude,
+      lng: this.state.lng || this.props.lng || user.userGeoLongitude,
+    };
+
+    const SearchTextForm = (
+      <div>
+        <div key={formValues[0].contentName}>
+          <EditSwitch
+            form={this.props.form}
+            formValues={formValues[0]}
+          />
+        </div>
+        { sortStrings && (
+          <SortSelect sortStrings={sortStrings} form={this.props.form} />
+        )}
+      </div>
+    );
+
+    const SearchMapForm = (
+      <div>
+        <GoogleMapLocation
+          {...geoData}
+          handleClick={this.handleMapPinDrop}
+        />
+        <div style={style.flexcontainer} >
+          {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
+            <div key={fV.contentName} >
+              <EditSwitch
+                form={this.props.form}
+                formValues={fV}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+
+    const tabs = [
+      {
+        name: 'Text Search',
+        value: 'text-search',
+        header: 'Find Your Activity By Name',
+        content: SearchTextForm,
+      },
+      {
+        name: 'Location Search',
+        value: 'location-search',
+        header: 'Find Your Activity By Location',
+        content: SearchMapForm,
+      },
+    ];
 
     return (
       <div>
@@ -233,123 +298,106 @@ class ActivitySearch extends Component {
               headerHeight={70}
             />
 
+            <Form
+              id={contentName}
+              onSubmit={handleSubmit(this.handleFormSubmit)}
+            >
+              <Card expanded={this.state.expanded} style={style.div} >
+                <ContentTabSwitch tabs={tabs} reset={reset} />
 
-                <Form
-                  id={contentName}
-                  onSubmit={handleSubmit(this.handleFormSubmit)}
+                <Toggle
+                  toggled={this.state.expanded}
+                  onToggle={this.handleToggle}
+                  labelPosition="right"
+                  label="Filters"
+                  style={style.toggle}
+                />
+                <CardText
+                  expandable
                 >
-                  <Card expanded={this.state.expanded} style={style.div} >
-                    <div key={formValues[0].contentName}>
-                      <EditSwitch
-                        form={this.props.form}
-                        formValues={formValues[0]}
-                      />
-                    </div>
-                    { sortStrings && (
-                      <SortSelect sortStrings={sortStrings} form={this.props.form} />
-                    )}
-                    { (activCalcFilter && adminMember) && (
-                      <ActivityCalc
-                        data={activCalcFilter}
-                        mPref={mPref}
-                        title="Filtered Results"
-                      />
-                    )}
-                    <Toggle
-                      toggled={this.state.expanded}
-                      onToggle={this.handleToggle}
-                      labelPosition="right"
-                      label="Filters"
-                      style={style.toggle}
-                    />
-                    <CardText
-                      expandable
-                    >
-                      <GoogleMapLocation
-                        lat={lat}
-                        lng={lng}
-                        handleClick={this.handleMapPinDrop}
-                      />
-                      {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
-                        <div key={fV.contentName}>
-                          <EditSwitch
-                            form={this.props.form}
-                            formValues={fV}
-                          />
-                        </div>
-                      ))}
-                      {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
-                        <div key={fV.contentName}>
-                          <EditSwitch
-                            form={this.props.form}
-                            formValues={fV}
-                          />
-                        </div>
-                      ))}
-                      { (!sortStrings && adminMember) && (
-                        <RangeInput sortStrings={sortStrings} form={this.props.form} />
-                      )}
-                    </CardText>
-                    <div>
-                      <div>
-                        {isFetching ? (
-                          <RaisedButton
-                            label="Searching"
-                            disabled
-                            primary
-                            style={style.button}
-                            icon={<CircularProgress size={22} />}
-                          />
-                        ) : (
-                          <RaisedButton
-                            label="Search"
-                            type={pristine ? 'button' : 'submit'}
-                            onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                            primary
-                            autoFocus
-                            style={style.button}
-                            icon={<MdSearch size={24} />}
-                          />
-                        )}
-                        <RaisedButton
-                          label="Clear Values"
-                          onClick={reset}
-                          style={style.button}
-                          disabled={pristine || submitting}
-                        />
-                        <RaisedButton
-                          label="Download Activities"
-                          primary
-                          style={style.button}
-                          onClick={handleSubmit(this.activitiesDownload)}
+                  <div style={style.flexcontainer} >
+                    {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
+                      <div key={fV.contentName}>
+                        <EditSwitch
+                          form={this.props.form}
+                          formValues={fV}
                         />
                       </div>
-                    </div>
-                    {!activities ? (
-                      <p>Loading Activities</p>
+                    ))}
+                  </div>
+
+                  { (sortStrings && adminMember) && (
+                    <RangeInput sortStrings={sortStrings} form={this.props.form} />
+                  )}
+
+                </CardText>
+                <div>
+                  <div>
+                    {isFetching ? (
+                      <RaisedButton
+                        label="Searching"
+                        disabled
+                        primary
+                        style={style.button}
+                        icon={<CircularProgress size={22} />}
+                      />
                     ) : (
-                      <div>
-                        { activities.map(act => (
-                          <div key={act} style={style.div}>
-                            <ActivitySingle
-                              activityId={act}
-                            />
-                          </div>
-                        ))}
-                        <RaisedButton
-                          label="Load more"
-                          type={pristine ? 'button' : 'submit'}
-                          onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                          primary
-                          autoFocus
-                          style={style.button}
+                      <RaisedButton
+                        label="Search"
+                        type={pristine ? 'button' : 'submit'}
+                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                        primary
+                        autoFocus
+                        style={style.button}
+                        icon={<MdSearch size={24} />}
+                      />
+                    )}
+                    <RaisedButton
+                      label="Clear Values"
+                      onClick={reset}
+                      style={style.button}
+                      disabled={pristine || submitting}
+                    />
+                    <RaisedButton
+                      label="Download Activities"
+                      primary
+                      style={style.button}
+                      onClick={handleSubmit(this.activitiesDownload)}
+                    />
+                  </div>
+                </div>
+                {!activities ? (
+                  <p>Loading Activities</p>
+                ) : (
+                  <div >
+                    { (activCalcFilter && adminMember) && (
+                      <div style={style.flexcontainer} >
+                        <ActivityCalc
+                          data={activCalcFilter}
+                          mPref={mPref}
+                          title="Filtered Results"
                         />
                       </div>
                     )}
-                  </Card>
-                </Form>
-
-
+                    { activities.map(act => (
+                      <div key={act} style={style.div}>
+                        <ActivitySingle
+                          activityId={act}
+                        />
+                      </div>
+                    ))}
+                    <RaisedButton
+                      label="Load more"
+                      type={pristine ? 'button' : 'submit'}
+                      onClick={pristine ? this.activitiesSearch : () => 'submit'}
+                      primary
+                      autoFocus
+                      style={style.button}
+                    />
+                  </div>
+                )}
+              </Card>
+            </Form>
           </div>
           <div className="side-lite right-pane" />
         </div>
@@ -357,9 +405,6 @@ class ActivitySearch extends Component {
     );
   }
 }
-
-ActivitySearch.propTypes = propTypes;
-ActivitySearch.defaultProps = defaultProps;
 
 function mapStateToProps(state, ownProps) {
   // console.log('ownProps', ownProps);
@@ -373,12 +418,12 @@ function mapStateToProps(state, ownProps) {
     activCalcFilter: state.activities.activCalcFilter,
     datePref: state.auth.user.date_preference,
     // initialValues,
-    mPref: state.auth.user.measurement_preference === 'feet',
     message: state.auth.message,
     srchOpts: state.activities.srchOpts,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
     isFetching: state.page.isFetching,
+    mPref: state.page.mPref,
     query: state.search.query,
     sortStrings: state.search.sortStrings,
     adminMember: state.auth.user.adminMember,

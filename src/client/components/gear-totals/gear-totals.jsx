@@ -13,11 +13,10 @@ class GearTotals extends React.Component {
     ),
     activities: PropTypes.arrayOf(PropTypes.object).isRequired,
     gear: PropTypes.arrayOf(PropTypes.object).isRequired,
-    mPref: PropTypes.bool,
+    mPref: PropTypes.bool.isRequired,
   }
 
   static defaultProps = {
-    mPref: false,
     activityIds: [],
   }
 
@@ -70,7 +69,7 @@ function mapStateToProps(state) {
   return {
     gear: [...state.auth.user.bikes, ...state.auth.user.shoes],
     activities: state.activities.activities,
-    mPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.page.mPref,
   };
 }
 

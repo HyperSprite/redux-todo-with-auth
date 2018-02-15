@@ -3,12 +3,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Drawer } from 'material-ui';
-
+import { Drawer, MenuItem } from 'material-ui';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
+import MPrefSwitcher from '../mpref-switcher';
 
 class MenuDrawer extends Component {
 
@@ -45,6 +45,9 @@ class MenuDrawer extends Component {
         open={this.props.open}
         onRequestChange={open => this.props.setDrawer({ drawer: open })}
       >
+        <MenuItem>
+          <MPrefSwitcher style={{ width: 256 }} />
+        </MenuItem>
         {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
           <MenuDrawerItem
             key={mI.linkTo}

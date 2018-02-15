@@ -128,8 +128,8 @@ const returnValues = [
     conversionMetric: 'dst',
     conversionYAxis: false,
     conversionData: 'distance',
-    conversionTypeSA: 'miles',
-    conversionTypeMetric: 'meters',
+    conversionTypeSA: 'mi',
+    conversionTypeMetric: 'km',
     conversionmPref: true,
   },
   {
@@ -140,8 +140,8 @@ const returnValues = [
     conversionMetric: 'elev',
     conversionYAxis: false,
     conversionData: 'elevation',
-    conversionTypeSA: 'feet',
-    conversionTypeMetric: 'meters',
+    conversionTypeSA: 'ft',
+    conversionTypeMetric: 'm',
     conversionmPref: true,
   },
 ];

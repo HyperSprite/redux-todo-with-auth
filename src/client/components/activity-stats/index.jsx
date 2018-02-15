@@ -153,7 +153,7 @@ activeStats.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     datePref: state.auth.user.date_preference,
-    mPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.page.mPref,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
     weeklyStats: state.activities.weeklyStats,
