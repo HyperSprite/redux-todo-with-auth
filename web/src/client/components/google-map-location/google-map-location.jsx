@@ -72,10 +72,20 @@ class ExtGoogleMapWithLocation extends React.Component {
                 color={palette.textColor}
               />
             }
+            { this.state.mapLoaded && this.props.pinDrops.map(pin => (
+              <MapPin
+                key={`${pin[1]}${pin[0]}`}
+                lat={pin[1]}
+                lng={pin[0]}
+                color={palette.accent5Color}
+              />
+            ))}
           </GoogleMapReact>
         ) : (
           <div style={{ width: 200, height: 400 }} >
-            Waiting for user verification
+            <h3>Waiting for user verification.</h3>
+            <p>Allow Location Access: We can use your current location.</p>
+            <p>Block Location Access: We can use your Strava City settings.</p>
           </div>
         )}
       </div>

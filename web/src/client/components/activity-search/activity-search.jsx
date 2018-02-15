@@ -109,7 +109,6 @@ class ActivitySearch extends Component {
   };
 
   handleMapPinDrop(lat, lng) {
-    console.log('handleMapPinDrop state', lat, lng);
     this.setState({ lat, lng });
     this.props.change('lng', justFNS.round(lng, 5));
     this.props.change('lat', justFNS.round(lat, 5));
@@ -148,16 +147,12 @@ class ActivitySearch extends Component {
     } else if (JSON.stringify(lastSearch) !== JSON.stringify(formProps)) {
       this.props.clearActivitySearch();
       page = 1;
-      console.log('>---------------------- no match');
     } else if (formProps.maxDist && lastmPref !== this.props.mPref) {
       this.props.clearActivitySearch();
       page = 1;
-      console.log('>---------------------- no match');
     }
-    console.log('formProps ---->>>', formProps);
     lastmPref = this.props.mPref;
     lastSearch = Object.assign(formProps, { page }, { mPref });
-    console.log('\n formProps ------>>>>', lastSearch, formProps);
     this.props.fetchActivitiesSearch(relURL, formProps);
   }
 
@@ -257,7 +252,7 @@ class ActivitySearch extends Component {
     const SearchMapForm = (
       <div>
         <GoogleMapLocation
-          {...geoData}
+          {...geoData}  pinDrops={this.props.pinDrops}
           handleClick={this.handleMapPinDrop}
         />
         <div style={style.flexcontainer} >
@@ -417,6 +412,7 @@ function mapStateToProps(state, ownProps) {
     activitySearchCustom: state.activities.activitySearchCustom,
     activCalcFilter: state.activities.activCalcFilter,
     datePref: state.auth.user.date_preference,
+    pinDrops: state.activities.activities.filter(aF => aF.geoStart).map(aM => aM.geoStart),
     // initialValues,
     message: state.auth.message,
     srchOpts: state.activities.srchOpts,
