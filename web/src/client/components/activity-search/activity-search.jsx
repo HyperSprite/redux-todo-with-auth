@@ -64,6 +64,7 @@ class ActivitySearch extends Component {
     super(props);
     this.state = {
       expanded: false,
+      page: 0,
     };
     this.activitiesSearch = this.activitiesSearch.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -132,10 +133,6 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
-    this.setState({
-      lat: formProps.lat,
-      lng: formProps.lng,
-    });
 
     this.props.setIsFetching();
     let page = this.props.searchCount;
@@ -144,15 +141,22 @@ class ActivitySearch extends Component {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
       page = 1;
-    } else if (JSON.stringify(lastSearch) !== JSON.stringify(formProps)) {
+    } else if (JSON.stringify(this.state.lastSearch) !== JSON.stringify(formProps)) {
       this.props.clearActivitySearch();
       page = 1;
-    } else if (formProps.maxDist && lastmPref !== this.props.mPref) {
+    } else if (formProps.maxDist && this.state.lastmPref !== this.props.mPref) {
       this.props.clearActivitySearch();
       page = 1;
     }
-    lastmPref = this.props.mPref;
-    lastSearch = Object.assign(formProps, { page }, { mPref });
+    this.setState({
+      lat: formProps.lat,
+      lng: formProps.lng,
+      page,
+      nextPage: page + 1,
+      lastSearch: Object.assign(formProps, { page }, { mPref }),
+    });
+    // lastmPref = this.props.mPref;
+    // lastSearch = Object.assign(formProps, { page }, { mPref });
     this.props.fetchActivitiesSearch(relURL, formProps);
   }
 
@@ -185,6 +189,13 @@ class ActivitySearch extends Component {
   updateUserActivities() {
     this.props.setIsFetching();
     this.props.fetchStrava('user-activities', null, null, this.props.user.stravatoken, 'getUserActivities');
+  }
+
+  handleReset() {
+    this.setState({
+      page: 0,
+    });
+    this.props.reset();
   }
 
   renderAlert() {
@@ -292,6 +303,43 @@ class ActivitySearch extends Component {
       },
     ];
 
+    const SearchButton = (
+      <div>
+        {isFetching ? (
+          <RaisedButton
+            label="Searching"
+            disabled
+            primary
+            style={style.button}
+            icon={<CircularProgress size={22} />}
+          />
+        ) : (
+          <RaisedButton
+            label="Search"
+            type={pristine ? 'button' : 'submit'}
+            onClick={pristine ? this.activitiesSearch : () => 'submit'}
+            primary
+            autoFocus
+            style={style.button}
+            icon={<MdSearch size={24} />}
+            disabled={this.state.page > 0 && activCalcFilter.count <= activities.length}
+          />
+        )}
+        <RaisedButton
+          label="Clear Values"
+          onClick={() => this.handleReset()}
+          style={style.button}
+          disabled={pristine || submitting}
+        />
+        <RaisedButton
+          label="Download Activities"
+          primary
+          style={style.button}
+          onClick={handleSubmit(this.activitiesDownload)}
+        />
+      </div>
+    );
+
     return (
       <div>
         <div className="main-flex-container" >
@@ -307,7 +355,7 @@ class ActivitySearch extends Component {
               onSubmit={handleSubmit(this.handleFormSubmit)}
             >
               <Card expanded={this.state.expanded} style={style.div} >
-                <ContentTabSwitch tabs={tabs} reset={reset} />
+                <ContentTabSwitch tabs={tabs} reset={() => this.handleReset()} />
 
                 <Toggle
                   toggled={this.state.expanded}
@@ -336,39 +384,7 @@ class ActivitySearch extends Component {
 
                 </CardText>
                 <div>
-                  <div>
-                    {isFetching ? (
-                      <RaisedButton
-                        label="Searching"
-                        disabled
-                        primary
-                        style={style.button}
-                        icon={<CircularProgress size={22} />}
-                      />
-                    ) : (
-                      <RaisedButton
-                        label={pristine ? 'Load More' : 'Search'}
-                        type={pristine ? 'button' : 'submit'}
-                        onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                        primary
-                        autoFocus
-                        style={style.button}
-                        icon={<MdSearch size={24} />}
-                      />
-                    )}
-                    <RaisedButton
-                      label="Clear Values"
-                      onClick={reset}
-                      style={style.button}
-                      disabled={pristine || submitting}
-                    />
-                    <RaisedButton
-                      label="Download Activities"
-                      primary
-                      style={style.button}
-                      onClick={handleSubmit(this.activitiesDownload)}
-                    />
-                  </div>
+                  {SearchButton}
                 </div>
                 {!activities ? (
                   <p>Loading Activities</p>
@@ -390,14 +406,7 @@ class ActivitySearch extends Component {
                         />
                       </div>
                     ))}
-                    <RaisedButton
-                      label="Load more"
-                      type={pristine ? 'button' : 'submit'}
-                      onClick={pristine ? this.activitiesSearch : () => 'submit'}
-                      primary
-                      autoFocus
-                      style={style.button}
-                    />
+                    {this.state.page && SearchButton}
                   </div>
                 )}
               </Card>
