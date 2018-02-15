@@ -41,27 +41,10 @@ for (let i = 0; i < 5; i += 0.250) {
 }
 
 class AltitudeTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mPref: this.props.mPref,
-    };
-    this.switchMeasurementPref = this.switchMeasurementPref.bind(this);
-  }
 
   componentDidMount() {
     this.props.fetchData('auth/user');
     this.props.setPageName(title);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.mPref !== this.props.mPref) {
-      this.setState({ mPref: nextProps.mPref });
-    }
-  }
-
-  switchMeasurementPref() {
-    this.setState({ mPref: !this.state.mPref });
   }
 
   render() {
@@ -93,91 +76,85 @@ class AltitudeTable extends Component {
             <Card>
               {(user.clubMember && user.premium && user.userGeoElevation && currentFTP && !isNaN(currentFTP)) ? (
                 <div>
-                <CardActions>
-                  <FlatButton onClick={this.switchMeasurementPref} style={style.toggleIconButton} >
-                    M <ToggleIcon option={this.state.mPref} /> F
-                  </FlatButton>
-
-                </CardActions>
-                <CardText>
-                  <Table
-                    fixedHeader
-                    selectable={false}
-                    multiSelectable={false}
-                  >
-                    <TableHeader
-                      displaySelectAll={false}
-                      adjustForCheckbox={false}
+                  <CardText>
+                    <Table
+                      fixedHeader
+                      selectable={false}
+                      multiSelectable={false}
                     >
-                      <TableRow >
-                        <TableHeaderColumn
-                          style={style.cells}
-                        >
-                          Altitude<br />
-                          {this.state.mPref ? (
-                            `${justFns.metersToFeetRound(user.userGeoElevation, 0)} Feet`
-                          ) : (
-                            `${justFns.round(user.userGeoElevation, 0)} Meters`
-                          )}
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          style={style.cells}
-                        >
-                          FTP%<br />Acclimated<br />100%
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          style={style.cells}
-                        >
-                          Reletive FTP<br />Acclimated<br />{currentFTP}
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          style={style.cells}
-                        >
-                          FTP%<br />Not<br />Acclimated
-                        </TableHeaderColumn>
-                        <TableHeaderColumn
-                          style={style.cells}
-                        >
-                          Reletive FTP<br />Not<br />Acclimated
-                        </TableHeaderColumn>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody
-                      displayRowCheckbox={false}
-                      stripedRows
-                    >
-                      {ftpAtElv.map(ftpAE => (
-                        <TableRow key={ftpAE.eachElvM}>
-                          <TableRowColumn style={style.cells}>
-                            {this.state.mPref ? (
-                              justFns.metersToFeetRound(ftpAE.eachElvM, 0)
+                      <TableHeader
+                        displaySelectAll={false}
+                        adjustForCheckbox={false}
+                      >
+                        <TableRow >
+                          <TableHeaderColumn
+                            style={style.cells}
+                          >
+                            Altitude<br />
+                            {this.props.mPref ? (
+                              `${justFns.metersToFeetRound(user.userGeoElevation, 0)} Feet`
                             ) : (
-                              justFns.round(ftpAE.eachElvM, 0)
+                              `${justFns.round(user.userGeoElevation, 0)} Meters`
                             )}
-                          </TableRowColumn>
-                          <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>
-                          <TableRowColumn style={style.cells}>
-                            <Dialog dialogData={ftpAE.ftpAccCalc} />
-                          </TableRowColumn>
-                          <TableRowColumn style={style.cells}>{ftpAE.ftpNAcc}%</TableRowColumn>
-                          <TableRowColumn style={style.cells}>
-                            <Dialog dialogData={ftpAE.ftpNAccCalc} />
-                          </TableRowColumn>
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            style={style.cells}
+                          >
+                            FTP%<br />Acclimated<br />100%
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            style={style.cells}
+                          >
+                            Reletive FTP<br />Acclimated<br />{currentFTP}
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            style={style.cells}
+                          >
+                            FTP%<br />Not<br />Acclimated
+                          </TableHeaderColumn>
+                          <TableHeaderColumn
+                            style={style.cells}
+                          >
+                            Reletive FTP<br />Not<br />Acclimated
+                          </TableHeaderColumn>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardText>
-                </div>
-              ) : (
-                <FeatureNotice
-                  user={user}
-                  checks={['clubMember', 'premium', 'ftpHistory', 'userGeoElevation']}
-                  title={`Learn more about ${title}`}
-                />
-              )}
-            </Card>
-          </div>
+                      </TableHeader>
+                      <TableBody
+                        displayRowCheckbox={false}
+                        stripedRows
+                      >
+                        {ftpAtElv.map(ftpAE => (
+                          <TableRow key={ftpAE.eachElvM}>
+                            <TableRowColumn style={style.cells}>
+                              {this.props.mPref ? (
+                                justFns.metersToFeetRound(ftpAE.eachElvM, 0)
+                              ) : (
+                                justFns.round(ftpAE.eachElvM, 0)
+                              )}
+                            </TableRowColumn>
+                            <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>
+                            <TableRowColumn style={style.cells}>
+                              <Dialog dialogData={ftpAE.ftpAccCalc} />
+                            </TableRowColumn>
+                            <TableRowColumn style={style.cells}>{ftpAE.ftpNAcc}%</TableRowColumn>
+                            <TableRowColumn style={style.cells}>
+                              <Dialog dialogData={ftpAE.ftpNAccCalc} />
+                            </TableRowColumn>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardText>
+                  </div>
+                ) : (
+                  <FeatureNotice
+                    user={user}
+                    checks={['clubMember', 'premium', 'ftpHistory', 'userGeoElevation']}
+                    title={`Learn more about ${title}`}
+                  />
+                )}
+              </Card>
+            </div>
           <div className="side-lite right-pane" />
         </div>
       </div>
@@ -190,7 +167,7 @@ AltitudeTable.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    mPref: state.auth.user.measurement_preference === 'feet',
+    mPref: state.page.mPref,
   };
 }
 

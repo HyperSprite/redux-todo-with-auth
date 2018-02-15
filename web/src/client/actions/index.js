@@ -51,8 +51,10 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   SET_PAGE_DRAWER: 'SET_PAGE_DRAWER',
   SET_IS_FETCHING: 'SET_IS_FETCHING',
   SET_IS_FETCHING_OFF: 'SET_IS_FETCHING_OFF',
+  SET_MPREF_SWITCH: 'SET_MPREF_SWITCH',
   SET_CLUB_NOTICE: 'SET_CLUB_NOTICE',
   MESSAGE_FOR_USER: 'MESSAGE_FOR_USER',
+  SERVER_MESSAGE: 'SERVER_MESSAGE',
 };
 
 // handle error mesages
@@ -349,6 +351,12 @@ export function fetchActivitiesWeeklyTotals(relURL, stravaId, weeksBack) {
         dispatch({
           type: TYPES.SET_IS_FETCHING_OFF,
         });
+        if (response.data.serverMessage) {
+          dispatch({
+            type: TYPES.SERVER_MESSAGE,
+            payload: response.data.serverMessage,
+          });
+        }
       })
       .catch((error) => {
         dispatch({
@@ -585,6 +593,12 @@ export function setDrawer(drawer: boolean) {
 export function setIsFetching() {
   return {
     type: TYPES.SET_IS_FETCHING,
+  };
+}
+
+export function setMPrefSwitch() {
+  return {
+    type: TYPES.SET_MPREF_SWITCH,
   };
 }
 

@@ -18,8 +18,8 @@ const returnValues = [
     conversionMetric: 'dst',
     conversionYAxis: false,
     conversionData: 'distance',
-    conversionTypeSA: 'miles',
-    conversionTypeMetric: 'meters',
+    conversionTypeSA: 'mi',
+    conversionTypeMetric: 'km',
     conversionmPref: true,
   },
   {
@@ -29,8 +29,8 @@ const returnValues = [
     conversionMetric: 'elev',
     conversionYAxis: false,
     conversionData: 'elevation_gain',
-    conversionTypeSA: 'feet',
-    conversionTypeMetric: 'meters',
+    conversionTypeSA: 'ft',
+    conversionTypeMetric: 'm',
     conversionmPref: true,
   },
   {
@@ -40,8 +40,8 @@ const returnValues = [
     conversionMetric: 'elev',
     conversionYAxis: false,
     conversionData: 'elevationStart',
-    conversionTypeSA: 'feet',
-    conversionTypeMetric: 'meters',
+    conversionTypeSA: 'ft',
+    conversionTypeMetric: 'm',
     conversionmPref: true,
   },
   {

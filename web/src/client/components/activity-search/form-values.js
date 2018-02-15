@@ -1,6 +1,7 @@
 export const thisForm = 'searchform';
 export const title = 'Activity Search';
 export const relURL = 'apiv1/activities/search-activities';
+
 export const formValues = [
   {
     contentName: 'textsearch',
@@ -23,6 +24,7 @@ export const formValues = [
     contentType: 'geo',
     componentType: 'InputText',
     addButtonset: false,
+    normalize: 'numbersOnly',
   },
   {
     contentName: 'lng',
@@ -34,6 +36,19 @@ export const formValues = [
     contentType: 'geo',
     componentType: 'InputText',
     addButtonset: false,
+    normalize: 'numbersOnly',
+  },
+  {
+    contentName: 'maxDist',
+    contentLabel: 'Max Distance',
+    contentAlt: '',
+    contentOptions: null,
+    contentHelp: '',
+    contentPlaceholder: 'Default 80km (50 miles)',
+    contentType: 'geo',
+    componentType: 'InputText',
+    addButtonset: false,
+    normalize: 'numbersOnly',
   },
   {
     contentName: 'wildcard',

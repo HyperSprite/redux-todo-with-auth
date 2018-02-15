@@ -6,6 +6,7 @@ export default function (state = {
   name: '',
   drawer: false,
   isFetching: false,
+  mPref: false,
 }, action) {
   switch (action.type) {
     case TYPES.SET_PAGE_NAME:
@@ -16,6 +17,10 @@ export default function (state = {
       return { ...state, isFetching: true };
     case TYPES.SET_IS_FETCHING_OFF:
       return { ...state, isFetching: false };
+    case TYPES.FETCH_USER:
+      return { ...state, mPref: action.payload.measurement_preference === 'feet' };
+    case TYPES.SET_MPREF_SWITCH:
+      return { ...state, mPref: !state.mPref };
     default:
       return state;
   }

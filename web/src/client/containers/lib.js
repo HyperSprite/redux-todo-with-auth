@@ -43,4 +43,6 @@ lib.dateStringFormat = (dateString, datePref = 'MM-DD-YYYY') => {
   return dateStringResult;
 };
 
+lib.numbersOnly = value => value.replace(/[^0-9-]+/g, '');
+
 export default lib;

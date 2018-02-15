@@ -24,9 +24,9 @@ const ActivityMetric = ({ data, rV, mPref }) => {
           {rV.conversionmPref ? (
             <span>
               {mPref ? (
-                <span> {`(${rV.conversionTypeSA})`}</span>
+                <span> {rV.conversionTypeSA}</span>
               ) : (
-                <span> {`(${rV.conversionTypeMetric})`}</span>
+                <span> {rV.conversionTypeMetric}</span>
               )}
             </span>
           ) : (null)}

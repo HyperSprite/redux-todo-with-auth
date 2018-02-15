@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { IconButton } from 'material-ui';
 import { Card } from 'material-ui/Card';
@@ -16,6 +16,7 @@ import style from '../../styles/style';
 const propTypes = {
   fetchData: PropTypes.func,
   setPageName: PropTypes.func,
+  mPref: PropTypes.bool.isRequired,
   user: PropTypes.shape({
     email: PropTypes.string,
     stravaId: PropTypes.number,
@@ -35,7 +36,7 @@ const propTypes = {
   }),
 };
 
-class Athlete extends Component {
+class Athlete extends React.Component {
   constructor(props) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
@@ -60,7 +61,7 @@ class Athlete extends Component {
       userGeoElevation,
     } = this.props.user;
 
-    const mPref = measurement_preference === 'feet';
+    const mPref = this.props.mPref;
     return (
       <div>
         <div className="main-flex-container" >
@@ -110,6 +111,7 @@ Athlete.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    mPref: state.page.mPref,
   };
 }
 

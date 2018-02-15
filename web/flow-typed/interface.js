@@ -45,7 +45,9 @@ export type ActionStrings = (
   'SET_PAGE_DRAWER' |
   'SET_IS_FETCHING' |
   'SET_IS_FETCHING_OFF' |
+  'MPREF_SWITCH' |
   'SET_CLUB_NOTICE' |
   'MESSAGE_FOR_USER' |
-  'SET_TSS_GOAL'
+  'SET_TSS_GOAL' |
+  'SERVER_MESSAGE'
   )
