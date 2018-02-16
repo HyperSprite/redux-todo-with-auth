@@ -247,7 +247,7 @@ class ActivitySearch extends Component {
     };
 
     const SearchTextForm = (
-      <div>
+      <div style={style.flexParent}>
         <GoogleMapLocation
           {...geoData}
           pinDrops={this.props.pinDrops}
@@ -255,12 +255,14 @@ class ActivitySearch extends Component {
           noClick
         />
         <div style={style.flexcontainer} >
-          <div key={formValues[0].contentName}>
-            <EditSwitch
-              form={this.props.form}
-              formValues={formValues[0]}
-            />
-          </div>
+          {formValues.filter(fFV => (fFV.contentType === 'text')).map(fV => (
+            <div key={fV.contentName} >
+              <EditSwitch
+                form={this.props.form}
+                formValues={fV}
+              />
+            </div>
+          ))}
           { sortStrings && (
             <SortSelect sortStrings={sortStrings} form={this.props.form} />
           )}
@@ -269,7 +271,7 @@ class ActivitySearch extends Component {
     );
 
     const SearchMapForm = (
-      <div>
+      <div style={style.flexParent}>
         <GoogleMapLocation
           {...geoData}
           pinDrops={this.props.pinDrops}
@@ -406,7 +408,7 @@ class ActivitySearch extends Component {
                         />
                       </div>
                     ))}
-                    {this.state.page && SearchButton}
+                    {!!this.state.page && SearchButton}
                   </div>
                 )}
               </Card>

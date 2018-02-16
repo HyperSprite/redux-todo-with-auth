@@ -63,7 +63,7 @@ const WizardInput = (props) => {
   );
 
   return (
-    <div>
+    <div style={{ margin: '0 5px 0 5px' }}>
       {formValues.addButtonset ? (
         <Form id={formValues.contentName} onSubmit={handleSubmit}>
           <div>

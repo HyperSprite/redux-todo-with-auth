@@ -57,7 +57,7 @@ export const formValues = [
     contentOptions: null,
     contentHelp: '',
     contentPlaceholder: '',
-    contentType: 'filter',
+    contentType: 'text',
     componentType: 'InputCheckbox',
     addButtonset: false,
   },
