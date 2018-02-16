@@ -29,6 +29,7 @@ const renderCheckbox = ({
     </label>
     <div>
       <Checkbox
+        style={{ margin: 8 }}
         className="form-control"
         {...input}
         checked={!!input.value}

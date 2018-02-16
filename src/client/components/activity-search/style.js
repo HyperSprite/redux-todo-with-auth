@@ -10,10 +10,16 @@ export default {
   toggleContainer: {
     width: 300,
   },
-  flexcontainer: {
+  flexParent: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
+  },
+  flexcontainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
     padding: '10px 0 10px 0',
+    minHeight: 80, 
   },
 };
