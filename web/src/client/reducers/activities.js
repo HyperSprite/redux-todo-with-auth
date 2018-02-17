@@ -11,9 +11,7 @@ export default function (state = {
   activitySearchCustom: false,
   activitySearchEnd: false,
   activCalcAll: {},
-  activCalcFilter: {
-    count: -1,
-  },
+  activCalcFilter: {},
   weeklyStats: [],
   weeklyStatsCount: 0,
 }, action) {
