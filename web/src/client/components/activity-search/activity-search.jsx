@@ -135,17 +135,21 @@ class ActivitySearch extends Component {
   handleFormSubmit(formProps) {
 
     this.props.setIsFetching();
+    let setDisabled = this.props.activities.length >= this.props.activCalcFilter.count;
     let page = this.props.searchCount;
     const mPref = this.props.mPref;
     if (!this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
+      setDisabled = false;
       page = 1;
     } else if (JSON.stringify(this.state.lastSearch) !== JSON.stringify(formProps)) {
       this.props.clearActivitySearch();
+      setDisabled = false;
       page = 1;
     } else if (formProps.maxDist && this.state.lastmPref !== this.props.mPref) {
       this.props.clearActivitySearch();
+      setDisabled = false;
       page = 1;
     }
     this.setState({
@@ -157,7 +161,11 @@ class ActivitySearch extends Component {
     });
     // lastmPref = this.props.mPref;
     // lastSearch = Object.assign(formProps, { page }, { mPref });
-    this.props.fetchActivitiesSearch(relURL, formProps);
+    if (setDisabled) {
+      this.props.setIsFetchingOff();
+    } else {
+      this.props.fetchActivitiesSearch(relURL, formProps);
+    }
   }
 
   activitiesDownload(formProps) {
@@ -324,7 +332,6 @@ class ActivitySearch extends Component {
             autoFocus
             style={style.button}
             icon={<MdSearch size={24} />}
-            disabled={this.state.page > 0 && activCalcFilter.count <= activities.length}
           />
         )}
         <RaisedButton

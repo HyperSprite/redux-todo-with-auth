@@ -596,6 +596,12 @@ export function setIsFetching() {
   };
 }
 
+export function setIsFetchingOff() {
+  return {
+    type: TYPES.SET_IS_FETCHING_OFF,
+  };
+}
+
 export function setMPrefSwitch() {
   return {
     type: TYPES.SET_MPREF_SWITCH,

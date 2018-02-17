@@ -17,9 +17,10 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const compression = require('compression');
 const router = require('./router');
 const hlpr = require('./lib/helpers');
-const compression = require('compression');
+const nexmo = require('./services/nexmo');
 
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
@@ -110,7 +111,11 @@ app.use((err, req, res) => {
   res.status(500).render('500');
 });
 
-const runtimeSettings = `${port} v${process.env.CURRENT_SCHEMA} logging:${process.env.LOGGING}`
+const runtimeSettings = `${port} v${process.env.CURRENT_SCHEMA} logging:${process.env.LOGGING}`;
+if (app.get('env') === 'production') {
+  nexmo.sendText(process.env.ADMIN_TXT_NUMBER, `ARaceathlete starting ${runtimeSettings}`);
+}
+
 // HTTPS
 if (isSSL) {
   httpServer = https.createServer({
