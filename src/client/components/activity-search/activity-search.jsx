@@ -437,7 +437,7 @@ function mapStateToProps(state) {
     activities: state.activities.activitySearch,
     searchCount: state.search.searchCount,
     activitySearchCustom: state.activities.activitySearchCustom,
-    activCalcFilter: state.activities.activCalcFilter,
+    activCalcFilter: state.activities.activCalcFilter || state.activities.activCalcAll,
     datePref: state.auth.user.date_preference,
     pinDrops: state.activities.activities.filter(aF => aF.geoStart).map(aM => ({
       lat: aM.geoStart[1],
