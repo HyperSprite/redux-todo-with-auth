@@ -121,6 +121,8 @@ const activitiesSchema = new Schema(
   });
 
 activitiesSchema.plugin(findOrCreate);
+activitiesSchema.index({ 'athlete.id': 1, resource_state: 1 });
+activitiesSchema.index({ resource_state: 1, 'athlete.id': 1, start_date_local: 1 });
 
 const Activities = mongoose.model('activities', activitiesSchema);
 
