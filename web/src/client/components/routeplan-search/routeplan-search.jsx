@@ -32,7 +32,7 @@ class RouteSearch extends Component {
   };
 
   componentDidMount() {
-    this.props.setPageName('Route Search');
+    this.props.setPageName('Route Search', '/blog/route-search');
     this.getUserRouteplans(this.props.user);
   }
 

@@ -576,10 +576,10 @@ export function toggleTodo(id: number) {
 
 // page
 
-export function setPageName(name: string) {
+export function setPageName(name: string, help: string = '') {
   return {
     type: TYPES.SET_PAGE_NAME,
-    payload: name,
+    payload: { name, help },
   };
 }
 

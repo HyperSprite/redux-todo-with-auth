@@ -124,7 +124,7 @@ const getStreams = (activityId, accessToken, done) => {
     'velocity_smooth',
   ];
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
-    hlpr.consLog(['getStreams rateLimit', rateLimit]);
+    hlpr.consLog(['getStreams rateLimit', JSON.stringify(rateLimit)]);
     if (err) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getStreams strava.streams.activity`,
@@ -152,7 +152,7 @@ const getStreams = (activityId, accessToken, done) => {
         logSubType: 'err',
         level: 6,
         error: err,
-        message: `err for ${activityId} message ${streams.message}`,
+        message: `err for ${activityId} message ${JSON.stringify(streams.message).slice(0, 50)}`,
       }));
       return done([]);
     }
@@ -419,7 +419,7 @@ exports.getExtendedActivityStats = () => {
       { authorizationError: { $exists: false } },
       { $or: [
         { resource_state: 2 },
-        { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
+        // { currentSchema: { $lt: process.env.CURRENT_SCHEMA * 1 } },
         { currentSchema: { $exists: false } },
       ] },
     ],
@@ -427,10 +427,10 @@ exports.getExtendedActivityStats = () => {
 
   Activities.find(toUpdate).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
-      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find err`, logObj.logType, 'err', 3, err, 'no_page', `Error finding activities ${JSON.stringify(toUpdate)}`, null);
+      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find err`, logObj.logType, 'err', 3, err, 'no_page', `Error finding activities query opts: ${toUpdate}`, null);
       return err;
     }
-    hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find info`, logObj.logType, 'info', 10, err, 'no_page', `activities ${JSON.stringify(toUpdate)}`, null);
+    hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find info`, logObj.logType, 'info', 10, err, 'no_page', `activities  query opts: ${toUpdate}`, null);
     activities.forEach((dbActivity) => {
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
@@ -455,7 +455,8 @@ exports.getExtendedActivityStats = () => {
 };
 
 const runOnStartup = () => {
-  exports.getExtendedActivityStats();
+  hlpr.logOutArgs(`${logObj.file}.runOnStartup info`, logObj.logType, 'info', 5, null, 'no_page', 'Starting up!', null);
+  // exports.getExtendedActivityStats();
 };
 runOnStartup();
 

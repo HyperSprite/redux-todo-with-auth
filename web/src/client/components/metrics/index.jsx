@@ -44,7 +44,7 @@ class Athlete extends React.Component {
 
   componentDidMount() {
     this.props.fetchData('auth/user');
-    this.props.setPageName('Power and Weight');
+    this.props.setPageName('Power and Weight', '/blog/power-and-weight');
   }
 
   updateUser() {

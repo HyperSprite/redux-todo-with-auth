@@ -10,7 +10,7 @@ export default function (state = {
 }, action) {
   switch (action.type) {
     case TYPES.SET_PAGE_NAME:
-      return { ...state, name: action.payload };
+      return { ...state, name: action.payload.name, help: action.payload.help };
     case TYPES.SET_PAGE_DRAWER:
       return { ...state, drawer: !state.drawer };
     case TYPES.SET_IS_FETCHING:

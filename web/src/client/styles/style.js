@@ -1,7 +1,7 @@
 import theme from './theme';
 
 export default {
-
+  theme,
   app: {
     children: {
       marginTop: 76,

@@ -9,6 +9,7 @@ import ToggleIcon from '../form/toggle-icon';
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
   setMPrefSwitch: PropTypes.func.isRequired,
+  setDrawer: PropTypes.func.isRequired,
 };
 
 class MPrefSwitcher extends React.Component {
@@ -19,6 +20,7 @@ class MPrefSwitcher extends React.Component {
 
   switchMeasurementPref() {
     this.props.setMPrefSwitch();
+    this.props.setDrawer({ drawer: false });
   }
 
   render() {

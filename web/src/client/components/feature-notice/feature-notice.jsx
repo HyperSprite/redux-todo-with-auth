@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CheckBox from './checkbox-icon';
+import CheckBox from '../form/checkbox-icon';
+import checkList from './checklist-values';
 
 const propTypes = {
   checks: PropTypes.array.isRequired,
@@ -9,37 +10,14 @@ const propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-const checkList = {
-  clubMember: {
-    field: 'clubMember',
-    text: 'A Race athlete Strava Club membership',
-  },
-  premium: {
-    field: 'premium',
-    text: 'To be a Strava Premium user',
-  },
-  ftpHistory: {
-    field: 'ftpHistory.length',
-    text: 'An entry for FTP on Strava',
-  },
-  weightHistory: {
-    field: 'weightHistory.length',
-    text: 'An entry for Weight on Strava',
-  },
-  userGeoElevation: {
-    field: 'userGeoElevation',
-    text: 'An entry for City and Country on Strava',
-  },
-};
-
 const featureNotice = ({ checks, title, user }) => (
   user.stravaId ? (
     <div style={{ margin: 20 }}>
       <h4>
-        {'We\'re sorry, this is an A Race athlete Premium feature'}
+        {`Missing Feature Requirements for ${title}`}
       </h4>
       <p>
-        To access this page you need the following:
+        {'We\'re sorry, you have a some missing requirements. To access this page, resolve the empty boxes below.'}
       </p>
       <ul style={{ listStyle: 'none' }}>
         {checks.map(check => (
@@ -49,7 +27,9 @@ const featureNotice = ({ checks, title, user }) => (
         ))}
       </ul>
       <p>
-        {`See "${title}" below for more information`}
+        {'For more information, see the '}
+        <a href={'/blog/feature-requirements'} target="new" >Feature Requirements</a>
+        {' blog post.'}
       </p>
     </div>
   ) : (

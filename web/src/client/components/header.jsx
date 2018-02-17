@@ -11,14 +11,15 @@ import * as actions from './../actions';
 import Signin from './auth/signin';
 import EventFilter from './events/filter-toolbar';
 import ClubNotice from './club-notice';
+import IconLink from './icon-link';
 
 import style from '../styles/style';
 
 const propTypes = {
   authenticated: PropTypes.bool,
+  fetchData: PropTypes.func.isRequired,
   page: PropTypes.object.isRequired,
   setDrawer: PropTypes.func.isRequired,
-  fetchData: PropTypes.func.isRequired,
   user: PropTypes.object,
 };
 
@@ -60,7 +61,21 @@ class Header extends Component {
   }
 
   render() {
-    const pageName = this.props.page.name ? `${this.props.page.name} : ` : '';
+    const pageName = this.props.page.name ? `${this.props.page.name} :` : '';
+    const pageNameWithHelp = this.props.page.help ? (
+      <span>
+        {`${this.props.page.name} `}
+        <IconLink
+          link={this.props.page.help}
+          color={style.theme.palette.accent2Color}
+        />
+      </span>
+    ) : (
+      <span>
+        {this.props.page.name}
+      </span>
+    );
+
     return (
       <div className="site-header" >
         <Helmet>
@@ -68,7 +83,7 @@ class Header extends Component {
           <link rel="canonical" href={`${window.location.host}`} />
         </Helmet>
         <AppBar
-          title={this.props.page.name}
+          title={pageNameWithHelp}
           onLeftIconButtonClick={this.handleToggle}
           showMenuIconButton
           iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}

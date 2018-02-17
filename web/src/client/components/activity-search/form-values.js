@@ -1,5 +1,6 @@
 export const thisForm = 'searchform';
 export const title = 'Activity Search';
+export const help = '/blog/activity-search';
 export const relURL = 'apiv1/activities/search-activities';
 
 export const formValues = [

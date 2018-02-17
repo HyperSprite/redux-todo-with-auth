@@ -17,7 +17,7 @@ import * as actions from '../../actions';
 import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
-import FeatureNotice from '../form/feature-notice';
+import FeatureNotice from '../feature-notice';
 import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
 import GoogleMapLocation from '../google-map-location';
@@ -27,7 +27,7 @@ import SortSelect from '../form/edit/sort-select';
 import validate from '../form/validate';
 
 import style from './style';
-import { formValues, relURL, thisForm, title } from './form-values';
+import { formValues, relURL, thisForm, title, help } from './form-values';
 
 const propTypes = {
   activities: PropTypes.array,
@@ -74,7 +74,7 @@ class ActivitySearch extends Component {
   }
   // TODO clear old search on entry to this page
   componentDidMount() {
-    this.props.setPageName(title);
+    this.props.setPageName(title, help);
     this.activitiesSearch();
   }
 
