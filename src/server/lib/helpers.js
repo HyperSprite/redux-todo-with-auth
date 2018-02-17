@@ -90,11 +90,22 @@ const loggit = (enhncdLogObj) => {
   });
 };
 
+exports.LogObj = function LogObj(func, logType, logSubType, level, error, page, message, stravaId) {
+  this.stravaId = stravaId;
+  this.func = func;
+  this.logType = logType;
+  this.logSubType = logSubType;
+  this.level = level;
+  this.error = JSON.stringify(error).slice(0, 50);
+  this.message = JSON.stringify(message).slice(0, 200);
+  this.page = page;
+};
+
 exports.logOut = (incLogObj) => {
   if (logLevel[process.env.LOGGING] !== '') {
     if (incLogObj.level <= logLevel[process.env.LOGGING] * 1) {
-      const errString = `${JSON.stringify(incLogObj.err)}`;
-      loggit(Object.assign({}, incLogObj, { err: errString.slice(0, 40) }));
+
+      loggit(Object.assign({}, incLogObj));
     }
   }
 };
@@ -102,7 +113,8 @@ exports.logOut = (incLogObj) => {
 // hlpr.logOutArgs(func, logType, logSubType, level, error, page, message, stravaId);
 // hlpr.logOutArgs(`${logObj.file}.functionName`, logObj.logType, 'admin', 9, err, req.originalUrl, message, req.user.stravaId);
 exports.logOutArgs = (func, logType, logSubType, level, error, page, message, stravaId) => {
-  exports.logOut({ func, logType, logSubType, level, error, page, message, stravaId });
+  const newLog = new exports.LogObj(func, logType, logSubType, level, error, page, message, stravaId);
+  exports.logOut(newLog);
 };
 
 // const wattsOverFTP = waw / ftp;

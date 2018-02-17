@@ -16,7 +16,7 @@ const menuDrawerList = [
     access: ['user', 'admin'],
   },
   {
-    primaryText: 'Activity Search (beta)',
+    primaryText: 'Activity Search',
     linkTo: '/activity-search',
     access: ['user', 'admin'],
   },
