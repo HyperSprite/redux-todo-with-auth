@@ -1,6 +1,6 @@
 {
   "name": "araceathlete",
-  "version": "4.1.4",
+  "version": "4.1.5",
   "description": "Search and Visualize Strava cycling data",
   "main": "main.js",
   "engines": {
@@ -15,8 +15,8 @@
     "test:client": "jest",
     "test-postinstall": "webpack --progress --optimize-minimize",
     "clean-assets": "rm -f src/server/public/assets/*",
-    "dev":  "npm run clean-assets && node_modules/.bin/nodemon --ignore 'src/server/public/' --ignore '*.test.js' src/server/index.js $LOGGING",
-    "dev:api":  "npm run clean-assets && node_modules/.bin/nodemon --ignore 'src/server/public/' --ignore '*.test.js' --ignore 'src/client/' src/server/index.js $LOGGING",
+    "dev": "npm run clean-assets && node_modules/.bin/nodemon --ignore 'src/server/public/' --ignore '*.test.js' src/server/index.js $LOGGING",
+    "dev:api": "npm run clean-assets && node_modules/.bin/nodemon --ignore 'src/server/public/' --ignore '*.test.js' --ignore 'src/client/' src/server/index.js $LOGGING",
     "dev-api-only": "NODE_ENV=API-ONLY node_modules/.bin/nodemon src/server/index.js",
     "postinstall": "rm -f src/server/public/assets/* && NODE_ENV=production webpack -p --progress --optimize-minimize",
     "start": "NODE_ENV=production node src/server/index.js",
@@ -79,6 +79,7 @@
     "mongoose": "^4.13.11",
     "mongoose-findorcreate": "^2.0.0",
     "morgan": "^1.9.0",
+    "nexmo": "^2.2.0",
     "node-geocoder": "^3.21.1",
     "node-schedule": "^1.2.5",
     "passport": "^0.4.0",

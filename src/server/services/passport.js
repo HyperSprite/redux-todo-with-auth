@@ -7,6 +7,7 @@ const path = require('path');
 
 const User = require('../models/user');
 const hlpr = require('../lib/helpers');
+const nexmo = require('./nexmo');
 
 const localOptions = { usernameField: 'email' };
 
@@ -32,7 +33,12 @@ const stravaLogin = new StravaStrategy({
   const tmpAthlete = {};
   tmpAthlete.stravaId = profile.id;
   tmpAthlete.access_token = profile.token;
-  User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user) => {
+  User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user, created) => {
+    if (created) {
+      const message = `ARaceathlete new user ${user.name}, id: ${user.stravaId}`;
+      nexmo.sendText(process.env.ADMIN_TXT_NUMBER, message);
+      hlpr.logOutArgs('services/passport.stravaLogin', 'auth', 'sussess', 5, err, null, message, user.stravaId);
+    }
     // this if handles if the user removes access then changes mind and gets a new token
     if (tmpAthlete.access_token !== user.access_token) {
       User.findOneAndUpdate(
