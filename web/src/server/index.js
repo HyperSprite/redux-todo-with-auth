@@ -112,9 +112,12 @@ app.use((err, req, res) => {
   res.status(500).render('500');
 });
 
-const runtimeSettings = `${port} v${process.env.CURRENT_SCHEMA} logging:${process.env.LOGGING}`;
-if (app.get('env') === 'production') {
-  nexmo.sendText(process.env.ADMIN_TXT_NUMBER, `ARaceathlete starting ${runtimeSettings}`);
+const runtimeSettings = `${process.env.NODE_ENV} v${pckg.version} log: ${process.env.LOGGING}`;
+if (process.env.NODE_ENV === 'production') {
+  hlpr.getDateLocal('America/Los_Angeles', 'YYYY-MM-DD HH:mm', (date) => {
+    const txtMessage = `${date} - ARaceathlete started ${runtimeSettings}`;
+    nexmo.sendText(process.env.ADMIN_TXT_NUMBER, txtMessage);
+  });
 }
 
 // HTTPS
@@ -123,13 +126,13 @@ if (isSSL) {
     key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
     cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
   }, app).listen(portS, () => {
-    console.log(`**** HTTPS ${app.get('env')} https://localhost${runtimeSettings}`);
+    console.log(`**** HTTPS https://localhost:${port} ${runtimeSettings}`);
   });
   const insecureServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${runtimeSettings}`);
+    console.log(`**** HTTP http://localhost:${port} ${runtimeSettings}`);
   });
 } else {
   httpServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP ${app.get('env')} http://localhost:${runtimeSettings}`);
+    console.log(`**** HTTP http://localhost:${port} ${runtimeSettings}`);
   });
 }
