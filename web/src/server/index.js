@@ -9,6 +9,7 @@ const pckg = require('../../package.json');
 
 const currentVersion = pckg.version.slice(0, 3) * 1;
 process.env.CURRENT_SCHEMA = process.env.CURRENT_SCHEMA || currentVersion;
+process.env.LOGGING = process.env.LOGGING || 'normal';
 
 const http = require('http');
 const https = require('https');

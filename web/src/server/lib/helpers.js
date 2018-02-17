@@ -13,9 +13,9 @@ const logObj = {
 
 const logLevel = {
   everything: 10, // bug testing
+  true: 9,        // important
   verbose: 7,     // not for production
   normal: 4,      // important
-  true: 1,        // clritical
   minimal: 1,     // critical
   none: -1,
 };
