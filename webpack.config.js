@@ -5,8 +5,19 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const WebpackChunkHash = require('webpack-chunk-hash');
 const UglifyJs = require('uglifyjs-webpack-plugin');
 
+let isLogging = false;
+
 const isProd = (process.env.NODE_ENV === 'production');
-const isLogging = (process.env.LOGGING !== '');
+
+switch (process.env.LOGGING) {
+  case ('normal'):
+  case ('minimal'):
+  case ('none'):
+    isLogging = false;
+    break;
+  default:
+    isLogging = true;
+}
 
 // process.traceDeprecation = true;
 const useBundleAnalyzerPlugin = false;
