@@ -7,7 +7,7 @@ const hlpr = require('../lib/helpers');
 
 exports.sendText = (txtNumber, txtMessage) => {
   nexmo.message.sendSms(
-    process.env.NEXMO_VIRTUAL_NUMBER, txtNumber, 'txtMessage',
+    process.env.NEXMO_VIRTUAL_NUMBER, txtNumber, txtMessage,
       (err, responseData) => {
         if (err) {
           hlpr.logOutArgs('services/nexmo.sendText', 'sms', 'error', 3, err, 'sms_message', txtMessage, txtNumber);
