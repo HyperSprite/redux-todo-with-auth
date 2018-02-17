@@ -1,5 +1,6 @@
 const { performance } = require('perf_hooks'); // eslint-disable-line
-const moment = require('moment');
+const m = require('moment');
+const mtz = require('moment-timezone');
 const dateFNS = require('date-fns');
 
 const Logs = require('../models/logging');
@@ -27,10 +28,15 @@ exports.isProd = () => {
 };
 
 exports.getDate = (result) => {
-  const newDate = moment().utc().format();
+  const newDate = m().utc().format();
   newDate.toString();
   return result(newDate);
 };
+
+exports.getDateLocal = (locale, format, result) => exports.getDate((date) => {
+  const newDate = format ? m(date).tz(locale).format(format) : m(date).tz(locale);
+  return result(newDate);
+});
 
 // Date String helper
 exports.correctedTZDate = (stringDate) => {

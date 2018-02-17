@@ -12,6 +12,11 @@ const apiLogSchema = new Schema({
   shortTermUsage: Number,
   longTermUsage: Number,
   dateTime: String, // 2018-02-13:13:00 / 15 / 30 / 45
+  remainingBalance: Number,
+  messagePrice: Number,
+  to: String,
+  status: String,
+  network: String,
 },
   {
     timestamps: true,
