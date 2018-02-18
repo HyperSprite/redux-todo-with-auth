@@ -11,7 +11,7 @@ const apiLogSchema = new Schema({
   logSubType: String,
   shortTermUsage: Number,
   longTermUsage: Number,
-  dateTime: String, // 2018-02-13:13:00 / 15 / 30 / 45
+  dateTime: String,  // 2018-02-13:13:00 / 15 / 30 / 45
   remainingBalance: Number,
   messagePrice: Number,
   to: String,
@@ -24,8 +24,6 @@ const apiLogSchema = new Schema({
 );
 
 apiLogSchema.plugin(findOrCreate);
-
-apiLogSchema.index({ logType: 1, dateTime: 1 }, { unique: true });
 
 const APILog = mongoose.model('apilog', apiLogSchema);
 
