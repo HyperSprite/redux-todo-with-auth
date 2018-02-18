@@ -25,6 +25,7 @@ exports.sendText = (txtNumber, txtMessage) => {
               to: m.to,
               status: m.status,
               network: m.network,
+              dateTime: hlpr.getDate(d => d),
             });
             newLog.save();
           });
@@ -44,4 +45,18 @@ exports.sendText = (txtNumber, txtMessage) => {
     newLog.save();
     hlpr.logOutArgs('services/nexmo.sendText nonProd', 'sms', 'sucsess', 5, null, 'sms_message', txtMessage, txtNumber);
   }
+};
+
+exports.checkBalance = (req, res) => {
+  nexmo.account.checkBalance((err, balance) => {
+    if (err) console.log(err);
+    const newLog = new APIlog({
+      logType: 'nexmo',
+      logSubType: 'checkBalance',
+      remainingBalance: balance.value * 1,
+      dateTime: hlpr.getDate(d => d),
+    });
+    newLog.save();
+    res.send(newLog);
+  });
 };

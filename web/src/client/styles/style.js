@@ -23,6 +23,20 @@ export default {
     margin: 12,
   },
 
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  },
+
+  flexcontainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    padding: '10px 0 10px 0',
+    minHeight: 80,
+  },
+
   formelement: {
     marginLeft: 5,
     maxWidth: '95%',

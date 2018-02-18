@@ -31,17 +31,12 @@ class OneDayWeather extends Component {
       weatherforcast: [],
       showExtended: false,
     };
-    this.switchDisplay = this.switchDisplay.bind(this);
     this.switchShowExtended = this.switchShowExtended.bind(this);
     this.updateWeather = this.updateWeather.bind(this);
   }
 
   componentDidMount() {
     this.getNewWeather();
-  }
-
-  componentWillReceiveProps() {
-    this.setState({ mPref: this.props.mPref });
   }
 
   getNewWeather = () => {
@@ -63,17 +58,13 @@ class OneDayWeather extends Component {
     this.getNewWeather();
   }
 
-  switchDisplay() {
-    this.setState({ mPref: !this.state.mPref });
-  }
-
   switchShowExtended() {
     this.setState({ showExtended: !this.state.showExtended });
   }
 
   render() {
-    const { date, tzOffset, dstOffset } = this.props;
-    const { weatherforcast, mPref, showExtended } = this.state;
+    const { date, tzOffset, mPref, dstOffset } = this.props;
+    const { weatherforcast, showExtended } = this.state;
     const dayWF = {};
 
     function dateSetup(theDate) {
@@ -170,7 +161,6 @@ class OneDayWeather extends Component {
     dayWF.tempType = setCandF(mPref);
     dayWF.mPref = mPref;
     dayWF.updateWeather = this.updateWeather;
-    dayWF.switchDisplay = this.switchDisplay;
     dayWF.switchShowExtended = this.switchShowExtended;
     dayWF.showExtended = showExtended;
 
@@ -198,13 +188,6 @@ class OneDayWeather extends Component {
         {this.state.showExtended ? (
           <div>
             <div className="weather-row">
-              <div>
-                <span >
-                  <FlatButton onClick={dayWF.switchDisplay} style={style.toggleIconButton} >
-                    C <ToggleIcon option={dayWF.mPref} /> F
-                  </FlatButton>
-                </span>
-              </div>
               <IconButton onClick={dayWF.updateWeather} style={style.toggleIconButton} >
                 <FaRefresh size={20} />
               </IconButton>

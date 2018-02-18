@@ -21,7 +21,7 @@ const cors = require('cors');
 const compression = require('compression');
 const router = require('./router');
 const hlpr = require('./lib/helpers');
-const nexmo = require('./services/nexmo');
+const txt = require('./services/nexmo');
 
 const app = express();
 const isSSL = fs.existsSync(`${__dirname}/../ssl/cert.pem`);
@@ -116,7 +116,7 @@ const runtimeSettings = `${process.env.NODE_ENV} v${pckg.version} log: ${process
 if (process.env.NODE_ENV === 'production') {
   hlpr.getDateLocal('America/Los_Angeles', 'YYYY-MM-DD HH:mm', (date) => {
     const txtMessage = `${date} - ARaceathlete started ${runtimeSettings}`;
-    nexmo.sendText(process.env.ADMIN_TXT_NUMBER, txtMessage);
+    txt.sendText(process.env.ADMIN_TXT_NUMBER, txtMessage);
   });
 }
 
