@@ -823,6 +823,7 @@ exports.searchActivities = async (req, res) => {
         distanceField: 'distance',
         maxDistance: maxDist, // 200 miles in meters
         spherical: true,
+        query: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] },
       },
     };
   } else {
@@ -954,8 +955,9 @@ exports.searchActivities = async (req, res) => {
   ];
   if (geoData) {
     aggregate.push(geoData);
+  } else {
+    aggregate.push({ $match: { $and: query.search } });
   }
-  aggregate.push({ $match: { $and: query.search } });
 
   aggregate.push({ $facet: {
     activCalcFilter: [{ $group: aggregateGroup }],
@@ -1068,6 +1070,7 @@ exports.searchActivities = async (req, res) => {
       filterIEE,
       activitySearch,
       activities: aggResult[0].results,
+      aggregate: hlpr.isProd() ? null : aggregate,
     });
   }
 };

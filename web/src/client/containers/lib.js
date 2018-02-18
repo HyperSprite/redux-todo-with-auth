@@ -18,6 +18,12 @@ lib.dateFormating = (datePref) => {
 
 lib.dateFormat = (date, datePref = '%m/%d/%Y') => format(date, lib.dateFormating(datePref));
 
+lib.cleanDateTime = (dateTime, datePref = '%m/%d/%Y') => {
+  const date = format(dateTime.slice(0, 11), lib.dateFormating(datePref));
+  const time = dateTime.slice(12, 19);
+  return `${date} ${time}`;
+};
+
 /*
 * Function below no longer needed but it was fun to write so I left it here down here.
 * Can be removed (also make sure to remove test).

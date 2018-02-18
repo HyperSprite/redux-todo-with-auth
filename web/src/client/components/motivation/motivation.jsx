@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-class Motovation extends Component {
+const localStyle = {
+  flexcontainer: { maxWidth: '400' },
+};
+
+class Motivation extends Component {
   constructor(props) {
     super(props);
     this.pickOneQuote = this.pickOneQuote.bind(this);
@@ -16,7 +20,7 @@ class Motovation extends Component {
   }
 
   componentWillReceiveProps() {
-    axios.get('/motovation.json')
+    axios.get('/motivation.json')
       .then((response) => {
         if (response.status === 200) {
           return response.data;
@@ -29,8 +33,6 @@ class Motovation extends Component {
       }).catch((error) => {
         this.setState({ thisQuote: { quote: 'Sorry, something went wrong getting your quote', author: 'Web guy' } });
       });
-
-
   }
 
   pickOneQuote() {
@@ -39,14 +41,34 @@ class Motovation extends Component {
   }
 
   render() {
+    const style = Object.assign(localStyle, this.props.style);
+    console.dir(style);
+
     return (
-      <div style={{ maxWidth: '400px', minHeight: '300px' }}>
+      <div style={style.container}>
         <strong>{this.state.thisQuote.quote}</strong><br />
         <em>{this.state.thisQuote.author}</em><br />
-        <button onClick={this.pickOneQuote}>Get a new quote</button>
+        <button
+          onClick={this.pickOneQuote}
+          style={style.button}
+        >Get a new quote</button>
       </div>
     );
   }
 }
 
-export default Motovation;
+Motivation.propTypes = {
+  style: PropTypes.shape({
+    container: PropTypes.object,
+    button: PropTypes.object,
+  }),
+};
+
+Motivation.defaultProps = {
+  style: {
+    container: {},
+    button: {},
+  },
+};
+
+export default Motivation;

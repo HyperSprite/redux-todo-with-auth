@@ -101,16 +101,6 @@ const activitiesSchema = new Schema(
     geoEnd: [Number], // type: [lng,lat]
     elevationStart: Number, // meters
     elevationEnd: Number, // meters
-    elevatoinPath: [
-      {
-        _id: false,
-        elevation: Number,
-        location: {
-          lat: Number,
-          lng: Number,
-        },
-      },
-    ],
     streamTime: [],
     streams: [],
     authorizationError: Boolean,
