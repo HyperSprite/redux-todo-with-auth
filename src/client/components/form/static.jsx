@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import LinearProgress from 'material-ui/LinearProgress';
 
 const propTypes = {
   baseURL: PropTypes.string,
@@ -10,6 +11,7 @@ const propTypes = {
   contentLabelLink: PropTypes.string,
   contentType: PropTypes.string,
   contentAlt: PropTypes.string,
+  style: PropTypes.object,
 };
 
 const renderContent = (content, contentType, contentAlt, baseURL) => {
@@ -38,6 +40,13 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
         </div>
       );
     }
+    case 'loading': {
+      return (
+        <div className="ellipsis">
+          <LinearProgress mode="indeterminate" />
+        </div>
+      );
+    }
     default:
       return content;
   }
@@ -50,10 +59,12 @@ const renderStatic = ({
   content,
   contentType,
   contentAlt,
+  style,
 }) => {
   if (content || contentType === 'bool') {
     return (
       <div
+        style={style}
         className="static"
       >
         {contentLabelLink ? (

@@ -13,7 +13,7 @@ import * as actions from './../actions';
 import Static from './form/static';
 // import Astrophases from './weather/astrophases';
 import ActivitySearch from './activity-search';
-import Motovation from './motovation';
+import Motivation from './motivation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
 import TextBalance from './admin/txt-balance';
@@ -127,7 +127,7 @@ class Athlete extends Component {
                   Loading Weather Data...
                 </div>
               )}
-              <Motovation />
+              <Motivation style={style} />
               <TextBalance />
               <div style={style.flexcontainer}>
                 <Static

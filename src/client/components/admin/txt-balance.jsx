@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
+import lib from '../../containers/lib';
 
 import style from '../../styles/style';
+import Static from '../form/static';
 
 class GetCheckBalance extends Component {
   constructor() {
@@ -48,15 +50,29 @@ class GetCheckBalance extends Component {
   }
 
   render() {
+    const { balance, date } = this.state;
     return (
-      <div>
-        <RaisedButton
-          label="Refresh Txt Balance"
-          primary
-          onClick={this.getCheckBalance}
+      <div style={style.flexcontainer}>
+        <div>
+          <RaisedButton
+            label="Refresh Txt Balance"
+            primary
+            onClick={this.getCheckBalance}
+            style={style.button}
+          />
+        </div>
+        <Static
+          contentLabel="Txt Balance"
+          content={`$ ${balance} `}
+          contentType={balance ? 'text' : 'loading'}
           style={style.button}
         />
-        {`Txt Balance: $${this.state.balance} Date: ${this.state.date}`}
+        <Static
+          contentLabel="Date"
+          content={`${lib.cleanDateTime(date)} `}
+          contentType={date ? 'text' : 'loading'}
+          style={style.button}
+        />
       </div>
     );
   }

@@ -10,6 +10,16 @@ const activitiesStreamSchema = new Schema(
   {
     activityId: { type: Number, unique: true, index: true }, // 321934,
     streams: [],
+    elevatoinPath: [
+      {
+        _id: false,
+        elevation: Number,
+        location: {
+          lat: Number,
+          lng: Number,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
