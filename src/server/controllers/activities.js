@@ -270,14 +270,19 @@ const getActivityDetails = (activity, opts, cb) => {
       findActivityAndUpdate(activity.activityId, data, opts, fullActivity => cb(fullActivity));
     }
 
-    const getPolyline = (map) => {
-      if (map) {
-        return map.summary_polyline || map.polyline || null;
-      }
-      return null;
-    };
+    // const getPolyline = (map) => {
+    //   if (map) {
+    //     return map.summary_polyline || map.polyline || null;
+    //   }
+    //   return null;
+    // };
+    const geoData = {};
+    if (data.end_latlng && data.start_latlng) {
+      geoData.geoStart = [data.start_latlng[1], data.start_latlng[0]];
+      geoData.geoEnd = [data.end_latlng[1], data.end_latlng[0]];
+    }
 
-    enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
+    // enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
       getStreams(activity.activityId, opts.access_token, (strmArr) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(
@@ -290,14 +295,10 @@ const getActivityDetails = (activity, opts, cb) => {
           );
 
           const mssg = `Controllers/Activity.getActivityDetails Enhancing Data activityId ${activity.activityId}
-          data  ___________________________________________
-          ${JSON.stringify(data.id)},
-          geoData ___________________________________________
-          ${JSON.stringify([geoData[0], geoData[1], geoData[3]])},
-          streamData  ___________________________________________
-          ${!!strmArr.length}, streamTime  ___________________________________________
-          ${JSON.stringify([strmTmArr[0], strmTmArr[1], strmTmArr[3]])},  ___________________________________________
-          currentVersion = ${currentVersion}`;
+            data: ${JSON.stringify(data.id)},
+            streamData: ${!!strmArr.length},
+            streamTime: ${JSON.stringify([strmTmArr[0], strmTmArr[1], strmTmArr[3]])},
+            currentVersion = ${currentVersion}`;
 
           hlpr.logOut(Object.assign({}, logObj, {
             func: `${logObj.file}.getActivityDetails`,
@@ -342,7 +343,7 @@ const getActivityDetails = (activity, opts, cb) => {
           }
         });
       });
-    });
+    // });
   });
 };
 
@@ -379,10 +380,11 @@ exports.getRecentActivities = (req, res) => {
           }
         });
       });
+    } else {
+      const message = 'Unable to update your activities at this time. Strava may be down or some other error has occurred. Here is what we already have';
+      hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)} or !isArray ${JSON.stringify(acts).slice(0, 50)}`, req.user.stravaId);
+      return exports.getWeeklyStats(Object.assign({}, req, { serverMessage: { error: message } }), res);
     }
-    const message = 'Unable to update your activities at this time. Strava may be down or some other error has occurred. Here is what we already have';
-    hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)} or !isArray ${JSON.stringify(acts).slice(0, 50)}`, req.user.stravaId);
-    return exports.getWeeklyStats(Object.assign({}, req, { serverMessage: { error: message } }), res);
   });
 };
 
