@@ -16,12 +16,14 @@ import ActivitySearch from './activity-search';
 import Motovation from './motovation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
+import TextBalance from './admin/txt-balance';
 import ScrollIntoView from '../containers/scroll-into-view';
 
 import style from '../styles/style';
 
 const propTypes = {
   fetchData: PropTypes.func,
+  mPref: PropTypes.bool.isRequired,
   setPageName: PropTypes.func,
   user: PropTypes.shape({
     email: PropTypes.string,
@@ -38,7 +40,6 @@ const propTypes = {
     created_at: PropTypes.string,
     updated_at: PropTypes.string,
     date_preference: PropTypes.string,
-    measurement_preference: PropTypes.string,
   }),
 };
 
@@ -85,15 +86,13 @@ class Athlete extends Component {
       created_at,
       updated_at,
       date_preference,
-      measurement_preference,
       userGeoLongitude,
       userGeoLatitude,
       userGeoTzDSTOffset,
       userGeoTzRawOffset,
       weightHistory,
     } = this.props.user;
-
-    const measurementPref = measurement_preference === 'metric';
+    const { mPref } = this.props;
 
     if (!adminMember) {
       return (
@@ -120,7 +119,7 @@ class Athlete extends Component {
                     dstOffset={userGeoTzDSTOffset}
                     tzOffset={userGeoTzRawOffset}
                     date={+new Date()}
-                    measurementPref={measurementPref}
+                    mPref={mPref}
                   />
                 </div>
               ) : (
@@ -129,46 +128,49 @@ class Athlete extends Component {
                 </div>
               )}
               <Motovation />
-              <Static
-                contentLabel="Strava ID"
-                content={stravaId}
-                contentType="text"
-              />
-              <Static
-                contentLabel="Name"
-                content={`${firstname} ${lastname}`}
-                contentType="text"
-              />
-              <Static
-                contentLabel="City"
-                content={loc_city}
-                contentType="text"
-              />
-              <Static
-                contentLabel="State"
-                content={loc_state}
-                contentType="text"
-              />
-              <Static
-                contentLabel="Country"
-                content={loc_country}
-                contentType="text"
-              />
-              <Static
-                contentLabel="Created On"
-                content={created_at}
-                contentType="text"
-              />
-              <Static
-                contentLabel="Last Updated"
-                content={updated_at}
-                contentType="text"
-              />
-              <Static
-                contentLabel="Date Pref."
-                content={date_preference}
-                contentType="text"
-              />
+              <TextBalance />
+              <div style={style.flexcontainer}>
+                <Static
+                  contentLabel="Strava ID"
+                  content={stravaId}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="Name"
+                  content={`${firstname} ${lastname}`}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="City"
+                  content={loc_city}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="State"
+                  content={loc_state}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="Country"
+                  content={loc_country}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="Created On"
+                  content={created_at}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="Last Updated"
+                  content={updated_at}
+                  contentType="text"
+                />
+                <Static
+                  contentLabel="Date Pref."
+                  content={date_preference}
+                  contentType="text"
+                />
+              </div>
               {/* {userGeoTzRawOffset ? (
                 <div>
                   <Astrophases
@@ -199,6 +201,7 @@ Athlete.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    mPref: state.page.mPref,
   };
 }
 
