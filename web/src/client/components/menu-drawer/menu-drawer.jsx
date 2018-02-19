@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Drawer, MenuItem } from 'material-ui';
+import { Divider, Drawer, MenuItem } from 'material-ui';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
@@ -48,6 +48,7 @@ class MenuDrawer extends Component {
         <MenuItem>
           <MPrefSwitcher style={{ width: 256 }} />
         </MenuItem>
+        <Divider />
         {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
           <MenuDrawerItem
             key={mI.linkTo}

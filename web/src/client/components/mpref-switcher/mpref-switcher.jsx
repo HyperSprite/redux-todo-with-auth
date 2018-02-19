@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FlatButton } from 'material-ui';
+import Toggle from 'material-ui/Toggle';
 // eslint-disable-next-line
 import * as actions from '../../actions';
-import ToggleIcon from '../form/toggle-icon';
+// import ToggleIcon from '../form/toggle-icon';
+import style from './style';
 
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
@@ -24,10 +25,14 @@ class MPrefSwitcher extends React.Component {
   }
 
   render() {
+    const { mPref } = this.props;
     return (
-      <FlatButton onClick={this.switchMeasurementPref} fullWidth >
-        Metric <ToggleIcon option={this.props.mPref} /> Imperial
-      </FlatButton>
+      <Toggle
+        style={style.toggle}
+        label={mPref ? 'Imperial' : 'Metric'}
+        onToggle={this.switchMeasurementPref}
+        toggled={mPref}
+      />
     );
   }
 
