@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GoogleMapReact from 'google-map-react';
 import Dimensions from 'react-dimensions';
-import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
+import { fitBounds } from 'google-map-react/utils';
+import { lineString } from '@turf/helpers';
+import bbox from '@turf/bbox';
 import { isValid } from 'just-fns';
 
 import MapPin from '../map-pin';
 import googleMapStyles, { palette } from '../../styles/map-styles';
 
-class ExtGoogleMapWithLocation extends React.Component {
+class GoogleMapLocation extends React.Component {
 
   static propTypes = {
     containerWidth: PropTypes.number,
@@ -63,53 +65,74 @@ class ExtGoogleMapWithLocation extends React.Component {
     const pinDrops = this.props.pinDrops.filter(
       pD => isValid(pD.lat) && isValid(pD.lng) && isValid(pD.id)
     );
+    // map sizer and center
 
+    const getCenterAndZoom = (pins) => {
+      const routeDataLS = lineString(pins.map(rD => [rD.lat, rD.lng]));
+      // routeDataLS.push([this.props.lat, this.props.lng]);
+      const newbounds = bbox(routeDataLS);
+      const bounds = {
+        nw: {
+          lat: newbounds[2],
+          lng: newbounds[1],
+        },
+        se: {
+          lat: newbounds[0],
+          lng: newbounds[3],
+        },
+      };
+
+      const size = {
+        width: this.props.containerWidth, // Map width in pixels
+        height: 400, // Map height in pixels
+      };
+      const result = fitBounds(bounds, size);
+      return result;
+    };
+
+    // end map sizer
     const clickReady = this.state.mapLoaded && !this.props.noClick;
+    this.centerZoom = (pinDrops.length && this.props.lat) ?
+      getCenterAndZoom([{ lat: this.props.lat, lng: this.props.lng }, ...pinDrops]) :
+      { center: { lat: this.props.lat, lng: this.props.lng }, zoom: 9 };
 
     return (
       <div style={{ width: this.props.containerWidth, height: 400 }}>
-        { this.props.lat ? (
-          <GoogleMapReact
-            onGoogleApiLoaded={({ map, maps }) => {
-              this.setState({ map, maps, mapLoaded: true });
-            }}
-            yesIWantToUseGoogleMapApiInternals
-            center={{ lat: this.props.lat, lng: this.props.lng }}
-            defaultZoom={9}
-            bootstrapURLKeys={{
-              key: process.env.REACT_APP_GOOGLE_MAPS_WEB,
-              language: 'en',
-            }}
-            options={mapOptions}
-            onClick={({ lat, lng }) => this.targetLocation(lat, lng)}
-          >
-            { clickReady &&
-              <MapPin
-                lat={this.state.lat || this.props.lat}
-                lng={this.state.lng || this.props.lng}
-                color={palette.accent6Color}
-              />
-            }
-            { this.state.mapLoaded && pinDrops.map(pin => (
-              <MapPin
-                key={pin.id}
-                lat={pin.lat}
-                lng={pin.lng}
-                name={pin.name}
-                color={palette.primary2Color}
-              />
-            ))}
-          </GoogleMapReact>
-        ) : (
-          <div style={{ width: 200, height: 400 }} >
-            <h3>Waiting for user verification.</h3>
-            <p>Allow Location Access: We can use your current location.</p>
-            <p>Block Location Access: We can use your Strava City settings.</p>
-          </div>
-        )}
+        <GoogleMapReact
+          onGoogleApiLoaded={({ map, maps }) => {
+            this.setState({ map, maps, mapLoaded: true });
+          }}
+          yesIWantToUseGoogleMapApiInternals
+          center={this.centerZoom.center || { lat: this.props.lat, lng: this.props.lng }}
+          defaultZoom={9}
+          zoom={this.centerZoom.zoom}
+          bootstrapURLKeys={{
+            key: process.env.REACT_APP_GOOGLE_MAPS_WEB,
+            language: 'en',
+          }}
+          options={mapOptions}
+          onClick={({ lat, lng }) => this.targetLocation(lat, lng)}
+        >
+          { this.state.mapLoaded && pinDrops.map(pin => (
+            <MapPin
+              key={pin.id}
+              lat={pin.lat}
+              lng={pin.lng}
+              name={pin.name}
+              color={palette.primary2Color}
+            />
+          ))}
+          { clickReady &&
+            <MapPin
+              lat={this.state.lat || this.props.lat}
+              lng={this.state.lng || this.props.lng}
+              color={palette.accent6Color}
+            />
+          }
+        </GoogleMapReact>
       </div>
     );
   }
 }
 
-export default ExtGeolocation(Dimensions()(ExtGoogleMapWithLocation));
+export default Dimensions()(GoogleMapLocation);

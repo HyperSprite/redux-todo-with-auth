@@ -20,7 +20,7 @@ export default class ContentTabSwitch extends React.Component {
   }
 
   handleChange = (value) => {
-    this.props.reset();
+    this.props.switch(value);
     this.setState({
       value,
     });

@@ -1,1 +1,1 @@
-export { default } from './google-map-location';
+export { default } from './geolocation-switch';
