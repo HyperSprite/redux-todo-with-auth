@@ -65,6 +65,7 @@ class ActivitySearch extends Component {
     this.state = {
       expanded: false,
       page: 0,
+      tab: 'text-search',
     };
     this.activitiesSearch = this.activitiesSearch.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -206,6 +207,11 @@ class ActivitySearch extends Component {
     this.props.reset();
   }
 
+  handleSwitch(tab) {
+    this.handleReset();
+    this.setState({ tab });
+  }
+
   renderAlert() {
     const { errorMessage } = this.props;
     return (errorMessage) ? (
@@ -256,12 +262,6 @@ class ActivitySearch extends Component {
 
     const SearchTextForm = (
       <div style={style.flexParent}>
-        <GoogleMapLocation
-          {...geoData}
-          pinDrops={this.props.pinDrops}
-          handleClick={this.handleMapPinDrop}
-          noClick
-        />
         <div style={style.flexcontainer} >
           {formValues.filter(fFV => (fFV.contentType === 'text')).map(fV => (
             <div key={fV.contentName} >
@@ -280,11 +280,6 @@ class ActivitySearch extends Component {
 
     const SearchMapForm = (
       <div style={style.flexParent}>
-        <GoogleMapLocation
-          {...geoData}
-          pinDrops={this.props.pinDrops}
-          handleClick={this.handleMapPinDrop}
-        />
         <div style={style.flexcontainer} >
           {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
             <div key={fV.contentName} >
@@ -364,8 +359,7 @@ class ActivitySearch extends Component {
               onSubmit={handleSubmit(this.handleFormSubmit)}
             >
               <Card expanded={this.state.expanded} style={style.div} >
-                <ContentTabSwitch tabs={tabs} reset={() => this.handleReset()} />
-
+                <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
                 <Toggle
                   toggled={this.state.expanded}
                   onToggle={this.handleToggle}
@@ -390,8 +384,14 @@ class ActivitySearch extends Component {
                   { (sortStrings && adminMember) && (
                     <RangeInput sortStrings={sortStrings} form={this.props.form} />
                   )}
-
                 </CardText>
+                <GoogleMapLocation
+                  {...geoData}
+                  pinDrops={this.props.pinDrops}
+                  handleClick={this.handleMapPinDrop}
+                  noClick={this.state.tab === 'text-search'}
+                />
+
                 <div>
                   {SearchButton}
                 </div>
