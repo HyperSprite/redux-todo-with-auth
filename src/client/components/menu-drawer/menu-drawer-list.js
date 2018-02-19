@@ -5,6 +5,12 @@ const menuDrawerList = [
     access: ['anon', 'user', 'admin'],
   },
   {
+    primaryText: 'Blog and Help',
+    linkTo: '/blog',
+    access: ['anon', 'user', 'admin'],
+    target: 'blank',
+  },
+  {
     primaryText: 'Strava Club',
     linkTo: 'https://www.strava.com/clubs/araceathlete',
     access: ['anon', 'user', 'admin'],
