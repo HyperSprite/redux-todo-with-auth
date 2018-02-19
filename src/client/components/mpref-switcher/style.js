@@ -1,6 +1,6 @@
 export default {
   toggle: {
     height: 30,
-    paddingTop: 16,
+    paddingTop: 12,
   },
 };
