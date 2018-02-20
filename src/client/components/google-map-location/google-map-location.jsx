@@ -74,7 +74,6 @@ class GoogleMapLocation extends React.Component {
     */
     const getCenterAndZoom = (pins) => {
       const routeDataLS = lineString(pins.map(rD => [rD.lat, rD.lng]));
-      // routeDataLS.push([this.props.lat, this.props.lng]);
       const newbounds = bbox(routeDataLS);
       const bounds = {
         nw: {
@@ -103,16 +102,19 @@ class GoogleMapLocation extends React.Component {
     /** pinDrops are search results pins this will add myPin to array if exists */
     const allThePins = this.props.myLat ?
       [{ lat: this.props.myLat, lng: this.props.myLng }, ...pinDrops] :
-      pinDrops;
+        pinDrops;
     /** allThePins are from above, this adds the location search pin if exists */
-    const includedPins = clickReady ? ([
+    const includedPins = clickReady && (this.state.lat || this.props.lat) ? ([
         { lat: this.state.lat || this.props.lat, lng: this.state.lng || this.props.lng },
       ...allThePins,
     ]) : allThePins;
     /** if array of pins (see above) else use default start position */
-    this.centerZoom = (includedPins.length && this.props.lat) ?
+    const setCenter = includedPins.length === 1 ?
+      { lat: includedPins[0].lat, lng: includedPins[0].lng } :
+        { lng: this.props.lat, lng: this.props.lng };
+    this.centerZoom = (includedPins.length > 1 && this.props.lat) ?
       getCenterAndZoom(includedPins) :
-      { center: { lat: this.props.lat, lng: this.props.lng }, zoom: 9 };
+        { center: setCenter, zoom: 9 };
     /** Pins on the map - End */
 
     return (
