@@ -18,6 +18,9 @@ class GoogleMapLocation extends React.Component {
     handleClick: PropTypes.func.isRequired,
     lat: PropTypes.number,
     lng: PropTypes.number,
+    /** Green pin */
+    myLat: PropTypes.number,
+    myLng: PropTypes.number,
     /** Do not moving location pin */
     noClick: PropTypes.bool,
     pinDrops: PropTypes.arrayOf(
@@ -65,8 +68,10 @@ class GoogleMapLocation extends React.Component {
     const pinDrops = this.props.pinDrops.filter(
       pD => isValid(pD.lat) && isValid(pD.lng) && isValid(pD.id)
     );
-    // map sizer and center
 
+    /**
+    * Map sizer and center - Start
+    */
     const getCenterAndZoom = (pins) => {
       const routeDataLS = lineString(pins.map(rD => [rD.lat, rD.lng]));
       // routeDataLS.push([this.props.lat, this.props.lng]);
@@ -89,19 +94,26 @@ class GoogleMapLocation extends React.Component {
       const result = fitBounds(bounds, size);
       return result;
     };
+    /** map sizer and center - End */
 
-    // end map sizer
+    /**
+    * Pins on the map - Start
+    */
     const clickReady = this.state.mapLoaded && !this.props.noClick;
+    /** pinDrops are search results pins this will add myPin to array if exists */
     const allThePins = this.props.myLat ?
       [{ lat: this.props.myLat, lng: this.props.myLng }, ...pinDrops] :
       pinDrops;
-
-    this.centerZoom = (pinDrops.length && this.props.lat) ?
-      getCenterAndZoom([
+    /** allThePins are from above, this adds the location search pin if exists */
+    const includedPins = clickReady ? ([
         { lat: this.state.lat || this.props.lat, lng: this.state.lng || this.props.lng },
-        ...allThePins
-      ]) :
+      ...allThePins,
+    ]) : allThePins;
+    /** if array of pins (see above) else use default start position */
+    this.centerZoom = (includedPins.length && this.props.lat) ?
+      getCenterAndZoom(includedPins) :
       { center: { lat: this.props.lat, lng: this.props.lng }, zoom: 9 };
+    /** Pins on the map - End */
 
     return (
       <div style={{ width: this.props.containerWidth, height: 400 }}>
