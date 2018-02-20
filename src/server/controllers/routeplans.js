@@ -108,9 +108,7 @@ exports.getRouteplan = (req, res) => {
       access_token: req.user.access_token,
     },
   };
-  getOneRoute(rPInput, (result) => {
-    res.send(result);
-  });
+  getOneRoute(rPInput, result => res.send(result));
 };
 
 // This function runs every three minutes to process 40 activities to ensure

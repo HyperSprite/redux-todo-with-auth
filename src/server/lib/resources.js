@@ -101,7 +101,7 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
       func: `${logObj.file} default`,
       level: 5,
       logSubType: 'error',
-      message: `Error resources.rLonLat - ${sLoc.toString().substring(0, 30)} response ${response} target.url: ${resourceMap[target].url}`,
+      message: `Error resources.rLonLat - target: ${target}, sloc:${sLoc.toString().substring(0, 30)} response ${response} target.url: ${resourceMap[target].url}`,
     }));
     return output({ [target]: null });
   });

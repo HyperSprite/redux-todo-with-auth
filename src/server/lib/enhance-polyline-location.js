@@ -1,4 +1,5 @@
 const mbPolyline = require('polyline');
+const _ = require('lodash');
 const resources = require('./resources');
 const hlpr = require('./helpers');
 
@@ -53,7 +54,7 @@ module.exports = (polyline, extended, result) => {
   const geoEnd = [cooArr[cooArr.length - 1][1], cooArr[cooArr.length - 1][0]];
   if (extended) {
     resources.rLonLat({ loc: polyline, samples: 500 }, 'elevationpath', (rslt) => {
-      if (rslt.elevationpath && rslt.elevationpath.length) {
+      if (_.isArray(rslt.elevationpath)) {
         const rsltElLen = rslt.elevationpath.length;
         const resultData = {
           geoStart,
@@ -74,10 +75,11 @@ module.exports = (polyline, extended, result) => {
       }));
       return result({ geoStart, geoEnd });
     });
+  } else {
+    hlpr.logOut(Object.assign({}, logObj, {
+      func: `${logObj.file} default no extended`,
+      message: `geoStart: ${geoStart}, geoEnd: ${geoEnd}`,
+    }));
+    return result({ geoStart, geoEnd });
   }
-  hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file} default no extended`,
-    message: `geoStart: ${geoStart}, geoEnd: ${geoEnd}`,
-  }));
-  return result({ geoStart, geoEnd });
 };
