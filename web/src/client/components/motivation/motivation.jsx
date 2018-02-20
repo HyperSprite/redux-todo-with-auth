@@ -42,7 +42,6 @@ class Motivation extends Component {
 
   render() {
     const style = Object.assign(localStyle, this.props.style);
-    console.dir(style);
 
     return (
       <div style={style.container}>
