@@ -5,8 +5,7 @@ import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
-import { CircularProgress, Paper, RaisedButton } from 'material-ui';
-import FaRefresh from 'react-icons/lib/fa/refresh';
+import { CircularProgress, RaisedButton } from 'material-ui';
 import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
@@ -390,6 +389,7 @@ class ActivitySearch extends Component {
                   pinDrops={this.props.pinDrops}
                   handleClick={this.handleMapPinDrop}
                   noClick={this.state.tab === 'text-search'}
+                  noGeolocation
                 />
 
                 <div>

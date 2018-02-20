@@ -92,8 +92,9 @@ class GoogleMapLocation extends React.Component {
 
     // end map sizer
     const clickReady = this.state.mapLoaded && !this.props.noClick;
+    this.allThePins = this.props.myLat ? pinDrops.concat([{ lat: this.props.myLat, lng: this.props.myLng }]) : pinDrops;
     this.centerZoom = (pinDrops.length && this.props.lat) ?
-      getCenterAndZoom([{ lat: this.props.lat, lng: this.props.lng }, ...pinDrops]) :
+      getCenterAndZoom([{ lat: this.props.lat, lng: this.props.lng }, ...this.allThePins]) :
       { center: { lat: this.props.lat, lng: this.props.lng }, zoom: 9 };
 
     return (
@@ -113,6 +114,7 @@ class GoogleMapLocation extends React.Component {
           options={mapOptions}
           onClick={({ lat, lng }) => this.targetLocation(lat, lng)}
         >
+
           { this.state.mapLoaded && pinDrops.map(pin => (
             <MapPin
               key={pin.id}
@@ -127,6 +129,13 @@ class GoogleMapLocation extends React.Component {
               lat={this.state.lat || this.props.lat}
               lng={this.state.lng || this.props.lng}
               color={palette.accent6Color}
+            />
+          }
+          { (this.props.myLat) &&
+            <MapPin
+              lat={this.props.myLat}
+              lng={this.props.myLng}
+              color={palette.accent8Color}
             />
           }
         </GoogleMapReact>
