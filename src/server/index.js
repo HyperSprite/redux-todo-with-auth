@@ -72,7 +72,16 @@ if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
 
 mongoose.plugin(require('./models/middleware-current-schema'));
 
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, {
+  useMongoClient: true,
+});
+
+mongoose.connection.on('error', (err) => {
+  hlpr.getDateLocal('America/Los_Angeles', 'YYYY-MM-DD HH:mm', (date) => {
+    const txtMessage = `${date} - ARaceathlete Mongoose error ${err}`;
+    txt.sendText(process.env.ADMIN_TXT_NUMBER, txtMessage);
+  });
+});
 
 function shouldCompress(req, res) {
   if (req.headers['x-no-compression']) {

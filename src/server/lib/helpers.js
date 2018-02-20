@@ -92,7 +92,7 @@ exports.perfNowEnd = (label) => {
 
 const loggit = (enhncdLogObj) => {
   Logs.create(Object.assign(enhncdLogObj, { date: exports.getDate(gD => gD) }), (err, logging) => {
-    exports.consLog([logging]);
+    exports.consLog([err, logging]);
   });
 };
 
@@ -102,8 +102,8 @@ exports.LogObj = function LogObj(func, logType, logSubType, level, error, page, 
   this.logType = logType;
   this.logSubType = logSubType;
   this.level = level;
-  this.error = JSON.stringify(error).slice(0, 50);
-  this.message = JSON.stringify(message).slice(0, 200);
+  this.error = toString(JSON.stringify(error).slice(0, 50));
+  this.message = toString(JSON.stringify(message).slice(0, 200));
   this.page = page;
 };
 
