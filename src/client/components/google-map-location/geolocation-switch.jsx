@@ -5,6 +5,7 @@ import { IconButton, Toggle } from 'material-ui';
 import GPSFixed from 'material-ui/svg-icons/device/gps-fixed';
 import GPSNotFixed from 'material-ui/svg-icons/device/gps-not-fixed';
 import GPSOff from 'material-ui/svg-icons/device/gps-off';
+import justFNS from 'just-fns';
 import GoogleMapLocation from './google-map-location';
 import style from './style';
 
@@ -34,7 +35,7 @@ class ExtGoogleMapWithLocation extends React.Component {
 
   render() {
     const { geolocation, lat, lng } = this.props;
-    const { geoAllowed, showMyPin } = this.state; 
+    const { geoAllowed, showMyPin } = this.state;
     return (
       <div>
 
@@ -45,7 +46,7 @@ class ExtGoogleMapWithLocation extends React.Component {
           {geoAllowed && (
             <Toggle
               style={style.toggle}
-              label="Show my pin"
+              label={'My pin'}
               onToggle={this.handleMyPin}
               toggled={showMyPin}
               labelPosition="right"
@@ -57,8 +58,8 @@ class ExtGoogleMapWithLocation extends React.Component {
             {(lat) ? (
               <GoogleMapLocation
                 {...this.props}
-                myLat={showMyPin && lat}
-                myLng={showMyPin && lng}
+                myLat={showMyPin ? lat : null}
+                myLng={showMyPin ? lng : null}
               />
             ) : (
               <div style={{ width: 200, height: 400 }} >
