@@ -72,9 +72,7 @@ if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
 
 mongoose.plugin(require('./models/middleware-current-schema'));
 
-mongoose.connect(process.env.MONGODB_URI, {
-  useMongoClient: true,
-});
+mongoose.connect(process.env.MONGODB_URI);
 
 function shouldCompress(req, res) {
   if (req.headers['x-no-compression']) {
