@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 
-import BarChart from './bar-chart';
+import BarChart from '../bar-chart';
 import GearTotals from './../gear-totals';
 import ActivitySingle from '../activity-single';
 import style from './style';

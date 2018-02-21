@@ -4,6 +4,7 @@ import { Bar, BarChart, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import justFns from 'just-fns';
 import Static from '../form/static';
+import style from '../../styles/style';
 
 const propTypes = {
   content: PropTypes.any,
@@ -22,7 +23,7 @@ const renderTooltipContent = (o) => {
   const total = payload.reduce((result, entry) => (result + entry.value), 0);
 
   return (
-    <div style={{ background: '#FFFFFF', margin: 5 }} className="customized-tooltip-content" >
+    <div style={{ background: style.theme.palette.accent2Color, margin: 5 }} className="customized-tooltip-content" >
       <p>{label}</p>
       <ul style={{ listStyle: 'none', marginLeft: 4, padding: 0 }}>
         <li>
@@ -55,9 +56,26 @@ const Chart = props => (
       <XAxis dataKey="day" />
       <YAxis tickFormatter={justFns.statsConversions(props.metric, true)} />
       <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip content={renderTooltipContent} metric={props.metric} mPref={props.mPref} />
-      <Bar name="Previous" dataKey={`${props.metric}.total`} stackId="a" fill="#770000" barGap={1} isAnimationActive={false} />
-      <Bar name="Day" dataKey={`${props.metric}.day`} stackId="a" fill="#DD0000" barGap={1} isAnimationActive={false} />
+      <Tooltip
+        {...props}
+        content={renderTooltipContent}
+      />
+      <Bar
+        name="Previous"
+        dataKey={`${props.metric}.total`}
+        stackId="a"
+        fill={style.theme.palette.textColor}
+        barGap={1}
+        isAnimationActive={false}
+      />
+      <Bar
+        name="Day"
+        dataKey={`${props.metric}.day`}
+        stackId="a"
+        fill={style.theme.palette.primary2Color}
+        barGap={1}
+        isAnimationActive
+      />
     </BarChart>
   </div>
 );
