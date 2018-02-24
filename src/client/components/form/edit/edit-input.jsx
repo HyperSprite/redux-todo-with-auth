@@ -15,6 +15,7 @@ const normalizer = {
 const WizardInput = (props) => {
   const {
     content,
+    component,
     formValues,
     handleSubmit,
     auxButton,
@@ -47,9 +48,7 @@ const WizardInput = (props) => {
 
   const ExtField = (
     <Field
-      content={content}
-      formValues={formValues}
-      component={props.component}
+      {...props}
       label={formValues.contentLabel}
       name={formValues.contentName}
       type={formValues.contentType}
