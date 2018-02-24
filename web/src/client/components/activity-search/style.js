@@ -20,6 +20,6 @@ export default {
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     padding: '10px 0 10px 0',
-    minHeight: 80, 
+    minHeight: 80,
   },
 };

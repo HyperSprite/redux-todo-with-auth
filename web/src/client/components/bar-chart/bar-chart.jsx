@@ -23,7 +23,10 @@ const renderTooltipContent = (o) => {
   const total = payload.reduce((result, entry) => (result + entry.value), 0);
 
   return (
-    <div style={{ background: style.theme.palette.accent2Color, margin: 5 }} className="customized-tooltip-content" >
+    <div
+      style={{ background: style.theme.palette.accent2Color, margin: 5 }}
+      className="customized-tooltip-content"
+    >
       <p>{label}</p>
       <ul style={{ listStyle: 'none', marginLeft: 4, padding: 0 }}>
         <li>

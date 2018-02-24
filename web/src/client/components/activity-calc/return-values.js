@@ -16,12 +16,12 @@ const returnValues = [
   {
     activityType: 'count',
     activityLabel: 'Total Activities',
-    displayType: [4],
+    displayType: ['sum'],
   },
   {
     activityType: 'date',
     activityLabel: 'Dates',
-    displayType: [3, 2],
+    displayType: ['range'],
     compute: lib.dateFormat,
     arg1: 'date',
     arg2: 'datePref',
@@ -29,7 +29,7 @@ const returnValues = [
   {
     activityType: 'tssScore',
     activityLabel: 'TSS',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     compute: justFns.round,
     arg1: 'tssScore',
     arg2: 1,
@@ -37,7 +37,7 @@ const returnValues = [
   {
     activityType: 'sufferScore',
     activityLabel: 'Suffering',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     compute: justFns.round,
     arg1: 'sufferScore',
     arg2: 1,
@@ -45,7 +45,7 @@ const returnValues = [
   {
     activityType: 'kilojoules',
     activityLabel: 'Kilojoules',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     compute: justFns.round,
     arg1: 'kilojoules',
     arg2: 1,
@@ -53,7 +53,7 @@ const returnValues = [
   {
     activityType: 'averageWatts',
     activityLabel: 'Average Watts',
-    displayType: [0, 2],
+    displayType: ['range'],
     compute: justFns.round,
     arg1: 'averageWatts',
     arg2: 1,
@@ -61,7 +61,7 @@ const returnValues = [
   {
     activityType: 'weightedAverageWatts',
     activityLabel: 'Normalized Watts',
-    displayType: [0, 2],
+    displayType: ['range'],
     compute: justFns.round,
     arg1: 'weightedAverageWatts',
     arg2: 1,
@@ -70,7 +70,7 @@ const returnValues = [
   {
     activityType: 'averageHeartrate',
     activityLabel: 'Average Heartrate',
-    displayType: [0, 2],
+    displayType: ['range'],
     compute: justFns.round,
     arg1: 'averageHeartrate',
     arg2: 1,
@@ -78,7 +78,7 @@ const returnValues = [
   {
     activityType: 'calories',
     activityLabel: 'Calories',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     compute: justFns.round,
     arg1: 'calories',
     arg2: 1,
@@ -86,7 +86,7 @@ const returnValues = [
   {
     activityType: 'maxHeartrate',
     activityLabel: 'Max Heartrate',
-    displayType: [0, 2],
+    displayType: ['range'],
     compute: justFns.round,
     arg1: 'maxHeartrate',
     arg2: 1,
@@ -94,7 +94,7 @@ const returnValues = [
   {
     activityType: 'maxSpeed',
     activityLabel: 'Max Speed',
-    displayType: [0, 2],
+    displayType: ['range'],
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'spd',
     conversionYAxis: false,
@@ -106,7 +106,7 @@ const returnValues = [
   {
     activityType: 'maxWatts',
     activityLabel: 'Max Watts',
-    displayType: [0, 2],
+    displayType: ['range'],
     compute: justFns.round,
     arg1: 'maxWatts',
     arg2: 1,
@@ -114,7 +114,7 @@ const returnValues = [
   {
     activityType: 'movingTime',
     activityLabel: 'Moving Time',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'time',
     conversionYAxis: false,
@@ -123,7 +123,7 @@ const returnValues = [
   {
     activityType: 'distance',
     activityLabel: 'Distance',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'dst',
     conversionYAxis: false,
@@ -135,7 +135,7 @@ const returnValues = [
   {
     activityType: 'elevation',
     activityLabel: 'Total Ascent',
-    displayType: [0, 1, 2],
+    displayType: ['range', 'avg', 'sum'],
     conversionFunction: justFns.statsConversions,
     conversionMetric: 'elev',
     conversionYAxis: false,

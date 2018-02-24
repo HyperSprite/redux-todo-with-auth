@@ -116,7 +116,7 @@ exports.searchActivities = async (req, res) => {
         distanceField: 'distance',
         maxDistance: maxDist, // 200 miles in meters
         spherical: true,
-        query: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] },
+        query: { $and: query.search },
       },
     };
   } else {
@@ -132,8 +132,8 @@ exports.searchActivities = async (req, res) => {
     asc: 1,
     true: true,
     false: false,
-    max: '$lt',
-    min: '$gt',
+    Max: '$lt',
+    Min: '$gt',
   };
 
   /**
@@ -178,14 +178,15 @@ exports.searchActivities = async (req, res) => {
 
   // form 'value'-min' 'value'-max
   Object.keys(q).forEach((item) => {
-    const itemArr = item.split('-');
 
-    if (qsValue[itemArr[0]] && sortOptions[itemArr[1]]) {
-      if (itemArr[1] === 'date') {
+
+    if (sortOptions[item]) {
+      console.log ('item', item, 'search', `{ $gt: ${q[item][0] * 1}, $lt: ${q[item][1] * 1} }`, sortOptions[item]);
+      if (item === 'date') {
         const tmpDate = format(q[item], 'YYYY-MM-DD');
-        query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: tmpDate } });
+        query.search.push({ [sortOptions[item]]: { [sortOptions[item]]: tmpDate } });
       } else {
-        query.search.push({ [sortOptions[itemArr[1]]]: { [qsValue[itemArr[0]]]: q[item] * 1 } });
+        query.search.push({ [sortOptions[item]]: { $gt: q[item][0] * 1, $lt: q[item][1] * 1 } });
       }
     }
   });
@@ -207,6 +208,20 @@ exports.searchActivities = async (req, res) => {
     count: { $sum: 1 },
   });
 
+  const aggRangeProject = sortStrings.reduce((acc, sS) => {
+    acc[`${sS.value}`] = {
+      range: [
+        `$${sS.value}Min`,
+        `$${sS.value}Max`,
+      ],
+      avg: `$${sS.value}Avg`,
+      sum: `$${sS.value}Sum`,
+    };
+    return acc;
+  }, {
+    count: 1,
+  });
+
   /**
   * Sorts --------------------------------------------------------------------
   *
@@ -215,9 +230,13 @@ exports.searchActivities = async (req, res) => {
   * if they don't they are ignored and defaults to $sort: { date: -1 }
   */
   if (q.sortBy) {
-    const tmpSrt = q.sortBy.split('-');
-    if (qsValue[tmpSrt[1]] && sortOptions[tmpSrt[0]]) {
-      sortObj = { [sortOptions[tmpSrt[0]]]: qsValue[tmpSrt[1]] };
+    console.log('sortBy', q.sortBy);
+    const sortKey = q.sortBy.substr(0, q.sortBy.length - 4);
+    const sortMod = q.sortBy.substr(q.sortBy.length - 3);
+    console.log('sortBy', q.sortBy, sortKey, sortMod);
+    // const tmpSrt = q.sortBy.split('-');
+    if (qsValue[sortMod] && sortOptions[sortKey]) {
+      sortObj = { [sortOptions[sortKey]]: qsValue[sortMod] };
     }
   }
 
@@ -227,7 +246,7 @@ exports.searchActivities = async (req, res) => {
   *  fast but returns stemmed words, will not return partial matches
   *  also works with -not words
   */
-  if (srchOpts.wildcard && srchOpts.textsearch) {
+  if (srchOpts.wildcard && srchOpts.textsearch && !geoData) {
     srchOpts.textsearch.split(' ').forEach((tSrch) => {
       query.search.push({ name: { $regex: tSrch, $options: 'i' } });
     });
@@ -253,7 +272,7 @@ exports.searchActivities = async (req, res) => {
   }
 
   aggregate.push({ $facet: {
-    activCalcFilter: [{ $group: aggregateGroup }],
+    activCalcFilter: [{ $group: aggregateGroup }, { $project: aggRangeProject }],
     results: aggregateArr,
     activitySearch: activitySearchArr,
   } });
@@ -325,6 +344,7 @@ exports.searchActivities = async (req, res) => {
   const aggregateMax = [
     { $match: { $and: [{ 'athlete.id': req.user.stravaId }, { resource_state: 3 }] } },
     { $group: aggregateGroup },
+    { $project: aggRangeProject },
   ];
   let aggResult;
   let activCalcAll;
@@ -334,8 +354,8 @@ exports.searchActivities = async (req, res) => {
     activCalcAll = await Activities.aggregate(aggregateMax);
     activitySearch = aggResult[0].activitySearch[0] && aggResult[0].activitySearch[0].arr;
   } catch (err) {
-    hlpr.logOutArgs(`${logObj.file}.searchActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, '500 - Failed to Search Activities', req.user.stravaId);
-    return res.status(500).send({ Error: 'Failed to Search Activities' });
+    hlpr.logOutArgs(`${logObj.file}.searchActivities err`, logObj.logType, 'error', 3, JSON.stringify(err), req.originalUrl, '500 - Failed to Search Activities', req.user.stravaId);
+    return res.status(500).send({ Error: 'Failed to Search Activities', err: err });
   }
   if (q.csv) {
     const filename = 'activity-data.csv';
@@ -354,16 +374,16 @@ exports.searchActivities = async (req, res) => {
   } else {
     // const activitySearch = result.map(r => r.activityId);
     res.send({
+      aggregate: hlpr.isProd() ? null : aggregate,
       q,
       searchQuery: query,
+      activCalcFilter: aggResult[0].activCalcFilter[0] || { count: 0 },
       activCalcAll: activCalcAll[0],
-      activCalcFilter: aggResult[0].activCalcFilter[0],
       query: qString,
       sortStrings,
       filterIEE,
       activitySearch,
       activities: aggResult[0].results,
-      aggregate: hlpr.isProd() ? null : aggregate,
     });
   }
 };

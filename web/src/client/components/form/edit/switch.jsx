@@ -6,6 +6,7 @@ import InputCheckbox from './input-checkbox';
 import InputRadio from './input-radio';
 import InputSelect from './input-select';
 import InputText from './input-text';
+import InputRange from './input-range';
 
 import EditInput from './edit-input';
 
@@ -23,6 +24,8 @@ const EditSwitch = (props) => {
       return <EditInput {...props} component={InputRadio} />;
     case 'InputSelect':
       return <EditInput {...props} component={InputSelect} />;
+    case 'InputRange':
+      return <EditInput {...props} component={InputRange} />;
     default:
       return null;
   }

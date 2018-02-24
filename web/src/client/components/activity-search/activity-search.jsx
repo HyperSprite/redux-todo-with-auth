@@ -27,6 +27,7 @@ import validate from '../form/validate';
 
 import style from './style';
 import { formValues, relURL, thisForm, title, help } from './form-values';
+import rangeValues from './range-values';
 
 const propTypes = {
   activities: PropTypes.array,
@@ -224,18 +225,22 @@ class ActivitySearch extends Component {
     const {
       activities,
       activitySearchCustom,
+      activCalcAll,
       activCalcFilter,
       adminMember,
+      clubMember,
       eventSelector,
       handleSubmit,
       isFetching,
       mPref,
+      form,
       pristine,
       reset,
       srchOpts,
       submit,
       submitting,
       contentName,
+      pinDrops,
       pristineOnClick,
       sortStrings,
       user
@@ -359,6 +364,7 @@ class ActivitySearch extends Component {
             >
               <Card expanded={this.state.expanded} style={style.div} >
                 <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
+
                 <Toggle
                   toggled={this.state.expanded}
                   onToggle={this.handleToggle}
@@ -366,6 +372,7 @@ class ActivitySearch extends Component {
                   label="Filters"
                   style={style.toggle}
                 />
+
                 <CardText
                   expandable
                 >
@@ -378,15 +385,24 @@ class ActivitySearch extends Component {
                         />
                       </div>
                     ))}
+                    {(sortStrings && activCalcFilter.count && activCalcAll.count && clubMember) && (
+                      <RangeInput
+                        {...this.props}
+                        valuesRange={activCalcFilter}
+                        valuesDefaults={activCalcAll}
+                        valueItems={sortStrings}
+                        rangeValues={rangeValues}
+                        form={form}
+                        mPref={mPref}
+                      />
+                    )}
                   </div>
 
-                  { (sortStrings && adminMember) && (
-                    <RangeInput sortStrings={sortStrings} form={this.props.form} />
-                  )}
+
                 </CardText>
                 <GoogleMapLocation
                   {...geoData}
-                  pinDrops={this.props.pinDrops}
+                  pinDrops={pinDrops}
                   handleClick={this.handleMapPinDrop}
                   noClick={this.state.tab === 'text-search'}
                   noGeolocation
@@ -399,7 +415,8 @@ class ActivitySearch extends Component {
                   <p>Loading Activities</p>
                 ) : (
                   <div >
-                    { (activCalcFilter && adminMember) && (
+
+                    { (activCalcFilter && activCalcFilter.count && adminMember) && (
                       <div style={style.flexcontainer} >
                         <ActivityCalc
                           data={activCalcFilter}
@@ -433,29 +450,39 @@ function mapStateToProps(state) {
   // const initialValues = (ownProps.location.search) ?
   //   qs.parse(ownProps.location.search.slice(1)) :
   //   null;
+  const { activities, auth, page, search } = state;
+  // const initialValues = (search.sortStrings && activities.activCalcAll) && search.sortStrings.reduce(
+  //   (acc, sS) => {
+  //     acc[sS.value] = activities.activCalcAll[sS.value].range;
+  //     return acc;
+  //   }, {});
+
+  // console.log('initialValues', initialValues);
   return {
-    activities: state.activities.activitySearch,
-    searchCount: state.search.searchCount,
-    activitySearchCustom: state.activities.activitySearchCustom,
-    activCalcFilter: state.activities.activCalcFilter || state.activities.activCalcAll,
-    datePref: state.auth.user.date_preference,
-    pinDrops: state.activities.activitySearch.length ?
-      state.activities.activities.filter(aF => aF.geoStart).map(aM => ({
+    activCalcAll: activities.activCalcAll,
+    activCalcFilter: activities.activCalcFilter || activities.activCalcAll,
+    activities: activities.activitySearch,
+    activitySearchCustom: activities.activitySearchCustom,
+    pinDrops: activities.activitySearch && activities.activitySearch.length ?
+      activities.activities.filter(aF => aF.geoStart).map(aM => ({
         lat: aM.geoStart[1],
         lng: aM.geoStart[0],
         name: aM.name,
         id: aM.activityId,
       })) : [],
+    srchOpts: activities.srchOpts,
+    adminMember: auth.user.adminMember,
+    clubMember: auth.user.clubMember,
+    datePref: auth.user.date_preference,
+    message: auth.message,
+    stravaId: auth.user.stravaId,
+    user: auth.user,
+    searchCount: search.searchCount,
+    query: search.query,
+    sortStrings: search.sortStrings,
+    isFetching: page.isFetching,
+    mPref: page.mPref,
     // initialValues,
-    message: state.auth.message,
-    srchOpts: state.activities.srchOpts,
-    stravaId: state.auth.user.stravaId,
-    user: state.auth.user,
-    isFetching: state.page.isFetching,
-    mPref: state.page.mPref,
-    query: state.search.query,
-    sortStrings: state.search.sortStrings,
-    adminMember: state.auth.user.adminMember,
   };
 }
 
