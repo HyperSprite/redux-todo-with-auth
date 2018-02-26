@@ -91,13 +91,6 @@ exports.getAllActivities = (input, result) => {
   });
 };
 
-// exports.getAllUserActivities(req, res) {
-//
-//   if (req.body.stravaId)
-//   hlpr.logOutArgs(`${logObj.file}.getAllUserActivities`, logObj.logType, 'activities', 9, 'err', req.originalUrl, `Check for all activites ${req.user.stravaId}`, null);
-//
-// }
-
 const getStreams = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
     hlpr.logOutArgs(`${logObj.file}.getStreams !activityId || !accessToken`, logObj.logType, 'activities', 2, 'err', 'no_page', '!activityId || !accessToken', null);
@@ -132,7 +125,7 @@ const getStreams = (activityId, accessToken, done) => {
         return done(streams);
       });
     } else {
-      hlpr.logOutArgs(`${logObj.file}.getStreams ActivityStreams.findOrCreate err`, logObj.logType, 'activities', 5, err, 'no_page', `${activityId} streams: ${streams.map(s => s.type)}`, null);
+      hlpr.logOutArgs(`${logObj.file}.getStreams ActivityStreams.findOrCreate err`, logObj.logType, 'activities', 5, err, 'no_page', `${activityId} streams: null`, null);
       return done([]);
     }
   });

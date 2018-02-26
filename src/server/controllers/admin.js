@@ -119,7 +119,7 @@ exports.getLogs = (req, res) => {
 // run nightlyUpdate
 exports.updateAllUsers = (req, res) => {
   stravaControl.nightlyUpdate();
-  res.send('update started');
+  res.send({ message: 'update started' });
 };
 
 exports.removeUser = (req, res) => {
