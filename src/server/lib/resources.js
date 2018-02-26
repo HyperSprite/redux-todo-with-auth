@@ -14,18 +14,26 @@ const logObj = {
 // target: 'weatherforcast', 'elevation', elevationpath, 'timezone', astrophases
 // input.loc: '-122.1439698,37.426941' or polyline
 exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, output) => {
+  switch (target) {
+    case 'elevation':
+    case 'elevationpath':
+    case 'timezone':
+      if (!loc && !loc.length) {
+        return output({ [target]: null });
+      }
+      break;
+    default:
+      break;
+  }
+
   const sLoc = target === 'elevationpath' ? loc : loc.split(',');
   const timestamp = moment(date).format('X');
   let timeOffset = 0;
   if (tzOffset) {
     timeOffset = ((tzOffset * 1) + (dstOffset * 1)) / 3600;
   }
-
-  hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file} default args setup`,
-    logSubType: 'info',
-    message: `${target} sLoc: ${sLoc.toString().substring(0, 30)} input.date: ${date} timeOffset: ${timeOffset} tzOffset: ${tzOffset} dstOffset ${dstOffset} timestamp: ${timestamp}`,
-  }));
+  const message = `${target} sLoc: ${sLoc.toString().substring(0, 30)} input.date: ${date} timeOffset: ${timeOffset} tzOffset: ${tzOffset} dstOffset ${dstOffset} timestamp: ${timestamp}`;
+  hlpr.logOutArgs(`${logObj.file}.rLonLat default args setup`, logObj.logType, 'resources', 9, null, 'no_page', message, null);
 
   // TODO remove sample date from astrophases and set real date
   const resourceMap = {
@@ -60,11 +68,7 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     const result = {
       output: {},
     };
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file} default response`,
-      logSubType: 'info',
-      message: `target ${target} target.url: ${resourceMap[target].url}`,
-    }));
+    hlpr.logOutArgs(`${logObj.file}.rLonLat default response`, logObj.logType, 'resources', 9, null, 'no_page', `target ${target} target.url: ${resourceMap[target].url}`, null);
     result.outputParsed = response.getBody();
     if (target === 'weatherforcast' && result.outputParsed.cod === '200') {
       result.output.location = loc;
@@ -78,8 +82,7 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     }
 
     if (result.outputParsed.status === 'OK') {
-      hlpr.logOut(Object.assign({}, logObj, {
-      }));
+      hlpr.logOutArgs(`${logObj.file}.rLonLat response OK`, logObj.logType, 'resources', 10, null, 'no_page', result.outputParsed.results, null);
       switch (target) {
         case 'elevation':
           result.output.elevation = result.outputParsed.results[0].elevation;
@@ -97,12 +100,8 @@ exports.rLonLat = ({ loc, samples, date, tzOffset = 0, dstOffset = 0 }, target, 
     }
     return output({ [target]: null });
   }).fail((response) => {
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file} default`,
-      level: 5,
-      logSubType: 'error',
-      message: `Error resources.rLonLat - target: ${target}, sloc:${sLoc.toString().substring(0, 30)} response ${response} target.url: ${resourceMap[target].url}`,
-    }));
+    const message = `Error resources.rLonLat - target: ${target}, sloc:${JSON.stringify(sLoc)} response ${response} target.url: ${resourceMap[target].url}`;
+    hlpr.logOutArgs(`${logObj.file}.rLonLat response Fail`, logObj.logType, 'resources', 10, response, 'no_page', message, null);
     return output({ [target]: null });
   });
 };

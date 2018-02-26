@@ -66,7 +66,7 @@ exports.userList = (req, res) => {
       } },
       { $sort: { firstname: 1, lastname: 1 } },
     ], (err, result) => {
-    hlpr.logOutArgs(`${logObj.file}.userList err`, 'admin', 'status now', 5, err, req.originalUrl, 'admin status', req.user.stravaId);
+    hlpr.logOutArgs(`${logObj.file}.userList`, 'admin', 'status now', 5, JSON.stringify(err), req.originalUrl, 'admin status', req.user.stravaId);
     if (err) return err;
     res.send(result);
   });

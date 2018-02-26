@@ -35,7 +35,7 @@ const stravaLogin = new StravaStrategy({
   tmpAthlete.access_token = profile.token;
   User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user, created) => {
     if (created) {
-      const message = `ARaceathlete new user ${user.name}, id: ${user.stravaId}`;
+      const message = `ARaceathlete new user ${user.firstname} ${user.lastname}, id: ${user.stravaId}, clubMember: ${user.clubMember}`;
       txt.sendText(process.env.ADMIN_TXT_NUMBER, message);
       hlpr.logOutArgs('services/passport.stravaLogin', 'auth', 'sussess', 5, err, null, message, user.stravaId);
     }
