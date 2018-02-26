@@ -105,10 +105,10 @@ exports.nightlyUpdate = () => {
               user: fUser,
             };
             activitiesCtrlr.getAllActivities(tmpAct, (result) => {
-              hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result.activities.length}`, fUser.stravaId);
+              hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result}`, fUser.stravaId);
             });
           } else {
-            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities non club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result.activities.length}`, fUser.stravaId);
+            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities non club member`, logObj.logType, 'info', 9, err, 'cron_no_page', 'status triggered activities non clubmember', fUser.stravaId);
           }
         });
       });
