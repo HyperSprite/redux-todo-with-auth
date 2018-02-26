@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import { Card, CardText } from 'material-ui/Card';
 import Toggle from 'material-ui/Toggle';
 import { CircularProgress, RaisedButton } from 'material-ui';
 import MdSearch from 'react-icons/lib/md/search';
@@ -256,9 +256,6 @@ class ActivitySearch extends Component {
       );
     }
 
-    // const lat = this.state.lat || this.props.lat || user.userGeoLatitude;
-    // const lng = this.state.lng || this.props.lng || user.userGeoLongitude;
-
     const geoData = {
       lat: this.state.lat || this.props.lat || user.userGeoLatitude,
       lng: this.state.lng || this.props.lng || user.userGeoLongitude,
@@ -385,7 +382,7 @@ class ActivitySearch extends Component {
                         />
                       </div>
                     ))}
-                    {(sortStrings && activCalcFilter.count && activCalcAll.count && clubMember) && (
+                    {(sortStrings && activCalcFilter.count && activCalcAll.count) && (
                       <RangeInput
                         {...this.props}
                         valuesRange={activCalcFilter}

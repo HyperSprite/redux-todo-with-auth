@@ -14,6 +14,12 @@ const getDate = (result) => {
   return result(newDate);
 };
 
+const logObj = {
+  file: 'controllers/Authentication',
+  logType: 'controller',
+  level: 10,
+};
+
 // push ftp or weight into user
 // exports.pushMetrics(athlete, editUser, ['ftp', 'weight'], resUser) => {
 // athlete is what is returned from strava
@@ -35,7 +41,7 @@ exports.pushMetrics = (athlete, editUser, metricType, resUser) => {
       if (!editUser[mTArray] || editUser[mTArray].length === 0 || athlete[mT] !== editUser[mTArray][editUser[mTArray].length - 1][mT]) {
         User.findByIdAndUpdate(editUser._id, pushItem, options, (err, metricResults) => {
           if (err) {
-            hlpr.consLog(['....................', `Error: auth.pushMetrics[mT] 0`, err, pushItem, mTArray, metricResults]);
+            hlpr.logOutArgs(`${logObj.file}.exports.pushMetrics err`, logObj.logType, 'auth', 9, JSON.stringify(err), 'no_page', `Error: auth.pushMetrics[mT] 0 ${pushItem}, ${mTArray}, {$metricResults}`, athlete.stravaId);
             returnValue = metricResults;
           }
           hlpr.consLog(['....................', `auth.pushMetrics[mT] 0`, mTArray, metricResults]);
@@ -86,12 +92,14 @@ exports.writeUser = (userData, user, resultUser) => {
       loc: `${toSave.userGeoLongitude},${toSave.userGeoLatitude}`,
       timestamp: user.updatedAt,
     };
+    hlpr.logOutArgs(`${logObj.file}.exports.writeUser inputElevation`, logObj.logType, 'auth', 9, JSON.stringify(err), 'no_page', JSON.stringify(inputElevation), user.stravaId);
     // hlpr.consLog(['....................', 'auth.writeUser.inputElevation', inputElevation]);
     resources.rLonLat(inputElevation, 'elevation', (geoElv) => {
       // hlpr.consLog(['....................', 'geoElv', geoElv]);
       toSave.userGeoElevation = geoElv.elevation;
 
       resources.rLonLat(inputElevation, 'timezone', (geoTZ) => {
+        hlpr.logOutArgs(`${logObj.file}.exports.writeUser`, logObj.logType, 'auth', 9, JSON.stringify(err), 'no_page', JSON.stringify(geoTZ), user.stravaId);
         hlpr.consLog(['....................', 'auth.writeUser.geoTZ', geoTZ]);
         if (geoTZ.timezone) {
           toSave.userGeoTzId = geoTZ.timezone.timeZoneId;

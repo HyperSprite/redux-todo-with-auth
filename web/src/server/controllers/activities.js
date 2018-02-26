@@ -91,22 +91,19 @@ exports.getAllActivities = (input, result) => {
   });
 };
 
+// exports.getAllUserActivities(req, res) {
+//
+//   if (req.body.stravaId)
+//   hlpr.logOutArgs(`${logObj.file}.getAllUserActivities`, logObj.logType, 'activities', 9, 'err', req.originalUrl, `Check for all activites ${req.user.stravaId}`, null);
+//
+// }
+
 const getStreams = (activityId, accessToken, done) => {
   if (!activityId || !accessToken) {
-    hlpr.logOut(Object.assign({}, logObj, {
-      func: `${logObj.file}.getStreams !activityId || !accessToken`,
-      logSubType: 'err',
-      level: 0,
-      message: '!activityId || !accessToken',
-    }));
+    hlpr.logOutArgs(`${logObj.file}.getStreams !activityId || !accessToken`, logObj.logType, 'activities', 2, 'err', 'no_page', '!activityId || !accessToken', null);
     return done([]);
   }
-  hlpr.logOut(Object.assign({}, logObj, {
-    func: `${logObj.file}.getStreams`,
-    logSubType: 'err',
-    level: 10,
-    message: 'In getStreams',
-  }));
+  hlpr.logOutArgs(`${logObj.file}.getStreams next`, logObj.logType, 'activities', 9, 'err', 'no_page', `In getStreams for activityId: ${activityId}`, null);
   /*
   * Streams to attempt to return from Strava
   */
@@ -126,34 +123,16 @@ const getStreams = (activityId, accessToken, done) => {
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', JSON.stringify(rateLimit)]);
     if (err) {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.getStreams strava.streams.activity`,
-        logSubType: 'err',
-        level: 3,
-        error: err,
-        message: `err for ${activityId} streams: ${streams.message}`,
-      }));
+      hlpr.logOutArgs(`${logObj.file}.getStreams got streams err`, logObj.logType, 'activities', 3, err, 'no_page', `err for ${activityId} streams: ${streams.message}`, null);
       return done([]);
     } else if (_.isArray(streams)) {
       const newStreams = Object.assign({}, { streams }, { activityId });
       ActivityStreams.findOrCreate({ activityId }, newStreams, (err, streamDB) => {
-        hlpr.logOut(Object.assign({}, logObj, {
-          func: `${logObj.file}.getStreams ActivityStreams.findOrCreate`,
-          logSubType: 'info',
-          level: 8,
-          error: err,
-          message: `${activityId} streams: ${streams.map(s => s.type)}`,
-        }));
+        hlpr.logOutArgs(`${logObj.file}.getStreams ActivityStreams.findOrCreate success`, logObj.logType, 'activities', 8, 'err', 'no_page', `${activityId} streams: ${streams.map(s => s.type)}`, null);
         return done(streams);
       });
     } else {
-      hlpr.logOut(Object.assign({}, logObj, {
-        func: `${logObj.file}.getStreams ActivityStreams.findOrCreate err`,
-        logSubType: 'err',
-        level: 6,
-        error: err,
-        message: `err for ${activityId} message ${JSON.stringify(streams.message).slice(0, 50)}`,
-      }));
+      hlpr.logOutArgs(`${logObj.file}.getStreams ActivityStreams.findOrCreate err`, logObj.logType, 'activities', 5, err, 'no_page', `${activityId} streams: ${streams.map(s => s.type)}`, null);
       return done([]);
     }
   });

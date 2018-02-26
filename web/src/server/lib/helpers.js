@@ -102,8 +102,8 @@ exports.LogObj = function LogObj(func, logType, logSubType, level, error, page, 
   this.logType = logType;
   this.logSubType = logSubType;
   this.level = level;
-  this.error = toString(JSON.stringify(error).slice(0, 50));
-  this.message = toString(JSON.stringify(message).slice(0, 200));
+  this.error = error;
+  this.message = message;
   this.page = page;
 };
 
