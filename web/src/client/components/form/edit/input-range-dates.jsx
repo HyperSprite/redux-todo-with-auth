@@ -75,7 +75,7 @@ class InputRangeDate extends React.Component {
           </label>
         </div>
         <div style={styles.flexParent}>
-          <div style={styles.inputBox}>
+          <div style={styles.rangeDateBox}>
             <DatePicker
               onChange={(event, value) => this.handleDateUpdate(new Date(value), 'min')}
               autoOk
@@ -89,7 +89,7 @@ class InputRangeDate extends React.Component {
               formatDate={lib.dateFormat}
             />
           </div>
-          <div style={styles.inputBox}>
+          <div style={styles.rangeDateBox}>
             <DatePicker
               onChange={(event, value) => this.handleDateUpdate(new Date(value), 'max')}
               autoOk
