@@ -393,13 +393,13 @@ class ActivitySearch extends Component {
                         valueItems={sortStrings}
                         rangeValues={rangeValues}
                         form={form}
-                        mPref={mPref}
                       />
                     )}
                   </div>
 
 
                 </CardText>
+
                 <GoogleMapLocation
                   {...geoData}
                   pinDrops={pinDrops}

@@ -54,33 +54,37 @@ const ActivityCalc = ({
       />
       {returnValues.map(rV => (
         <div key={rV.activityType}>
-          {[rV.activityLabel]}
-          {rV.displayType.map(rVDT => (
-            <div key={`${rV.activityType}${data[rV.activityType][rVDT]}`}>
-              {(rVDT === 'range') ? (
-              <div>
-                <ActivityMetric
-                  data={buildData(data, rV.activityType, rVDT, 0)}
-                  rV={activityTypeMod(rV, rVDT)}
-                  mPref={mPref}
-                />
-                <ActivityMetric
-                  data={buildData(data, rV.activityType, rVDT, 1)}
-                  rV={activityTypeMod(rV, rVDT)}
-                  mPref={mPref}
-                />
+          {(rV.displayType.range && rV.displayType.range[0] !== rV.displayType.range[1]) && (
+          <div>
+            {[rV.activityLabel]}
+            {rV.displayType.map(rVDT => (
+              <div key={`${rV.activityType}${data[rV.activityType][rVDT]}`}>
+                {(rVDT === 'range') ? (
+                  <div>
+                    <ActivityMetric
+                      data={buildData(data, rV.activityType, rVDT, 0)}
+                      rV={activityTypeMod(rV, rVDT)}
+                      mPref={mPref}
+                    />
+                    <ActivityMetric
+                      data={buildData(data, rV.activityType, rVDT, 1)}
+                      rV={activityTypeMod(rV, rVDT)}
+                      mPref={mPref}
+                    />
+                  </div>
+              ) : (
+                <div>
+                  <ActivityMetric
+                    data={buildData(data, rV.activityType, rVDT)}
+                    rV={activityTypeMod(rV, rVDT)}
+                    mPref={mPref}
+                  />
+                </div>
+              )}
               </div>
-            ) : (
-              <div>
-                <ActivityMetric
-                  data={buildData(data, rV.activityType, rVDT)}
-                  rV={activityTypeMod(rV, rVDT)}
-                  mPref={mPref}
-                />
-              </div>
-            )}
-            </div>
-          ))}
+            ))}
+          </div>
+        )}
         </div>
       ))}
     </div>

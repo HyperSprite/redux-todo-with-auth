@@ -16,10 +16,10 @@ const propTypes = {
 };
 
 const RangeInput = (props) => {
-
   const {
     form,
     mPref,
+    datePref,
     valueItems,
     valuesRange,
     valuesDefaults,
@@ -28,9 +28,8 @@ const RangeInput = (props) => {
     placeholder,
     type,
     initialValues,
-    rangeValues,
   } = props;
-  let rangeArr = [];
+  const rangeArr = [];
 
   if (valueItems && valuesRange) {
     Object.values(valueItems).forEach((element) => {
@@ -40,8 +39,11 @@ const RangeInput = (props) => {
         conVal0: valuesRange[element.value].range[0],
         conVal1: valuesRange[element.value].range[1],
       };
-      if (justFNS.isValid(vals.conDef0) && justFNS.isValid(vals.conDef1) && (vals.conDef0 < vals.conDef1)) {
-        if (element.value !== 'date' && element.value !== 'count') {
+      if (
+        justFNS.isValid(vals.conDef0) &&
+        justFNS.isValid(vals.conDef1) &&
+        (vals.conDef0 < vals.conDef1)) {
+        if (element.value !== 'count') {
           rangeArr.push(
             {
               componentType: 'InputRange',
@@ -55,11 +57,20 @@ const RangeInput = (props) => {
                 justFNS.round(vals.conVal0, 0),
                 justFNS.round(vals.conval1, 0),
               ],
-              rangeValue: rangeValues[element.value] || { conMetric: null },
             },
           );
         }
-        // add date range here
+      } else if (element.value === 'date') {
+        rangeArr.push(
+          {
+            componentType: 'InputRangeDates',
+            contentName: element.value,
+            contentLabel: element.option,
+            contentDefautls: [vals.conDef0, vals.conDef1],
+            contentValue: [vals.conVal0, vals.conVal1,
+            ],
+          },
+        );
       }
     });
   }
@@ -69,14 +80,16 @@ const RangeInput = (props) => {
       <div style={style.flexcontainer} >
         {(valueItems && rangeArr.length && valuesRange) && rangeArr.map(rA => (
           <div key={rA.contentName} >
-            {rA.contentName !== 'date' || rA.contentName !== 'count' || !rA.contentDefautls[0] ? (
+            {rA.contentName !== 'count' || !rA.contentDefautls[0] ? (
               <EditSwitch
                 form={form}
                 formValues={rA}
-                defaultValue={rA.contentValue}
+                // defaultValue={rA.contentValue}
+                defaultValue={rA.contentDefautls}
                 min={rA.contentDefautls[0]}
                 max={rA.contentDefautls[1]}
                 mPref={mPref}
+                datePref={datePref}
                 rangeValue={rA.rangeValue}
               />
             ) : null }

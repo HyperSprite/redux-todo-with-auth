@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
+import styles from './styles';
 
 import './styles.css';
 
@@ -22,13 +23,14 @@ const renderCheckbox = ({
   contentOptions,
   meta: { touched, error, warning },
 }) => (
-  <div>
+  <div style={styles.inputBox}>
     <label
+      style={styles.inputLabel}
       htmlFor={input}
     >
       {label}
     </label>
-    <div>
+    <div style={styles.flexParent}>
       <RadioButtonGroup
         className="form-control"
         {...input}

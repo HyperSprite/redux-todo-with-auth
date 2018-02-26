@@ -57,4 +57,19 @@ export default {
     backgroundColor: styles.theme.palette.primary3Color,
     height: 13,
   },
+  floatingLabelStyle: {
+    color: '#770000',
+  },
+  floatingLabelFocusStyle: {
+    color: '#530000',
+  },
+  inputBox: {
+    marginTop: -20,
+    width: 280,
+    padding: '0 25px 0 20px',
+  },
+  inputLabel: {
+    padding: '0 25px 0 20px',
+    fontWeight: 'bold',
+  },
 };
