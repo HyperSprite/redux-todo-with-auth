@@ -178,18 +178,21 @@ exports.searchActivities = async (req, res) => {
 
   // form 'value'-min' 'value'-max
   Object.keys(q).forEach((item) => {
-
-
     if (sortOptions[item]) {
-      console.log ('item', item, 'search', `{ $gt: ${q[item][0] * 1}, $lt: ${q[item][1] * 1} }`, sortOptions[item]);
+      console.log(`item: ${item}, search: ${q[item][0]}, ${sortOptions[item]}`);
       if (item === 'date') {
-        const tmpDate = format(q[item], 'YYYY-MM-DD');
-        query.search.push({ [sortOptions[item]]: { [sortOptions[item]]: tmpDate } });
+        if (q[item][0]) {
+          query.search.push({ [sortOptions[item]]: { $gte: q[item][0] } });
+        }
+        if (q[item][1]) {
+          query.search.push({ [sortOptions[item]]: { $lte: q[item][1] } });
+        }
       } else {
         query.search.push({ [sortOptions[item]]: { $gt: q[item][0] * 1, $lt: q[item][1] * 1 } });
       }
     }
   });
+  console.log(`item: ${JSON.stringify(query.search)}`);
 
   /**
   * This builds a $group object based on sortStrings
