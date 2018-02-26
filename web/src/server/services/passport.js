@@ -35,7 +35,7 @@ const stravaLogin = new StravaStrategy({
   tmpAthlete.access_token = profile.token;
   User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user, created) => {
     if (created) {
-      const message = `ARaceathlete new user ${user.firstname} ${user.lastname}, id: ${user.stravaId}, clubMember: ${user.clubMember}`;
+      const message = `ARaceathlete new user ${user.firstname} ${user.lastname}, https://www.strava.com/athletes/${user.stravaId}, clubMember: ${user.clubMember}`;
       txt.sendText(process.env.ADMIN_TXT_NUMBER, message);
       hlpr.logOutArgs('services/passport.stravaLogin', 'auth', 'sussess', 5, err, null, message, user.stravaId);
     }
@@ -44,10 +44,8 @@ const stravaLogin = new StravaStrategy({
       User.findOneAndUpdate(
         { stravaId: tmpAthlete.stravaId },
         { access_token: tmpAthlete.access_token },
-        {new: true},
-        (err, updatedUser) => {
-          return done(err, updatedUser);
-        });
+        { new: true },
+        (err, updatedUser) => done(err, updatedUser));
     } else {
       return done(err, user);
     }
