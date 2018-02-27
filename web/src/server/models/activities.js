@@ -105,6 +105,7 @@ const activitiesSchema = new Schema(
     streams: [],
     authorizationError: Boolean,
     failedUpdate: Boolean,
+    ftpTest: Boolean,
   },
   {
     timestamps: true,

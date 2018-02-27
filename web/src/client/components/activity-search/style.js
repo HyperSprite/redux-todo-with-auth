@@ -10,6 +10,9 @@ export default {
   toggleContainer: {
     width: 300,
   },
+  title: {
+    cursor: 'pointer',
+  },
   flexParent: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -21,5 +24,9 @@ export default {
     justifyContent: 'flex-start',
     padding: '10px 0 10px 0',
     minHeight: 80,
+  },
+  toggle: {
+    hight: 36,
+    paddingTop: 20,
   },
 };
