@@ -29,7 +29,7 @@ const RangeInput = (props) => {
     type,
     initialValues,
   } = props;
-  const rangeArr = [];
+  let rangeArr = [];
 
   if (valueItems && valuesRange) {
     Object.values(valueItems).forEach((element) => {
@@ -44,33 +44,28 @@ const RangeInput = (props) => {
         justFNS.isValid(vals.conDef1) &&
         (vals.conDef0 < vals.conDef1)) {
         if (element.value !== 'count') {
-          rangeArr.push(
-            {
-              componentType: 'InputRange',
-              contentName: element.value,
-              contentLabel: element.option,
-              contentDefautls: [
-                justFNS.round(vals.conDef0, 0),
-                justFNS.round(vals.conDef1, 0),
-              ],
-              contentValue: [
-                justFNS.round(vals.conVal0, 0),
-                justFNS.round(vals.conval1, 0),
-              ],
-            },
-          );
-        }
-      } else if (element.value === 'date') {
-        rangeArr.push(
-          {
-            componentType: 'InputRangeDates',
+          rangeArr = [...rangeArr, {
+            componentType: 'InputRange',
             contentName: element.value,
             contentLabel: element.option,
-            contentDefautls: [vals.conDef0, vals.conDef1],
-            contentValue: [vals.conVal0, vals.conVal1,
+            contentDefautls: [
+              justFNS.round(vals.conDef0, 0),
+              justFNS.round(vals.conDef1, 0),
             ],
-          },
-        );
+            contentValue: [
+              justFNS.round(vals.conVal0, 0),
+              justFNS.round(vals.conval1, 0),
+            ],
+          }];
+        }
+      } else if (element.value === 'date') {
+        rangeArr = [...rangeArr, {
+          componentType: 'InputRangeDates',
+          contentName: element.value,
+          contentLabel: element.option,
+          contentDefautls: [vals.conDef0, vals.conDef1],
+          contentValue: [vals.conVal0, vals.conVal1],
+        }];
       }
     });
   }
@@ -80,7 +75,7 @@ const RangeInput = (props) => {
       <div style={style.flexcontainer} >
         {(valueItems && rangeArr.length && valuesRange) && rangeArr.map(rA => (
           <div key={rA.contentName} >
-            {rA.contentName !== 'count' || !rA.contentDefautls[0] ? (
+            {rA.contentName !== 'count' || rA.contentName !== 'maxSpeed' || rA.contentName !== 'maxHeartrate' || rA.contentName !== 'maxWatts' || !rA.contentDefautls[0] ? (
               <EditSwitch
                 form={form}
                 formValues={rA}

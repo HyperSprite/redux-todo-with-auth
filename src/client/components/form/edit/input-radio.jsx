@@ -23,14 +23,14 @@ const renderCheckbox = ({
   contentOptions,
   meta: { touched, error, warning },
 }) => (
-  <div style={styles.inputBox}>
+  <div >
     <label
       style={styles.inputLabel}
       htmlFor={input}
     >
       {label}
     </label>
-    <div style={styles.flexParent}>
+    <div >
       <RadioButtonGroup
         className="form-control"
         {...input}

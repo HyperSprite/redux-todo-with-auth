@@ -11,7 +11,7 @@ export default {
     // margin: 5,
   },
   rangeBox: {
-    width: 280,
+    width: 250,
     padding: '5px 15px',
   },
   toggleContainer: {
@@ -63,7 +63,7 @@ export default {
     color: '#530000',
   },
   inputBox: {
-    width: 280,
+    width: 260,
     padding: '0 25px 0 20px',
   },
   inputLabel: {
@@ -72,7 +72,7 @@ export default {
   },
   rangeDateBox: {
     marginTop: -20,
-    width: 280,
+    width: 260,
     padding: '0 25px 0 20px',
   },
 };

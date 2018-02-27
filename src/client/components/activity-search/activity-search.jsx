@@ -19,8 +19,11 @@ import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../feature-notice';
 import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
+import FilterDrawer from './filter-drawer';
 import GoogleMapLocation from '../google-map-location';
-import RangeInput from '../form/edit/range-input';
+
+// import RangeInput from '../form/edit/range-input';
+
 import ScrollIntoView from '../../containers/scroll-into-view';
 import SortSelect from '../form/edit/sort-select';
 import validate from '../form/validate';
@@ -169,6 +172,12 @@ class ActivitySearch extends Component {
     }
   }
 
+  handleSearch() {
+    if (this.props.pristine) {
+      pristine ? this.activitiesSearch : () => 'submit'
+    }
+  }
+
   activitiesDownload(formProps) {
     let query = {};
     const axiosConfig = {
@@ -310,7 +319,18 @@ class ActivitySearch extends Component {
     ];
 
     const SearchButton = (
-      <div>
+      <div style={style.flexParent}>
+        <FilterDrawer
+          {...this.props}
+          valuesRange={activCalcFilter}
+          valuesDefaults={activCalcAll}
+          valueItems={sortStrings}
+          rangeValues={rangeValues}
+          form={form}
+          radioFormValues={formValues}
+          onSearchClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
+          style={style.toggle}
+        />
         {isFetching ? (
           <RaisedButton
             label="Searching"
@@ -330,6 +350,7 @@ class ActivitySearch extends Component {
             icon={<MdSearch size={24} />}
           />
         )}
+
         <RaisedButton
           label="Clear Values"
           onClick={() => this.handleReset()}
@@ -361,41 +382,6 @@ class ActivitySearch extends Component {
             >
               <Card expanded={this.state.expanded} style={style.div} >
                 <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
-
-                <Toggle
-                  toggled={this.state.expanded}
-                  onToggle={this.handleToggle}
-                  labelPosition="right"
-                  label="Filters"
-                  style={style.toggle}
-                />
-
-                <CardText
-                  expandable
-                >
-                  <div style={style.flexcontainer} >
-                    {formValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
-                      <div key={fV.contentName}>
-                        <EditSwitch
-                          form={this.props.form}
-                          formValues={fV}
-                        />
-                      </div>
-                    ))}
-                    {(sortStrings && activCalcFilter.count && activCalcAll.count) && (
-                      <RangeInput
-                        {...this.props}
-                        valuesRange={activCalcFilter}
-                        valuesDefaults={activCalcAll}
-                        valueItems={sortStrings}
-                        rangeValues={rangeValues}
-                        form={form}
-                      />
-                    )}
-                  </div>
-
-
-                </CardText>
 
                 <GoogleMapLocation
                   {...geoData}
@@ -457,7 +443,7 @@ function mapStateToProps(state) {
   // console.log('initialValues', initialValues);
   return {
     activCalcAll: activities.activCalcAll,
-    activCalcFilter: activities.activCalcFilter || activities.activCalcAll,
+    activCalcFilter: { ...activities.activCalcAll, ...activities.activCalcFilter },
     activities: activities.activitySearch,
     activitySearchCustom: activities.activitySearchCustom,
     pinDrops: activities.activitySearch && activities.activitySearch.length ?
