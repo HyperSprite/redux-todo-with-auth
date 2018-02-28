@@ -355,9 +355,6 @@ class ActivitySearch extends Component {
         />
         <FilterDrawer
           {...this.props}
-          valuesRange={activCalcFilter}
-          valuesDefaults={activCalcAll}
-          valueItems={sortStrings}
           rangeValues={rangeValues}
           form={form}
           radioFormValues={formValues}
