@@ -7,7 +7,7 @@ import Search from 'material-ui/svg-icons/action/search';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import EditSwitch from '../form/edit/switch';
-import RangeInput from '../form/edit/range-input';
+import RangeInput from './range-input';
 import styles from './style';
 
 export default class FilterDrawer extends React.Component {
@@ -64,7 +64,6 @@ export default class FilterDrawer extends React.Component {
             {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
               <div key={fV.contentName}>
                 <EditSwitch
-
                   form={this.props.form}
                   formValues={fV}
                 />
