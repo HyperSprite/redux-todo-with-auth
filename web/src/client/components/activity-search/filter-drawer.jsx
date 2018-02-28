@@ -2,9 +2,9 @@ import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toggle from 'material-ui/Toggle';
-import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
 import Search from 'material-ui/svg-icons/action/search';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import EditSwitch from '../form/edit/switch';
 import RangeInput from '../form/edit/range-input';
@@ -44,8 +44,21 @@ export default class FilterDrawer extends React.Component {
           open={this.state.open}
         >
           <AppBar
-            title={<span style={styles.title}>Search</span>}
-            iconElementLeft={<IconButton onClick={this.handleSearchClick}><Search /></IconButton>}
+            // title={<span style={styles.title}>Search</span>}
+            iconElementLeft={
+              <IconButton
+                onClick={this.handleSearchClick}
+              >
+                <Search />
+              </IconButton>
+            }
+            iconElementRight={
+              <IconButton
+                onClick={this.handleToggle}
+              >
+                <NavigationClose />
+              </IconButton>
+            }
           />
           <div style={{ ...styles.flexParent, ...{ marginTop: 10 } }}>
             {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
