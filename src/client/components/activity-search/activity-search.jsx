@@ -319,18 +319,8 @@ class ActivitySearch extends Component {
     ];
 
     const SearchButton = (
-      <div style={style.flexParent}>
-        <FilterDrawer
-          {...this.props}
-          valuesRange={activCalcFilter}
-          valuesDefaults={activCalcAll}
-          valueItems={sortStrings}
-          rangeValues={rangeValues}
-          form={form}
-          radioFormValues={formValues}
-          onSearchClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
-          style={style.toggle}
-        />
+      <div style={{ ...style.flexcontainer, minHeight: 'inherit' }}>
+
         {isFetching ? (
           <RaisedButton
             label="Searching"
@@ -362,6 +352,17 @@ class ActivitySearch extends Component {
           primary
           style={style.button}
           onClick={handleSubmit(this.activitiesDownload)}
+        />
+        <FilterDrawer
+          {...this.props}
+          valuesRange={activCalcFilter}
+          valuesDefaults={activCalcAll}
+          valueItems={sortStrings}
+          rangeValues={rangeValues}
+          form={form}
+          radioFormValues={formValues}
+          onSearchClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
+          style={style.toggle}
         />
       </div>
     );

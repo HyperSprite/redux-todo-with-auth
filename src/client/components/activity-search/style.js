@@ -26,7 +26,9 @@ export default {
     minHeight: 80,
   },
   toggle: {
-    hight: 36,
+    // hight: 36,
     paddingTop: 20,
+    paddingLeft: 20,
+    // width: 180,
   },
 };
