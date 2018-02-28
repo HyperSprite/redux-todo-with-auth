@@ -387,7 +387,7 @@ class ActivitySearch extends Component {
                 <GoogleMapLocation
                   {...geoData}
                   pinDrops={pinDrops}
-                  handleClick={this.handleMapPinDrop}
+                  handleMapPinDrop={this.handleMapPinDrop}
                   noClick={this.state.tab === 'text-search'}
                   noGeolocation
                 />
