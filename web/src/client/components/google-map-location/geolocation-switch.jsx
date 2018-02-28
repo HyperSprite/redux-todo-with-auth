@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
-import { IconButton, Toggle } from 'material-ui';
+import { FlatButton, IconButton, Toggle } from 'material-ui';
 import GPSFixed from 'material-ui/svg-icons/device/gps-fixed';
 import GPSNotFixed from 'material-ui/svg-icons/device/gps-not-fixed';
 import GPSOff from 'material-ui/svg-icons/device/gps-off';
@@ -25,6 +25,7 @@ class ExtGoogleMapWithLocation extends React.Component {
       geoAllowed: true,
     });
     this.props.refreshLocation();
+    this.props.handleMapPinDrop(this.props.lat, this.props.lng);
   }
 
   handleMyPin() {
@@ -44,13 +45,16 @@ class ExtGoogleMapWithLocation extends React.Component {
             {geoAllowed ? <GPSFixed /> : <GPSNotFixed />}
           </IconButton>
           {geoAllowed && (
-            <Toggle
-              style={style.toggle}
-              label={'My pin'}
-              onToggle={this.handleMyPin}
-              toggled={showMyPin}
-              labelPosition="right"
-            />
+            <div>
+              <Toggle
+                style={style.toggle}
+                label={'Show my pin'}
+                onToggle={this.handleMyPin}
+                toggled={showMyPin}
+                labelPosition="right"
+              />
+            </div>
+
           )}
         </div>
         {(geoAllowed) ? (

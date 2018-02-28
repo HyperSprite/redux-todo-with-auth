@@ -15,7 +15,7 @@ class GoogleMapLocation extends React.Component {
   static propTypes = {
     containerWidth: PropTypes.number,
     /** returns lat, lng from map pin location */
-    handleClick: PropTypes.func.isRequired,
+    handleMapPinDrop: PropTypes.func.isRequired,
     lat: PropTypes.number,
     lng: PropTypes.number,
     /** Green pin */
@@ -51,8 +51,8 @@ class GoogleMapLocation extends React.Component {
 
   targetLocation(lat, lng) {
     this.setState({ lat, lng });
-    if (this.props.handleClick && !this.props.noClick) {
-      this.props.handleClick(lat, lng);
+    if (this.props.handleMapPinDrop && !this.props.noClick) {
+      this.props.handleMapPinDrop(lat, lng);
     }
   }
 
