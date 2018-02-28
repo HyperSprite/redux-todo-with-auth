@@ -30,7 +30,7 @@ export default class FilterDrawer extends React.Component {
 
   render() {
     return (
-      <div >
+      <div>
         <Toggle
           toggled={this.state.open}
           onToggle={this.handleToggle}
@@ -44,7 +44,6 @@ export default class FilterDrawer extends React.Component {
           open={this.state.open}
         >
           <AppBar
-            // title={<span style={styles.title}>Search</span>}
             iconElementLeft={
               <IconButton
                 onClick={this.handleSearchClick}

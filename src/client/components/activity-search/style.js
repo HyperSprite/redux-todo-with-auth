@@ -29,6 +29,6 @@ export default {
     // hight: 36,
     paddingTop: 20,
     paddingLeft: 20,
-    // width: 180,
+    width: 200,
   },
 };
