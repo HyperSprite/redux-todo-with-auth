@@ -26,6 +26,9 @@ const style = {
     justifyContent: 'space-between',
     flexWrap: 'wrap',
   },
+  narrowBox: {
+    width: 130,
+  },
   boxLabel: {
     color: theme.palette.accent7Color,
     marginLeft: 10,

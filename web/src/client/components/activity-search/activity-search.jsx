@@ -17,6 +17,7 @@ import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../feature-notice';
+import ActivityCount from '../activity-calc/activity-count';
 import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
 import FilterDrawer from './filter-drawer';
@@ -388,7 +389,7 @@ class ActivitySearch extends Component {
                   noClick={this.state.tab === 'text-search'}
                   noGeolocation
                 />
-
+                <ActivityCount />
                 <div>
                   {SearchButton}
                 </div>
@@ -397,7 +398,7 @@ class ActivitySearch extends Component {
                 ) : (
                   <div >
 
-                    { (activCalcFilter && activCalcFilter.count && adminMember) && (
+                    {/* { (activCalcFilter && activCalcFilter.count && adminMember) && (
                       <div style={style.flexcontainer} >
                         <ActivityCalc
                           data={activCalcFilter}
@@ -405,7 +406,7 @@ class ActivitySearch extends Component {
                           title="Filtered Results"
                         />
                       </div>
-                    )}
+                    )} */}
                     { activities.map(act => (
                       <div key={act} style={style.div}>
                         <ActivitySingle
