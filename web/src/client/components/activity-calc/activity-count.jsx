@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import justFNS from 'just-fns';
 
 import ActivityMetric from '../activity-metric';
 import ChartBarSingleHorz from '../charts/bar-single-horz';
@@ -50,7 +51,7 @@ class ActivityCount extends React.Component {
           {(activCalcFilter !== activCalcAll) ? (
             <div style={{ ...style.box, ...style.narrowBox }} >
               <div style={style.boxLabel}>
-                {'Matched'}
+                {`Matched ${justFNS.round((activCalcFilter / activCalcAll) * 100, 0)}%`}
               </div>
               <div style={style.boxData}>
                 {activCalcFilter}
