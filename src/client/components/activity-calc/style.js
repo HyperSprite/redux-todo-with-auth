@@ -31,7 +31,7 @@ const style = {
   },
   boxLabel: {
     color: theme.palette.accent7Color,
-    marginLeft: 10,
+    margin: '0 5px 0 10px',
   },
   boxData: {
     // marginRight: 10,
