@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Bar, BarChart, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+// Tooltip, Legend
+const propTypes = {
+  chartData: PropTypes.arrayOf(PropTypes.objects).isRequired,
+};
 
 const color = [
   '#93a6af',
@@ -12,7 +16,7 @@ const color = [
 
 // const testData = [
 //   {
-//     name: 'Activities',
+//     name: 'Activities', // name is reserved.
 //     total: 1018,
 //     downloaded: 320,
 //     display: 300,
@@ -22,7 +26,6 @@ const color = [
 
 const ChartBarSingleHorz = (props) => {
   const chartData = props.chartData || [{ name: '', total: 0 }];
-  console.log('chartData', chartData);
   const dataKeys = Object.keys(chartData[0]).filter(vNF => vNF !== 'name');
 
   return (
@@ -65,5 +68,7 @@ const ChartBarSingleHorz = (props) => {
     </div>
   );
 };
+
+ChartBarSingleHorz.propTypes = propTypes;
 
 export default ChartBarSingleHorz;
