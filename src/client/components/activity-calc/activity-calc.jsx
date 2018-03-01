@@ -40,6 +40,7 @@ const ActivityCalc = ({
   title,
 }) => (
   <div>
+
     <div style={style.title}>
       <div>
         {title}
