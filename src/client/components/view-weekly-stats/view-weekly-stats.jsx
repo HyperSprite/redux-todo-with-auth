@@ -6,6 +6,7 @@ import { CircularProgress, Paper, RaisedButton } from 'material-ui';
 import FaRefresh from 'react-icons/lib/fa/refresh';
 
 import * as actions from '../../actions';
+import Layout from '../layout';
 import WeeklyStats from './weekly-stats';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -65,19 +66,14 @@ class activeStats extends Component {
   render() {
     const { weeklyStats, datePref, isFetching, mPref } = this.props;
     return (
-      <div>
-        <div className="main-flex-container" >
-          <div className="side-lite left-pane" />
-          <div className="main" >
+      <Layout>
             <ScrollIntoView
               id={location.hash}
               headerHeight={70}
             />
-            <Paper
-              zDepth={1}
-            >
+        <div>
+          <div>
               {isFetching ? (
-                <div>
                   <RaisedButton
                     label="Check Strava for New Activities"
                     secondary
@@ -85,9 +81,7 @@ class activeStats extends Component {
                     icon={<CircularProgress size={22} thickness={4} />}
                     disabled
                   />
-                </div>
               ) : (
-                <div>
                   <RaisedButton
                     label="Check Strava for New Activities"
                     secondary
@@ -95,12 +89,12 @@ class activeStats extends Component {
                     onClick={this.updateUserActivities}
                     icon={<FaRefresh size={20} />}
                   />
-                </div>
               )}
+            </div>
               {!weeklyStats ? (
                 <p>Loading Activities</p>
               ) : (
-                <div>
+                <div >
                   { weeklyStats.map((oneWeek, i) => (
                     <WeeklyStats
                       key={`week-${oneWeek.weeklyTotals.date}`}
@@ -138,11 +132,8 @@ class activeStats extends Component {
                   />
                 </div>
               )}
-            </Paper>
-          </div>
-          <div className="side-lite right-pane" />
-        </div>
-      </div>
+            </div>
+      </Layout>
     );
   }
 }

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
-import { Card, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
+import { withStyles } from 'material-ui-next/styles';
+import { FormGroup, FormControlLabel } from 'material-ui-next/Form';
+import Button from 'material-ui-next/Button';
+import { Card } from 'material-ui/Card';
 import { CircularProgress, RaisedButton } from 'material-ui';
 import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
@@ -13,6 +15,7 @@ import qs from 'qs';
 import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
+import Layout from '../layout';
 import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
@@ -62,6 +65,19 @@ const defaultProps = {
 let queryOptions = {};
 let lastSearch = {};
 let lastmPref = false;
+
+const styles = theme => ({
+  buttonSet: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+  },
+  button: {
+    width: 150,
+    // hight: 36,
+    margin: theme.spacing.unit,
+  },
+});
 
 class ActivitySearch extends Component {
   constructor(props) {
@@ -238,6 +254,7 @@ class ActivitySearch extends Component {
       activCalcAll,
       activCalcFilter,
       adminMember,
+      classes,
       clubMember,
       eventSelector,
       handleSubmit,
@@ -320,109 +337,111 @@ class ActivitySearch extends Component {
     ];
 
     const SearchButton = (
-      <div style={{ ...style.flexcontainer, minHeight: 'inherit' }}>
+      <div className={classes.buttonSet} >
 
         {isFetching ? (
-          <RaisedButton
-            label="Searching"
+          <Button
+            variant="raised"
             disabled
-            primary
-            style={style.button}
+            color="primary"
+            className={classes.button}
             icon={<CircularProgress size={22} />}
-          />
+          >
+            Searching
+          </Button>
         ) : (
-          <RaisedButton
-            label="Search"
+          <Button
+            variant="raised"
             type={pristine ? 'button' : 'submit'}
             onClick={pristine ? this.activitiesSearch : () => 'submit'}
-            primary
+            color="primary"
             autoFocus
-            style={style.button}
+            className={classes.button}
             icon={<MdSearch size={24} />}
-          />
+          >
+            Search
+          </Button>
         )}
 
-        <RaisedButton
-          label="Clear Values"
+        <Button
+          variant="raised"
           onClick={() => this.handleReset()}
-          style={style.button}
+          className={classes.button}
           disabled={pristine || submitting}
-        />
-        <RaisedButton
-          label="Download Activities"
-          primary
-          style={style.button}
+          >
+            Clear Values
+          </Button>
+        <Button
+          variant="raised"
+          color="primary"
+          className={classes.button}
           onClick={handleSubmit(this.activitiesDownload)}
-        />
+          >
+            Download
+          </Button>
         <FilterDrawer
           {...this.props}
+          classes={{}}
           rangeValues={rangeValues}
           form={form}
           radioFormValues={formValues}
           onSearchClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
-          style={style.toggle}
         />
       </div>
     );
 
     return (
-      <div>
-        <div className="main-flex-container" >
-          <div className="side-lite left-pane" />
-          <div className="main" >
-            <ScrollIntoView
-              id={location.hash}
-              headerHeight={70}
+      <Layout>
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
+
+        <Form
+          id={contentName}
+          onSubmit={handleSubmit(this.handleFormSubmit)}
+        >
+          <Card expanded={this.state.expanded} style={style.div} >
+            <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
+
+            <GoogleMapLocation
+              {...geoData}
+              pinDrops={pinDrops}
+              handleMapPinDrop={this.handleMapPinDrop}
+              noClick={this.state.tab === 'text-search'}
+              noGeolocation
             />
+            <ActivityCount />
+            <div>
+              {SearchButton}
+            </div>
+            {!activities ? (
+              <p>Loading Activities</p>
+            ) : (
+              <div >
 
-            <Form
-              id={contentName}
-              onSubmit={handleSubmit(this.handleFormSubmit)}
-            >
-              <Card expanded={this.state.expanded} style={style.div} >
-                <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
-
-                <GoogleMapLocation
-                  {...geoData}
-                  pinDrops={pinDrops}
-                  handleMapPinDrop={this.handleMapPinDrop}
-                  noClick={this.state.tab === 'text-search'}
-                  noGeolocation
-                />
-                <ActivityCount />
-                <div>
-                  {SearchButton}
-                </div>
-                {!activities ? (
-                  <p>Loading Activities</p>
-                ) : (
-                  <div >
-
-                    {/* { (activCalcFilter && activCalcFilter.count && adminMember) && (
-                      <div style={style.flexcontainer} >
-                        <ActivityCalc
-                          data={activCalcFilter}
-                          mPref={mPref}
-                          title="Filtered Results"
-                        />
-                      </div>
-                    )} */}
-                    { activities.map(act => (
-                      <div key={act} style={style.div}>
-                        <ActivitySingle
-                          activityId={act}
-                        />
-                      </div>
-                    ))}
-                    {!!this.state.page && SearchButton}
+                {/* { (activCalcFilter && activCalcFilter.count && adminMember) && (
+                  <div style={style.flexcontainer} >
+                    <ActivityCalc
+                      data={activCalcFilter}
+                      mPref={mPref}
+                      title="Filtered Results"
+                    />
                   </div>
-                )}
-              </Card>
-            </Form>
-          </div>
-          <div className="side-lite right-pane" />
-        </div>
-      </div>
+                )} */}
+                { activities.map(act => (
+                  <div key={act} style={style.div}>
+                    <ActivitySingle
+                      activityId={act}
+                    />
+                  </div>
+                ))}
+                {!!this.state.page && SearchButton}
+              </div>
+            )}
+          </Card>
+        </Form>
+      </Layout>
     );
   }
 }
@@ -476,4 +495,5 @@ ActivitySearch = reduxForm({
 ActivitySearch.propTypes = propTypes;
 ActivitySearch.defaultProps = defaultProps;
 
-export default connect(mapStateToProps, actions)(ActivitySearch);
+const styledActivitySearch = withStyles(styles, { name: 'StyledActivitySearch' })(ActivitySearch);
+export default connect(mapStateToProps, actions)(styledActivitySearch);

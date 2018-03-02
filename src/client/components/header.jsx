@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import { AppBar } from 'material-ui';
+import Headroom from 'react-headroom';
+// import { AppBar } from 'material-ui';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
 
 
 import * as actions from './../actions';
 
+import AppBar from './app-bar';
 import Signin from './auth/signin';
-import EventFilter from './events/filter-toolbar';
+import EventFilter from './view-events/filter-toolbar';
 import ClubNotice from './club-notice';
 import IconLink from './icon-link';
 
@@ -26,6 +28,9 @@ const propTypes = {
 const defaultProps = {
   authenticated: false,
   user: {},
+  page: {
+    name: 'A Race athlete',
+  },
 };
 
 class Header extends Component {
@@ -61,7 +66,7 @@ class Header extends Component {
   }
 
   render() {
-    const pageName = this.props.page.name ? `${this.props.page.name} :` : '';
+    const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
     const pageNameWithHelp = this.props.page.help ? (
       <span>
         {`${this.props.page.name} `}
@@ -79,20 +84,17 @@ class Header extends Component {
     return (
       <div className="site-header" >
         <Helmet>
-          <title>{`${pageName}A Race athlete`}</title>
+          <title>{`${pageName} A Race athlete`}</title>
           <link rel="canonical" href={`${window.location.host}`} />
         </Helmet>
-        <AppBar
-          title={pageNameWithHelp}
-          onLeftIconButtonClick={this.handleToggle}
-          showMenuIconButton
-          iconElementLeft={<img src={ARaceAthleteSVG} alt="A Race Athlete logo" style={style.appBar.iconLeft} />}
-          iconElementRight={this.renderRightMenu()}
-          zDepth={1}
-          style={style.appBar}
-          className="app-bar"
-        />
 
+        <Headroom>
+          <AppBar
+            title={pageNameWithHelp}
+            rightMenu={this.renderRightMenu()}
+            leftOnClick={this.handleToggle}
+          />
+        </Headroom>
       </div>
     );
   }

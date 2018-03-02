@@ -1,17 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import palette from '../../../styles/mui-palette';
+
 // Tooltip, Legend
 const propTypes = {
-  chartData: PropTypes.arrayOf(PropTypes.objects).isRequired,
+  chartData: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+  })).isRequired,
 };
 
 const color = [
-  '#93a6af',
-  '#5e0000',
-  '#c40000',
-  '#ff5959',
-  '#ffe7e7',
+  palette.secondary[300],
+  palette.primary[900],
+  palette.primary[500],
+  palette.primary[200],
+  palette.primary[50],
 ];
 
 // const testData = [

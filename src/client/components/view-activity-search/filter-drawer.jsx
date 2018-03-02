@@ -1,17 +1,27 @@
 import React from 'react';
+import { withStyles } from 'material-ui-next/styles';
+import { FormControlLabel } from 'material-ui-next/Form';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
-import Toggle from 'material-ui/Toggle';
+import Switch from 'material-ui-next/Switch';
 import IconButton from 'material-ui/IconButton';
 import Search from 'material-ui/svg-icons/action/search';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import EditSwitch from '../form/edit/switch';
 import RangeInput from './range-input';
-import styles from './style';
+import style from './style';
 
-export default class FilterDrawer extends React.Component {
+const styles = theme => ({
+  switch: {
+    width: 150,
+    // hieght: 36,
+    // margin: theme.spacing.unit,
+    margin: '0 8px',
+  },
+});
 
+class FilterDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = { open: false };
@@ -29,15 +39,21 @@ export default class FilterDrawer extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
-        <Toggle
-          toggled={this.state.open}
-          onToggle={this.handleToggle}
-          labelPosition="right"
-          label="Filters"
-          style={styles.toggle}
-        />
+        <div className={classes.switch} >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={this.state.open}
+                onChange={this.handleToggle}
+                color="primary"
+              />
+            }
+            label="Filters"
+          />
+        </div>
         <Drawer
           width={340}
           openSecondary
@@ -59,7 +75,7 @@ export default class FilterDrawer extends React.Component {
               </IconButton>
             }
           />
-          <div style={{ ...styles.flexParent, ...{ marginTop: 10 } }}>
+          <div style={{ ...style.flexParent, ...{ marginTop: 10 } }}>
             {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
               <div key={fV.contentName}>
                 <EditSwitch
@@ -77,3 +93,5 @@ export default class FilterDrawer extends React.Component {
     );
   }
 }
+
+export default withStyles(styles, { name: 'StyledFilterDrawer' })(FilterDrawer);
