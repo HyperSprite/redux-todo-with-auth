@@ -452,11 +452,13 @@ function mapStateToProps(state) {
   //   qs.parse(ownProps.location.search.slice(1)) :
   //   null;
   const { activities, auth, page, search } = state;
-  // const initialValues = (search.sortStrings && activities.activCalcAll) && search.sortStrings.reduce(
-  //   (acc, sS) => {
-  //     acc[sS.value] = activities.activCalcAll[sS.value].range;
-  //     return acc;
-  //   }, {});
+  const pinDrops = activities.activitySearch && activities.activitySearch.length ?
+    activities.activities.filter(aF => aF.geoStart).map(aM => ({
+      lat: aM.geoStart[1],
+      lng: aM.geoStart[0],
+      name: aM.name,
+      id: aM.activityId,
+    })) : [];
 
   // console.log('initialValues', initialValues);
   return {
@@ -464,13 +466,7 @@ function mapStateToProps(state) {
     activCalcFilter: { ...activities.activCalcAll, ...activities.activCalcFilter },
     activities: activities.activitySearch,
     activitySearchCustom: activities.activitySearchCustom,
-    pinDrops: activities.activitySearch && activities.activitySearch.length ?
-      activities.activities.filter(aF => aF.geoStart).map(aM => ({
-        lat: aM.geoStart[1],
-        lng: aM.geoStart[0],
-        name: aM.name,
-        id: aM.activityId,
-      })) : [],
+    pinDrops,
     srchOpts: activities.srchOpts,
     adminMember: auth.user.adminMember,
     clubMember: auth.user.clubMember,

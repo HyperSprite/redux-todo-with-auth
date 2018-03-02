@@ -47,7 +47,7 @@ function getPlugins() {
     }
   }));
   plugins.push(new webpack.optimize.CommonsChunkPlugin({
-    name: 'node-static',
+    name: 'nodestatic',
     minChunks(module) {
       const context = module.context;
       return context && context.indexOf('node_modules') >= 0;

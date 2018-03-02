@@ -3,12 +3,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Divider, Drawer, MenuItem } from 'material-ui';
+import { withStyles } from 'material-ui-next/styles';
+import Drawer from 'material-ui-next/Drawer';
+import List from 'material-ui-next/List';
+import Divider from 'material-ui-next/Divider';
+import { MenuItem } from 'material-ui-next/Menu';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
 import MPrefSwitcher from '../mpref-switcher';
+
+const styles = theme => ({
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
+});
 
 class MenuDrawer extends Component {
 
@@ -41,9 +54,12 @@ class MenuDrawer extends Component {
   render() {
     return (
       <Drawer
-        docked={false}
+        onClose={this.handleClose}
         open={this.props.open}
-        onRequestChange={open => this.props.setDrawer({ drawer: open })}
+
+        // docked={false}
+
+        // onRequestChange={open => this.props.setDrawer({ drawer: open })}
       >
         <MenuItem>
           <MPrefSwitcher style={{ width: 256 }} />
@@ -52,7 +68,7 @@ class MenuDrawer extends Component {
         {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
           <MenuDrawerItem
             key={mI.linkTo}
-            onTouchTap={this.handleClose}
+            onClick={this.handleClose}
             {...mI}
           />
         ))}
@@ -69,4 +85,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(MenuDrawer);
+const styledMenuDrawer = withStyles(styles, { name: 'styledMenuDrawer' })(MenuDrawer);
+export default connect(mapStateToProps, actions)(styledMenuDrawer);

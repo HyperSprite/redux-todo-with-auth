@@ -45,6 +45,7 @@ export default function (state = {
       return {
         ...state,
         activitySearchCount: 1,
+        activitySearch: [],
       };
 
     case TYPES.SET_ACTIVITY_SEARCH_CUSTOM:
