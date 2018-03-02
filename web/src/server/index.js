@@ -59,14 +59,12 @@ const secureHost = (req, res, next) => {
 if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
   hlpr.consLog(['**** Using Webpack Dev Middleware']);
   const webpack = require('webpack');
-  const webpackDevMiddleware = require('webpack-dev-middleware');
-  const webpackHotMiddleware = require('webpack-hot-middleware');
   const webpackConfig = require('../../webpack.config');
   const compiler = webpack(webpackConfig);
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath,
+  app.use(require('webpack-dev-middleware')(compiler, {
+    noInfo: true, publicPath: webpackConfig.output.publicPath
   }));
-  app.use(webpackHotMiddleware(compiler));
+  app.use(require('webpack-hot-middleware')(compiler));
   // app.use(morgan('combined'));
 }
 
@@ -84,7 +82,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 function shouldCompress(req, res) {
-  if (req.headers['x-no-compression']) {
+  if (req.headers['x-no-compression'] || !hlpr.isProd()) {
     // don't compress responses with this request header
     return false;
   }

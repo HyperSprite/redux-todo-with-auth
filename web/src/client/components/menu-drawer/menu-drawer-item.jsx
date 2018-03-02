@@ -5,7 +5,7 @@ import { MenuItem } from 'material-ui';
 
 const propTypes = {
   linkTo: PropTypes.string.isRequired,
-  onTouchTap: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   primaryText: PropTypes.string.isRequired,
   target: PropTypes.string,
 };
@@ -14,9 +14,9 @@ const defaultProps = {
   target: null,
 };
 
-const MenuDrawerItem = ({ linkTo, onTouchTap, primaryText, target }) => (
+const MenuDrawerItem = ({ linkTo, onClick, primaryText, target }) => (
   <MenuItem
-    onTouchTap={onTouchTap}
+    onClick={onClick}
     primaryText={primaryText}
     containerElement={
       <Link to={linkTo} target={target} />

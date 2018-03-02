@@ -10,14 +10,17 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 import EditSwitch from '../form/edit/switch';
 import RangeInput from './range-input';
-import style from './style';
 
 const styles = theme => ({
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+    marginTop: 10,
+  },
   switch: {
     width: 150,
-    // hieght: 36,
-    // margin: theme.spacing.unit,
-    margin: '0 8px',
+    margin: '0 20px',
   },
 });
 
@@ -75,7 +78,7 @@ class FilterDrawer extends React.Component {
               </IconButton>
             }
           />
-          <div style={{ ...style.flexParent, ...{ marginTop: 10 } }}>
+          <div className={classes.flexParent} >
             {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
               <div key={fV.contentName}>
                 <EditSwitch

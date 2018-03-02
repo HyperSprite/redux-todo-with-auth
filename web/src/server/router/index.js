@@ -24,7 +24,7 @@ if (hlpr.isProd() || process.env.NODE_ENV === 'API-ONLY') {
 } else {
   manifest = {
     'bundle.js': 'bundle.js',
-    'node-static.js': 'node-static.js',
+    'nodestatic.js': 'nodestatic.js',
   };
 }
 
@@ -67,7 +67,7 @@ const indexHTML = `
           <img src="/images/preloader.gif">
         </div>
       </div>
-      <script src="/assets/${manifest['node-static.js']}"></script>
+      <script src="/assets/${manifest['nodestatic.js']}"></script>
       <script src="/assets/${manifest['bundle.js']}"></script>
       ${googleAnalytics}
     </body>
