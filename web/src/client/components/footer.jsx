@@ -1,34 +1,122 @@
 import React from 'react';
-import { Paper } from 'material-ui';
-import pckg from '../../../package.json';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
 
+const propTypes = {
+  /**
+  * Copywrite owner
+  */
+  brand: PropTypes.string,
+  /**
+  * Copywrite owner homepage
+  */
+  brandLink: PropTypes.string,
+  /**
+  * injected by withStyles
+  */
+  classes: PropTypes.object.isRequired,
+  /**
+  * Alt text for the image
+  */
+  imgAlt: PropTypes.string,
+  /**
+  * URL string e.g. 'http://someimage.jpg'
+  */
+  imgLink: PropTypes.string,
+  /**
+  * Image can be a link or an import. Image is optional.
+  */
+  imgSrc: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
+  /**
+  * Comments about the site, something to make you smile, whatever.
+  */
+  info: PropTypes.string,
+};
 
-import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
+const defaultProps = {
+  brand: '',
+  brandLink: '',
+  imgAlt: '',
+  imgLink: '',
+  imgSrc: '',
+  info: '',
+};
 
 const today = new Date().getFullYear();
 
-const Footer = () => (
-  <div className="site-footer" >
-    <div className="footer-flex-container" >
-      <div className="side-lite left-pane"></div>
-      <div className="main" >
-        <div className="footer-text quote-box" >
-          <p>This app came about because I wanted to use it. It is a labor of love and suffering, much like cycling.</p>
-        </div>
-        <div>
-          <a href="https://www.strava.com" target="new">
-            <img src={PoweredByStrava} alt="Powered By Strava" style={{ width: 200 }} />
-          </a>
-        </div>
-        <div>
-          <p className="footer-text" >
-            v{pckg.version} - &copy; {today} araceathlete.com
-          </p>
-        </div>
-      </div>
-      <div className="side-lite right-pane"></div>
-    </div>
-  </div>
-);
+const styles = theme => ({
+  root: {
+    boxSizing: 'border-box',
+    marginTop: 10,
+  },
+  flexContainer: {
+    backgroundColor: theme.palette.primary[900],
+    height: 224,
+    display: 'flex',
+  },
+  main: {
+    marginTop: 20,
+    flexGrow: 2,
+    maxWidth: '56em',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  leftPane: {
+    flexGrow: 1,
+  },
+  rightPane: {
+    flexGrow: 1,
+  },
+  footerText: {
+    padding: 5,
+    color: theme.palette.grey[100],
+  },
+  quoteBox: {
+    maxWidth: '40em',
+    paddingBottom: '1em',
+    padding: 5,
+    color: theme.palette.grey[100],
+  },
+  img: {
+    width: 200,
+  },
+});
 
-export default Footer;
+const Footer = (props) => {
+  const { classes, imgAlt, imgLink, imgSrc, info, brand, brandLink } = props;
+  return (
+    <div className={classes.root}>
+      <div className={classes.flexContainer}>
+        <div className={classes.leftPane} />
+        <div className={classes.main}>
+          <div className={classes.quoteBox}>
+            <p>{info}</p>
+          </div>
+          {imgSrc && (
+            <div>
+              <a href={imgLink} target="new">
+                <img src={imgSrc} alt={imgAlt} className={classes.img} />
+              </a>
+            </div>
+          )}
+          {brand && (
+            <div>
+              <p className={classes.footerText}>
+                &copy; {today} {brand}
+              </p>
+            </div>
+          )}
+        </div>
+        <div className={classes.rightPane} />
+      </div>
+    </div>
+  );
+};
+
+Footer.propTypes = propTypes;
+Footer.defaultProps = defaultProps;
+
+export default withStyles(styles, { name: 'StyledFooter' })(Footer);

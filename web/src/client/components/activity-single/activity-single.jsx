@@ -1,32 +1,86 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
+import Typography from 'material-ui-next/Typography';
 import { connect } from 'react-redux';
-import { IconButton } from 'material-ui';
-import { ActionDeleteForever, NavigationRefresh } from 'material-ui/svg-icons';
+import { IconButton } from 'material-ui-next';
+import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
+import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
+import RefreshIcon from 'mdi-react/RefreshIcon';
 
 import * as actions from '../../actions';
-import returnValues from './return-values';
+
 import ActivityMetric from '../activity-metric';
-import style from './style';
+import MetricLabel from '../metric-label';
+import Icon from '../icon';
+import returnValues from './return-values';
+// import style from './style';
 
 const propTypes = {
+  /** Activity ID */
   activityId: PropTypes.number.isRequired,
+  /** Activity array */
   activities: PropTypes.array.isRequired,
-  datePref: PropTypes.string,
+  /** Imperial or Metric */
   mPref: PropTypes.bool,
-  manageActivity: PropTypes.func.isRequired,
+  /** Function to remove this Activity */
+  removeActivity: PropTypes.func.isRequired,
+  /** Sets Redux state to isFetching */
   setIsFetching: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
   datePref: '%m/%d/%Y',
   mPref: false,
+  thisActivity: {},
 };
 
-class ActivitySingle extends Component {
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    margin: '15px 2px 5px 2px',
+    overflow: 'hidden',
+  },
+  titleBox: {
+    display: 'flex',
+    color: theme.palette.primary[500],
+    fontSize: '1.2em',
+    fontWeight: 600,
+    width: '100%',
+    flexWrap: 'wrap',
+  },
+  title: {
+    marginTop: 14,
+    fontSize: 18,
+  },
+  icons: {
+    // marginRight: '3vw',
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    maxWidth: 600,
+  },
+  // box: {
+  //   width: 200,
+  //   display: 'flex',
+  //   justifyContent: 'space-between',
+  //   flexWrap: 'wrap',
+  // },
+});
+
+const deleteActivityURL = 'apiv1/activities/delete-activity';
+
+class ExtActivitySingle extends Component {
   constructor(props) {
     super(props);
-    this.manageActivity = this.manageActivity.bind(this);
+    this.deleteActivity = this.deleteActivity.bind(this);
+    this.refreshActivity = this.refreshActivity.bind(this);
+  }
+
+  getThisActivity() {
+    return this.props.activities.filter(activity => activity.activityId === this.props.activityId)[0];
   }
 
   manageActivity(action) {
@@ -34,60 +88,62 @@ class ActivitySingle extends Component {
     this.props.manageActivity(action, this.props.activityId);
   }
 
-  thisActivity() {
-    return this.props.activities.filter(activity => activity.activityId === this.props.activityId)[0];
+  deleteActivity() {
+    this.manageActivity('delete');
+  }
+
+  refreshActivity() {
+    this.manageActivity('refresh');
   }
 
   render() {
-    const { mPref, datePref } = this.props;
-    const activity = this.thisActivity();
-    activity.datePref = datePref;
-    if (activity.deleted) {
-      return (
-        <h4 style={style.h4}>{activity.name}</h4>
-      );
-    }
-
+    const { classes, mPref, datePref, deleteActivity, refreshActivity } = this.props;
+    const thisActivity = this.getThisActivity();
+    thisActivity.datePref = datePref;
     return (
-      <div key={`${activity.activityId}-single`} >
-        <div style={style.title}>
-          <div>
-            <a href={`https://www.strava.com/activities/${activity.activityId}`} target="new">
-              {activity.name}
-            </a>
+      <div key={`${thisActivity.activityId}-single`} className={classes.root} >
+        <div className={classes.titleBox} >
+          <div className={classes.title} >
+            {thisActivity.name}
+          </div>
+          <div className={classes.icons} >
+            <IconButton
+              onClick={() => window.open(`https://www.strava.com/activities/${thisActivity.activityId}`, '_new')}
+            >
+              <Icon svgIcon={OpenInNewIcon} size="sm" pointer />
+            </IconButton>
+            <IconButton
+              onClick={this.deleteActivity}
+              tooltip="Delete from A Race athlete (does not remove from Strava)"
+            >
+              <Icon svgIcon={DeleteForeverIcon} size="sm" pointer />
+            </IconButton>
+            <IconButton
+              onClick={this.refreshActivity}
+              tooltip="Updates Activity from Strava"
+            >
+              <Icon svgIcon={RefreshIcon} size="sm" pointer />
+            </IconButton>
           </div>
         </div>
-        <div style={style.container} >
+        <div className={classes.container} >
 
           {returnValues.map(rV => (
             <ActivityMetric
               key={rV.activityType}
-              data={activity}
+              data={thisActivity}
               rV={rV}
               mPref={mPref}
             />
           ))}
         </div>
-        <div style={style.delete}>
-          <IconButton
-            onClick={() => this.manageActivity('delete')}
-          >
-            <ActionDeleteForever />
-          </IconButton>
-          <IconButton
-            onClick={() => this.manageActivity('refresh')}
-          >
-            <NavigationRefresh />
-          </IconButton>
-        </div>
-
       </div>
     );
   }
 }
 
-ActivitySingle.propTypes = propTypes;
-ActivitySingle.defaultProps = defaultProps;
+ExtActivitySingle.propTypes = propTypes;
+ExtActivitySingle.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -97,4 +153,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(ActivitySingle);
+const StyledSingleActivity = withStyles(styles, { name: 'StyledSingleActivity' })(ExtActivitySingle);
+
+export default connect(mapStateToProps, actions)(StyledSingleActivity);

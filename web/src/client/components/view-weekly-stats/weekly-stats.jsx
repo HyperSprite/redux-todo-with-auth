@@ -47,79 +47,82 @@ class weeklyStats extends React.Component {
   render() {
     const { week, stats, mPref } = this.props;
     return (
-      <Card expanded={this.state.expanded} >
+      <Card
+        expanded={this.state.expanded}
+      >
         <CardHeader
           title={`Week of ${week}`}
         />
         <CardActions>
-          {stats.weeklyTotals.names[0] && <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
-
-            {stats.weeklyTotals.tss.total ? (
+          {stats.weeklyTotals.names[0] && <div>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
               <BarChart
-                contentLabel="TSS"
-                content={`${stats.weeklyTotals.tss.total}`}
+                contentLabel="Moving Time"
+                content={`${stats.weeklyTotals.time.total}`}
                 contentType="text"
-                metric="tss"
+                metric="time"
                 weeklyTotals={stats.dayTotals}
               />
-            ) : (null)}
 
-            {stats.weeklyTotals.kj.total ? (
               <BarChart
-                contentLabel="Kilojoules"
-                content={`${stats.weeklyTotals.kj.total}`}
+                contentLabel="Distance"
+                content={`${stats.weeklyTotals.dst.total}`}
                 contentType="text"
-                metric="kj"
+                metric="dst"
                 weeklyTotals={stats.dayTotals}
+                mPref={mPref}
               />
-            ) : (null)}
 
-            {stats.weeklyTotals.ss.total ? (
               <BarChart
-                contentLabel="Suffer Score"
-                content={`${stats.weeklyTotals.ss.total}`}
+                contentLabel="Elevation"
+                content={`${stats.weeklyTotals.elev.total}`}
                 contentType="text"
-                metric="ss"
+                metric="elev"
                 weeklyTotals={stats.dayTotals}
+                mPref={mPref}
               />
-            ) : (null)}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+              {stats.weeklyTotals.tss.total ? (
+                <BarChart
+                  contentLabel="TSS"
+                  content={`${stats.weeklyTotals.tss.total}`}
+                  contentType="text"
+                  metric="tss"
+                  weeklyTotals={stats.dayTotals}
+                />
+              ) : (null)}
 
-            {stats.weeklyTotals.cal.total ? (
-              <BarChart
-                contentLabel="Calories"
-                content={`${stats.weeklyTotals.cal.total}`}
-                contentType="text"
-                metric="cal"
-                weeklyTotals={stats.dayTotals}
-              />
-            ) : (null)}
+              {stats.weeklyTotals.kj.total ? (
+                <BarChart
+                  contentLabel="Kilojoules"
+                  content={`${stats.weeklyTotals.kj.total}`}
+                  contentType="text"
+                  metric="kj"
+                  weeklyTotals={stats.dayTotals}
+                />
+              ) : (null)}
 
-            <BarChart
-              contentLabel="Moving Time"
-              content={`${stats.weeklyTotals.time.total}`}
-              contentType="text"
-              metric="time"
-              weeklyTotals={stats.dayTotals}
-            />
+              {stats.weeklyTotals.ss.total ? (
+                <BarChart
+                  contentLabel="Suffer Score"
+                  content={`${stats.weeklyTotals.ss.total}`}
+                  contentType="text"
+                  metric="ss"
+                  weeklyTotals={stats.dayTotals}
+                />
+              ) : (null)}
 
-            <BarChart
-              contentLabel="Distance"
-              content={`${stats.weeklyTotals.dst.total}`}
-              contentType="text"
-              metric="dst"
-              weeklyTotals={stats.dayTotals}
-              mPref={mPref}
-            />
-
-            <BarChart
-              contentLabel="Elevation"
-              content={`${stats.weeklyTotals.elev.total}`}
-              contentType="text"
-              metric="elev"
-              weeklyTotals={stats.dayTotals}
-              mPref={mPref}
-            />
-
+              {stats.weeklyTotals.cal.total ? (
+                <BarChart
+                  contentLabel="Calories"
+                  content={`${stats.weeklyTotals.cal.total}`}
+                  contentType="text"
+                  metric="cal"
+                  weeklyTotals={stats.dayTotals}
+                />
+              ) : (null)}
+            </div>
           </div>}
         </CardActions>
         <GearTotals activityIds={stats.weeklyTotals.names.map(acts => acts.activityId)} />

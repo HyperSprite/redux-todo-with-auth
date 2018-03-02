@@ -8,6 +8,7 @@ import FaRefresh from 'react-icons/lib/fa/refresh';
 import justFns from 'just-fns';
 import * as actions from './../../actions';
 
+import Layout from '../layout';
 import FtpWeight from './ftp-weight';
 import ScrollIntoView from '../../containers/scroll-into-view';
 
@@ -63,45 +64,39 @@ class Athlete extends React.Component {
 
     const mPref = this.props.mPref;
     return (
-      <div>
-        <div className="main-flex-container" >
-          <div className="side-lite left-pane" />
-          <div className="main" >
-            <ScrollIntoView
-              id={location.hash}
-              headerHeight={70}
+      <Layout>
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
+        <Card
+          className="card"
+        >
+          {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
+            <FtpWeight
+              ftpHistory={ftpHistory}
+              weightHistory={weightHistory}
+              mPref={mPref}
             />
-            <Card
-              className="card"
-            >
-              {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
+          ) : (
+            <div>
+              {/* TODO - this is all ugly */}
+              {justFns.getLastInArray(weightHistory, 'weight') ? (
                 <FtpWeight
-                  ftpHistory={ftpHistory}
+                  ftpHistory={[]}
                   weightHistory={weightHistory}
                   mPref={mPref}
                 />
-              ) : (
-                <div>
-                  {/* TODO - this is all ugly */}
-                  {justFns.getLastInArray(weightHistory, 'weight') ? (
-                    <FtpWeight
-                      ftpHistory={[]}
-                      weightHistory={weightHistory}
-                      mPref={mPref}
-                    />
-                  ) : null }
-                </div>
-              )}
-              <div className="flex-row">
-                <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
-                  <FaRefresh size={20} />
-                </IconButton>
-              </div>
-            </Card>
+              ) : null }
+            </div>
+          )}
+          <div className="flex-row">
+            <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
+              <FaRefresh size={20} />
+            </IconButton>
           </div>
-          <div className="side-lite right-pane" />
-        </div>
-      </div>
+        </Card>
+      </Layout>
     );
   }
 }
