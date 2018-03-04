@@ -1,11 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Toggle from 'material-ui/Toggle';
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+} from 'material-ui-next/List';
+import Switch from 'material-ui-next/Switch';
+import RulerIcon from 'mdi-react/RulerIcon';
 // eslint-disable-next-line
 import * as actions from '../../actions';
-// import ToggleIcon from '../form/toggle-icon';
-import style from './style';
+
 
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
@@ -27,12 +33,16 @@ class MPrefSwitcher extends React.Component {
   render() {
     const { mPref } = this.props;
     return (
-      <Toggle
-        style={style.toggle}
-        label={mPref ? 'Imperial' : 'Metric'}
-        onToggle={this.switchMeasurementPref}
-        toggled={mPref}
-      />
+      <ListItem>
+        <ListItemText primary={mPref ? 'Imperial' : 'Metric'} />
+        <ListItemSecondaryAction>
+          <Switch
+            onChange={this.switchMeasurementPref}
+            checked={mPref}
+            color="primary"
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
     );
   }
 

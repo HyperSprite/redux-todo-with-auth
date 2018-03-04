@@ -7,6 +7,7 @@ import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import { isValid } from 'just-fns';
 
+import MapMarker from '../map-marker';
 import MapPin from '../map-pin';
 import googleMapStyles, { palette } from '../../styles/map-styles';
 
@@ -152,7 +153,7 @@ class GoogleMapLocation extends React.Component {
             />
           }
           { (this.props.myLat) &&
-            <MapPin
+            <MapMarker
               lat={this.props.myLat}
               lng={this.props.myLng}
               color={palette.accent8Color}

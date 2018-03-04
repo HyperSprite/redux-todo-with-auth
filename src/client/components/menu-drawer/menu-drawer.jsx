@@ -1,5 +1,4 @@
 // @flow
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,7 +6,6 @@ import { withStyles } from 'material-ui-next/styles';
 import Drawer from 'material-ui-next/Drawer';
 import List from 'material-ui-next/List';
 import Divider from 'material-ui-next/Divider';
-import { MenuItem } from 'material-ui-next/Menu';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
@@ -16,7 +14,7 @@ import MPrefSwitcher from '../mpref-switcher';
 
 const styles = theme => ({
   list: {
-    width: 250,
+    width: 300,
   },
   fullList: {
     width: 'auto',
@@ -52,26 +50,29 @@ class MenuDrawer extends Component {
   }
 
   render() {
+    const { classes, theme } = this.props;
+    const drawer = (
+      <div>
+        <div className={classes.toolbar} />
+        <List>
+          <MPrefSwitcher />
+          <Divider />
+          {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
+            <MenuDrawerItem
+              key={mI.linkTo}
+              onClick={this.handleClose}
+              {...mI}
+            />
+          ))}
+        </List>
+      </div>
+    );
     return (
       <Drawer
         onClose={this.handleClose}
         open={this.props.open}
-
-        // docked={false}
-
-        // onRequestChange={open => this.props.setDrawer({ drawer: open })}
       >
-        <MenuItem>
-          <MPrefSwitcher style={{ width: 256 }} />
-        </MenuItem>
-        <Divider />
-        {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
-          <MenuDrawerItem
-            key={mI.linkTo}
-            onClick={this.handleClose}
-            {...mI}
-          />
-        ))}
+        {drawer}
       </Drawer>
     );
   }
@@ -85,5 +86,5 @@ function mapStateToProps(state) {
   };
 }
 
-const styledMenuDrawer = withStyles(styles, { name: 'styledMenuDrawer' })(MenuDrawer);
+const styledMenuDrawer = withStyles(styles, { name: 'styledMenuDrawer', theme: true })(MenuDrawer);
 export default connect(mapStateToProps, actions)(styledMenuDrawer);
