@@ -1,25 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton, Dialog } from 'material-ui';
-import Cancel from 'material-ui/svg-icons/navigation/cancel';
+import Dialog, {
+  withMobileDialog,
+} from 'material-ui-next/Dialog';
 
-import RaisedButton from 'material-ui/RaisedButton';
+import Button from 'material-ui-next/Button';
 import DialogMessage from './dialog-message';
-import style from './style';
+
 
 const propTypes = {
   dialogData: PropTypes.number.isRequired,
-  closeToolTip: PropTypes.string,
+  fullScreen: PropTypes.bool.isRequired,
 };
 
-const defaultProps = {
-  closeToolTip: 'close',
-};
-
-class DialogAlert extends Component {
-  state = {
-    open: false,
-  };
+class DialogAlert extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      open: false,
+    };
+    this.handleClose = this.handleClose.bind(this);
+  }
 
   handleOpen = () => {
     this.setState({ open: true });
@@ -30,26 +31,22 @@ class DialogAlert extends Component {
   };
 
   render() {
-    const actions = [
-      <IconButton
-        tooltip={this.props.closeToolTip}
-        onTouchTap={this.handleClose}
-      >
-        <Cancel />
-      </IconButton>,
-    ];
-
+    const { dialogData, fullScreen } = this.props;
     return (
       <span>
-        <RaisedButton label={this.props.dialogData} onTouchTap={this.handleOpen} />
-        <Dialog
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
-          contentStyle={style.dialog}
+        <Button
+          variant="raised"
+          color="primary"
+          onClick={this.handleOpen}
         >
-          <DialogMessage data={this.props.dialogData} />
+          {dialogData}
+        </Button>
+        <Dialog
+          fullScreen={fullScreen}
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <DialogMessage data={dialogData} handleClose={this.handleClose} print {...this.props} />
         </Dialog>
       </span>
     );
@@ -57,6 +54,5 @@ class DialogAlert extends Component {
 }
 
 DialogAlert.propTypes = propTypes;
-DialogAlert.defaultProps = defaultProps;
 
-export default DialogAlert;
+export default withMobileDialog()(DialogAlert);
