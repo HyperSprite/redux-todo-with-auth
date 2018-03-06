@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
 import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
 import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
 import LinearProgress from 'material-ui/LinearProgress';
@@ -14,7 +15,38 @@ const propTypes = {
   style: PropTypes.object,
 };
 
-const renderContent = (content, contentType, contentAlt, baseURL) => {
+const styles = theme => ({
+  root: {},
+  ellipsis: {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+  },
+  static: {
+    marginLeft: 5,
+    marginTop: 10,
+    maxWidth: 360,
+  },
+  staticLabel: {
+    color: '#9E9E9E',
+  },
+  staticSubDiv: {
+    fontWeight: 500,
+    marginLeft: 5,
+  },
+  link: {
+    cursor: 'pointer',
+    color: '#B71C1C',
+    textDecoration: 'none',
+    '&:hover': {
+      cursor: 'pointer',
+      color: '#B71C1C',
+      textDecoration: 'underline',
+    },
+  },
+});
+
+const renderContent = (classes, content, contentType, contentAlt, baseURL) => {
   switch (contentType) {
     case 'bool': {
       return content ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />);
@@ -27,22 +59,22 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
     }
     case 'address': {
       if (contentAlt) {
-        return <a href={`${baseURL}${contentAlt}`} target="new" className="url">{contentAlt}</a>;
+        return <a href={`${baseURL}${contentAlt}`} target="new" className={classes.link}>{contentAlt}</a>;
       }
       let place = content.filter(item => !!item);
       place = place.join(', ');
-      return <a href={`${baseURL}${place}`} target="new" className="url">{place}</a>;
+      return <a href={`${baseURL}${place}`} target="new" className={classes.link}>{place}</a>;
     }
     case 'url': {
       return (
-        <div className="ellipsis">
-          <a href={`${baseURL}${content}`} target="new" className="url" >{content}</a>
+        <div className={classes.ellipsis}>
+          <a href={`${baseURL}${content}`} target="new" className={classes.link} >{content}</a>
         </div>
       );
     }
     case 'loading': {
       return (
-        <div className="ellipsis">
+        <div className={classes.ellipsis}>
           <LinearProgress mode="indeterminate" />
         </div>
       );
@@ -53,6 +85,7 @@ const renderContent = (content, contentType, contentAlt, baseURL) => {
 };
 
 const renderStatic = ({
+  classes,
   baseURL,
   contentLabel,
   contentLabelLink,
@@ -65,33 +98,19 @@ const renderStatic = ({
     return (
       <div
         style={style}
-        className="static"
+        className={classes.static}
       >
         {contentLabelLink ? (
-          <a
-            href={contentLabelLink}
-            target="new"
-          >
-            <label
-              htmlFor={content}
-              className="static-label"
-            >
-              {contentLabel}
-            </label>
+          <a href={contentLabelLink} className={classes.link} target="new" >
+            {contentLabel}
           </a>
         ) : (
-          <label
-            htmlFor={content}
-            className="static-label"
-          >
+          <label htmlFor={content} className={classes.staticLabel} >
             {contentLabel}
           </label>
         )}
-
-        <div
-          className="static-sub-div"
-        >
-          {renderContent(content, contentType, contentAlt, baseURL)}
+        <div className={classes.staticSubDiv} >
+          {renderContent(classes, content, contentType, contentAlt, baseURL)}
         </div>
       </div>
     );
@@ -101,4 +120,4 @@ const renderStatic = ({
 
 renderStatic.propTypes = propTypes;
 
-export default renderStatic;
+export default withStyles(styles, { name: 'StyledRenderStatic' })(renderStatic);
