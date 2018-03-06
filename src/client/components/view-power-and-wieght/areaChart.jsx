@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Area, AreaChart, Brush, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { Area, AreaChart, Brush, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import Static from '../form/static';
 
@@ -58,7 +58,6 @@ const linearGrad = () => (
   </defs>
 );
 
-// TODO make carts responsive
 const Chart = (props) => (
   <div>
     <Static
@@ -67,6 +66,7 @@ const Chart = (props) => (
       content={props.content}
       contentType={props.contentType}
     />
+    <ResponsiveContainer width="100%" height={200} >
     <AreaChart
       id={props.id}
       width={styles.lineChart.width}
@@ -96,6 +96,7 @@ const Chart = (props) => (
         <Brush />
       ) : null}
     </AreaChart>
+  </ResponsiveContainer>
   </div>
 );
 

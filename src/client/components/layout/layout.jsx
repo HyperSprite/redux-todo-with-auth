@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
+import Typography from 'material-ui-next/Typography';
 import Paper from 'material-ui-next/Paper';
 import Grid from 'material-ui-next/Grid';
 
@@ -19,17 +20,9 @@ const styles = theme => ({
   },
   paper: {
     color: theme.palette.text.secondary,
-  },
-  card: {
-    width: 240,
-    margin: 10,
-    color: theme.palette.primary[800],
-  },
-  banner: {
-    height: 130,
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightRegular,
   },
 });
 

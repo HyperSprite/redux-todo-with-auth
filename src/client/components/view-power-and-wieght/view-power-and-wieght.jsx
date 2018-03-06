@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from 'material-ui';
-import { Card } from 'material-ui/Card';
 import { connect } from 'react-redux';
-import FaRefresh from 'react-icons/lib/fa/refresh';
+import { withStyles } from 'material-ui-next/styles';
+import IconButton from 'material-ui-next/IconButton';
+import Card from 'material-ui-next/Card';
+import RefreshIcon from 'mdi-react/RefreshIcon';
 
 import justFns from 'just-fns';
 import * as actions from './../../actions';
@@ -37,7 +38,18 @@ const propTypes = {
   }),
 };
 
-class Athlete extends React.Component {
+const styles = theme => ({
+  flexRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    fill: theme.palette.primary[800],
+  },
+});
+
+class PowerAndWeight extends React.Component {
   constructor(props) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
@@ -57,21 +69,18 @@ class Athlete extends React.Component {
     const {
       stravaId,
       ftpHistory,
-      measurement_preference,
       weightHistory,
       userGeoElevation,
     } = this.props.user;
 
-    const mPref = this.props.mPref;
+    const { classes, mPref } = this.props;
     return (
       <Layout>
         <ScrollIntoView
           id={location.hash}
           headerHeight={70}
         />
-        <Card
-          className="card"
-        >
+        <Card >
           {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
             <FtpWeight
               ftpHistory={ftpHistory}
@@ -90,9 +99,9 @@ class Athlete extends React.Component {
               ) : null }
             </div>
           )}
-          <div className="flex-row">
+          <div className={classes.flexRow}>
             <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
-              <FaRefresh size={20} />
+              <RefreshIcon size={20} className={classes.icon} />
             </IconButton>
           </div>
         </Card>
@@ -101,7 +110,7 @@ class Athlete extends React.Component {
   }
 }
 
-Athlete.propTypes = propTypes;
+PowerAndWeight.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
@@ -110,4 +119,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(Athlete);
+const styledPowerAndWeight = withStyles(styles, { name: 'StyledPowerAndWieght' })(PowerAndWeight);
+export default connect(mapStateToProps, actions)(styledPowerAndWeight);
