@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
+import { withStyles } from 'material-ui-next/styles';
+import Button from 'material-ui-next/Button';
 
-import style from '../../styles/style';
+const styles = theme => ({
+  button: {
+    margin: 12,
+  },
+});
 
 class RemoveUser extends Component {
   constructor(props) {
@@ -34,12 +39,14 @@ class RemoveUser extends Component {
 
   render() {
     return (
-      <RaisedButton
-        label={`Remove ${this.props.stravaId}`}
-        primary
+      <Button
+        variant="raised"
+        color="primary"
         onClick={this.handleRemoveUser}
-        style={style.button}
-      />
+        className={this.props.classes.button}
+      >
+        {`Remove ${this.props.stravaId}`}
+      </Button>
     );
   }
 }
@@ -48,4 +55,4 @@ RemoveUser.propTypes = {
   stravaId: PropTypes.number.isRequired,
 };
 
-export default RemoveUser;
+export default withStyles(styles, { name: 'StyledRemoveUser' })(RemoveUser);

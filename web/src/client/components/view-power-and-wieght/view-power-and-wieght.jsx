@@ -44,6 +44,13 @@ const styles = theme => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  toggleIconButton: {
+    color: theme.palette.primary[800],
+    margin: 0,
+    padding: 0,
+    height: 32,
+    width: 32,
+  },
   icon: {
     fill: theme.palette.primary[800],
   },
@@ -100,7 +107,7 @@ class PowerAndWeight extends React.Component {
             </div>
           )}
           <div className={classes.flexRow}>
-            <IconButton onClick={this.updateUser} style={style.toggleIconButton} >
+            <IconButton onClick={this.updateUser} className={classes.toggleIconButton} >
               <RefreshIcon size={20} className={classes.icon} />
             </IconButton>
           </div>

@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
+import { withStyles } from 'material-ui-next/styles';
+import Button from 'material-ui-next/Button';
 
-import style from '../../styles/style';
+const styles = theme => ({
+  button: {
+    margin: 12,
+  },
+});
 
 class GetUpdateAllUsers extends Component {
   constructor() {
@@ -36,14 +41,16 @@ class GetUpdateAllUsers extends Component {
 
   render() {
     return (
-      <RaisedButton
-        label="Update All Users"
-        primary
+      <Button
+        variant="raised"
+        color="primary"
         onClick={this.forceUpdateAllUsers}
-        style={style.button}
-      />
+        className={this.props.classes.button}
+      >
+        Update All Users
+      </Button>
     );
   }
 }
 
-export default GetUpdateAllUsers;
+export default withStyles(styles, { name: 'StyledGetUpdateAllUsers' })(GetUpdateAllUsers);

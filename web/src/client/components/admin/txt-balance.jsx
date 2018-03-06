@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import RaisedButton from 'material-ui/RaisedButton';
+import { withStyles } from 'material-ui-next/styles';
+import Button from 'material-ui-next/Button';
 import lib from '../../containers/lib';
 
 import style from '../../styles/style';
 import Static from '../form/static';
+
+const styles = theme => ({
+  button: {
+    margin: 12,
+  },
+});
+
 
 class GetCheckBalance extends Component {
   constructor() {
@@ -54,28 +62,30 @@ class GetCheckBalance extends Component {
     return (
       <div style={style.flexcontainer}>
         <div>
-          <RaisedButton
-            label="Refresh Txt Balance"
-            primary
+          <Button
+            variant="raised"
+            color="primary"
             onClick={this.getCheckBalance}
-            style={style.button}
-          />
+            className={this.props.classes.button}
+          >
+            Refresh Txt Balance
+          </Button>
         </div>
         <Static
           contentLabel="Txt Balance"
           content={`$ ${balance} `}
           contentType={balance ? 'text' : 'loading'}
-          style={style.button}
+          className={this.props.classes.button}
         />
         <Static
           contentLabel="Date"
           content={`${lib.cleanDateTime(date)} `}
           contentType={date ? 'text' : 'loading'}
-          style={style.button}
+          className={this.props.classes.button}
         />
       </div>
     );
   }
 }
 
-export default GetCheckBalance;
+export default withStyles(styles, { name: 'StyledGetCheckBalance' })(GetCheckBalance);

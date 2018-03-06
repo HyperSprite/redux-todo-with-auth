@@ -49,12 +49,13 @@ const today = new Date().getFullYear();
 
 const styles = theme => ({
   root: {
-    // margin: '0 auto -224px',
-    // boxSizing: 'border-box',
-    // marginTop: 10,
+    color: theme.palette.primary.contrastText,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightRegular,
+    backgroundColor: theme.palette.secondary.dark,
   },
   flexContainer: {
-    backgroundColor: theme.palette.primary[900],
     height: 224,
     display: 'flex',
   },
@@ -73,13 +74,11 @@ const styles = theme => ({
   },
   footerText: {
     padding: 5,
-    color: theme.palette.grey[100],
   },
   quoteBox: {
     maxWidth: '40em',
     paddingBottom: '1em',
     padding: 5,
-    color: theme.palette.grey[100],
   },
   img: {
     width: 200,

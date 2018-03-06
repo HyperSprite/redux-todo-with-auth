@@ -1,8 +1,17 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
-import style from '../../styles/style';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
+import TextField from 'material-ui-next/TextField';
 
 import RemoveUser from './remove-user';
+
+const styles = theme => ({
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+});
 
 class InputRemove extends React.Component {
   constructor(props) {
@@ -23,11 +32,12 @@ class InputRemove extends React.Component {
     return (
       <div>
         <TextField
-          floatingLabelText="StravaId of User to be removed"
-          style={style.input}
           id="remove-user-input"
+          label="StravaId to remove"
+          className={this.props.classes.textField}
           value={this.state.value}
           onChange={this.handleChange}
+          margin="normal"
         />
         {this.state.value && (
           <RemoveUser stravaId={this.state.value * 1} />
@@ -37,4 +47,4 @@ class InputRemove extends React.Component {
   }
 }
 
-export default InputRemove;
+export default withStyles(styles, { name: 'StyledInputRemove' })(InputRemove);
