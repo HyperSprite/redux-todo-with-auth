@@ -49,8 +49,9 @@ const today = new Date().getFullYear();
 
 const styles = theme => ({
   root: {
-    boxSizing: 'border-box',
-    marginTop: 10,
+    // margin: '0 auto -224px',
+    // boxSizing: 'border-box',
+    // marginTop: 10,
   },
   flexContainer: {
     backgroundColor: theme.palette.primary[900],
@@ -83,6 +84,26 @@ const styles = theme => ({
   img: {
     width: 200,
   },
+  onlyPrint: {
+    display: 'none',
+  },
+  '@media print': {
+    root: {
+      marginTop: 0,
+    },
+    noPrint: {
+      display: 'none',
+    },
+    onlyPrint: {
+      display: 'inherit',
+    },
+    quoteBox: {
+      display: 'none',
+    },
+    main: {
+      marginTop: '1em',
+    },
+  },
 });
 
 const Footer = (props) => {
@@ -104,8 +125,13 @@ const Footer = (props) => {
           )}
           {brand && (
             <div>
-              <p className={classes.footerText}>
-                &copy; {today} {brand}
+              <p>
+                <span className={classes.onlyPrint}>
+                  Thanks for using araceathlete.com!
+                </span>
+                <span className={classes.footerText}>
+                  &copy; {today} {brand}
+                </span>
               </p>
             </div>
           )}

@@ -38,6 +38,7 @@ class DialogAlert extends React.Component {
           variant="raised"
           color="primary"
           onClick={this.handleOpen}
+          size="small"
         >
           {dialogData}
         </Button>
