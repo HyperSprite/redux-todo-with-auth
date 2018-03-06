@@ -59,7 +59,18 @@ const indexHTML = `
       <meta name="msapplication-config" content="/favicons/browserconfig.xml">
       <meta name="theme-color" content="#cc0000">
       <meta property="og:image" content="/images/logo-512x512.png" />
-      <link rel="stylesheet" type="text/css" href="/styles/main.css">
+      <style media="screen">
+        html, body {
+          height: 100%;
+        }
+        .centered {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          margin-top: -85px;
+          margin-left: -85px;
+        }
+      </style>
     </head>
     <body>
       <div id='root'>

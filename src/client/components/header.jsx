@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui-next/styles';
 import Headroom from 'react-headroom';
 // import { AppBar } from 'material-ui';
 import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
@@ -32,6 +33,23 @@ const defaultProps = {
     name: 'A Race athlete',
   },
 };
+
+const styles = theme => ({
+  icon: {
+    fill: theme.palette.background.appBar,
+  },
+  onlyPrint: {
+    display: 'none',
+  },
+  '@media print': {
+    noPrint: {
+      display: 'none',
+    },
+    onlyPrint: {
+      display: 'inherit',
+    },
+  },
+});
 
 class Header extends Component {
   constructor(props) {
@@ -66,18 +84,19 @@ class Header extends Component {
   }
 
   render() {
+    const { classes, page } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
     const pageNameWithHelp = this.props.page.help ? (
       <span>
-        {`${this.props.page.name} `}
+        {`${page.name} `}
         <IconLink
-          link={this.props.page.help}
-          color={style.theme.palette.accent2Color}
+          link={page.help}
+          color={'#fefefe'} // TODO Fix color to use theme
         />
       </span>
     ) : (
       <span>
-        {this.props.page.name}
+        {page.name}
       </span>
     );
 
@@ -87,14 +106,22 @@ class Header extends Component {
           <title>{`${pageName} A Race athlete`}</title>
           <link rel="canonical" href={`${window.location.host}`} />
         </Helmet>
-
-        <Headroom>
+        <div className={classes.onlyPrint}>
           <AppBar
-            title={pageNameWithHelp}
+            title={<span>{`${pageName} A Race athlete`}</span>}
             rightMenu={this.renderRightMenu()}
             leftOnClick={this.handleToggle}
           />
-        </Headroom>
+        </div>
+        <div className={classes.noPrint}>
+          <Headroom>
+            <AppBar
+              title={pageNameWithHelp}
+              rightMenu={this.renderRightMenu()}
+              leftOnClick={this.handleToggle}
+            />
+          </Headroom>
+        </div>
       </div>
     );
   }
@@ -112,4 +139,5 @@ function mapStateToProps(state) {
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;
 
-export default connect(mapStateToProps, actions)(Header);
+const styledHeader = withStyles(styles, { name: 'StyledHeader' })(Header);
+export default connect(mapStateToProps, actions)(styledHeader);

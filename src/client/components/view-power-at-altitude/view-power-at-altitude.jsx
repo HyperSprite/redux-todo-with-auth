@@ -1,29 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Card, CardText } from 'material-ui/Card';
-import {
-  Table,
+import classNames from 'classnames'
+import { withStyles } from 'material-ui-next/styles';
+import Card, { CardContent } from 'material-ui-next/Card';
+import Table, {
   TableBody,
-  TableHeader,
-  TableHeaderColumn,
+  TableCell,
+  TableHead,
   TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
+} from 'material-ui-next/Table';
+import Button from 'material-ui-next/Button';
+import PrinterIcon from 'mdi-react/PrinterIcon';
 
 import justFns from 'just-fns';
 import * as actions from './../../actions';
 import Layout from '../layout';
 import FeatureNotice from '../feature-notice';
 import Dialog from './dialog';
-import ScrollIntoView from '../../containers/scroll-into-view';
-
-import style from '../../styles/style';
 
 const title = 'Power at Altitude';
 const help = '/blog/power-at-altitude';
 
 const propTypes = {
+  classes: PropTypes.object,
   fetchData: PropTypes.func.isRequired,
   setPageName: PropTypes.func.isRequired,
   mPref: PropTypes.bool,
@@ -44,11 +44,56 @@ const defaultProps = {
   userGeoElevation: 0,
 };
 
-style.cells = {
-  paddingLeft: 'inherit',
-  paddingRight: 'inherit',
-  textAlign: 'center',
-};
+const styles = theme => ({
+  root: {
+    padding: '0.1em',
+  },
+  tableRow: {
+    '&:nth-child(odd)': {
+      backgroundColor: theme.palette.secondary[50],
+    },
+    '&:nth-child(even)': {
+      backgroundColor: theme.palette.background.paper,
+    },
+  },
+  cell: {
+    textAlign: 'center',
+    padding: 'inherit',
+  },
+  button: {
+    margin: '0.3em',
+  },
+  buttonLabel: {
+    paddingLeft: '0.5em',
+  },
+  icon: {
+    fill: theme.palette.primary.contrastText,
+  },
+  onlyPrint: {
+    display: 'none',
+  },
+  '@media print': {
+    noPrint: {
+      display: 'none',
+    },
+    onlyPrint: {
+      display: 'table-cell',
+    },
+    tableRow: {
+      height: 20,
+      padding: '0.1em',
+      textSize: '1.4em',
+    },
+    cell: {
+      fontSize: '1.2em',
+    },
+    button: {
+      display: 'none',
+    },
+  },
+});
+
+const handlePrint = () => window.print();
 
 const elevations = [];
 for (let i = 0; i < 5; i += 0.250) {
@@ -65,7 +110,7 @@ class AltitudeTable extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { classes, user } = this.props;
     const currentFTP = justFns.getLastInArray(user.ftpHistory, 'ftp');
     const ftpAtElv = elevations.map(e => {
       const adjustedElev = e - (user.userGeoElevation * 0.01);
@@ -83,83 +128,93 @@ class AltitudeTable extends Component {
     });
     return (
       <Layout>
-        <ScrollIntoView
-          id={location.hash}
-          headerHeight={70}
-        />
         <Card>
           {(user.premium && user.userGeoElevation && currentFTP && !isNaN(currentFTP)) ? (
-            <div>
-              <CardText>
-                <Table
-                  fixedHeader
-                  selectable={false}
-                  multiSelectable={false}
-                >
-                  <TableHeader
-                    displaySelectAll={false}
-                    adjustForCheckbox={false}
-                  >
-                    <TableRow >
-                      <TableHeaderColumn
-                        style={style.cells}
-                      >
-                        Altitude<br />
+            <CardContent className={classes.root}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      className={classes.cell}
+                    >
+                      Altitude<br />
+                      {this.props.mPref ? (
+                        `${justFns.metersToFeetRound(user.userGeoElevation, 0)} Feet`
+                      ) : (
+                        `${justFns.round(user.userGeoElevation, 0)} Meters`
+                      )}
+                    </TableCell>
+                    <TableCell
+
+                      className={classes.cell}
+                    >
+                      FTP%<br />Acclimated<br />100%
+                    </TableCell>
+                    <TableCell
+
+                      className={classes.cell}
+                    >
+                      Reletive FTP<br />Acclimated<br />{currentFTP}
+                    </TableCell>
+                    <TableCell
+
+                      className={classes.cell}
+                    >
+                      FTP%<br />Not<br />Acclimated
+                    </TableCell>
+                    <TableCell
+
+                      className={classes.cell}
+                    >
+                      Reletive FTP<br />Not<br />Acclimated
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {ftpAtElv.map(ftpAE => (
+                    <TableRow key={ftpAE.eachElvM} className={classes.tableRow}>
+                      <TableCell className={classes.cell}>
                         {this.props.mPref ? (
-                          `${justFns.metersToFeetRound(user.userGeoElevation, 0)} Feet`
+                          justFns.metersToFeetRound(ftpAE.eachElvM, 0)
                         ) : (
-                          `${justFns.round(user.userGeoElevation, 0)} Meters`
+                          justFns.round(ftpAE.eachElvM, 0)
                         )}
-                      </TableHeaderColumn>
-                      <TableHeaderColumn
-                        style={style.cells}
-                      >
-                        FTP%<br />Acclimated<br />100%
-                      </TableHeaderColumn>
-                      <TableHeaderColumn
-                        style={style.cells}
-                      >
-                        Reletive FTP<br />Acclimated<br />{currentFTP}
-                      </TableHeaderColumn>
-                      <TableHeaderColumn
-                        style={style.cells}
-                      >
-                        FTP%<br />Not<br />Acclimated
-                      </TableHeaderColumn>
-                      <TableHeaderColumn
-                        style={style.cells}
-                      >
-                        Reletive FTP<br />Not<br />Acclimated
-                      </TableHeaderColumn>
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        {ftpAE.ftpAcc.toFixed(2)}%
+                      </TableCell>
+                      <TableCell className={classNames(classes.cell, classes.noPrint)} >
+                        <Dialog dialogData={ftpAE.ftpAccCalc} />
+                      </TableCell>
+                      <TableCell className={classNames(classes.cell, classes.onlyPrint)} >
+                        {ftpAE.ftpAccCalc}
+                      </TableCell>
+                      <TableCell className={classes.cell}>
+                        {ftpAE.ftpNAcc.toFixed(2)}%
+                      </TableCell>
+                      <TableCell className={classNames(classes.cell, classes.noPrint)} >
+                        <Dialog dialogData={ftpAE.ftpNAccCalc} />
+                      </TableCell>
+                      <TableCell className={classNames(classes.cell, classes.onlyPrint)} >
+                        {ftpAE.ftpNAccCalc}
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody
-                    displayRowCheckbox={false}
-                    stripedRows
-                  >
-                    {ftpAtElv.map(ftpAE => (
-                      <TableRow key={ftpAE.eachElvM}>
-                        <TableRowColumn style={style.cells}>
-                          {this.props.mPref ? (
-                            justFns.metersToFeetRound(ftpAE.eachElvM, 0)
-                          ) : (
-                            justFns.round(ftpAE.eachElvM, 0)
-                          )}
-                        </TableRowColumn>
-                        <TableRowColumn style={style.cells}>{ftpAE.ftpAcc}%</TableRowColumn>
-                        <TableRowColumn style={style.cells}>
-                          <Dialog dialogData={ftpAE.ftpAccCalc} />
-                        </TableRowColumn>
-                        <TableRowColumn style={style.cells}>{ftpAE.ftpNAcc}%</TableRowColumn>
-                        <TableRowColumn style={style.cells}>
-                          <Dialog dialogData={ftpAE.ftpNAccCalc} />
-                        </TableRowColumn>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardText>
-            </div>
+                  ))}
+                </TableBody>
+              </Table>
+              <Button
+                aria-label="Print"
+                className={classes.button}
+                color="primary"
+                onClick={handlePrint}
+                variant="raised"
+              >
+                <PrinterIcon className={classes.icon} />
+                <span className={classes.buttonLabel}>
+                  Print
+                </span>
+              </Button>
+            </CardContent>
           ) : (
             <FeatureNotice
               user={user}
@@ -183,4 +238,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(AltitudeTable);
+const styledAltitudeTable = withStyles(styles, { name: 'StyledAltitudeTable' })(AltitudeTable);
+export default connect(mapStateToProps, actions)(styledAltitudeTable);
