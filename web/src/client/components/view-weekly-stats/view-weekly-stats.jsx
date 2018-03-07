@@ -47,6 +47,10 @@ class activeStats extends Component {
     this.props.setPageName('Weekly Stats', '/blog/weekly-stats');
   }
 
+  componentWillUnmount() {
+    this.props.clearActivitySearch();
+  }
+
   fetchAnotherWeek() {
     this.props.setIsFetching();
     this.props.fetchActivitiesWeeklyTotals(relURL, this.props.stravaId, this.props.weeklyStats.length);

@@ -54,6 +54,7 @@ const propTypes = {
 const defaultProps = {
   color: '',
   label: 'Search',
+  hasIcon: true,
   size: 'small',
   toolTip: 'Search',
   toolTipId: 'tooltip-search',

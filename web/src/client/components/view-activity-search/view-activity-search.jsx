@@ -142,7 +142,7 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
-
+    console.log('pristine', formProps);
     this.props.setIsFetching();
     let setDisabled = this.props.activities.length >= this.props.activCalcFilter.count;
     let page = this.props.searchCount;
@@ -329,9 +329,8 @@ class ActivitySearch extends Component {
         ) : (
           <ButtonSearch
             type={pristine ? 'button' : 'submit'}
-            onClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
+            onClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
             color="primary"
-            autoFocus
             label="Search"
             size="small"
             toolTip="Search Activities"
@@ -346,9 +345,9 @@ class ActivitySearch extends Component {
           onClick={() => this.handleReset()}
           className={classes.button}
           disabled={pristine || submitting}
-          >
-            Clear Values
-          </Button>
+        >
+          Clear Values
+        </Button>
         <ButtonDownload
           variant="raised"
           color="primary"
@@ -362,7 +361,7 @@ class ActivitySearch extends Component {
           rangeValues={rangeValues}
           form={form}
           radioFormValues={formValues}
-          onSearchClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
+          onSearchClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
         />
       </div>
     );
@@ -430,7 +429,7 @@ function mapStateToProps(state) {
   //   null;
   const { activities, auth, page, search } = state;
   const pinDrops = activities.activitySearch && activities.activitySearch.length ?
-    activities.activities.filter(aF => aF.geoStart).map(aM => ({
+    activities.activities.filter(aF => aF.geoStart && aF.type !== 'VirtualRide').map(aM => ({
       lat: aM.geoStart[1],
       lng: aM.geoStart[0],
       name: aM.name,

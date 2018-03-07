@@ -51,6 +51,7 @@ const propTypes = {
 const defaultProps = {
   color: 'primary',
   label: 'Open',
+  hasIcon: true,
   size: 'small',
   toolTip: 'Open',
   toolTipId: 'tooltip-open',

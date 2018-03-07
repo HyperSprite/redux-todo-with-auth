@@ -29,11 +29,12 @@ class RangeInput extends React.Component {
 
   shapeData() {
     let buildRangeArr = [];
-      const {
-        valueItems,
-        valuesRange,
-        valuesDefaults,
-      } = this.props;
+    const {
+      valueItems,
+      valuesRange,
+      valuesDefaults,
+    } = this.props;
+    if (valueItems && valuesRange && valuesDefaults) {
       Object.values(valueItems).forEach((element) => {
         const vals = {
           conDef0: valuesDefaults[element.value].range[0],
@@ -70,6 +71,7 @@ class RangeInput extends React.Component {
           }];
         }
       });
+    }
     this.setState({
       rangeArr: buildRangeArr,
     });
