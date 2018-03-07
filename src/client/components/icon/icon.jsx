@@ -1,31 +1,56 @@
 // @flow weak
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from 'material-ui-next/styles';
 import TestIcon from './test-icon';
 
+/**
+Required only props
+<Icon
+  svgIcon
+/>
+
+All Props
+<ButtonClose
+  onClick={handleClose}
+  color="primary"
+  label="Cancel"
+  size="small"
+  toolTip="Cancel Dialog"
+  toolTipId="tooltip-close"
+  toolTipPlacement="bottom"
+  variant="flat"
+/>
+*/
+
 const propTypes = {
   classes: PropTypes.object.isRequired,
   /** color=<option> - "primary" for primary palette color, "secondary" for secondary color */
   color: PropTypes.string,
+  /** force - (bool) fixed primary colors */
+  force: PropTypes.bool,
   /** inverse - (bool) the icon will swap the colors */
   inverse: PropTypes.bool,
   /** pointer - (bool) the icon look like a link */
   pointer: PropTypes.bool,
-  /** size=<option> - xs: 12x12, sm: 24x24, md: 28x28, lg: 72x72, xl: 120x120 */
+  /** enum: xs: 12x12, sm || small: 24x24, md || medium: 28x28,
+            lg || large: 72x72, xl: 120x120 */
   size: PropTypes.string,
   /** This is an icon component from mdi-react */
-  svgIcon: PropTypes.any,
+  children: PropTypes.any,
+  /** works like inverse for raised buttons */
+  variant: PropTypes.string,
 };
 
 const defaultProps = {
-  color: null,
+  color: '',
+  force: false,
   inverse: false,
   pointer: false,
-  size: null,
-  svgIcon: TestIcon,
+  size: 'sm',
+  children: TestIcon,
+  variant: 'flat',
 };
 
 const styles = theme => ({
@@ -42,12 +67,30 @@ const styles = theme => ({
       duration: theme.transitions.duration.shorter,
     }),
   },
+  inherit: {
+    '&$variant': {
+      fill: theme.palette.primary.main,
+      backgroundColor: 'inherit',
+    },
+  },
+  force: {
+    fill: theme.palette.primary[500],
+    backgroundColor: 'white',
+    '&$inverse': {
+      fill: theme.palette.background.default,
+      backgroundColor: theme.palette.primary[500],
+    },
+  },
   primary: {
     fill: theme.palette.primary[500],
-    backgroundColor: theme.palette.getContrastText(theme.palette.primary[500]),
+    backgroundColor: 'transparent',
     '&$inverse': {
-      fill: theme.palette.getContrastText(theme.palette.primary[500]),
+      fill: theme.palette.background.default,
       backgroundColor: theme.palette.primary[500],
+    },
+    '&$variant': {
+      fill: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.primary.main,
     },
   },
   secondary: {
@@ -56,6 +99,10 @@ const styles = theme => ({
     '&$inverse': {
       fill: theme.palette.getContrastText(theme.palette.secondary.A200),
       backgroundColor: theme.palette.secondary.A200,
+    },
+    '&$variant': {
+      fill: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.secondary.main,
     },
   },
   xs: {
@@ -83,37 +130,38 @@ const styles = theme => ({
   pointer: {
     cursor: 'pointer',
   },
+  variant: {},
 });
 
 const ExtIcon = (props) => {
-  const { classes, color, className: classNameProp, inverse, pointer, size, svgIcon } = props;
+  const { classes, children, color, className: classNameProp, force, inverse, pointer, size, variant } = props;
 
   const className = classNames(
     {
       [classes.root]: true,
       [classes.primary]: color === 'primary',
       [classes.secondary]: color === 'secondary',
+      [classes.inherit]: color === 'inherit',
+      [classes.force]: force,
       [classes.inverse]: inverse,
+      [classes.variant]: variant === 'raised',
       [classes.pointer]: pointer,
       [classes.xs]: size === 'xs',
-      [classes.sm]: size === 'sm',
-      [classes.md]: size === 'md',
-      [classes.lg]: size === 'lg',
+      [classes.sm]: size === 'sm' || size === 'small',
+      [classes.md]: size === 'md' || size === 'medium',
+      [classes.lg]: size === 'lg' || size === 'large',
       [classes.xl]: size === 'xl',
     },
     classNameProp,
   );
-
-  const SVGIcon = svgIcon;
   return (
     <div className={classNames(classes.root, className)} >
-      <SVGIcon className={classNames(classes.root, className)} />
+      {React.cloneElement(children, { className: classNames(classes.root, className) })}
     </div>
   );
 };
 
 ExtIcon.propTypes = propTypes;
 ExtIcon.defaultProps = defaultProps;
-
 
 export default withStyles(styles, { name: 'StyledExtIcon' })(ExtIcon);

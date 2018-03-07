@@ -110,19 +110,25 @@ class ExtActivitySingle extends Component {
             <IconButton
               onClick={() => window.open(`https://www.strava.com/activities/${thisActivity.activityId}`, '_new')}
             >
-              <Icon svgIcon={OpenInNewIcon} size="sm" pointer />
+              <Icon pointer inverse>
+                <OpenInNewIcon />
+              </Icon>
             </IconButton>
             <IconButton
               onClick={this.deleteActivity}
               tooltip="Delete from A Race athlete (does not remove from Strava)"
             >
-              <Icon svgIcon={DeleteForeverIcon} size="sm" pointer />
+              <Icon pointer size="lg">
+                <DeleteForeverIcon />
+              </Icon>
             </IconButton>
             <IconButton
               onClick={this.refreshActivity}
               tooltip="Updates Activity from Strava"
             >
-              <Icon svgIcon={RefreshIcon} size="sm" pointer />
+              <Icon pointer color="secondary" inverse >
+                <RefreshIcon />
+              </Icon>
             </IconButton>
           </div>
         </div>

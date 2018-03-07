@@ -10,8 +10,7 @@ import Table, {
   TableHead,
   TableRow,
 } from 'material-ui-next/Table';
-import Button from 'material-ui-next/Button';
-import PrinterIcon from 'mdi-react/PrinterIcon';
+import ButtonPrint from '../button/print';
 
 import justFns from 'just-fns';
 import * as actions from './../../actions';
@@ -202,18 +201,7 @@ class AltitudeTable extends Component {
                   ))}
                 </TableBody>
               </Table>
-              <Button
-                aria-label="Print"
-                className={classes.button}
-                color="primary"
-                onClick={handlePrint}
-                variant="raised"
-              >
-                <PrinterIcon className={classes.icon} />
-                <span className={classes.buttonLabel}>
-                  Print
-                </span>
-              </Button>
+              <ButtonPrint />
             </CardContent>
           ) : (
             <FeatureNotice
