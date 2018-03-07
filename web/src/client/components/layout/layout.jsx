@@ -19,10 +19,10 @@ const styles = theme => ({
     marginTop: 10,
   },
   paper: {
-    color: theme.palette.text.secondary,
-    fontFamily: theme.typography.fontFamily,
-    fontSize: theme.typography.fontSize,
-    fontWeight: theme.typography.fontWeightRegular,
+    // color: theme.palette.text.secondary,
+    // fontFamily: theme.typography.fontFamily,
+    // fontSize: theme.typography.fontSize,
+    // fontWeight: theme.typography.fontWeightRegular,
   },
 });
 

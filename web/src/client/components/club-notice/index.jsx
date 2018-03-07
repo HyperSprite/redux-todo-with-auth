@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { IconButton, Dialog } from 'material-ui';
-import Cancel from 'material-ui/svg-icons/navigation/cancel';
-import RaisedButton from 'material-ui/RaisedButton';
+import Dialog, { DialogActions } from 'material-ui-next/Dialog';
+import IconButton from 'material-ui-next/IconButton';
+import Button from 'material-ui-next/Button';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import ButtonClose from '../button/close';
 
+import Icon from '../icon';
+import ButtonOpen from '../button/open';
 import DialogMessage from '../form/dialog-message';
 import Checkbox from '../form/checkbox-icon';
 
@@ -50,13 +54,12 @@ class toggleClubNoticeDialog extends Component {
 
   render() {
     const buttonActions = [
-      <IconButton
+      <ButtonClose
         key={1}
         tooltip="Close this message"
-        onTouchTap={this.handleClose}
-      >
-        <Cancel />
-      </IconButton>,
+        onClick={this.handleClose}
+        color="primary"
+      />,
     ];
 
     const cardText = (
@@ -71,7 +74,7 @@ class toggleClubNoticeDialog extends Component {
         <p>Joining the club gets you additional features such as:</p>
         <ul>
           <li>Creating New Events</li>
-          <li>Personalized Power at Altitude</li>
+          <li>Activity Search</li>
         </ul>
         <p>{'If you don\'t want to join now, the link to the club is always available from the Menu Drawer.'}
         </p>
@@ -80,20 +83,30 @@ class toggleClubNoticeDialog extends Component {
 
     const dialog = (
       <span>
-        <RaisedButton label="Open" onTouchTap={this.handleOpen} />
+        <ButtonOpen
+          color="inherit"
+          label="Club Notice"
+          onClick={this.handleOpen}
+        />
         <Dialog
-          actions={buttonActions}
           modal={false}
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
           <DialogMessage cardText={cardText} />
-          <Checkbox option={this.props.clubNotice} onClick={this.toggleNotice} /> {'I don\'t want to see this agian'}
+          <Checkbox
+            option={this.props.clubNotice}
+            onClick={this.toggleNotice}
+          />
+          {'I don\'t want to see this agian'}
+          <DialogActions>
+            {buttonActions}
+          </DialogActions>
         </Dialog>
       </span>
     );
 
-    if (this.props.firstname && !this.props.clubNotice && !this.props.clubMember) {
+    if (this.props.firstname && !this.props.clubMember) {
       return dialog;
     }
     return null;

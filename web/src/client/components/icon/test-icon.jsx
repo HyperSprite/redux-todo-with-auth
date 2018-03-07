@@ -1,20 +1,14 @@
 import React from 'react';
 
-const ARAIcon = props => (
+const ARAIcon = (
   <svg
-    className={props.className}
     version="1.0"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 480 480"
     // preserveAspectRatio="xMidYMid meet"
   >
     <g
-      // transform="translate(0.000000,16.000000) scale(0.7,0.7)"
-      // transform="rotate(180) translate(0, -50) scale(0.07,0.07)"
-      // transform="scale(0.07,0.07)"
       transform="translate(0,480) scale(0.07,-0.07)"
-      // fill="#000000"
-      // stroke="none"
     >
       <path d="M0 3500 l0 -3500 3500 0 3500 0 0 3500 0 3500 -3500 0 -3500 0 0
         -3500z m6335 1392 l-375 -2 0 -2145 0 -2145 -2822 0 -2823 0 55 54 c1282 1257

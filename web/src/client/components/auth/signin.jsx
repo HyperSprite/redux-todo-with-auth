@@ -2,19 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { FlatButton } from 'material-ui';
+import { withStyles } from 'material-ui-next/styles';
+import Button from 'material-ui-next/Button';
 
 import { signinUser, ifToken } from '../../actions';
 import Alert from './../form/alert';
 
 import ConnectWithStrava from '../../assets/btn_strava_connectwith_light.svg';
 
-import style from '../../styles/style';
-
 const propTypes = {
   errorMessage: PropTypes.string,
   authenticated: PropTypes.bool,
 };
+
+const styles = theme => ({
+  signin: {
+    marginTop: 4,
+  },
+});
 
 let Signin = class Signin extends Component {
   constructor(props) {
@@ -35,7 +40,7 @@ let Signin = class Signin extends Component {
   }
 
   render() {
-    const { authenticated } = this.props;
+    const { classes, authenticated } = this.props;
 
     if (authenticated) {
       return (
@@ -43,9 +48,9 @@ let Signin = class Signin extends Component {
       );
     }
     return (
-      <FlatButton onClick={this.stravaClick} style={style.signin}>
+      <Button onClick={this.stravaClick} className={classes.signin}>
         <img src={ConnectWithStrava} alt="Signin with Strava" />
-      </FlatButton>
+      </Button>
     );
   }
 };
@@ -59,4 +64,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default Signin = connect(mapStateToProps, { signinUser, ifToken })(Signin);
+const styledSignin = withStyles(styles, { name: 'StyledSignin' })(Signin);
+export default connect(mapStateToProps, { signinUser, ifToken })(styledSignin);

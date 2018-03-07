@@ -13,6 +13,9 @@ import PrinterIcon from 'mdi-react/PrinterIcon';
 
 import justFns from 'just-fns';
 
+import ButtonClose from '../button/close';
+import ButtonPrint from '../button/print';
+
 const propTypes = {
   classes: PropTypes.object,
   closeToolTip: PropTypes.string,
@@ -215,37 +218,23 @@ const DialogMessage = ({ classes, closeToolTip, data, handleClose, powerZones, p
       </DialogContent>
       <DialogActions>
         {print && (
-          <Button
-            aria-label="Print"
-            className={classes.button}
-            color="primary"
+          <ButtonPrint
+            // aria-label="Print"
+            // className={classes.button}
+            // color="primary"
             onClick={handlePrint}
-            variant="raised"
-          >
-            <PrinterIcon className={classes.icon} />
-            <span className={classes.buttonLabel}>
-              Print
-            </span>
-          </Button>
+            // variant="raised"
+          />
         )}
-        <Tooltip
-          id="tooltip-close"
-          title={closeToolTip}
-          placement="left"
-        >
-          <Button
-            aria-label="Close"
-            className={classes.button}
-            color="secondary"
-            onClick={handleClose}
-            variant="raised"
-          >
-            <CloseCircleIcon className={classes.icon} />
-            <span className={classes.buttonLabel}>
-              Close
-            </span>
-          </Button>
-        </Tooltip>
+        <ButtonClose
+          onClick={handleClose}
+          // label="Cancel"
+          // size="small"
+          // toolTip="Cancel Dialog"
+          // toolTipId="tooltip-close"
+          // toolTipPlacement="bottom"
+          // variant="flat"
+        />
       </DialogActions>
     </div>
   );

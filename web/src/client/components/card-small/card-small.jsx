@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card } from 'material-ui/Card';
+import { withStyles } from 'material-ui-next/styles';
+import Card from 'material-ui-next/Card';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
     marginTop: 30,
@@ -14,13 +15,13 @@ const styles = {
   card: {
     width: 300,
     margin: 10,
-    color: '#B71C1C',
+    color: theme.palette.primary[500],
   },
-};
+});
 
-const CardSmall = ({ children }) => (
-  <div style={styles.root}>
-    <Card style={styles.card}>
+const CardSmall = ({ classes, children }) => (
+  <div className={classes.root}>
+    <Card className={classes.card}>
       {children}
     </Card>
   </div>
@@ -28,4 +29,4 @@ const CardSmall = ({ children }) => (
 
 CardSmall.propTypes = propTypes;
 
-export default CardSmall;
+export default withStyles(styles, { name: 'StyledCardSmall' })(CardSmall);

@@ -43,7 +43,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  leftIcon: <Icon color="primary" size="md" />,
+  leftIcon: <Icon force size="md" />,
   rightImgSrc: null,
   rightOnClick: null,
   rightText: '',
@@ -65,7 +65,7 @@ const styles = theme => ({
 
 function ExtAppBar(props) {
   const { classes, leftIcon, leftOnClick, rightImgSrc, rightOnClick, rightMenu, rightText } = props;
-  const LeftIcon = leftIcon === 'menu' ? <Icon svgIcon={MenuIcon} color="primary" inverse size="md" /> : leftIcon;
+  const LeftIcon = leftIcon === 'menu' ? <Icon force inverse size="md" ><MenuIcon /></Icon> : leftIcon;
   const RightButton = () => {
     if (rightMenu) {
       return rightMenu
