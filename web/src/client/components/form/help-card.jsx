@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import FaQuestionCircle from 'react-icons/lib/fa/question-circle';
+import Card, { CardHeader, CardContent } from 'material-ui-next/Card';
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 
 import Iframe from './iframe';
 
@@ -36,19 +36,19 @@ export default class HelpCard extends Component {
     return (
       <div className="main" >
         <Card
-          expanded={this.state.expanded}
-          onExpandChange={this.handleExpandChange}
+          // expanded={this.state.expanded}
+          // onExpandChange={this.handleExpandChange}
         >
           <CardHeader
             title={this.props.title}
-            actAsExpander
-            avatar={<FaQuestionCircle style={{ verticalAlign: 'inherit' }} />}
+            // actAsExpander
+            avatar={<HelpCircleIcon style={{ verticalAlign: 'inherit' }} />}
           />
-          <CardText
-            expandable
+          <CardContent
+            // expandable
           >
             <Iframe {...this.props} />
-          </CardText>
+          </CardContent>
         </Card>
       </div>
     );

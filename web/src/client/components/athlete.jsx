@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { IconButton, Paper, Subheader } from 'material-ui';
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
 import { connect } from 'react-redux';
-import FaRefresh from 'react-icons/lib/fa/refresh';
-import FaToggleOff from 'react-icons/lib/fa/toggle-off';
-import FaToggleOn from 'react-icons/lib/fa/toggle-on';
 
 import * as actions from './../actions';
 import Static from './form/static';
@@ -108,9 +102,7 @@ class Athlete extends Component {
               id={location.hash}
               headerHeight={70}
             />
-            <Card
-              className="card"
-            >
+            <div >
               {userGeoTzRawOffset ? (
                 <div>
                   <OneDayWeather
@@ -184,7 +176,7 @@ class Athlete extends Component {
                   Loading Astrophase Data...
                 </div>
               )} */}
-            </Card>
+            </div>
             <UserList />
           </div>
           <div className="side-lite right-pane" />

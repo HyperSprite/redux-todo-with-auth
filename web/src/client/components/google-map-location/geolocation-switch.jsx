@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
 import { FlatButton, IconButton, Toggle } from 'material-ui';
-import GPSFixed from 'material-ui/svg-icons/device/gps-fixed';
-import GPSNotFixed from 'material-ui/svg-icons/device/gps-not-fixed';
+import CrosshairsGpsIcon from 'mdi-react/CrosshairsGpsIcon';
+import CrosshairsIcon from 'mdi-react/CrosshairsIcon';
 import GPSOff from 'material-ui/svg-icons/device/gps-off';
 import justFNS from 'just-fns';
 import GoogleMapLocation from './google-map-location';
+import Icon from '../icon';
 import style from './style';
 
 class ExtGoogleMapWithLocation extends React.Component {
@@ -42,7 +43,15 @@ class ExtGoogleMapWithLocation extends React.Component {
 
         <div style={style.flexcontainer}>
           <IconButton onClick={() => this.handleGPSClick()}>
-            {geoAllowed ? <GPSFixed /> : <GPSNotFixed />}
+            {geoAllowed ? (
+              <Icon size="sm" color="primary">
+                <CrosshairsGpsIcon />
+              </Icon>
+            ) : (
+              <Icon size="sm" color="secondary">
+                <CrosshairsIcon />
+              </Icon>
+            )}
           </IconButton>
           {geoAllowed && (
             <div>
@@ -54,7 +63,6 @@ class ExtGoogleMapWithLocation extends React.Component {
                 labelPosition="right"
               />
             </div>
-
           )}
         </div>
         {(geoAllowed) ? (

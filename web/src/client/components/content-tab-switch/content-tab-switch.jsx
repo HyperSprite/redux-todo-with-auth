@@ -1,16 +1,22 @@
 import React from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
+import Tabs, { Tab } from 'material-ui-next/Tabs';
 
-const styles = {
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    marginTop: theme.spacing.unit * 3,
+  },
   headline: {
     fontSize: 24,
     paddingTop: 16,
     marginBottom: 12,
     fontWeight: 400,
   },
-};
+});
 
-export default class ContentTabSwitch extends React.Component {
+class ContentTabSwitch extends React.Component {
 
   constructor(props) {
     super(props);
@@ -19,7 +25,7 @@ export default class ContentTabSwitch extends React.Component {
     };
   }
 
-  handleChange = (value) => {
+  handleChange = (event, value)=> {
     this.props.switch(value);
     this.setState({
       value,
@@ -43,23 +49,33 @@ export default class ContentTabSwitch extends React.Component {
 
   render() {
     return (
-      <Tabs
-        value={this.state.value}
-        onChange={this.handleChange}
-      >
+      <div>
+        <Tabs
+          value={this.state.value}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          {this.props.tabs.map(tab => (
+            <Tab
+              key={tab.value}
+              label={tab.name}
+              value={tab.value}
+            />
+          ))}
+        </Tabs>
         {this.props.tabs.map(tab => (
-          <Tab
-            key={tab.value}
-            label={tab.name}
-            value={tab.value}
-          >
-            <div>
-              <h2 style={styles.headline}>{tab.header}</h2>
+          (this.state.value === tab.value) && (
+            <div key={tab.value}>
+              {tab.header && <h2 className={this.props.classes.headline}>{tab.header}</h2>}
               {tab.content}
             </div>
-          </Tab>
-        ))}
-      </Tabs>
+          )
+         ))}
+      </div>
     );
   }
 }
+
+export default withStyles(styles, { name: 'StyledContentTabSwitch' })(ContentTabSwitch);

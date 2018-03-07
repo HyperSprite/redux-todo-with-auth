@@ -6,8 +6,8 @@ import { Form, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui-next/styles';
 import { FormGroup, FormControlLabel } from 'material-ui-next/Form';
 import Button from 'material-ui-next/Button';
-import { Card } from 'material-ui/Card';
-import { CircularProgress, RaisedButton } from 'material-ui';
+import Card from 'material-ui-next/Card';
+import { CircularProgress } from 'material-ui';
 import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
@@ -16,6 +16,8 @@ import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 import Layout from '../layout';
+import ButtonDownload from '../button/download';
+import ButtonSearch from '../button/search';
 import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
@@ -77,13 +79,15 @@ const styles = theme => ({
     // hight: 36,
     margin: theme.spacing.unit,
   },
+  progress: {
+
+  },
 });
 
 class ActivitySearch extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       page: 0,
       tab: 'text-search',
     };
@@ -113,22 +117,6 @@ class ActivitySearch extends Component {
   //     });
   //   }
   // }
-
-  handleExpandChange = (expanded) => {
-    this.setState({ expanded: expanded });
-  };
-
-  handleToggle = (event, toggle) => {
-    this.setState({ expanded: toggle });
-  };
-
-  handleExpand = () => {
-    this.setState({ expanded: true });
-  };
-
-  handleReduce = () => {
-    this.setState({ expanded: false });
-  };
 
   handleMapPinDrop(lat, lng) {
     this.setState({ lat, lng });
@@ -180,18 +168,10 @@ class ActivitySearch extends Component {
       nextPage: page + 1,
       lastSearch: Object.assign(formProps, { page }, { mPref }),
     });
-    // lastmPref = this.props.mPref;
-    // lastSearch = Object.assign(formProps, { page }, { mPref });
     if (setDisabled) {
       this.props.setIsFetchingOff();
     } else {
       this.props.fetchActivitiesSearch(relURL, formProps);
-    }
-  }
-
-  handleSearch() {
-    if (this.props.pristine) {
-      pristine ? this.activitiesSearch : () => 'submit'
     }
   }
 
@@ -206,7 +186,6 @@ class ActivitySearch extends Component {
     query.csv = true;
     query.limit = 5000;
     query.page = 1;
-    // axios.get(`${relURL}?csv=true&limit=5000`, axiosConfig)
     axios.get(`${relURL}?${qs.stringify(query)}`, axiosConfig)
       .then((response) => {
         if (response.status === 200) {
@@ -325,13 +304,13 @@ class ActivitySearch extends Component {
       {
         name: 'Text Search',
         value: 'text-search',
-        header: 'Find Your Activity By Name',
+        // header: 'Find Your Activity By Name',
         content: SearchTextForm,
       },
       {
         name: 'Location Search',
         value: 'location-search',
-        header: 'Find Your Activity By Location',
+        // header: 'Find Your Activity By Location',
         content: SearchMapForm,
       },
     ];
@@ -340,27 +319,26 @@ class ActivitySearch extends Component {
       <div className={classes.buttonSet} >
 
         {isFetching ? (
-          <Button
-            variant="raised"
-            disabled
+          <ButtonSearch
             color="primary"
-            className={classes.button}
-            icon={<CircularProgress size={22} />}
-          >
-            Searching
-          </Button>
+            label="Searching"
+            size="small"
+            variant="flat"
+            disabled
+          />
         ) : (
-          <Button
-            variant="raised"
+          <ButtonSearch
             type={pristine ? 'button' : 'submit'}
-            onClick={pristine ? this.activitiesSearch : () => 'submit'}
+            onClick={pristine ? this.activitiesSearch : handleSubmit(this.handleFormSubmit)}
             color="primary"
             autoFocus
-            className={classes.button}
-            icon={<MdSearch size={24} />}
-          >
-            Search
-          </Button>
+            label="Search"
+            size="small"
+            toolTip="Search Activities"
+            toolTipId="tooltip-search"
+            toolTipPlacement="left"
+            variant="raised"
+          />
         )}
 
         <Button
@@ -371,14 +349,13 @@ class ActivitySearch extends Component {
           >
             Clear Values
           </Button>
-        <Button
+        <ButtonDownload
           variant="raised"
           color="primary"
           className={classes.button}
           onClick={handleSubmit(this.activitiesDownload)}
-          >
-            Download
-          </Button>
+          label="Download"
+        />
         <FilterDrawer
           {...this.props}
           classes={{}}
@@ -401,7 +378,7 @@ class ActivitySearch extends Component {
           id={contentName}
           onSubmit={handleSubmit(this.handleFormSubmit)}
         >
-          <Card expanded={this.state.expanded} style={style.div} >
+          <Card style={style.div} >
             <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
 
             <GoogleMapLocation

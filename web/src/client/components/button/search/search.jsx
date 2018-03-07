@@ -1,28 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PrinterIcon from 'mdi-react/PrinterIcon';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import ButtonBase from '../base';
 
 /**
+
+import ButtonSearch from '../button/search';
+
 * Required only props
 
-<ButtonPrint
+<ButtonSearch
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonPrint
+<ButtonSearch
   onClick={handleClose}
   color="primary"
-  label="Print"
+  label="Search"
   size="small"
-  toolTip="Print this page"
-  toolTipId="tooltip-print"
-  toolTipPlacement="bottom"
-  variant="flat"
+  toolTip="Search Activities"
+  toolTipId="tooltip-search"
+  toolTipPlacement="left"
+  variant="raised"
 />
 
 */
@@ -49,23 +52,22 @@ const propTypes = {
 };
 
 const defaultProps = {
-  color: 'primary',
-  label: 'Print',
+  color: '',
+  label: 'Search',
   size: 'small',
-  toolTip: '',
-  toolTipId: 'tooltip-print',
+  toolTip: 'Search',
+  toolTipId: 'tooltip-search',
   toolTipPlacement: 'top',
-  variant: 'flat',
-  onClick: () => window.print(),
+  variant: '',
 };
 
-const ButtonPrint = props => (
+const ButtonSearch = props => (
   <ButtonBase {...props} >
-    <PrinterIcon />
+    <MagnifyIcon />
   </ButtonBase>
 );
 
-ButtonPrint.propTypes = propTypes;
-ButtonPrint.defaultProps = defaultProps;
+ButtonSearch.propTypes = propTypes;
+ButtonSearch.defaultProps = defaultProps;
 
-export default ButtonPrint;
+export default ButtonSearch;
