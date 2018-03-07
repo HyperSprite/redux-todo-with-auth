@@ -32,10 +32,11 @@ const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
   color: PropTypes.string,
+  disabled: PropTypes.bool,
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   /** enum: 'small', 'medium', 'large' */
   size: PropTypes.string,
   /** ToolTip text */
@@ -51,6 +52,7 @@ const propTypes = {
 
 const defaultProps = {
   color: '',
+  disabled: false,
   label: '',
   size: 'small',
   toolTip: '',
@@ -63,6 +65,8 @@ const styles = theme => ({
   root: {},
   button: {
     margin: '0.3em',
+    width: 150,
+    height: 38,
   },
   buttonLabel: {
     paddingLeft: '0.5em',
@@ -81,6 +85,7 @@ const ExtButton = ({
   classes,
   children,
   color,
+  disabled,
   onClick,
   label,
   size,
@@ -89,27 +94,48 @@ const ExtButton = ({
   toolTipPlacement,
   variant,
 }) => (
-  <Tooltip
-    id={toolTipId}
-    title={toolTip}
-    placement={toolTipPlacement}
-  >
-    <Button
-      aria-label={label}
-      className={classes.button}
-      color={color}
-      onClick={onClick}
-      size={size}
-      variant={variant}
-    >
-      <Icon color={color} size={size} variant={variant} >
-        {children}
-      </Icon>
-      <span className={classes.buttonLabel}>
-        {label}
-      </span>
-    </Button>
-  </Tooltip>
+  <div>
+    {disabled ? (
+      <Button
+        aria-label={label}
+        className={classes.button}
+        color={color}
+        size={size}
+        variant={variant}
+        disabled
+      >
+        <Icon color={color} size={size} variant={variant} >
+          {children}
+        </Icon>
+        <span className={classes.buttonLabel}>
+          {label}
+        </span>
+      </Button>
+    ) : (
+      <Tooltip
+        id={toolTipId}
+        title={toolTip}
+        placement={toolTipPlacement}
+      >
+        <Button
+          aria-label={label}
+          className={classes.button}
+          color={color}
+          onClick={onClick}
+          size={size}
+          variant={variant}
+          disabled={disabled}
+        >
+          <Icon color={color} size={size} variant={variant} >
+            {children}
+          </Icon>
+          <span className={classes.buttonLabel}>
+            {label}
+          </span>
+        </Button>
+      </Tooltip>
+    )}
+  </div>
 );
 
 ExtButton.propTypes = propTypes;

@@ -60,6 +60,13 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
+    maxWidth: 800,
+  },
+  containerCol: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
     maxWidth: 600,
   },
   // box: {
@@ -103,9 +110,9 @@ class ExtActivitySingle extends Component {
     return (
       <div key={`${thisActivity.activityId}-single`} className={classes.root} >
         <div className={classes.titleBox} >
-          <div className={classes.title} >
+          <Typography variant="title" >
             {thisActivity.name}
-          </div>
+          </Typography>
           <div className={classes.icons} >
             <IconButton
               onClick={() => window.open(`https://www.strava.com/activities/${thisActivity.activityId}`, '_new')}
@@ -118,7 +125,7 @@ class ExtActivitySingle extends Component {
               onClick={this.deleteActivity}
               tooltip="Delete from A Race athlete (does not remove from Strava)"
             >
-              <Icon pointer size="lg">
+              <Icon pointer inverse>
                 <DeleteForeverIcon />
               </Icon>
             </IconButton>
@@ -126,22 +133,53 @@ class ExtActivitySingle extends Component {
               onClick={this.refreshActivity}
               tooltip="Updates Activity from Strava"
             >
-              <Icon pointer color="secondary" inverse >
+              <Icon pointer inverse >
                 <RefreshIcon />
               </Icon>
             </IconButton>
           </div>
         </div>
         <div className={classes.container} >
-
-          {returnValues.map(rV => (
-            <ActivityMetric
-              key={rV.activityType}
-              data={thisActivity}
-              rV={rV}
-              mPref={mPref}
-            />
-          ))}
+          <div className={classes.containerCol} >
+            {returnValues.filter(f => f.category === 'group1').map(rV => (
+              <ActivityMetric
+                key={rV.activityType}
+                data={thisActivity}
+                rV={rV}
+                mPref={mPref}
+              />
+            ))}
+          </div>
+          <div className={classes.containerCol} >
+            {returnValues.filter(f => f.category === 'group2').map(rV => (
+              <ActivityMetric
+                key={rV.activityType}
+                data={thisActivity}
+                rV={rV}
+                mPref={mPref}
+              />
+            ))}
+          </div>
+          <div className={classes.containerCol} >
+            {returnValues.filter(f => f.category === 'group3').map(rV => (
+              <ActivityMetric
+                key={rV.activityType}
+                data={thisActivity}
+                rV={rV}
+                mPref={mPref}
+              />
+            ))}
+          </div>
+          <div className={classes.containerCol} >
+            {returnValues.filter(f => f.category === 'group4').map(rV => (
+              <ActivityMetric
+                key={rV.activityType}
+                data={thisActivity}
+                rV={rV}
+                mPref={mPref}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );

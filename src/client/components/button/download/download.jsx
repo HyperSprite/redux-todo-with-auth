@@ -1,28 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PrinterIcon from 'mdi-react/PrinterIcon';
+import DownloadIcon from 'mdi-react/DownloadIcon';
 
 import ButtonBase from '../base';
 
 /**
+
+import ButtonDownload from '../button/downlaod';
+
 * Required only props
 
-<ButtonPrint
+<ButtonDownload
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonPrint
+<ButtonDownload
   onClick={handleClose}
   color="primary"
-  label="Print"
+  label="Download"
   size="small"
-  toolTip="Print this page"
-  toolTipId="tooltip-print"
-  toolTipPlacement="bottom"
-  variant="flat"
+  toolTip="Download Activities"
+  toolTipId="tooltip-downlaod"
+  toolTipPlacement="left"
+  variant="raised"
 />
 
 */
@@ -34,7 +37,7 @@ const propTypes = {
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
   /** enum: 'small', 'medium', 'large' */
   size: PropTypes.string,
   /** ToolTip text */
@@ -50,22 +53,21 @@ const propTypes = {
 
 const defaultProps = {
   color: 'primary',
-  label: 'Print',
+  label: 'Download',
   size: 'small',
-  toolTip: '',
-  toolTipId: 'tooltip-print',
+  toolTip: 'Downlaod',
+  toolTipId: 'tooltip-download',
   toolTipPlacement: 'top',
   variant: 'flat',
-  onClick: () => window.print(),
 };
 
-const ButtonPrint = props => (
+const ButtonDownload = props => (
   <ButtonBase {...props} >
-    <PrinterIcon />
+    <DownloadIcon />
   </ButtonBase>
 );
 
-ButtonPrint.propTypes = propTypes;
-ButtonPrint.defaultProps = defaultProps;
+ButtonDownload.propTypes = propTypes;
+ButtonDownload.defaultProps = defaultProps;
 
-export default ButtonPrint;
+export default ButtonDownload;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Card, CardHeader, CardMedia, CardTitle } from 'material-ui/Card';
+import Card, { CardHeader } from 'material-ui-next/Card';
 
 import VisibilitySensorLock from '../../containers/visibility-sensor-lock';
 // import lib from '../../containers/lib';
