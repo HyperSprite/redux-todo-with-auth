@@ -54,6 +54,7 @@ const propTypes = {
 const defaultProps = {
   color: 'primary',
   label: 'Download',
+  hasIcon: true,
   size: 'small',
   toolTip: 'Downlaod',
   toolTipId: 'tooltip-download',

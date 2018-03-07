@@ -80,7 +80,7 @@ ActivityCount.defaultProps = defaultProps;
 function mapStateToProps(state) {
   const { activities } = state;
   return {
-    activitySearchCount: activities.activitySearch.length,
+    activitySearchCount: activities.activitySearch && activities.activitySearch.length,
     activCalcAll: activities.activCalcAll.count,
     activCalcFilter: activities.activCalcFilter.count,
   };

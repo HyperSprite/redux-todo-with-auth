@@ -51,6 +51,7 @@ const propTypes = {
 const defaultProps = {
   color: 'primary',
   label: 'Print',
+  hasIcon: true,
   size: 'small',
   toolTip: '',
   toolTipId: 'tooltip-print',

@@ -1,25 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
-import Tooltip from 'material-ui-next/Tooltip';
-import Button from 'material-ui-next/Button';
+
+import Tooltip from './tooltip';
+import Button from './button';
 
 import Icon from '../../icon';
 
 /**
 * Required only props
 
-<ButtonClose
+<ButtonBase
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonClose
+<ButtonBase
   onClick={handleClose}
   color="primary"
   label="Cancel"
+  hasIcon={false}
   size="small"
   toolTip="Cancel Dialog"
   toolTipId="tooltip-close"
@@ -33,6 +35,7 @@ const propTypes = {
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
   color: PropTypes.string,
   disabled: PropTypes.bool,
+  hasIcon: PropTypes.bool,
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
@@ -53,6 +56,7 @@ const propTypes = {
 const defaultProps = {
   color: '',
   disabled: false,
+  hasIcon: false,
   label: '',
   size: 'small',
   toolTip: '',
@@ -75,70 +79,43 @@ const styles = theme => ({
   * Print style
   */
   '@media print': {
-    button: {
+    root: {
       display: 'none',
     },
   },
 });
 
-const ExtButton = ({
-  classes,
-  children,
-  color,
-  disabled,
-  onClick,
-  label,
-  size,
-  toolTip,
-  toolTipId,
-  toolTipPlacement,
-  variant,
-}) => (
-  <div>
-    {disabled ? (
-      <Button
-        aria-label={label}
-        className={classes.button}
-        color={color}
-        size={size}
-        variant={variant}
-        disabled
-      >
-        <Icon color={color} size={size} variant={variant} >
+const ButtonBase = (props) => {
+  const {
+    classes,
+    children,
+    disabled,
+    toolTip,
+    toolTipId,
+    toolTipPlacement,
+  } = props;
+  return (
+    <div className={classes.root}>
+      {disabled || !toolTipId ? (
+        <Button {...props} >
           {children}
-        </Icon>
-        <span className={classes.buttonLabel}>
-          {label}
-        </span>
-      </Button>
-    ) : (
-      <Tooltip
-        id={toolTipId}
-        title={toolTip}
-        placement={toolTipPlacement}
-      >
-        <Button
-          aria-label={label}
-          className={classes.button}
-          color={color}
-          onClick={onClick}
-          size={size}
-          variant={variant}
-          disabled={disabled}
-        >
-          <Icon color={color} size={size} variant={variant} >
-            {children}
-          </Icon>
-          <span className={classes.buttonLabel}>
-            {label}
-          </span>
         </Button>
-      </Tooltip>
-    )}
-  </div>
-);
+      ) : (
+        <Tooltip
+          id={toolTipId}
+          title={toolTip}
+          placement={toolTipPlacement}
+        >
+          <Button {...props} >
+            {children}
+          </Button>
+        </Tooltip>
+      )}
+    </div>
+  );
+};
 
-ExtButton.propTypes = propTypes;
-ExtButton.defaultProps = defaultProps;
+ButtonBase.propTypes = propTypes;
+ButtonBase.defaultProps = defaultProps;
 
-export default withStyles(styles, { name: 'StyledCloseButton' })(ExtButton);
+export default withStyles(styles, { name: 'StyledCloseButton' })(ButtonBase);
