@@ -4,6 +4,9 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui-next/styles';
 import Headroom from 'react-headroom';
+import IconButton from 'material-ui-next/IconButton';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 
 import * as actions from './../actions';
 
@@ -11,7 +14,6 @@ import AppBar from './app-bar';
 import Signin from './auth/signin';
 import EventFilter from './view-events/filter-toolbar';
 import ClubNotice from './club-notice';
-import IconLink from './icon-link';
 
 const propTypes = {
   authenticated: PropTypes.bool,
@@ -22,6 +24,7 @@ const propTypes = {
 };
 
 const defaultProps = {
+  classes: PropTypes.object.isRequired,
   authenticated: false,
   user: {},
   page: {
@@ -34,12 +37,15 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    ...theme.typography.title2,
+    color: 'inherit',
+    lineHeight: '48px',
   },
   help: {
     padding: '0 12px 0 2px',
   },
   icon: {
-    fill: theme.palette.background.appBar,
+    color: 'inherit',
   },
   onlyPrint: {
     display: 'none',
@@ -95,10 +101,17 @@ class Header extends Component {
           {page.name}
         </div>
         <div className={classes.help}>
-          <IconLink
-            link={page.help}
-            color={'#fefefe'} // TODO Fix color to use theme
-          />
+          <IconButton
+            component="a"
+            href={this.props.page.help}
+            target="blank"
+            title="Help"
+            className={classes.icon}
+          >
+            <SvgIcon>
+              <HelpCircleIcon />
+            </SvgIcon>
+          </IconButton>
         </div>
       </div>
     ) : (

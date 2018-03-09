@@ -1,19 +1,20 @@
+// TODO setup tool tips again
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from 'material-ui';
+import IconButton from 'material-ui-next/IconButton';
+import SvgIcon from 'material-ui-next/SvgIcon';
 
-import MdModeEdit from 'react-icons/lib/md/mode-edit';
-import MdPlaylistAdd from 'react-icons/lib/md/playlist-add';
-import MdPlaylistAddCheck from 'react-icons/lib/md/playlist-add-check';
-import FaQuestion from 'react-icons/lib/fa/question';
-import FaSquare from 'react-icons/lib/fa/square';
-import FaSquareO from 'react-icons/lib/fa/square-o';
-import FaStar from 'react-icons/lib/fa/star';
-import FaStarO from 'react-icons/lib/fa/star-o';
-import MdDelete from 'react-icons/lib/md/delete';
-import MdDeleteForever from 'react-icons/lib/md/delete-forever';
-import FaUser from 'react-icons/lib/fa/user';
-// import FaUserO from 'react-icons/lib/fa/user-o'; // not in react-icon set
+import PencilIcon from 'mdi-react/PencilIcon';
+import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
+import PlaylistCheckIcon from 'mdi-react/PlaylistCheckIcon';
+import HelpIcon from 'mdi-react/HelpIcon';
+import SquareIcon from 'mdi-react/SquareIcon';
+import SquareOutlineIcon from 'mdi-react/SquareOutlineIcon';
+import StarIcon from 'mdi-react/StarIcon';
+import StarOutlineIcon from 'mdi-react/StarOutlineIcon';
+import DeleteIcon from 'mdi-react/DeleteIcon';
+import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
+import AccountIcon from 'mdi-react/AccountIcon';
 
 import style from '../../styles/style';
 
@@ -24,85 +25,65 @@ const propTypes = {
   toggleCount: PropTypes.number,
 };
 
-const toggleIconButton = (buttonType, authenticated, toggle, toggleClick, toggleCount) => {
-  let buttonOn;
-  let buttonOff;
-  let tooltipOn;
-  let tooltipOff;
+const ToggleIconButton = ({ buttonType, authenticated, toggle, toggleClick, toggleCount }) => {
 
-  switch (buttonType) {
-    case 'ActionBookmark':
-      buttonOn = (<FaStar size={24} />);
-      buttonOff = (<FaStarO size={24} />);
-      tooltipOn = toggleCount ? (`You + ${toggleCount - 1}`) : null;
-      tooltipOff = toggleCount ? (`${toggleCount}`) : null;
-      break;
-    case 'ActionDelete':
-      buttonOn = (<MdDelete size={24} />);
-      buttonOff = (<MdDeleteForever size={24} />);
-      tooltipOn = 'Delete?';
-      tooltipOff = 'Delete?';
-      break;
-    case 'ActionAddGoal':
-      buttonOn = (<MdPlaylistAddCheck size={24} />);
-      buttonOff = (<MdPlaylistAdd size={24} />);
-      tooltipOn = 'You\'ve set this as a Goal!';
-      tooltipOff = 'Set this as a Goal?';
-      break;
-    case 'ActionEdit':
-      buttonOn = (<MdModeEdit size={24} />);
-      buttonOff = (null);
-      tooltipOn = 'Edit?';
-      tooltipOff = 'Edit?';
-      break;
-    case 'ToggleRadioButtonChecked':
-      buttonOn = (<FaSquare size={24} />);
-      buttonOff = (<FaSquareO size={24} />);
-      tooltipOn = 'You\'ve set this as a Goal!';
-      tooltipOff = 'Set this as a Goal?';
-      break;
-    case 'SocialPerson':
-      buttonOn = (<FaUser size={24} />);
-      buttonOff = (null);
-      break;
-    default:
-      buttonOn = (<FaQuestion size={24} />);
-      buttonOff = (<FaQuestion size={24} />);
-      break;
-  }
+  const iconType = {
+    ActionBookmark: {
+      buttonOn: (<SvgIcon size={24}><StarIcon /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><StarOutlineIcon /></SvgIcon>),
+      tooltipOn: toggleCount ? (`You + ${toggleCount - 1}`) : null,
+      tooltipOff: toggleCount ? (`${toggleCount}`) : null,
+    },
+    ActionDelete: {
+      buttonOn: (<SvgIcon size={24}><DeleteIcon /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><DeleteForeverIcon /></SvgIcon>),
+      tooltipOn: 'Delete?',
+      tooltipOff: 'Delete?',
+    },
+    ActionAddGoal: {
+      buttonOn: (<SvgIcon size={24}><PlaylistCheckIcon /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><PlaylistPlusIcon /></SvgIcon>),
+      tooltipOn: 'You\'ve set this as a Goal!',
+      tooltipOff: 'Set this as a Goal?',
+    },
+    ActionEdit: {
+      buttonOn: (<SvgIcon size={24}><PencilIcon /></SvgIcon>),
+      buttonOff: null,
+      tooltipOn: 'Edit?',
+      tooltipOff: 'Edit?',
+    },
+    ToggleRadioButtonChecked: {
+      buttonOn: (<SvgIcon size={24}><SquareIcon /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><SquareOutlineIcon /></SvgIcon>),
+      tooltipOn: 'You\'ve set this as a Goal!',
+      tooltipOff: 'Set this as a Goal?',
+    },
+    SocialPerson: {
+      buttonOn: (<SvgIcon size={24}><AccountIcon /></SvgIcon>),
+      buttonOff: null,
+    },
+  };
 
   if (authenticated) {
-    return (toggle ? (
+    return (
       <IconButton
-        tooltip={tooltipOn}
-        tooltipPosition="top-right"
-        className="icon-on"
-        style={style.toggleIconButton}
+        color="primary"
         onClick={toggleClick}
       >
-        {buttonOn}
+        {iconType[buttonType][toggle ? 'buttonOn' : 'buttonOff']}
       </IconButton>
-    ) : (
-      <IconButton
-        tooltip={tooltipOff}
-        tooltipPosition="top-right"
-        style={style.toggleIconButton}
-        onClick={toggleClick}
-      >
-        {buttonOff}
-      </IconButton>
-    ));
+    );
   }
   return (
     <IconButton
       disabled
       style={style.toggleIconButton}
     >
-      {buttonOff}
+      {iconType[buttonType]['buttonOff']}
     </IconButton>
   );
 };
 
-toggleIconButton.propTypes = propTypes;
+ToggleIconButton.propTypes = propTypes;
 
-export default toggleIconButton;
+export default ToggleIconButton;

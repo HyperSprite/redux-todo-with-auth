@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { Chip } from 'material-ui';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
+import classNames from 'classnames';
+import { withStyles } from 'material-ui-next/styles';
+import Chip from 'material-ui-next/Chip';
+import Card, { CardActions, CardHeader, CardContent } from 'material-ui-next/Card';
+import Collapse from 'material-ui-next/transitions/Collapse';
+import IconButton from 'material-ui-next/IconButton';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
+
 
 import justFns from 'just-fns';
 import MultiDayWeather from './../weather/multi-day-weather';
@@ -34,175 +41,252 @@ const propTypes = {
   urlRoot: PropTypes.string,
 };
 
+const styles = theme => ({
+  chip: {
+    margin: 4,
+    paddingLeft: 10,
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+});
+
 // props are passed in from component/list-events
-const renderViewEvent = ({
-  ...event,
-  adminMember,
-  authenticated,
-  canEdit,
-  deleteClick,
-  editClick,
-  eventLink,
-  expanded,
-  fav,
-  favClick,
-  favCount,
-  getWeather,
-  goal,
-  goalClick,
-  mPref,
-  niceEventDate,
-  subTitleName,
-  urlPath,
-  urlRoot,
-}) => (
-  <Card
-    className="card"
-    initiallyExpanded={expanded}
-  >
+class renderViewEvent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    };
+  }
 
-    <CardHeader
-      className="card-header"
-      showExpandableButton
-      avatar={ToggleIconButton('ActionBookmark', authenticated, fav, favClick, favCount)}
-      title={eventLink}
-      subtitle={subTitleName}
-    />
+  handleExpandClick = () => {
+    this.setState({ expanded: !this.state.expanded });
+  };
 
-    <CardText
-      expandable
-    >
-      <Helmet>
-        <title>{`${event.eventTitle} : Events : A Race athlete`}</title>
-        <link rel="canonical" href={`${urlRoot}/${urlPath}#${event.urlHash}`} />
-        <meta property="og:url" content={`${urlRoot}/${urlPath}#${event.urlHash}`} />
-        <meta property="og:title" content={event.eventTitle} />
-        <meta property="og:image" content={`${urlRoot}/images/logo-192x192.png`} />
-      </Helmet>
-      <ShareButtons
-        {...event}
-        hashtags={event.eventHashtags.concat('ARaceathlete')}
-        title={event.eventTitle}
-        urlHash={event.eventId}
-        urlPath={urlPath}
-        urlRoot={urlRoot}
-      />
-      {adminMember ? ( // hiding for adminMember only unitl this works
-        <span>{ToggleIconButton('ActionAddGoal', authenticated, goal, goalClick, null)}</span>
+  render() {
+    const {
+      classes,
+      adminMember,
+      authenticated,
+      canEdit,
+      deleteClick,
+      editClick,
+      eventLink,
+      expanded,
+      fav,
+      favClick,
+      favCount,
+      getWeather,
+      goal,
+      goalClick,
+      mPref,
+      niceEventDate,
+      subTitleName,
+      urlPath,
+      urlRoot,
+      ...event
+    } = this.props;
 
-      ) : (null)}
-      {canEdit ? (
-        <span>
-          {ToggleIconButton('ActionEdit', authenticated, true, editClick, null)}
-          {event.eventFavorites.length < 2 || adminMember ? (
-            <span>{ToggleIconButton('ActionDelete', authenticated, true, deleteClick, null)}</span>
+    return (
+      <Card
+        className={classes.card}
+      >
+
+        <CardHeader
+          className="card-header"
+
+          avatar={
+            <ToggleIconButton
+              buttonType="ActionBookmark"
+              authenticated={authenticated}
+              toggle={fav}
+              toggleClick={favClick}
+              toggleCount={favCount}
+            />}
+          title={eventLink}
+          subtitle={subTitleName}
+          action={<IconButton
+            className={classNames(classes.expand, {
+              [classes.expandOpen]: this.state.expanded,
+            })}
+            onClick={this.handleExpandClick}
+            aria-expanded={this.state.expanded}
+            aria-label="Show more"
+          >
+            <SvgIcon size={24} >
+              <ChevronDownIcon />
+            </SvgIcon>
+          </IconButton>}
+        />
+        <Collapse
+          in={this.state.expanded}
+          timeout="auto"
+          unmountOnExit
+        >
+          <CardContent>
+            <Helmet>
+              <title>{`${event.eventTitle} : Events : A Race athlete`}</title>
+              <link rel="canonical" href={`${urlRoot}/${urlPath}#${event.urlHash}`} />
+              <meta property="og:url" content={`${urlRoot}/${urlPath}#${event.urlHash}`} />
+              <meta property="og:title" content={event.eventTitle} />
+              <meta property="og:image" content={`${urlRoot}/images/logo-192x192.png`} />
+            </Helmet>
+            <ShareButtons
+              {...event}
+              hashtags={event.eventHashtags.concat('ARaceathlete')}
+              title={event.eventTitle}
+              urlHash={event.eventId}
+              urlPath={urlPath}
+              urlRoot={urlRoot}
+            />
+            {adminMember ? ( // hiding for adminMember only unitl this works
+              <span>
+                <ToggleIconButton
+                  buttonType="ActionAddGoal"
+                  authenticated={authenticated}
+                  toggle={goal}
+                  toggleClick={goalClick}
+                  toggleCount={null}
+                />
+              </span>
+
           ) : (null)}
-        </span>
-      ) : (null)}
-      <div className="div-flexwrap" >
-        {event.eventHashtags.map((hashtag) => {
-          return (
-            <span key={`${event.eventId}${hashtag}`} className="chip">
-              <Chip className="chip" >
-                {`#${hashtag}`}
-              </Chip>
-            </span>
-          );
-        })}
-      </div>
+            {canEdit ? (
+              <span>
+                <ToggleIconButton
+                  buttonType="ActionEdit"
+                  authenticated={authenticated}
+                  toggle
+                  toggleClick={editClick}
+                  toggleCount={null}
+                />
+                {event.eventFavorites.length < 2 || adminMember ? (
+                  <span>
+                    <ToggleIconButton
+                      buttonType="ActionDelete"
+                      authenticated={authenticated}
+                      toggle
+                      toggleClick={deleteClick}
+                      toggleCount={null}
+                    />
+                  </span>
+                ) : (null)}
+              </span>
+            ) : (null)}
+            <div className="div-flexwrap" >
+              {event.eventHashtags.map(hashtag => (
+                <Chip
+                  key={`${event.eventId}${hashtag}`}
+                  className={classes.chip}
+                  label={`#${hashtag}`}
+                />
+              ))}
+            </div>
 
-      <Static
-        contentLabel="Event Date"
-        content={niceEventDate}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Number of Days"
-        content={event.eventDays}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Time Zone"
-        content={event.eventGeoTzName}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Activity Type"
-        content={event.eventAthleteType}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Type"
-        content={event.eventType}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Series"
-        content={event.eventSeries}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Organizer"
-        content={event.eventOrg}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Description"
-        content={event.eventDescHTML}
-        contentType="html"
-      />
-      <Static
-        contentLabel="Event Link"
-        content={event.eventURL}
-        contentType="url"
-        baseURL=""
-      />
-      <Static
-        contentLabel="Location"
-        content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
-        contentType="address"
-        baseURL="http://www.google.com/maps/dir//"
-        contentAlt={event.eventGeoFormattedAddress}
-      />
-      <Static
-        contentLabel="Starting Elevation"
-        content={`${justFns.statsConversions('elev', null, event.eventGeoElevation, mPref)} ${justFns.mPrefLabel('dstS', mPref).display}`}
-        contentType="text"
-      />
-      <Static
-        contentLabel="Routes"
-        content={event.eventRoutes && event.eventRoutes.length}
-        contentType="text"
-      />
-      {authenticated && event.eventRoutes.map(route => (
-        <GetViewRoute
-          key={`${event.eventId}${route.eventRouteURL}`}
-          {...route}
-          mPref={mPref}
-          adminMember={adminMember}
-        />
-      ))}
-    </CardText>
-    {getWeather && event.eventGeoTzRawOffset ? (
-      <CardActions>
-        <MultiDayWeather
-          geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
-          dstOffset={event.eventGeoTzDSTOffset}
-          tzOffset={event.eventGeoTzRawOffset}
-          date={new Date(event.eventDate)}
-          eventDays={event.eventDays || 1}
-          mPref={mPref}
-          expanded={expanded}
-          noShowExtender
-        />
-      </CardActions>
-    ) : null }
-  </Card>
-);
+            <Static
+              contentLabel="Event Date"
+              content={niceEventDate}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Number of Days"
+              content={event.eventDays}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Time Zone"
+              content={event.eventGeoTzName}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Activity Type"
+              content={event.eventAthleteType}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Type"
+              content={event.eventType}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Series"
+              content={event.eventSeries}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Organizer"
+              content={event.eventOrg}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Description"
+              content={event.eventDescHTML}
+              contentType="html"
+            />
+            <Static
+              contentLabel="Event Link"
+              content={event.eventURL}
+              contentType="url"
+              baseURL=""
+            />
+            <Static
+              contentLabel="Location"
+              content={[event.eventLocStreet, event.eventLocCity, event.eventLocState, event.eventLocZip, event.eventLocCountry]}
+              contentType="address"
+              baseURL="http://www.google.com/maps/dir//"
+              contentAlt={event.eventGeoFormattedAddress}
+            />
+            <Static
+              contentLabel="Starting Elevation"
+              content={`${justFns.statsConversions('elev', null, event.eventGeoElevation, mPref)} ${justFns.mPrefLabel('dstS', mPref).display}`}
+              contentType="text"
+            />
+            <Static
+              contentLabel="Routes"
+              content={event.eventRoutes && event.eventRoutes.length}
+              contentType="text"
+            />
+            {authenticated && event.eventRoutes.map(route => (
+              <GetViewRoute
+                key={`${event.eventId}${route.eventRouteURL}`}
+                {...route}
+                mPref={mPref}
+                adminMember={adminMember}
+              />
+            ))}
+          </CardContent>
+        </Collapse>
+        {getWeather && event.eventGeoTzRawOffset ? (
+          <CardActions>
+            <MultiDayWeather
+              geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
+              dstOffset={event.eventGeoTzDSTOffset}
+              tzOffset={event.eventGeoTzRawOffset}
+              date={new Date(event.eventDate)}
+              eventDays={event.eventDays || 1}
+              mPref={mPref}
+              expanded={expanded}
+              noShowExtender
+            />
+          </CardActions>
+        ) : null }
+      </Card>
+    );
+  }
+}
+
 
 renderViewEvent.propTypes = propTypes;
 
-export default renderViewEvent;
+export default withStyles(styles, { name: 'StyledrenderViewEvent' })(renderViewEvent);
 
 // eventId: String,
 // eventOwner: String,

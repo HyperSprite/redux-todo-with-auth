@@ -1,52 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatButton, IconButton } from 'material-ui';
+import { withStyles } from 'material-ui-next/styles';
+import IconButton from 'material-ui-next/IconButton';
+import SvgIcon from 'material-ui-next/SvgIcon';
 
-import MdPerson from 'react-icons/lib/md/person';
-import MdPersonO from 'react-icons/lib/md/person-outline';
-import FaSquare from 'react-icons/lib/fa/square';
-import FaSquareO from 'react-icons/lib/fa/square-o';
-import FaStar from 'react-icons/lib/fa/star';
-import FaStarO from 'react-icons/lib/fa/star-o';
-
-import {
-  grey50, // #FAFAFA
-  grey100, // #F5F5F5
-} from 'material-ui/styles/colors';
+import AccountIcon from 'mdi-react/AccountIcon';
+import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';
+import SquareIcon from 'mdi-react/SquareIcon';
+import SquareOutlineIcon from 'mdi-react/SquareOutlineIcon';
+import StarIcon from 'mdi-react/StarIcon';
+import StarOutlineIcon from 'mdi-react/StarOutlineIcon';
 
 const propTypes = {
+  classes: PropTypes.object.isRequired,
   active: PropTypes.bool.isRequired,
   filter: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
-const EventTBLink = ({ active, filter, onClick }) => {
+const styles = theme => ({
+  icon: {
+    color: 'inherit',
+    // fontSize: 30,
+  },
+});
+
+const EventTBLink = ({ classes, active, filter, onClick }) => {
   if (active) {
     switch (filter) {
       case 'EVENTS_SHOW_ALL': {
         return (
           <IconButton
-            touch
+            className={classes.icon}
+            aria-label="Show All"
           >
-            {<FaSquare size={28} color={grey50} />}
+            <SvgIcon><SquareIcon /></SvgIcon>
           </IconButton>
         );
       }
       case 'EVENTS_SHOW_FAVORITE': {
         return (
           <IconButton
-            touch
+            className={classes.icon}
+            aria-label="Show Favorites"
           >
-            {<FaStar size={28} color={grey50} />}
+            <SvgIcon><StarIcon /></SvgIcon>
           </IconButton>
         );
       }
       case 'EVENTS_SHOW_OWNER': {
-        return (<IconButton
-          touch
-        >
-          icon={<MdPerson size={28} color={grey50} />}
-        </IconButton>
+        return (
+          <IconButton
+            className={classes.icon}
+            aria-label="Show Mine"
+          >
+            <SvgIcon><AccountIcon /></SvgIcon>
+          </IconButton>
         );
       }
       default:
@@ -57,39 +66,39 @@ const EventTBLink = ({ active, filter, onClick }) => {
     case 'EVENTS_SHOW_ALL': {
       return (
         <IconButton
-          touch
-          onClick={(e) => {
-            e.preventDefault();
+          className={classes.icon}
+          aria-label="Show All"
+          onClick={() => {
             onClick();
           }}
         >
-          {<FaSquareO size={28} color={grey100} />}
+          <SvgIcon><SquareOutlineIcon /></SvgIcon>
         </IconButton>
       );
     }
     case 'EVENTS_SHOW_FAVORITE': {
       return (
         <IconButton
-          touch
-          onClick={(e) => {
-            e.preventDefault();
+          className={classes.icon}
+          aria-label="Show Favorites"
+          onClick={() => {
             onClick();
           }}
         >
-          {<FaStarO size={28} color={grey100} />}
+          <SvgIcon><StarOutlineIcon /></SvgIcon>
         </IconButton>
       );
     }
     case 'EVENTS_SHOW_OWNER': {
       return (
         <IconButton
-          touch
-          onClick={(e) => {
-            e.preventDefault();
+          className={classes.icon}
+          aria-label="Show Mine"
+          onClick={() => {
             onClick();
           }}
         >
-          {<MdPersonO size={28} color={grey100} />}
+          <SvgIcon><AccountOutlineIcon /></SvgIcon>
         </IconButton>
       );
     }
@@ -100,4 +109,4 @@ const EventTBLink = ({ active, filter, onClick }) => {
 
 EventTBLink.propTypes = propTypes;
 
-export default EventTBLink;
+export default withStyles(styles, { name: 'StyledEventTBLink' })(EventTBLink);

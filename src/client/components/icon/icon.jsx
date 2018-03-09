@@ -28,6 +28,8 @@ const propTypes = {
   classes: PropTypes.object.isRequired,
   /** color=<option> - "primary" for primary palette color, "secondary" for secondary color */
   color: PropTypes.string,
+  /** used with buttons to change color */
+  disabled: PropTypes.bool,
   /** force - (bool) fixed primary colors */
   force: PropTypes.bool,
   /** inverse - (bool) the icon will swap the colors */
@@ -45,6 +47,7 @@ const propTypes = {
 
 const defaultProps = {
   color: '',
+  disabled: false,
   force: false,
   inverse: false,
   pointer: false,
@@ -84,6 +87,10 @@ const styles = theme => ({
   primary: {
     fill: theme.palette.primary[500],
     backgroundColor: 'transparent',
+    '&$disabled': {
+      fill: theme.palette.action.disabled,
+      backgroundColor: 'transparent',
+    },
     '&$inverse': {
       fill: theme.palette.background.default,
       backgroundColor: 'transparent',
@@ -98,7 +105,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.getContrastText(theme.palette.secondary.A200),
     '&$inverse': {
       fill: theme.palette.getContrastText(theme.palette.secondary.A200),
-      backgroundColor: theme.palette.secondary.A200,
+      backgroundColor: 'transparent',
     },
     '&$variant': {
       fill: theme.palette.secondary.contrastText,
@@ -131,10 +138,14 @@ const styles = theme => ({
     cursor: 'pointer',
   },
   variant: {},
+  disabled: {
+    fill: theme.palette.action.disabled,
+    backgroundColor: 'transparent',
+  },
 });
 
 const ExtIcon = (props) => {
-  const { classes, children, color, className: classNameProp, force, inverse, pointer, size, variant } = props;
+  const { classes, children, color, className: classNameProp, disabled, force, inverse, pointer, size, variant } = props;
 
   const className = classNames(
     {
@@ -143,6 +154,7 @@ const ExtIcon = (props) => {
       [classes.secondary]: color === 'secondary',
       [classes.inherit]: color === 'inherit',
       [classes.force]: force,
+      [classes.disabled]: disabled,
       [classes.inverse]: inverse,
       [classes.variant]: variant === 'raised',
       [classes.pointer]: pointer,

@@ -10,7 +10,8 @@ import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
-import MPrefSwitcher from '../mpref-switcher';
+import SwitcherMPref from '../switcher-mpref';
+import SwitcherTheme from '../switcher-theme';
 
 const styles = theme => ({
   list: {
@@ -55,7 +56,8 @@ class MenuDrawer extends Component {
       <div>
         <div className={classes.toolbar} />
         <List>
-          <MPrefSwitcher />
+          <SwitcherMPref />
+          <SwitcherTheme />
           <Divider />
           {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
             <MenuDrawerItem

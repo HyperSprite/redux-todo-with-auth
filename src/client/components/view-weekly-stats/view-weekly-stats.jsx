@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
-import { CircularProgress, Paper, RaisedButton } from 'material-ui';
-import FaRefresh from 'react-icons/lib/fa/refresh';
+import ButtonRefresh from '../button/refresh';
+import ButtonBase from '../button/base';
+import ButtonProgress from '../button/progress';
 
 import * as actions from '../../actions';
 import Layout from '../layout';
@@ -71,72 +72,61 @@ class activeStats extends Component {
     const { weeklyStats, datePref, isFetching, mPref } = this.props;
     return (
       <Layout>
-            <ScrollIntoView
-              id={location.hash}
-              headerHeight={70}
-            />
+        <ScrollIntoView
+          id={location.hash}
+          headerHeight={70}
+        />
         <div>
           <div>
-              {isFetching ? (
-                  <RaisedButton
-                    label="Check Strava for New Activities"
-                    secondary
-                    style={style.button}
-                    icon={<CircularProgress size={22} thickness={4} />}
-                    disabled
-                  />
-              ) : (
-                  <RaisedButton
-                    label="Check Strava for New Activities"
-                    secondary
-                    style={style.button}
-                    onClick={this.updateUserActivities}
-                    icon={<FaRefresh size={20} />}
-                  />
-              )}
+            <ButtonRefresh
+              label="Check Strava for New Activities"
+              color="secondary"
+              onClick={this.updateUserActivities}
+              disabled={isFetching}
+            />
+          </div>
+          {!weeklyStats ? (
+            <p>Loading Activities</p>
+          ) : (
+            <div >
+              { weeklyStats.map(oneWeek => (
+                <WeeklyStats
+                  key={`week-${oneWeek.weeklyTotals.date}`}
+                  week={oneWeek.weeklyTotals.date}
+                  stats={oneWeek}
+                  datePref={datePref}
+                  mPref={mPref}
+                />
+              ))}
             </div>
-              {!weeklyStats ? (
-                <p>Loading Activities</p>
-              ) : (
-                <div >
-                  { weeklyStats.map((oneWeek, i) => (
-                    <WeeklyStats
-                      key={`week-${oneWeek.weeklyTotals.date}`}
-                      week={oneWeek.weeklyTotals.date}
-                      stats={oneWeek}
-                      datePref={datePref}
-                      mPref={mPref}
-                    />
-                  ))}
-                </div>
-              )}
-              {isFetching ? (
-                <div>
-                  {weeklyStats.length ? (
-                    <RaisedButton
-                      label="Load Another Week"
-                      primary
-                      style={style.button}
-                      disabled
-                      icon={<CircularProgress size={22} thickness={4} />}
-                    />
-                  ) : null}
-                </div>
-              ) : (
-                <div>
-                  <VisibilitySensor
-                    delayedCall
-                    onChange={this.loadSensor}
-                  />
-                  <RaisedButton
-                    label="Load Another Week"
-                    primary
-                    style={style.button}
-                    onClick={this.fetchAnotherWeek}
-                  />
-                </div>
-              )}
+          )}
+          {isFetching ? (
+            <div>
+              {weeklyStats.length ? (
+                <ButtonProgress
+                  variant="raised"
+                  label="Load Another Week"
+                  color="primary"
+                  style={style.button}
+                  disabled
+                />
+              ) : null}
             </div>
+          ) : (
+            <div>
+              <VisibilitySensor
+                delayedCall
+                onChange={this.loadSensor}
+              />
+              <ButtonBase
+                variant="raised"
+                label="Load Another Week"
+                color="primary"
+                onClick={this.fetchAnotherWeek}
+              />
+            </div>
+          )}
+        </div>
       </Layout>
     );
   }

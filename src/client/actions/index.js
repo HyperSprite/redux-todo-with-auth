@@ -55,6 +55,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   SET_CLUB_NOTICE: 'SET_CLUB_NOTICE',
   MESSAGE_FOR_USER: 'MESSAGE_FOR_USER',
   SERVER_MESSAGE: 'SERVER_MESSAGE',
+  THEME_CHANGE_PALETTE_TYPE: 'THEME_CHANGE_PALETTE_TYPE',
 };
 
 // handle error mesages
@@ -605,6 +606,15 @@ export function setIsFetchingOff() {
 export function setMPrefSwitch() {
   return {
     type: TYPES.SET_MPREF_SWITCH,
+  };
+}
+
+export function setMUITheme(paletteType: string) {
+  return {
+    type: TYPES.THEME_CHANGE_PALETTE_TYPE,
+    payload: {
+      paletteType: paletteType === 'light' ? 'dark' : 'light',
+    },
   };
 }
 

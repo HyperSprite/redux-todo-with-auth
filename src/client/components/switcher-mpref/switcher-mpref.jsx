@@ -3,12 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   ListItem,
-  ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
 } from 'material-ui-next/List';
 import Switch from 'material-ui-next/Switch';
-import RulerIcon from 'mdi-react/RulerIcon';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 
@@ -19,7 +17,7 @@ const propTypes = {
   setDrawer: PropTypes.func.isRequired,
 };
 
-class MPrefSwitcher extends React.Component {
+class SwitcherMPref extends React.Component {
   constructor(props) {
     super(props);
     this.switchMeasurementPref = this.switchMeasurementPref.bind(this);
@@ -54,6 +52,6 @@ function mapStateToProps(state) {
   };
 }
 
-MPrefSwitcher.propTypes = propTypes;
+SwitcherMPref.propTypes = propTypes;
 
-export default connect(mapStateToProps, actions)(MPrefSwitcher);
+export default connect(mapStateToProps, actions)(SwitcherMPref);

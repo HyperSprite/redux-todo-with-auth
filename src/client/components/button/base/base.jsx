@@ -5,8 +5,6 @@ import { withStyles } from 'material-ui-next/styles';
 import Tooltip from './tooltip';
 import Button from './button';
 
-import Icon from '../../icon';
-
 /**
 * Required only props
 
@@ -69,7 +67,7 @@ const styles = theme => ({
   root: {},
   button: {
     margin: '0.3em',
-    width: 150,
+    minWidth: 150,
     height: 38,
   },
   buttonLabel: {
@@ -97,7 +95,7 @@ const ButtonBase = (props) => {
 
   return (
     <div className={classes.root}>
-      {props.disabled || !toolTipId ? (
+      {props.disabled || !toolTipPlacement ? (
         <Button {...buttonProps} >
           {children}
         </Button>

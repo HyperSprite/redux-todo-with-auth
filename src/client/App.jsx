@@ -18,13 +18,15 @@ import Template from './components/template';
 
 const app = Component => (
   <Provider store={store}>
+    <MuiTheme >
     <Router>
-      <MuiTheme >
+
         <OldMuiThemeProvider muiTheme={getMuiTheme(oldTheme)}>
           <Component >{ routes }</Component>
         </OldMuiThemeProvider>
-      </MuiTheme>
+
     </Router>
+    </MuiTheme>
   </Provider>
 );
 

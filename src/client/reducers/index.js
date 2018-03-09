@@ -11,6 +11,7 @@ import page from './page';
 import routeplans from './routeplan';
 import search from './search';
 import serverMessage from './server-messages';
+import theme from './theme';
 import visibilityFilter from './visibility-filter';
 
 const appReducer = combineReducers({
@@ -22,6 +23,7 @@ const appReducer = combineReducers({
   routeplans,
   search,
   serverMessage,
+  theme,
   visibilityFilter,
 });
 
