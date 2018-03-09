@@ -11,9 +11,6 @@ import * as actions from './../../actions';
 
 import Layout from '../layout';
 import FtpWeight from './ftp-weight';
-import ScrollIntoView from '../../containers/scroll-into-view';
-
-import style from '../../styles/style';
 
 const propTypes = {
   fetchData: PropTypes.func,
@@ -83,10 +80,6 @@ class PowerAndWeight extends React.Component {
     const { classes, mPref } = this.props;
     return (
       <Layout>
-        <ScrollIntoView
-          id={location.hash}
-          headerHeight={70}
-        />
         <Card >
           {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
             <FtpWeight

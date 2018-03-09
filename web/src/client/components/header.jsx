@@ -4,9 +4,6 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui-next/styles';
 import Headroom from 'react-headroom';
-// import { AppBar } from 'material-ui';
-import ARaceAthleteSVG from '../assets/araceathlete-w-noname.svg';
-
 
 import * as actions from './../actions';
 
@@ -15,8 +12,6 @@ import Signin from './auth/signin';
 import EventFilter from './view-events/filter-toolbar';
 import ClubNotice from './club-notice';
 import IconLink from './icon-link';
-
-import style from '../styles/style';
 
 const propTypes = {
   authenticated: PropTypes.bool,
@@ -35,6 +30,14 @@ const defaultProps = {
 };
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  help: {
+    padding: '0 12px 0 2px',
+  },
   icon: {
     fill: theme.palette.background.appBar,
   },
@@ -87,13 +90,17 @@ class Header extends Component {
     const { classes, page } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
     const pageNameWithHelp = this.props.page.help ? (
-      <span>
-        {`${page.name} `}
-        <IconLink
-          link={page.help}
-          color={'#fefefe'} // TODO Fix color to use theme
-        />
-      </span>
+      <div className={classes.root}>
+        <div>
+          {page.name}
+        </div>
+        <div className={classes.help}>
+          <IconLink
+            link={page.help}
+            color={'#fefefe'} // TODO Fix color to use theme
+          />
+        </div>
+      </div>
     ) : (
       <span>
         {page.name}

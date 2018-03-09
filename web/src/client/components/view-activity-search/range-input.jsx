@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withStyles } from 'material-ui-next/styles';
 import justFNS from 'just-fns';
 import EditSwitch from '../form/edit/switch';
-import style from './style';
 
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
@@ -14,6 +14,21 @@ const propTypes = {
   /** Object */
   valuesRange: PropTypes.object.isRequired,
 };
+
+const styles = theme => ({
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  },
+  flexcontainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    padding: '10px 0 10px 0',
+    minHeight: 80,
+  },
+});
 
 class RangeInput extends React.Component {
   constructor(props) {
@@ -34,7 +49,7 @@ class RangeInput extends React.Component {
       valuesRange,
       valuesDefaults,
     } = this.props;
-    if (valueItems && valuesRange && valuesDefaults) {
+    if (valuesRange) {
       Object.values(valueItems).forEach((element) => {
         const vals = {
           conDef0: valuesDefaults[element.value].range[0],
@@ -79,6 +94,7 @@ class RangeInput extends React.Component {
 
   render() {
     const {
+      classes,
       form,
       mPref,
       datePref,
@@ -93,8 +109,8 @@ class RangeInput extends React.Component {
     } = this.props;
 
     const ranges = (
-      <div style={style.flexParent} >
-        <div style={style.flexcontainer} >
+      <div className={classes.flexParent} >
+        <div className={classes.flexcontainer} >
           {(this.state.rangeArr.map(rA => (
             <div key={rA.contentName} >
               {rA.contentName !== 'count' ||
@@ -137,4 +153,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(RangeInput);
+const styledRangeInput = withStyles(styles, { name: 'StyledRangeInput' })(RangeInput);
+export default connect(mapStateToProps)(styledRangeInput);

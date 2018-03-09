@@ -1,11 +1,10 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import { IconButton } from 'material-ui';
+import IconButton from 'material-ui-next/IconButton';
 
 import SpinnerIcon from '../form/spinner-icon';
 import style from '../../styles/style';
 import './weather.css';
-// import '../../styles/weather-icons.css';
 
 const HeadlineWeather = ({ ...dayWF }) => {
   const tempDiff = document.documentElement.clientWidth > 600 ?

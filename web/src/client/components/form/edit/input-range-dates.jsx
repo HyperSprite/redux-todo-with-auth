@@ -1,13 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
 import { DatePicker } from 'material-ui';
 
 import lib from '../../../containers/lib';
-
-
-// import metricConv from './metric-conversions';
-import styles from './styles';
-
 
 const propTypes = {
   /** date display '%m/%d/%Y' from Strava*/
@@ -33,6 +29,31 @@ const propTypes = {
   min: PropTypes.string.isRequired,
 };
 
+const styles = theme => ({
+  formError: {
+    color: '#dd0000',
+    fontWeight: 'bold',
+  },
+  formWarning: {
+    color: '#dd9900',
+    fontWeight: 'bold',
+  },
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  inputLabel: {
+    padding: '0 25px 0 20px',
+    fontWeight: 'bold',
+  },
+  rangeDateBox: {
+    marginTop: -20,
+    width: 220,
+    padding: '0 5px 0 5px',
+  },
+});
+
 class InputRangeDate extends React.Component {
   constructor(props) {
     super(props);
@@ -52,6 +73,7 @@ class InputRangeDate extends React.Component {
 
   render() {
     const {
+      classes,
       input,
       datePref,
       defaultValue,
@@ -67,21 +89,21 @@ class InputRangeDate extends React.Component {
 
     return (
       <div>
-        <div style={styles.inputLabel}>
+        <div className={classes.inputLabel}>
           <label
             htmlFor={input.name}
           >
             {label}
           </label>
         </div>
-        <div style={styles.flexParent}>
-          <div style={styles.rangeDateBox}>
+        <div className={classes.flexParent}>
+          <div className={classes.rangeDateBox}>
             <DatePicker
               onChange={(event, value) => this.handleDateUpdate(new Date(value), 'min')}
               autoOk
               floatingLabelText={dsply.min}
-              floatingLabelStyle={styles.floatingLabelStyle}
-              floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+              floatingLabelStyle={classes.floatingLabelStyle}
+              floatingLabelFocusStyle={classes.floatingLabelFocusStyle}
               minDate={new Date(min)}
               maxDate={(this.props.input.value && this.props.input.value[1]) || new Date(max)}
               value={this.props.input.value[0]}
@@ -89,13 +111,13 @@ class InputRangeDate extends React.Component {
               formatDate={lib.dateFormat}
             />
           </div>
-          <div style={styles.rangeDateBox}>
+          <div className={classes.rangeDateBox}>
             <DatePicker
               onChange={(event, value) => this.handleDateUpdate(new Date(value), 'max')}
               autoOk
               floatingLabelText={dsply.max}
-              floatingLabelStyle={styles.floatingLabelStyle}
-              floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+              floatingLabelStyle={classes.floatingLabelStyle}
+              floatingLabelFocusStyle={classes.floatingLabelFocusStyle}
               minDate={(this.props.input.value && this.props.input.value[0]) || new Date(min)}
               maxDate={new Date(max)}
               value={this.props.input.value[1]}
@@ -105,7 +127,7 @@ class InputRangeDate extends React.Component {
           </div>
         </div>
         {touched && (
-          (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
+          (error && <div className={classes.formError}>{error}</div>) || (warning && <div className={classes.formWarning}>{warning}</div>)
         )}
       </div>
     );
@@ -114,4 +136,4 @@ class InputRangeDate extends React.Component {
 
 InputRangeDate.propTypes = propTypes;
 
-export default InputRangeDate;
+export default withStyles(styles, { name: 'StyledInputRangeDate' })(InputRangeDate);

@@ -8,7 +8,7 @@ import Signin from './../components/auth/signin';
 import Signout from './../components/auth/signout';
 import Athlete from './../components/athlete';
 import ActivitySearch from './../components/view-activity-search';
-import RouteplanSearch from './../components/routeplan-search';
+import RouteplanSearch from './../components/view-routeplan-search';
 import Dashboard from './../components/dashboard';
 import Events from './../components/view-events';
 import EditEvent from './../components/view-events/edit-event';

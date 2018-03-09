@@ -1,3 +1,4 @@
+// TODO material-ui-next - complete redo with charts, still not public
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -55,7 +56,6 @@ const ActivityCalc = ({
       />
       {returnValues.map(rV => (
         <div key={rV.activityType}>
-          {(rV.displayType.range && rV.displayType.range[0] !== rV.displayType.range[1]) && (
           <div>
             {[rV.activityLabel]}
             {rV.displayType.map(rVDT => (
@@ -85,7 +85,6 @@ const ActivityCalc = ({
               </div>
             ))}
           </div>
-        )}
         </div>
       ))}
     </div>

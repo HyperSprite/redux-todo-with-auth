@@ -50,9 +50,6 @@ const today = new Date().getFullYear();
 const styles = theme => ({
   root: {
     color: theme.palette.primary.contrastText,
-    fontFamily: theme.typography.fontFamily,
-    fontSize: theme.typography.fontSize,
-    fontWeight: theme.typography.fontWeightRegular,
     backgroundColor: theme.palette.secondary.dark,
   },
   flexContainer: {

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import * as actions from './../actions';
 import Static from './form/static';
 // import Astrophases from './weather/astrophases';
+import ThemeObject from './admin/theme-object';
 import Motivation from './motivation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
@@ -118,6 +119,7 @@ class Athlete extends Component {
                   Loading Weather Data...
                 </div>
               )}
+              <ThemeObject />
               <Motivation style={style} />
               <TextBalance />
               <div style={style.flexcontainer}>

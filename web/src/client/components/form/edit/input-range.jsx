@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 import justFNS from 'just-fns';
 import metricConv from './metric-conversions';
-import styles from './styles';
 
 const propTypes = {
   /** [default min value, default max value] */
@@ -30,8 +30,102 @@ const propTypes = {
   min: PropTypes.number.isRequired,
 };
 
+const styles = theme => ({
+  formError: {
+    color: '#dd0000',
+    fontWeight: 'bold',
+  },
+  formWarning: {
+    color: '#dd9900',
+    fontWeight: 'bold',
+  },
+  container: {
+    width: 250,
+    padding: '5px 15px',
+  },
+  label: theme.typography.fontWeightMedium,
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  flexChild: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-evenly',
+  },
+  div: {
+    padding: '0 5px',
+  },
+  rangeTrackStyle: [
+    {
+      backgroundColor: '#ef9a9a',
+      height: 13,
+    },
+  ],
+  rangeHandleStyle: [
+    {
+      borderColor: '#d50000',
+      height: 21,
+      width: 21,
+      marginLeft: -8,
+      marginTop: -4,
+      backgroundColor: '#d50000',
+    },
+    {
+      borderColor: '#d50000',
+      height: 21,
+      width: 21,
+      marginLeft: -8,
+      marginTop: -4,
+      backgroundColor: '#d50000',
+    },
+  ],
+  rangeRailStyle: {
+    backgroundColor: theme.palette.secondary[200],
+    height: 13,
+  },
+});
+const style = {
+  rangeTrackStyle: [{
+    backgroundColor: '#ef9a9a',
+    height: 13,
+  }],
+  rangeHandleStyle: [
+    {
+      borderColor: '#d50000',
+      height: 21,
+      width: 21,
+      marginLeft: -8,
+      marginTop: -4,
+      backgroundColor: '#d50000',
+    },
+    {
+      borderColor: '#d50000',
+      height: 21,
+      width: 21,
+      marginLeft: -8,
+      marginTop: -4,
+      backgroundColor: '#d50000',
+    },
+  ],
+  rangeRailStyle: {
+    backgroundColor: '#aebcc3',
+    height: 13,
+  },
+}
+
 const InputRange = (props) => {
-  const { input, defaultValue, label, min, max, mPref, meta: { touched, error, warning } } = props;
+  const {
+    classes,
+    input,
+    defaultValue,
+    label,
+    min,
+    max,
+    mPref,
+    meta: { touched, error, warning },
+  } = props;
   const conMetric = metricConv[input.name] ? metricConv[input.name].conMetric : null;
   const dsply = {
     min: justFNS.statsConversions(conMetric, false, min, mPref),
@@ -43,41 +137,40 @@ const InputRange = (props) => {
       (metricConv[input.name] && metricConv[input.name].conTypeMet) || null,
   };
   return (
-    <div style={styles.rangeBox}>
-      <label
-        htmlFor={input.name}
-      >
-        <div style={{ fontWeight: 'bold' }} >{`${label} ${dsply.metric ? dsply.metric : ''}`}</div>
-        <div style={styles.flexParent} >
-          <div style={styles.flexChild} >
-            <div style={styles.div} >{dsply.min}</div>
-            <div style={styles.div} >{dsply.min !== dsply.iValue0 && dsply.iValue0}</div>
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <label htmlFor={input.name}>
+          <div className={classes.label} >{`${label} ${dsply.metric ? dsply.metric : ''}`}</div>
+          <div className={classes.flexParent} >
+            <div className={classes.flexChild} >
+              <div className={classes.div} >{dsply.min}</div>
+              <div className={classes.div} >{dsply.min !== dsply.iValue0 && dsply.iValue0}</div>
+            </div>
+            <div className={classes.flexChild}>
+              <div className={classes.div} >{dsply.max !== dsply.iValue1 && dsply.iValue1}</div>
+              <div className={classes.div} >{dsply.max}</div>
+            </div>
           </div>
-          <div style={styles.flexChild}>
-            <div style={styles.div} >{dsply.max !== dsply.iValue1 && dsply.iValue1}</div>
-            <div style={styles.div} >{dsply.max}</div>
-          </div>
-
+        </label>
+        <div>
+          <Range
+            value={input.value || [min, max]}
+            name={input.value}
+            onChange={input.onChange}
+            defaultValue={defaultValue}
+            min={min}
+            max={max}
+            mPref={mPref}
+            allowCross={false}
+            trackStyle={style.rangeTrackStyle}
+            handleStyle={style.rangeHandleStyle}
+            railStyle={style.rangeRailStyle}
+          />
         </div>
-
-      </label>
-      <div>
-        <Range
-          value={input.value || [min, max]}
-          name={input.value}
-          onChange={input.onChange}
-          defaultValue={defaultValue}
-          min={min}
-          max={max}
-          mPref={mPref}
-          allowCross={false}
-          trackStyle={styles.rangeTrackStyle}
-          handleStyle={styles.rangeHandleStyle}
-          railStyle={styles.rangeRailStyle}
-        />
       </div>
       {touched && (
-        (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
+        (error && <div className={classes.formError}>{error}</div>) ||
+        (warning && <div className={classes.formWarning}>{warning}</div>)
       )}
     </div>
   );
@@ -85,4 +178,4 @@ const InputRange = (props) => {
 
 InputRange.propTypes = propTypes;
 
-export default InputRange;
+export default withStyles(styles, { name: 'StyledInputRange' })(InputRange);
