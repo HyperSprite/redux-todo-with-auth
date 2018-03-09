@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import RefreshIcon from 'mdi-react/RefreshIcon';
+import { CircularProgress } from 'material-ui-next/Progress';
 
 import ButtonBase from '../base';
 
 /**
+
+import ButtonProgress from '../button/progress';
+
 * Required only props
 
-<ButtonRefresh
+<ButtonProgress
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonRefresh
+<ButtonProgress
   onClick={handleClose}
-  color="secondary"
-  label="Refresh"
+  color="primary"
+  label="Search"
   size="small"
-  toolTip="Refresh Data"
-  toolTipId="tooltip-refresh"
-  toolTipPlacement="bottom"
+  toolTip="Search Activities"
+  toolTipId="tooltip-search"
+  toolTipPlacement="left"
   variant="raised"
 />
 
@@ -49,23 +52,23 @@ const propTypes = {
 };
 
 const defaultProps = {
-  color: 'primary',
-  label: 'Refresh',
-  hasIcon: true,
+  color: '',
+  label: 'Search',
+  hasIcon: false,
   size: 'small',
-  toolTip: 'Refresh Data',
-  toolTipId: 'tooltip-refresh',
+  toolTip: 'Search',
+  toolTipId: 'tooltip-search',
   toolTipPlacement: 'top',
-  variant: 'flat',
+  variant: '',
 };
 
-const ButtonRefresh = props => (
+const ButtonProgress = props => (
   <ButtonBase {...props} >
-    <RefreshIcon />
+    :)
   </ButtonBase>
 );
 
-ButtonRefresh.propTypes = propTypes;
-ButtonRefresh.defaultProps = defaultProps;
+ButtonProgress.propTypes = propTypes;
+ButtonProgress.defaultProps = defaultProps;
 
-export default ButtonRefresh;
+export default ButtonProgress;

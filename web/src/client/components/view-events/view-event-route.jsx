@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Card, CardHeader } from 'material-ui/Card';
+import withStyles from 'material-ui-next/styles';
+import Card, { CardHeader } from 'material-ui-next/Card';
 
 import justFns from 'just-fns';
 import Static from './../form/static';
@@ -17,6 +18,10 @@ const propTypes = {
   eventRouteURL: PropTypes.number.isRequired,
   mPref: PropTypes.bool.isRequired,
 };
+
+const styles = theme => ({
+
+});
 
 class ViewEventRoute extends React.Component {
   constructor(props) {
@@ -84,4 +89,4 @@ class ViewEventRoute extends React.Component {
 
 ViewEventRoute.propTypes = propTypes;
 
-export default ViewEventRoute;
+export default withStyles(styles, { name: 'StyledViewEventRoute' })(ViewEventRoute);

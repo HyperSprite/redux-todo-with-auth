@@ -1,6 +1,7 @@
 import 'typeface-roboto/index.css';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 // import { create } from 'jss';
 // import jssCompose from 'jss-compose';
 // import JssProvider from 'react-jss/lib/JssProvider';
@@ -17,20 +18,54 @@ const propTypes = {
   ]).isRequired,
 };
 
+
 // Configure JSS
 // const jss = create({ plugins: [...jssPreset().plugins, jssCompose()] });
 
-const theme = createMuiTheme({ palette, typography });
+const getTheme = theme => createMuiTheme({
+  typography,
+  direction: theme.direction,
+  palette: {
+    ...palette,
+    type: theme.paletteType,
+  },
+});
 
-const Theme = props => (
-  // <JssProvider jss={jss} >
-  <MuiThemeProvider theme={theme} sheetsManager={new Map()} >
-    <Reboot />
-    {props.children}
-  </MuiThemeProvider>
-  // </JssProvider>
-);
+
+let theme = getTheme({
+  paletteType: 'light',
+});
+
+// const theme = createMuiTheme({ palette, typography });
+
+class Theme extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.uiTheme.paletteType !== this.props.uiTheme.paletteType ||
+      nextProps.uiTheme.direction !== this.props.uiTheme.direction
+    ) {
+      theme = getTheme(nextProps.uiTheme);
+    }
+  }
+
+  render() {
+    return (
+      // <JssProvider jss={jss} >
+      <MuiThemeProvider theme={theme} sheetsManager={new Map()} >
+        <Reboot />
+        {this.props.children}
+      </MuiThemeProvider>
+      // </JssProvider>
+    );
+  }
+}
 
 Theme.propTypes = propTypes;
 
-export default Theme;
+export default connect(state => ({
+  uiTheme: state.theme,
+}))(Theme);

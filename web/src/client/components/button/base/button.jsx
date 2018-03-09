@@ -41,7 +41,7 @@ const styles = theme => ({
   root: {},
   button: {
     margin: '0.3em',
-    width: 150,
+    minWidth: 150,
     height: 38,
   },
   buttonLabel: {
@@ -84,7 +84,12 @@ const ButtonBaseButton = (props) => {
         // type={type}
       >
         {hasIcon && (
-          <Icon color={props.color} size={props.size} variant={props.variant} >
+          <Icon
+            color={props.color}
+            size={props.size}
+            variant={props.variant}
+            disabled={props.disabled}
+          >
             {children}
           </Icon>
         )}

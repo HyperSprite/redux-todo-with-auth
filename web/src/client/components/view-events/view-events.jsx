@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { FloatingActionButton } from 'material-ui';
-import { ContentAdd } from 'material-ui/svg-icons';
 import Helmet from 'react-helmet';
+import { withStyles } from 'material-ui-next/styles';
+import Button from 'material-ui-next/Button';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import PlusIcon from 'mdi-react/PlusIcon';
 
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';
 import ScrollIntoView from '../../containers/scroll-into-view';
@@ -14,7 +16,13 @@ import Layout from '../layout';
 import ViewEvent from './view-event';
 import EditEvent from './edit-event';
 
-import style from '../../styles/style';
+const styles = theme => ({
+  floatActButton: {
+    position: 'absolute',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+  },
+});
 
 const propTypes = {
   adminMember: PropTypes.bool,
@@ -34,7 +42,7 @@ const propTypes = {
 
 const relURL = 'apiv1/events';
 
-class ListEvent extends Component {
+class ListEvent extends React.Component {
 
   componentDidMount() {
     this.props.fetchEvents(relURL, this.props.stravaId);
@@ -64,33 +72,35 @@ class ListEvent extends Component {
   }
 
   renderActionButton() {
-    switch (true) {
-      case (this.props.clubMember):
-        return (
-          <Link to="/events/addevent">
-            <FloatingActionButton
-              style={style.floatingActionButton}
-            >
-              <ContentAdd />
-            </FloatingActionButton>
-          </Link>
-        );
-      case (this.props.authenticated):
-        return (
-          <FloatingActionButton
-            style={style.floatingActionButton}
-            disabled
-          >
-            <ContentAdd />
-          </FloatingActionButton>
-        );
-      default:
-        return null;
-    }
+    return (this.props.authenticated ? (
+      <Link to="/events/addevent">
+        <Button
+          variant="fab"
+          color="primary"
+          aria-label="add"
+          className={this.props.classes.floatActButton}
+          disabled={!this.props.clubMember}
+        >
+          <SvgIcon >
+            <PlusIcon />
+          </SvgIcon>
+        </Button>
+      </Link>
+    ) : null);
   }
 
   render() {
-    const { authenticated, events, forEdit, stravaId, mPref, adminMember, user } = this.props;
+    const {
+      classes,
+      authenticated,
+      events,
+      forEdit,
+      stravaId,
+      mPref,
+      adminMember,
+      user,
+    } = this.props;
+
     return (
       <Layout>
         <Helmet>
@@ -244,4 +254,5 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(ListEvent);
+const styledListEvent = withStyles(styles, { name: 'StyledListEvent' })(ListEvent);
+export default connect(mapStateToProps, actions)(styledListEvent);

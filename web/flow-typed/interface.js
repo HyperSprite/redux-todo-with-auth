@@ -49,5 +49,6 @@ export type ActionStrings = (
   'SET_CLUB_NOTICE' |
   'MESSAGE_FOR_USER' |
   'SET_TSS_GOAL' |
-  'SERVER_MESSAGE'
+  'SERVER_MESSAGE' |
+  'THEME_CHANGE_PALETTE_TYPE'
   )
