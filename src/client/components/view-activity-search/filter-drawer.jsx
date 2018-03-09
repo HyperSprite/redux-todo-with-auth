@@ -1,17 +1,34 @@
 import React from 'react';
 import { withStyles } from 'material-ui-next/styles';
 import { FormControlLabel } from 'material-ui-next/Form';
-import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
+import classNames from 'classnames';
+import Drawer from 'material-ui-next/Drawer';
+import AppBar from 'material-ui-next/AppBar';
 import Switch from 'material-ui-next/Switch';
-import IconButton from 'material-ui/IconButton';
-import Search from 'material-ui/svg-icons/action/search';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import IconButton from 'material-ui-next/IconButton';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
+import CloseCircleIcon from 'mdi-react/CloseCircleIcon';
 
+import Icon from '../icon';
 import EditSwitch from '../form/edit/switch';
 import RangeInput from './range-input';
 
+const drawerWidth = 300;
+
 const styles = theme => ({
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  innerDrawer: {
+    flexGrow: 1,
+    // width: drawerWidth - 15,
+  },
+  flexAppBar: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    // marginTop: 10,
+  },
   flexParent: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -58,39 +75,49 @@ class FilterDrawer extends React.Component {
           />
         </div>
         <Drawer
-          width={340}
-          openSecondary
+          classes={{
+            paper: classNames(classes.drawerPaper),
+          }}
+          variant="persistent"
+          anchor="right"
           open={this.state.open}
         >
-          <AppBar
-            iconElementLeft={
-              <IconButton
-                onClick={this.handleSearchClick}
-              >
-                <Search />
-              </IconButton>
-            }
-            iconElementRight={
-              <IconButton
-                onClick={this.handleToggle}
-              >
-                <NavigationClose />
-              </IconButton>
-            }
-          />
-          <div className={classes.flexParent} >
-            {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
-              <div key={fV.contentName}>
-                <EditSwitch
-                  form={this.props.form}
-                  formValues={fV}
-                />
+          <div className={classes.innerDrawer}>
+            <AppBar
+              position="sticky"
+            >
+              <div className={classes.flexAppBar}>
+                <IconButton
+                  onClick={this.handleSearchClick}
+                >
+                  <Icon inverse color="primary">
+                    <MagnifyIcon />
+                  </Icon>
+                </IconButton>
+                  <IconButton
+                    onClick={this.handleToggle}
+                  >
+                    <Icon inverse color="primary">
+                      <CloseCircleIcon />
+                    </Icon>
+                  </IconButton>
               </div>
-            ))}
+            </AppBar>
+            <div className={classes.flexParent} >
+              {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
+                <div key={fV.contentName}>
+                  <EditSwitch
+                    form={this.props.form}
+                    formValues={fV}
+                  />
+                </div>
+              ))}
+            </div>
+            <RangeInput
+              {...this.props}
+              classes={{}}
+            />
           </div>
-          <RangeInput
-            {...this.props}
-          />
         </Drawer>
       </div>
     );

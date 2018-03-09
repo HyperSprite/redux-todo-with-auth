@@ -1,9 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
-import styles from './styles';
+import { withStyles } from 'material-ui-next/styles';
+import Radio, { RadioGroup } from 'material-ui-next/Radio';
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui-next/Form';
 
-import './styles.css';
+const styles = theme => ({
+  formError: {
+    color: '#dd0000',
+    fontWeight: 'bold',
+  },
+  formWarning: {
+    color: '#dd9900',
+    fontWeight: 'bold',
+  },
+});
 
 const propTypes = {
   input: PropTypes.object,
@@ -15,6 +25,7 @@ const propTypes = {
 };
 
 const renderCheckbox = ({
+  classes,
   input,
   label,
   placeholder,
@@ -24,30 +35,37 @@ const renderCheckbox = ({
   meta: { touched, error, warning },
 }) => (
   <div >
-    <label
-      style={styles.inputLabel}
-      htmlFor={input}
+    <FormControl
+      component="fieldset"
+      className={classes.formControl}
     >
-      {label}
-    </label>
-    <div >
-      <RadioButtonGroup
-        className="form-control"
+      <FormLabel component="legend">
+        {label}
+      </FormLabel>
+      <RadioGroup
+        aria-label={input.name}
+        className={classes.group}
         {...input}
-        valueSelected={input.value}
+        value={input.value}
         onChange={(event, value) => input.onChange(value)}
       >
         {contentOptions.map(cOpts => (
-          <RadioButton key={cOpts.label} value={cOpts.value} label={cOpts.label} />
+          <FormControlLabel
+            key={cOpts.label}
+            value={cOpts.value}
+            control={<Radio />}
+            label={cOpts.label}
+          />
         ))}
-      </RadioButtonGroup>
-      {touched && (
-        (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
-      )}
-    </div>
+      </RadioGroup>
+    </FormControl>
+    {touched && (
+      (error && <div className={classes.formError}>{error}</div>) ||
+      (warning && <div className={classes.formWarning}>{warning}</div>)
+    )}
   </div>
 );
 
 renderCheckbox.propTypes = propTypes;
 
-export default renderCheckbox;
+export default withStyles(styles, { name: 'StyledrenderCheckbox' })(renderCheckbox);

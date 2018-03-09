@@ -1,6 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Area, AreaChart, Brush, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  Area,
+  AreaChart,
+  Brush,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 
 import Static from '../form/static';
 
@@ -58,7 +67,7 @@ const linearGrad = () => (
   </defs>
 );
 
-const Chart = (props) => (
+const Chart = props => (
   <div>
     <Static
       contentLabel={props.contentLabel}
@@ -67,36 +76,36 @@ const Chart = (props) => (
       contentType={props.contentType}
     />
     <ResponsiveContainer width="100%" height={200} >
-    <AreaChart
-      id={props.id}
-      width={styles.lineChart.width}
-      height={styles.lineChart.height}
-      data={props.data}
-      syncId="pageId"
-      margin={styles.lineChart.margin}
-    >
-      {linearGrad()}
-      <XAxis dataKey={props.xAxisDataKey} padding={styles.lineChart.xAxis.padding} />
-      <YAxis
-        type="number"
-        domain={props.domain}
-        padding={styles.lineChart.yAxis.padding}
-      />
-      <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip />
-      <Area
-        type="monotone"
-        name={props.name}
-        dataKey={props.dataKey}
-        stroke="#990000"
-        fillOpacity={1}
-        fill="url(#lGColor)"
-      />
-      {props.brush ? (
-        <Brush />
-      ) : null}
-    </AreaChart>
-  </ResponsiveContainer>
+      <AreaChart
+        id={props.id}
+        width={styles.lineChart.width}
+        height={styles.lineChart.height}
+        data={props.data}
+        syncId="pageId"
+        margin={styles.lineChart.margin}
+      >
+        {linearGrad()}
+        <XAxis dataKey={props.xAxisDataKey} padding={styles.lineChart.xAxis.padding} />
+        <YAxis
+          type="number"
+          domain={props.domain}
+          padding={styles.lineChart.yAxis.padding}
+        />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Area
+          type="monotone"
+          name={props.name}
+          dataKey={props.dataKey}
+          stroke="#990000"
+          fillOpacity={1}
+          fill="url(#lGColor)"
+        />
+        {props.brush ? (
+          <Brush />
+        ) : null}
+      </AreaChart>
+    </ResponsiveContainer>
   </div>
 );
 

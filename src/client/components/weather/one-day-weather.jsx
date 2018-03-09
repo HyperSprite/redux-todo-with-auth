@@ -1,15 +1,13 @@
+// TODO move this to its own repo. Enclose in location hoc.
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { format, startOfDay } from 'date-fns';
-import { FlatButton, IconButton } from 'material-ui';
-import FaRefresh from 'react-icons/lib/fa/refresh';
 
+import ButtonRefresh from '../button/refresh';
 import HeadlineWeather from './headline-weather';
 import SingleWeather from './single-weather';
-import ToggleIcon from '../form/toggle-icon';
 
-import style from '../../styles/style';
 import './weather.css';
 
 const propTypes = {
@@ -168,11 +166,8 @@ class OneDayWeather extends Component {
     if (!weatherforcast) {
       return (
         <div>Sorry, we could not load the weather forcast. {' '}
-          <IconButton onClick={dayWF.updateWeather} style={style.toggleIconButton} >
-            <FaRefresh size={20} />
-          </IconButton>
+          <ButtonRefresh onClick={dayWF.updateWeather} color="secondary" />
         </div>
-
       );
     }
 
@@ -188,9 +183,7 @@ class OneDayWeather extends Component {
         {this.state.showExtended ? (
           <div>
             <div className="weather-row">
-              <IconButton onClick={dayWF.updateWeather} style={style.toggleIconButton} >
-                <FaRefresh size={20} />
-              </IconButton>
+              <ButtonRefresh onClick={dayWF.updateWeather} color="primary" label="" />
             </div>
             <div className="weather-set">
               {dayWF.eventDayWF.map(eDWF => (

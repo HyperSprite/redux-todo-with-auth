@@ -1,59 +1,79 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next';
 
 import returnValues from './return-values';
+import ActivityMetric from '../activity-metric';
 import style from './style';
 
 const propTypes = {
+  classes: PropTypes.object.isRequired,
   totals: PropTypes.array.isRequired,
   mPref: PropTypes.bool.isRequired,
 };
 
-const tableRows = (stl, i) => {
-  if (i % 2) {
-    const newStl = Object.assign({}, stl.row, stl.rowOdd);
-    return newStl;
-  }
-  return stl.row;
-};
+const styles = theme => ({
+  title: {
+    display: 'flex',
+    verticalAlign: 'middle',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontWeight: 500,
+  },
+  row: {
+    padding: 15,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexFlow: 'row wrap',
+    backgroundColor: theme.palette.secondary[50],
+    '&:nth-child(even)': {
+      backgroundColor: theme.palette.secondary[100],
+    },
+    '&:nth-child(odd)': {
+      backgroundColor: theme.palette.secondary[50],
+    },
+  },
+  box: {
+    width: 180,
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  boxLabel: {
+    ...theme.typography.body1,
+    color: theme.palette.secondary.dark,
+    marginLeft: 10,
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  boxData: {
+    ...theme.typography.body3,
+    color: theme.palette.primary.dark,
+  },
+});
 
-const ActivityTotals = ({ totals, mPref }) => (
+const ActivityTotals = ({ classes, totals, mPref }) => (
   <div>
-    {totals.map((row, index) => (
-      <div key={row.name} style={tableRows(style, index)}>
-        <div style={style.box} >
-          <div style={style.boxMain}>
+    {totals.map(row => (
+      <div key={row.name} className={classes.row}>
+        <div className={classes.box} >
+          <div className={classes.boxLabel}>
             {row.name}
           </div>
-          <div style={style.boxData}>
+          <div className={classes.boxData}>
             {row.count}
           </div>
         </div>
         {returnValues.map(rV => (
           <div key={`${row.name}${rV.activityType}`}>
             {(rV.conversionMetric) ? (
-              <div style={style.box} >
-                <div style={style.boxLabel}>
-                  {rV.activityLabel}
-                  {rV.conversionmPref ? (
-                    <span>
-                      {mPref ? (
-                        <span> {rV.conversionTypeSA}</span>
-                      ) : (
-                        <span> {rV.conversionTypeMetric}</span>
-                      )}
-                    </span>
-                  ) : (null)}
-                </div>
-                <div style={style.boxData}>
-                  {rV.conversionFunction(
-                    rV.conversionMetric,
-                    rV.conversionYAxis,
-                    row[rV.conversionData],
-                    mPref,
-                  )}
-                </div>
-              </div>
+              <ActivityMetric
+                key={rV.activityType}
+                data={row}
+                rV={rV}
+                mPref={mPref}
+              />
+
             ) : null}
           </div>
         ))}
@@ -64,4 +84,29 @@ const ActivityTotals = ({ totals, mPref }) => (
 
 ActivityTotals.propTypes = propTypes;
 
-export default ActivityTotals;
+export default withStyles(styles, { name: 'StyledActivityTotals' })(ActivityTotals);
+
+/*
+<div className={classes.box} >
+  <div className={classes.boxLabel}>
+    {rV.activityLabel}
+    {rV.conversionmPref ? (
+      <span>
+        {mPref ? (
+          <span> {rV.conversionTypeSA}</span>
+        ) : (
+          <span> {rV.conversionTypeMetric}</span>
+        )}
+      </span>
+    ) : (null)}
+  </div>
+  <div className={classes.boxData}>
+    {rV.conversionFunction(
+      rV.conversionMetric,
+      rV.conversionYAxis,
+      row[rV.conversionData],
+      mPref,
+    )}
+  </div>
+</div>
+*/

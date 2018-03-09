@@ -99,7 +99,7 @@ const returnValues = [
   {
     category: 'group3',
     activityType: 'average_heartrate',
-    activityLabel: 'Avereage HR',
+    activityLabel: 'Average HR',
   },
   {
     category: 'group4',

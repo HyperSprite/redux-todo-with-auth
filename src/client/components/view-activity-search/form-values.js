@@ -59,7 +59,7 @@ export const formValues = [
     contentHelp: '',
     contentPlaceholder: '',
     contentType: 'text',
-    componentType: 'InputCheckbox',
+    componentType: 'InpupCheckbox',
     addButtonset: false,
   },
   {
@@ -74,7 +74,7 @@ export const formValues = [
     contentHelp: '',
     contentPlaceholder: '',
     contentType: 'filter',
-    componentType: 'InputRadio',
+    componentType: 'InputRadioCheckbox',
     addButtonset: false,
   },
   {
@@ -89,7 +89,7 @@ export const formValues = [
     contentHelp: '',
     contentPlaceholder: '',
     contentType: 'filter',
-    componentType: 'InputRadio',
+    componentType: 'InputRadioCheckbox',
     addButtonset: false,
   },
 

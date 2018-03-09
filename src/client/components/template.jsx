@@ -8,8 +8,10 @@ import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
 
 const styles = theme => ({
   root: {
-    // height: '100vh',
-    // minHeight: '100vh',
+    color: theme.palette.primary.dark,
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    fontWeight: theme.typography.fontWeightRegular,
   },
   site: {
     height: '100vh',

@@ -20,7 +20,7 @@ const propTypes = {
   size: PropTypes.string,
   type: PropTypes.string,
   /** Button variant enum: 'flat', 'raised', 'fab' <round> */
-  variant: PropTypes.string,
+  variant: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -34,7 +34,7 @@ const defaultProps = {
   toolTip: '',
   toolTipId: '',
   toolTipPlacement: 'top',
-  variant: 'flat',
+  // variant: 'flat',
 };
 
 const styles = theme => ({
@@ -59,34 +59,32 @@ const styles = theme => ({
 
 const ButtonBaseButton = (props) => {
   const {
-    autoFocus,
+    toolTip,
+    toolTipId,
+    toolTipPlacement,
     classes,
     children,
-    color,
-    disabled,
     hasIcon,
     label,
-    onClick,
-    size,
-    type,
-    variant,
+    ...buttonProps
   } = props;
+
   return (
     <div>
       <Button
-        // {...props}
-        aria-label={label}
+        {...buttonProps}
+        aria-label={props.label}
         className={classes.button}
-        color={color}
-        onClick={onClick}
-        size={size}
-        variant={variant}
-        disabled={disabled}
-        autoFocus={autoFocus}
-        type={type}
+        // color={color}
+        // onClick={onClick}
+        // size={size}
+        // variant={variant}
+        // disabled={disabled}
+        // autoFocus={autoFocus}
+        // type={type}
       >
         {hasIcon && (
-          <Icon color={color} size={size} variant={variant} >
+          <Icon color={props.color} size={props.size} variant={props.variant} >
             {children}
           </Icon>
         )}

@@ -1,6 +1,7 @@
 import React from 'react';
+import { withStyles } from 'material-ui-next/styles';
 import { Field, Form, reduxForm } from 'redux-form';
-import { CircularProgress, RaisedButton } from 'material-ui';
+import Button from 'material-ui-next/Button';
 
 // eslint-disable-next-line
 import * as actions from '../../../actions';
@@ -12,8 +13,15 @@ const normalizer = {
   numbersOnly: lib.numbersOnly,
 };
 
+const styles = theme => ({
+  container: {
+    margin: '0 5px 0 5px',
+  },
+});
+
 const WizardInput = (props) => {
   const {
+    classes,
     content,
     component,
     formValues,
@@ -28,19 +36,21 @@ const WizardInput = (props) => {
   const buttonSet = (
     formValues.addButtonset ? (
       <div className="edit-in-place form-right">
-        <RaisedButton
+        <Button
+          variant="raised"
           type="submit"
           disabled={pristine || submitting}
         >
           {submitLabel}
-        </RaisedButton>
+        </Button>
         {(auxButtonLabel) ? (
-          <RaisedButton
+          <Button
             type="button"
+            variant="raised"
             onClick={auxButton}
           >
             {auxButtonLabel}
-          </RaisedButton>
+          </Button>
           ) : null}
       </div>
     ) : null
@@ -49,6 +59,7 @@ const WizardInput = (props) => {
   const ExtField = (
     <Field
       {...props}
+      classes={{}}
       label={formValues.contentLabel}
       name={formValues.contentName}
       type={formValues.contentType}
@@ -62,7 +73,7 @@ const WizardInput = (props) => {
   );
 
   return (
-    <div style={{ margin: '0 5px 0 5px' }}>
+    <div className={classes.container} >
       {formValues.addButtonset ? (
         <Form id={formValues.contentName} onSubmit={handleSubmit}>
           <div>
@@ -78,7 +89,5 @@ const WizardInput = (props) => {
   );
 };
 
-export default reduxForm({
-  destroyOnUnmount: false,
-  validate,
-})(WizardInput);
+const styledWizardInput = withStyles(styles, { name: 'StyledWizardInput' })(WizardInput);
+export default reduxForm({ destroyOnUnmount: false, validate })(styledWizardInput);

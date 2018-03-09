@@ -86,7 +86,7 @@ const styles = theme => ({
     backgroundColor: 'transparent',
     '&$inverse': {
       fill: theme.palette.background.default,
-      backgroundColor: theme.palette.primary[500],
+      backgroundColor: 'transparent',
     },
     '&$variant': {
       fill: theme.palette.primary.contrastText,

@@ -4,11 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui-next/styles';
-import { FormGroup, FormControlLabel } from 'material-ui-next/Form';
-import Button from 'material-ui-next/Button';
+// import Button from 'material-ui-next/Button';
 import Card from 'material-ui-next/Card';
-import { CircularProgress } from 'material-ui';
-import MdSearch from 'react-icons/lib/md/search';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import qs from 'qs';
@@ -16,6 +13,7 @@ import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 import Layout from '../layout';
+import ButtonBase from '../button/base';
 import ButtonDownload from '../button/download';
 import ButtonSearch from '../button/search';
 import Alert from '../form/alert';
@@ -23,10 +21,10 @@ import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../feature-notice';
 import ActivityCount from '../activity-calc/activity-count';
-import ActivityCalc from '../activity-calc';
 import ActivitySingle from '../activity-single';
 import FilterDrawer from './filter-drawer';
 import GoogleMapLocation from '../google-map-location';
+import ActivityCalc from '../activity-calc';
 
 // import RangeInput from '../form/edit/range-input';
 
@@ -34,7 +32,6 @@ import ScrollIntoView from '../../containers/scroll-into-view';
 import SortSelect from '../form/edit/sort-select';
 import validate from '../form/validate';
 
-import style from './style';
 import { formValues, relURL, thisForm, title, help } from './form-values';
 import rangeValues from './range-values';
 
@@ -76,11 +73,34 @@ const styles = theme => ({
   },
   button: {
     width: 150,
-    // hight: 36,
     margin: theme.spacing.unit,
   },
   progress: {
 
+  },
+  div: {},
+  toggleContainer: {
+    width: 300,
+  },
+  title: {
+    cursor: 'pointer',
+  },
+  flexParent: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  },
+  flexcontainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+    padding: '10px 0 10px 0',
+    minHeight: 80,
+  },
+  toggle: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    width: 200,
   },
 });
 
@@ -268,8 +288,8 @@ class ActivitySearch extends Component {
     };
 
     const SearchTextForm = (
-      <div style={style.flexParent}>
-        <div style={style.flexcontainer} >
+      <div className={classes.flexParent}>
+        <div className={classes.flexcontainer} >
           {formValues.filter(fFV => (fFV.contentType === 'text')).map(fV => (
             <div key={fV.contentName} >
               <EditSwitch
@@ -286,8 +306,8 @@ class ActivitySearch extends Component {
     );
 
     const SearchMapForm = (
-      <div style={style.flexParent}>
-        <div style={style.flexcontainer} >
+      <div className={classes.flexParent}>
+        <div className={classes.flexcontainer} >
           {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
             <div key={fV.contentName} >
               <EditSwitch
@@ -339,15 +359,25 @@ class ActivitySearch extends Component {
             variant="raised"
           />
         )}
-
-        <Button
-          variant="raised"
-          onClick={() => this.handleReset()}
-          className={classes.button}
-          disabled={pristine || submitting}
-        >
-          Clear Values
-        </Button>
+        {pristine ? (
+          <ButtonBase
+            variant="raised"
+            hasIcon={false}
+            onClick={() => this.props.clearActivitySearch()}
+            className={classes.button}
+            disabled={submitting}
+            label="Clear Activities"
+          />
+        ) : (
+          <ButtonBase
+            variant="raised"
+            hasIcon={false}
+            onClick={() => this.handleReset()}
+            className={classes.button}
+            disabled={submitting}
+            label="Reset Search"
+          />
+        )}
         <ButtonDownload
           variant="raised"
           color="primary"
@@ -377,7 +407,7 @@ class ActivitySearch extends Component {
           id={contentName}
           onSubmit={handleSubmit(this.handleFormSubmit)}
         >
-          <Card style={style.div} >
+          <Card className={classes.div} >
             <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
 
             <GoogleMapLocation
@@ -396,17 +426,17 @@ class ActivitySearch extends Component {
             ) : (
               <div >
 
-                {/* { (activCalcFilter && activCalcFilter.count && adminMember) && (
-                  <div style={style.flexcontainer} >
+                { /* (activCalcFilter && activCalcFilter.count && adminMember) && (
+                  <div className={classes.flexcontainer} >
                     <ActivityCalc
                       data={activCalcFilter}
                       mPref={mPref}
                       title="Filtered Results"
                     />
                   </div>
-                )} */}
+                ) */ }
                 { activities.map(act => (
-                  <div key={act} style={style.div}>
+                  <div key={act} className={classes.div}>
                     <ActivitySingle
                       activityId={act}
                     />

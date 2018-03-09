@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextField } from 'redux-form-material-ui';
+import { withStyles } from 'material-ui-next/styles';
+import { FormControl, FormHelperText } from 'material-ui-next/Form';
+import Input, { InputLabel } from 'material-ui-next/Input';
 
 import './styles.css';
 
 const propTypes = {
+  classes: PropTypes.object.isRequired,
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
@@ -13,7 +16,26 @@ const propTypes = {
   meta: PropTypes.object,
 };
 
-const renderInput = ({
+const styles = theme => ({
+  formError: {
+    color: '#dd0000',
+    fontWeight: 'bold',
+  },
+  formWarning: {
+    color: '#dd9900',
+    fontWeight: 'bold',
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
+  selectEmpty: {
+    // marginTop: theme.spacing.unit * 3,
+  },
+});
+
+const RenderInput = ({
+  classes,
   input,
   label,
   placeholder,
@@ -21,26 +43,21 @@ const renderInput = ({
   initialValue,
   meta: { touched, error, warning },
 }) => (
-  <div>
-    <label
-      htmlFor={input}
-    >
-      {label}
-    </label>
-    <div>
-      <TextField
-        className="form-control"
-        {...input}
-        placeholder={placeholder}
-        type={type}
-      />
-      {touched && (
-        (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
-      )}
-    </div>
-  </div>
+  <FormControl className={classes.formControl}>
+    <InputLabel htmlFor={input.value}>{label}</InputLabel>
+    <Input
+      className={classes.formControl}
+      {...input}
+      type={type}
+    />
+    <FormHelperText>{placeholder}</FormHelperText>
+    {touched && (
+      (error && <div className={classes.formError}>{error}</div>) ||
+      (warning && <div className={classes.formWarning}>{warning}</div>)
+    )}
+  </FormControl>
 );
 
-renderInput.propTypes = propTypes;
+RenderInput.propTypes = propTypes;
 
-export default renderInput;
+export default withStyles(styles, { name: 'StyledRenderInput' })(RenderInput);

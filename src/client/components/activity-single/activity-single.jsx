@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
-import Typography from 'material-ui-next/Typography';
 import { connect } from 'react-redux';
 import { IconButton } from 'material-ui-next';
 import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
@@ -11,10 +10,8 @@ import RefreshIcon from 'mdi-react/RefreshIcon';
 import * as actions from '../../actions';
 
 import ActivityMetric from '../activity-metric';
-import MetricLabel from '../metric-label';
 import Icon from '../icon';
 import returnValues from './return-values';
-// import style from './style';
 
 const propTypes = {
   /** Activity ID */
@@ -40,12 +37,15 @@ const styles = theme => ({
     flexGrow: 1,
     margin: '15px 2px 5px 2px',
     overflow: 'hidden',
+    border: `4px solid ${theme.palette.background.contentFrame}`,
+    borderRadius: 2,
   },
   titleBox: {
     display: 'flex',
     color: theme.palette.primary[500],
-    fontSize: '1.2em',
-    fontWeight: 600,
+    backgroundColor: theme.palette.background.contentFrame,
+    fontSize: '1.3em',
+    fontWeight: 500,
     width: '100%',
     flexWrap: 'wrap',
   },
@@ -67,7 +67,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
-    maxWidth: 600,
   },
   // box: {
   //   width: 200,
@@ -109,10 +108,10 @@ class ExtActivitySingle extends Component {
     thisActivity.datePref = datePref;
     return (
       <div key={`${thisActivity.activityId}-single`} className={classes.root} >
-        <div className={classes.titleBox} >
-          <Typography variant="title" >
+        <div className={classes.containerCol}>
+          <div className={classes.titleBox} >
             {thisActivity.name}
-          </Typography>
+          </div>
           <div className={classes.icons} >
             <IconButton
               onClick={() => window.open(`https://www.strava.com/activities/${thisActivity.activityId}`, '_new')}

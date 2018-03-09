@@ -90,7 +90,7 @@ function ExtAppBar(props) {
           <IconButton onClick={leftOnClick} className={classes.menuButton} aria-label="Menu">
             {LeftIcon}
           </IconButton>
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography variant="headline" color="inherit" className={classes.flex}>
             {props.title}
           </Typography>
           {(rightText || rightMenu) && <RightButton />}

@@ -54,7 +54,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  color: '',
+  color: 'default',
   disabled: false,
   hasIcon: false,
   label: '',
@@ -89,15 +89,16 @@ const ButtonBase = (props) => {
   const {
     classes,
     children,
-    disabled,
     toolTip,
     toolTipId,
     toolTipPlacement,
+    ...buttonProps
   } = props;
+
   return (
     <div className={classes.root}>
-      {disabled || !toolTipId ? (
-        <Button {...props} >
+      {props.disabled || !toolTipId ? (
+        <Button {...buttonProps} >
           {children}
         </Button>
       ) : (
@@ -106,7 +107,7 @@ const ButtonBase = (props) => {
           title={toolTip}
           placement={toolTipPlacement}
         >
-          <Button {...props} >
+          <Button {...buttonProps} >
             {children}
           </Button>
         </Tooltip>
