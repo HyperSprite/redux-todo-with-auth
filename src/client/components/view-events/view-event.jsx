@@ -10,7 +10,6 @@ import IconButton from 'material-ui-next/IconButton';
 import SvgIcon from 'material-ui-next/SvgIcon';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 
-
 import justFns from 'just-fns';
 import MultiDayWeather from './../weather/multi-day-weather';
 import ShareButtons from '../form/share-button';
@@ -56,6 +55,14 @@ const styles = theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  flexedWrap: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  cardHeader: {
+    ...theme.typography.title,
+    color: theme.palette.primary.dark,
+  },
 });
 
 // props are passed in from component/list-events
@@ -96,13 +103,12 @@ class renderViewEvent extends React.Component {
     } = this.props;
 
     return (
-      <Card
-        className={classes.card}
-      >
+      <Card>
 
         <CardHeader
-          className="card-header"
-
+          className={classes.cardHeader}
+          title={eventLink}
+          subheader={subTitleName}
           avatar={
             <ToggleIconButton
               buttonType="ActionBookmark"
@@ -111,8 +117,7 @@ class renderViewEvent extends React.Component {
               toggleClick={favClick}
               toggleCount={favCount}
             />}
-          title={eventLink}
-          subtitle={subTitleName}
+
           action={<IconButton
             className={classNames(classes.expand, {
               [classes.expandOpen]: this.state.expanded,
@@ -139,49 +144,51 @@ class renderViewEvent extends React.Component {
               <meta property="og:title" content={event.eventTitle} />
               <meta property="og:image" content={`${urlRoot}/images/logo-192x192.png`} />
             </Helmet>
-            <ShareButtons
-              {...event}
-              hashtags={event.eventHashtags.concat('ARaceathlete')}
-              title={event.eventTitle}
-              urlHash={event.eventId}
-              urlPath={urlPath}
-              urlRoot={urlRoot}
-            />
-            {adminMember ? ( // hiding for adminMember only unitl this works
-              <span>
-                <ToggleIconButton
-                  buttonType="ActionAddGoal"
-                  authenticated={authenticated}
-                  toggle={goal}
-                  toggleClick={goalClick}
-                  toggleCount={null}
-                />
-              </span>
+            <CardActions>
+              <ShareButtons
+                {...event}
+                hashtags={event.eventHashtags.concat('ARaceathlete')}
+                title={event.eventTitle}
+                urlHash={event.eventId}
+                urlPath={urlPath}
+                urlRoot={urlRoot}
+              />
+              {adminMember ? ( // hiding for adminMember only unitl this works
+                <span>
+                  <ToggleIconButton
+                    buttonType="ActionAddGoal"
+                    authenticated={authenticated}
+                    toggle={goal}
+                    toggleClick={goalClick}
+                    toggleCount={null}
+                  />
+                </span>
 
-          ) : (null)}
-            {canEdit ? (
-              <span>
-                <ToggleIconButton
-                  buttonType="ActionEdit"
-                  authenticated={authenticated}
-                  toggle
-                  toggleClick={editClick}
-                  toggleCount={null}
-                />
-                {event.eventFavorites.length < 2 || adminMember ? (
-                  <span>
-                    <ToggleIconButton
-                      buttonType="ActionDelete"
-                      authenticated={authenticated}
-                      toggle
-                      toggleClick={deleteClick}
-                      toggleCount={null}
-                    />
-                  </span>
-                ) : (null)}
-              </span>
             ) : (null)}
-            <div className="div-flexwrap" >
+              {canEdit ? (
+                <span>
+                  <ToggleIconButton
+                    buttonType="ActionEdit"
+                    authenticated={authenticated}
+                    toggle
+                    toggleClick={editClick}
+                    toggleCount={null}
+                  />
+                  {event.eventFavorites.length < 2 || adminMember ? (
+                    <span>
+                      <ToggleIconButton
+                        buttonType="ActionDelete"
+                        authenticated={authenticated}
+                        toggle
+                        toggleClick={deleteClick}
+                        toggleCount={null}
+                      />
+                    </span>
+                  ) : (null)}
+                </span>
+              ) : (null)}
+            </CardActions>
+            <div className={classes.flexedWrap} >
               {event.eventHashtags.map(hashtag => (
                 <Chip
                   key={`${event.eventId}${hashtag}`}
@@ -265,18 +272,16 @@ class renderViewEvent extends React.Component {
           </CardContent>
         </Collapse>
         {getWeather && event.eventGeoTzRawOffset ? (
-          <CardActions>
-            <MultiDayWeather
-              geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
-              dstOffset={event.eventGeoTzDSTOffset}
-              tzOffset={event.eventGeoTzRawOffset}
-              date={new Date(event.eventDate)}
-              eventDays={event.eventDays || 1}
-              mPref={mPref}
-              expanded={expanded}
-              noShowExtender
-            />
-          </CardActions>
+          <MultiDayWeather
+            geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
+            dstOffset={event.eventGeoTzDSTOffset}
+            tzOffset={event.eventGeoTzRawOffset}
+            date={new Date(event.eventDate)}
+            eventDays={event.eventDays || 1}
+            mPref={mPref}
+            expanded={expanded}
+            noShowExtender
+          />
         ) : null }
       </Card>
     );
