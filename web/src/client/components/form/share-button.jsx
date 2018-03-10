@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { IconButton } from 'material-ui';
-import FaFacebook from 'react-icons/lib/fa/facebook-official';
-import FaTwitter from 'react-icons/lib/fa/twitter';
-import FaChain from 'react-icons/lib/fa/chain';
-import FaCalendar from 'react-icons/lib/fa/calendar-plus-o';
+import { withStyles } from 'material-ui-next/styles';
+import IconButton from 'material-ui-next/IconButton';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import Tooltip from 'material-ui-next/Tooltip';
+import FacebookBoxIcon from 'mdi-react/FacebookBoxIcon';
+import TwitterBoxIcon from 'mdi-react/TwitterBoxIcon';
+import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
+import CalendarPlusIcon from 'mdi-react/CalendarPlusIcon';
 
 import style from '../../styles/style';
 import '../../assets/araceathlete240x240.png';
@@ -20,7 +23,11 @@ const propTypes = {
   urlRoot: PropTypes.string,
 };
 
-const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) => {
+const styles = theme => ({
+  root: {},
+});
+
+const ShareButtons = ({ ...event, classes, hashtags, title, urlHash, urlPath, urlRoot }) => {
   const url = encodeURIComponent(`${urlRoot}/${urlPath}#${urlHash}`);
   const imagePath = encodeURIComponent(`${urlRoot}/assets/araceathlete240x240.png`);
   const encodedTitle = encodeURIComponent(title);
@@ -34,28 +41,28 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
   const templates = {
     link: {
       url: `/${urlPath}#${urlHash}`,
-      icon: FaChain,
+      icon: LinkVariantIcon,
       toolTip: 'Link to this Event',
       target: '_self',
       rel: 'bookmark',
     },
     googleCal: {
       url: googleCalURL,
-      icon: FaCalendar,
+      icon: CalendarPlusIcon,
       toolTip: 'Add to Google Calendar',
       target: 'new',
       rel: 'nofollow',
     },
     facebook: {
       url: `https://www.facebook.com/sharer/sharer.php?u=${url}&title=${encodedTitle}&image=${imagePath}`,
-      icon: FaFacebook,
+      icon: FacebookBoxIcon,
       toolTip: 'Share on facebook',
       target: 'new',
       rel: 'nofollow',
     },
     twitter: {
       url: `https://twitter.com/intent/tweet?text=${encodedTitle}&url=${url}&hashtags=${hashtags}`,
-      icon: FaTwitter,
+      icon: TwitterBoxIcon,
       toolTip: 'Tweet this!',
       target: 'new',
       rel: 'nofollow',
@@ -64,17 +71,20 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
 
   const socialSet = sites.map((s) => {
     const SocialIcon = templates[s].icon;
-    const Icon = () => <SocialIcon size={24} />;  // need to pull in Icon here
+    const Icon = () => <SvgIcon><SocialIcon size={24} /></SvgIcon>;  // need to pull in Icon here
     const iconButton = (
-      <IconButton
-        tooltip={templates[s].tooltip}
-        tooltipPosition="top-right"
-        className="icon-on"
-        touch
-        style={style.toggleIconButton}
+      <Tooltip
+        id={`social${s.icon}`}
+        title={templates[s].toolTip}
+        placement="bottom"
       >
-        <Icon />
-      </IconButton>
+        <IconButton
+          className={classes.icon}
+          color="primary"
+        >
+          <Icon />
+        </IconButton>
+      </Tooltip>
     );
     return (
       <a key={`social${s}`} href={templates[s].url} target={templates[s].target} rel={templates[s].rel} >{iconButton}</a>
@@ -89,5 +99,4 @@ const ShareButtons = ({ ...event, hashtags, title, urlHash, urlPath, urlRoot }) 
 
 ShareButtons.propTypes = propTypes;
 // ShareButtons.defaultProps = defaultProps;
-
-export default ShareButtons;
+export default withStyles(styles, { name: 'StyledShareButtons' })(ShareButtons);

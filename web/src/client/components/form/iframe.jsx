@@ -1,7 +1,8 @@
+// TODO material-ui-next - update styles
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { LinearProgress } from 'material-ui';
+import { LinearProgress } from 'material-ui-next/Progress';
 
 const propTypes = {
   src: PropTypes.node.isRequired,

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { Field, FieldArray, reduxForm } from 'redux-form';
-import { FlatButton, Paper, RaisedButton } from 'material-ui';
-import { Card, CardHeader } from 'material-ui/Card';
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { DatePicker, TextField } from 'redux-form-material-ui';
+import Button from 'material-ui-next/Button';
+import Paper from 'material-ui-next/Paper';
+import Card, { CardHeader } from 'material-ui-next/Card';
+import Toolbar from 'material-ui-next/Toolbar';
+// import { DatePicker, TextField } from 'redux-form-material-ui';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
@@ -92,7 +93,7 @@ let AddGoal = class AddGoal extends Component {
 
     const renderForm = (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-        <div>
+        {/* <div>
           <Field
             component={TextField}
             style={style.formelement}
@@ -111,8 +112,8 @@ let AddGoal = class AddGoal extends Component {
             type="text"
             hintText="Why are you doing this?"
           />
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Field
             component={DatePicker}
             style={style.formelement}
@@ -120,8 +121,8 @@ let AddGoal = class AddGoal extends Component {
             name="goalStartTrainingDate"
             format={null}
           />
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Field
             component={TextField}
             style={style.formelement}
@@ -138,7 +139,7 @@ let AddGoal = class AddGoal extends Component {
             name="goalPrivate"
             type="text"
           />
-        </div>
+        </div> */}
         <div>
           <FieldArray
             name="goalNotes"
@@ -147,26 +148,30 @@ let AddGoal = class AddGoal extends Component {
         </div>
         { this.renderAlert() }
         <div>
-          <RaisedButton
+          <Button
+            variant="raised"
             type="submit"
-            label="Submit"
             primary
             style={style.button}
             disabled={pristine || submitting}
-          />
-          <FlatButton
-            type="button"
-            label="Clear Values"
+          >
+            Submit
+          </Button>
+          <Button
+            variant="flat"
             style={style.button}
             disabled={pristine || submitting}
             onClick={reset}
-          />
-          <FlatButton
-            type="button"
-            label="Cancel"
+          >
+            Clear Values
+          </Button>
+          <Button
+            variant="flat"
             style={style.button}
             onClick={this.cancelFormEdit}
-          />
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     );
@@ -196,9 +201,7 @@ let AddGoal = class AddGoal extends Component {
               className="card"
             >
               <Toolbar>
-                <ToolbarTitle
-                  text="Add Goal"
-                />
+                Add Goal
               </Toolbar>
               {renderForm}
             </Card>

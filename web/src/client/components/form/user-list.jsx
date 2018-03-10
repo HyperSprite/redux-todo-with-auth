@@ -1,24 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { LinearProgress, Divider } from 'material-ui';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
-import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
+import { withStyles } from 'material-ui-next/styles';
+import { LinearProgress } from 'material-ui-next/Progress';
+import Divider from 'material-ui-next/Divider';
+import Card, { CardHeader, CardContent } from 'material-ui-next/Card';
+import Button from 'material-ui-next/Button';
 
 import justFns from 'just-fns';
 import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';
-import theme from '../../styles/theme';
-import styleMain from '../../styles/style';
 import CheckBox from './checkbox-icon';
 import RemoveUser from '../admin/remove-user';
 import InputRemoveUser from '../admin/input-remove-user';
 
-const style = {
-  button: styleMain.button,
+const styles = theme => ({
   container: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -30,17 +27,14 @@ const style = {
     display: 'inline-flex',
     verticalAlign: 'middle',
     alignItems: 'center',
-    // justifyContent: 'space-between',
-    // flexWrap: 'wrap',
-    // border: `thin solid ${theme.palette.accent3Color}`,
   },
   boxLabel: {
-    color: theme.palette.accent1Color,
+
   },
   boxData: {
     marginLeft: 10,
   },
-};
+});
 
 const propTypes = {
 
@@ -52,7 +46,7 @@ const axiosConfig = {
   },
 };
 
-export default class UserList extends Component {
+class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,6 +88,7 @@ export default class UserList extends Component {
         {user.stravaId}
       </a>
     );
+    const { classes } = this.props;
     return (
       <div>
         {this.state.udpating ? (
@@ -103,13 +98,13 @@ export default class UserList extends Component {
         )}
         <GetUpdateAllUsers />
 
-        <RaisedButton
+        <Button
           onClick={this.callGetUserList}
           disabled={this.state.udating}
-          style={style.button}
-          label="Refresh List"
-          secondary
-        />
+          color="secondary"
+        >
+          Refresh List
+        </Button>
 
         <InputRemoveUser />
 
@@ -117,118 +112,121 @@ export default class UserList extends Component {
           content={this.state.userList.length}
           contentLabel="User Count"
         />
-          {this.state.userList.map((user) => (
-            <Card key={user.stravaId}>
-              <CardHeader
-                title={`${user.firstname} ${user.lastname}`}
-                subtitle={AthleteLink(user)}
-              />
-              <RemoveUser stravaId={user.stravaId} />
-              {user.authorizationErrors && (
-                <div style={style.box}>
-                  <div style={style.boxLabel}>
-                    Authorization Errors
-                  </div>
-                  <div style={style.boxData}>
-                    {` ${user.authorizationErrors}`}
-                  </div>
-                </div>
-              )}
-              <CardText>
-                <div style={style.container}>
-                  <div style={style.box}>
-                    <CheckBox option={!!user.premium} /> Strava Premium
-                  </div>
-                  <div style={style.box}>
-                    <CheckBox option={!!user.clubMember} /> Club
-                  </div>
-                  <div style={style.box}>
-                    <CheckBox option={!!user.userGeoElevation} /> Elevation
-                  </div>
-                  <div style={style.box}>
-                    <CheckBox option={!!justFns.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
-                  </div>
-                  <div style={style.box}>
-                    <CheckBox option={!!user.adminMember} /> Admin
-                  </div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Activities
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.activityCount}`}
-                    </div>
-                  </div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Events Created
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.eventCount}`}
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Strava Created
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.created_at}`}
-                    </div>
-                  </div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Strava Updated
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.updated_at}`}
-                    </div>
-                  </div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Created
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.createdAt}`}
-                    </div>
-                  </div>
-                  <div style={style.box}>
-                    <div style={style.boxLabel}>
-                      Updated
-                    </div>
-                    <div style={style.boxData}>
-                      {` ${user.updatedAt}`}
-                    </div>
-                  </div>
-                  {user.logCount && user.logLastAccess ? (
-                    <div>
-                      <div style={style.box}>
-                        <div style={style.boxLabel}>
-                          Last Access
-                        </div>
-                        <div style={style.boxData}>
-                          {` ${user.logLastAccess[0].updatedAt}`}
-                        </div>
-                      </div>
-                      <div style={style.box}>
-                        <div style={style.boxLabel}>
-                          Access Count
-                        </div>
-                        <div style={style.boxData}>
-                          {` ${user.logCount}`}
-                        </div>
-                      </div>
-                    </div>
+        {this.state.userList.map(user => (
+          <Card key={user.stravaId}>
+            <CardHeader
+              title={`${user.firstname} ${user.lastname}`}
+              subheader={AthleteLink(user)}
+            />
 
-                  ) : (null)}
+            <RemoveUser stravaId={user.stravaId} />
+            {user.authorizationErrors && (
+              <div className={classes.box}>
+                <div className={classes.boxLabel}>
+                  Authorization Errors
                 </div>
-              </CardText>
-            </Card>
-          ))}
+                <div className={classes.boxData}>
+                  {` ${user.authorizationErrors}`}
+                </div>
+              </div>
+            )}
+            <CardContent>
+              <div className={classes.container}>
+                <div className={classes.box}>
+                  <CheckBox option={!!user.premium} /> Strava Premium
+                </div>
+                <div className={classes.box}>
+                  <CheckBox option={!!user.clubMember} /> Club
+                </div>
+                <div className={classes.box}>
+                  <CheckBox option={!!user.userGeoElevation} /> Elevation
+                </div>
+                <div className={classes.box}>
+                  <CheckBox option={!!justFns.getLastInArray(user.ftpHistory, 'ftp')} /> FTP
+                </div>
+                <div className={classes.box}>
+                  <CheckBox option={!!user.adminMember} /> Admin
+                </div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Activities
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.activityCount}`}
+                  </div>
+                </div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Events Created
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.eventCount}`}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Strava Created
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.created_at}`}
+                  </div>
+                </div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Strava Updated
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.updated_at}`}
+                  </div>
+                </div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Created
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.createdAt}`}
+                  </div>
+                </div>
+                <div className={classes.box}>
+                  <div className={classes.boxLabel}>
+                    Updated
+                  </div>
+                  <div className={classes.boxData}>
+                    {` ${user.updatedAt}`}
+                  </div>
+                </div>
+                {user.logCount && user.logLastAccess ? (
+                  <div>
+                    <div className={classes.box}>
+                      <div className={classes.boxLabel}>
+                        Last Access
+                      </div>
+                      <div className={classes.boxData}>
+                        {` ${user.logLastAccess[0].updatedAt}`}
+                      </div>
+                    </div>
+                    <div className={classes.box}>
+                      <div className={classes.boxLabel}>
+                        Access Count
+                      </div>
+                      <div className={classes.boxData}>
+                        {` ${user.logCount}`}
+                      </div>
+                    </div>
+                  </div>
+
+                ) : (null)}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
 }
 
 UserList.propTypes = propTypes;
+
+export default withStyles(styles, { name: 'StyledUserList' })(UserList);
