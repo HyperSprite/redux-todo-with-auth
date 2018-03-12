@@ -1,11 +1,12 @@
+// TODO material-ui-next - move styles to jss
 import React from 'react';
 import PropTypes from 'prop-types';
 import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
-import { FlatButton, IconButton, Toggle } from 'material-ui';
+import { FormControlLabel } from 'material-ui-next/Form';
+import IconButton from 'material-ui-next/IconButton';
+import Switch from 'material-ui-next/Switch';
 import CrosshairsGpsIcon from 'mdi-react/CrosshairsGpsIcon';
 import CrosshairsIcon from 'mdi-react/CrosshairsIcon';
-import GPSOff from 'material-ui/svg-icons/device/gps-off';
-import justFNS from 'just-fns';
 import GoogleMapLocation from './google-map-location';
 import Icon from '../icon';
 import style from './style';
@@ -55,12 +56,15 @@ class ExtGoogleMapWithLocation extends React.Component {
           </IconButton>
           {geoAllowed && (
             <div>
-              <Toggle
-                style={style.toggle}
-                label={'Show my pin'}
-                onToggle={this.handleMyPin}
-                toggled={showMyPin}
-                labelPosition="right"
+              <FormControlLabel
+                control={
+                  <Switch
+                    color="primary"
+                    onChange={this.handleMyPin}
+                    checked={showMyPin}
+                  />
+                }
+                label="Show my pin"
               />
             </div>
           )}
