@@ -23,74 +23,57 @@ const styles = theme => ({
   },
 });
 
-class renderCheckboxGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkedValue: '',
-    };
-  }
+const InputCheckboxGroup = (props) => {
+  const {
+    classes,
+    input,
+    label,
+    type,
+    initialValue,
+    contentOptions,
+    meta: { touched, error, warning },
+  } = props;
 
-  handleChange(newValue) {
-    const checkedValue = this.state.checkedValue === newValue ? '' : newValue;
-    this.setState({
-      checkedValue,
-    });
-    this.props.input.onChange(checkedValue);
-  }
-
-  render() {
-    const {
-      classes,
-      input,
-      label,
-      type,
-      initialValue,
-      contentOptions,
-      meta: { touched, error, warning },
-    } = this.props;
-
-    return (
-      <div >
-        <FormControl
-          component="fieldset"
-          // className={classes.formControl}
+  return (
+    <div >
+      <FormControl
+        component="fieldset"
+        // className={classes.formControl}
+      >
+        <FormLabel
+          component="legend"
+          // className={classes.formGroupLabel}
         >
-          <FormLabel
-            component="legend"
-            // className={classes.formGroupLabel}
-          >
-            {label}
-          </FormLabel>
-          <FormGroup
-            aria-label={input.name}
-            // className={classes.group}
-          >
-            {contentOptions.filter(f => f.value > 0).map(cOpts => (
-              <FormControlLabel
-                // className={classes.formLabel}
-                key={cOpts.label}
-                label={cOpts.label}
-                control={
-                  <Checkbox
-                    value={cOpts.value}
-                    onChange={() => this.handleChange(cOpts.value)}
-                    checked={(this.state.checkedValue === cOpts.value)}
-                  />
-                }
-              />
-            ))}
-          </FormGroup>
-        </FormControl>
-        {touched && (
-          (error && <div className={classes.formError}>{error}</div>) ||
-          (warning && <div className={classes.formWarning}>{warning}</div>)
-        )}
-      </div>
-    );
-  }
-}
+          {label}
+        </FormLabel>
+        <FormGroup
+          aria-label={input.name}
+          // className={classes.group}
+        >
+          {contentOptions.data.filter(f => f.value > 0).map(cOpts => (
+            <FormControlLabel
+              // className={classes.formLabel}
+              key={cOpts.label}
+              label={cOpts.label}
+              control={
+                <Checkbox
+                  value={cOpts.value}
+                  onChange={() => input.onChange(cOpts.value)}
+                  checked={(input.value === cOpts.value)}
+                />
+              }
+            />
+          ))}
+        </FormGroup>
+      </FormControl>
+      {touched && (
+        (error && <div className={classes.formError}>{error}</div>) ||
+        (warning && <div className={classes.formWarning}>{warning}</div>)
+      )}
+    </div>
+  );
+};
 
-renderCheckboxGroup.propTypes = propTypes;
+InputCheckboxGroup.propTypes = propTypes;
 
-export default withStyles(styles, { name: 'StyledrenderCheckboxGroup' })(renderCheckboxGroup);
+export default withStyles(styles, { name: 'StyledInputCheckboxGroup' })(InputCheckboxGroup);

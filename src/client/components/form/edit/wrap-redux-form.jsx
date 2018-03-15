@@ -11,6 +11,7 @@ import validate from '../../form/validate';
 
 const normalizer = {
   numbersOnly: lib.numbersOnly,
+  alphaNumbersOnly: lib.alphaNumbersOnly,
 };
 
 const styles = theme => ({
@@ -19,7 +20,7 @@ const styles = theme => ({
   },
 });
 
-const WizardInput = (props) => {
+const EditWrapperReduxForm = (props) => {
   const {
     classes,
     content,
@@ -28,9 +29,11 @@ const WizardInput = (props) => {
     handleSubmit,
     auxButton,
     auxButtonLabel,
+    anyTouched,
     pristine,
     submitting,
-    submitLabel
+    submitLabel,
+    ...fieldProps
   } = props;
 
   const buttonSet = (
@@ -58,24 +61,21 @@ const WizardInput = (props) => {
 
   const ExtField = (
     <Field
-      {...props}
-      classes={{}}
-      label={formValues.contentLabel}
-      name={formValues.contentName}
-      type={formValues.contentType}
+      {...fieldProps}
+      {...formValues}
+      name={formValues.name}
+      component={props.component}
       checked={formValues.content}
       shouldFocus
       addedComps={buttonSet}
-      contentOptions={formValues.contentOptions}
       normalize={normalizer[formValues.normalize]}
-      placeholder={formValues.contentPlaceholder}
     />
   );
 
   return (
     <div className={classes.container} >
       {formValues.addButtonset ? (
-        <Form id={formValues.contentName} onSubmit={handleSubmit}>
+        <Form id={formValues.name} onSubmit={handleSubmit}>
           <div>
             {ExtField}
           </div>
@@ -89,5 +89,5 @@ const WizardInput = (props) => {
   );
 };
 
-const styledWizardInput = withStyles(styles, { name: 'StyledWizardInput' })(WizardInput);
-export default reduxForm({ destroyOnUnmount: false, validate })(styledWizardInput);
+const styledEditWrapperReduxForm = withStyles(styles, { name: 'StyledEditWrapperReduxForm' })(EditWrapperReduxForm);
+export default reduxForm({ destroyOnUnmount: false, validate })(styledEditWrapperReduxForm);

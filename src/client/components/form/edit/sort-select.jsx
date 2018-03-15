@@ -5,25 +5,25 @@ const RenderSelect = ({ form, sortStrings }) => {
   const sortArr = sortStrings.reduce((acc, sS) => {
     acc.push(
       {
-        option: `${sS.option} Des`,
+        label: `${sS.option} Des`,
         value: `${sS.value}-des`,
       },
       {
-        option: `${sS.option} Asc`,
+        label: `${sS.option} Asc`,
         value: `${sS.value}-asc`,
       },
     );
     return acc;
   }, []);
   const searchValues = {
-    contentName: 'sortBy',
-    contentLabel: 'Sort',
+    name: 'sortBy',
+    label: 'Sort',
     contentAlt: '',
-    contentOptions: sortArr,
+    contentOptions: { data: sortArr },
     contentHelp: '',
-    contentPlaceholder: '',
-    contentType: '',
-    componentType: 'InputSelect',
+    placeholder: 'Try typing "dec"',
+    type: 'text',
+    component: 'InputSelect',
     addButtonset: false,
   };
   return (

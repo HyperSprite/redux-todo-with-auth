@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
 import { connect } from 'react-redux';
-import { IconButton } from 'material-ui-next';
+import IconButton from 'material-ui-next/IconButton';
 import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
 import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
 import RefreshIcon from 'mdi-react/RefreshIcon';

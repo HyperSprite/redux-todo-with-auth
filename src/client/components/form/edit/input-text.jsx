@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
-import { FormControl, FormHelperText } from 'material-ui-next/Form';
+import { FormControl } from 'material-ui-next/Form';
 import Input, { InputLabel } from 'material-ui-next/Input';
-
-import './styles.css';
 
 const propTypes = {
   classes: PropTypes.object.isRequired,
@@ -34,30 +32,71 @@ const styles = theme => ({
   },
 });
 
-const RenderInput = ({
-  classes,
-  input,
-  label,
-  placeholder,
-  type,
-  initialValue,
-  meta: { touched, error, warning },
-}) => (
-  <FormControl className={classes.formControl}>
-    <InputLabel htmlFor={input.value}>{label}</InputLabel>
-    <Input
-      className={classes.formControl}
-      {...input}
-      type={type}
-    />
-    <FormHelperText>{placeholder}</FormHelperText>
-    {touched && (
-      (error && <div className={classes.formError}>{error}</div>) ||
-      (warning && <div className={classes.formWarning}>{warning}</div>)
-    )}
-  </FormControl>
-);
+const InputText = (props) => {
+  const {
+    classes,
+    input,
+    label,
+    initialValue,
 
-RenderInput.propTypes = propTypes;
 
-export default withStyles(styles, { name: 'StyledRenderInput' })(RenderInput);
+    // extras
+    contentAlt,
+    contentHelp,
+    contentOptions,
+    fieldValues,
+    meta: { touched, error, warning },
+
+    min,
+    max,
+    checked,
+    maxLength,
+
+    autoComplete,
+    autoFocus,
+    disabled,
+    endAdornment,
+    fullWidth,
+    inputComponent,
+    margin,
+    placeholder,
+    rows,
+    rowsMax,
+    startAdornment,
+    type,
+  } = props;
+
+  return (
+    <FormControl className={classes.formControl}>
+      <InputLabel htmlFor={input.name}>{label}</InputLabel>
+      <Input
+        className={classes.formControl}
+        autoComplete={autoComplete}
+        autoFocus={autoFocus}
+        disabled={disabled}
+        endAdornment={endAdornment}
+        error={!!error}
+        fullWidth={fullWidth}
+        inputComponent={inputComponent}
+        margin={margin}
+        placeholder={placeholder}
+        rows={rows}
+        rowsMax={rowsMax}
+        startAdornment={startAdornment}
+        type={type}
+        inputProps={{ min, max, checked, maxLength }}
+        {...input}
+      />
+      {/* <FormHelperText>{inputOpts.placeholder}</FormHelperText> */}
+      {(touched) && (
+        // TODO Focus errors in view
+        (error && <div className={classes.formError}>{error}</div>) ||
+        (warning && <div className={classes.formWarning}>{warning}</div>)
+      )}
+    </FormControl>
+  );
+};
+
+InputText.propTypes = propTypes;
+
+export default withStyles(styles, { name: 'StyledInputText' })(InputText);

@@ -25,6 +25,7 @@ import ActivitySingle from '../activity-single';
 import FilterDrawer from './filter-drawer';
 import GoogleMapLocation from '../google-map-location';
 import ActivityCalc from '../activity-calc';
+import ProgressDivider from '../progress-divider';
 
 // import RangeInput from '../form/edit/range-input';
 
@@ -70,6 +71,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-evenly',
     flexWrap: 'wrap',
+    padding: '4px 0',
   },
   button: {
     width: 150,
@@ -265,7 +267,7 @@ class ActivitySearch extends Component {
       srchOpts,
       submit,
       submitting,
-      contentName,
+      name,
       pinDrops,
       pristineOnClick,
       sortStrings,
@@ -290,8 +292,8 @@ class ActivitySearch extends Component {
     const SearchTextForm = (
       <div className={classes.flexParent}>
         <div className={classes.flexcontainer} >
-          {formValues.filter(fFV => (fFV.contentType === 'text')).map(fV => (
-            <div key={fV.contentName} >
+          {formValues.filter(fFV => (fFV.group === 'text')).map(fV => (
+            <div key={fV.name} >
               <EditSwitch
                 form={this.props.form}
                 formValues={fV}
@@ -308,8 +310,8 @@ class ActivitySearch extends Component {
     const SearchMapForm = (
       <div className={classes.flexParent}>
         <div className={classes.flexcontainer} >
-          {formValues.filter(fFV => (fFV.contentType === 'geo')).map(fV => (
-            <div key={fV.contentName} >
+          {formValues.filter(fFV => (fFV.group === 'geo')).map(fV => (
+            <div key={fV.name} >
               <EditSwitch
                 form={this.props.form}
                 formValues={fV}
@@ -361,7 +363,7 @@ class ActivitySearch extends Component {
         )}
         {pristine ? (
           <ButtonBase
-            variant="raised"
+            variant="flat"
             hasIcon={false}
             onClick={() => this.props.clearActivitySearch()}
             className={classes.button}
@@ -370,7 +372,7 @@ class ActivitySearch extends Component {
           />
         ) : (
           <ButtonBase
-            variant="raised"
+            variant="flat"
             hasIcon={false}
             onClick={() => this.handleReset()}
             className={classes.button}
@@ -379,8 +381,8 @@ class ActivitySearch extends Component {
           />
         )}
         <ButtonDownload
-          variant="raised"
-          color="primary"
+          variant="flat"
+          color="secondary"
           className={classes.button}
           onClick={handleSubmit(this.activitiesDownload)}
           label="Download"
@@ -404,7 +406,7 @@ class ActivitySearch extends Component {
         />
 
         <Form
-          id={contentName}
+          id={name}
           onSubmit={handleSubmit(this.handleFormSubmit)}
         >
           <Card className={classes.div} >
@@ -420,6 +422,7 @@ class ActivitySearch extends Component {
             <ActivityCount />
             <div>
               {SearchButton}
+              <ProgressDivider isProgress={isFetching} />
             </div>
             {!activities ? (
               <p>Loading Activities</p>
@@ -442,6 +445,7 @@ class ActivitySearch extends Component {
                     />
                   </div>
                 ))}
+                <ProgressDivider isProgress={isFetching} />
                 {!!this.state.page && SearchButton}
               </div>
             )}
@@ -459,7 +463,9 @@ function mapStateToProps(state) {
   //   null;
   const { activities, auth, page, search } = state;
   const pinDrops = activities.activitySearch && activities.activitySearch.length ?
-    activities.activities.filter(aF => aF.geoStart && aF.type !== 'VirtualRide').map(aM => ({
+    activities.activities.filter(aF => aF.geoStart &&
+      aF.activityType !== 'VirtualRide' &&
+      aF.name.indexOf('Zwift') !== 0).map(aM => ({
       lat: aM.geoStart[1],
       lng: aM.geoStart[0],
       name: aM.name,

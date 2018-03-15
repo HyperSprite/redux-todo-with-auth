@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
+import ProgressDivider from '../progress-divider';
 import ButtonRefresh from '../button/refresh';
 import ButtonBase from '../button/base';
 import ButtonProgress from '../button/progress';
@@ -84,6 +85,7 @@ class activeStats extends Component {
               onClick={this.updateUserActivities}
               disabled={isFetching}
             />
+            <ProgressDivider isProgress={isFetching} />
           </div>
           {!weeklyStats ? (
             <p>Loading Activities</p>
@@ -124,6 +126,7 @@ class activeStats extends Component {
                 color="primary"
                 onClick={this.fetchAnotherWeek}
               />
+              <ProgressDivider isProgress={isFetching} />
             </div>
           )}
         </div>

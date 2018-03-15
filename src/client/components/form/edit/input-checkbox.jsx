@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
+import { FormGroup, FormControlLabel } from 'material-ui-next/Form';
 import Checkbox from 'material-ui-next/Checkbox';
-
-import './styles.css';
 
 const propTypes = {
   input: PropTypes.object,
@@ -13,35 +13,56 @@ const propTypes = {
   meta: PropTypes.object,
 };
 
-const renderCheckbox = ({
-  input,
-  label,
-  placeholder,
-  type,
-  initialValue,
-  meta: { touched, error, warning },
-}) => (
-  <div>
-    <label
-      htmlFor={input}
-    >
-      {label}
-    </label>
-    <div>
-      <Checkbox
-        style={{ margin: 8 }}
-        className="form-control"
-        {...input}
-        checked={!!input.value}
-        onChange={input.onChange}
+const styles = theme => ({
+  root: {
+    margin: '18px 12px 14px 8px',
+    marginLeft: 10,
+    width: 180,
+  },
+  formError: {
+    color: '#dd0000',
+    fontWeight: 'bold',
+  },
+  formWarning: {
+    color: '#dd9900',
+    fontWeight: 'bold',
+  },
+});
+
+const InputCheckbox = (props) => {
+  const {
+    classes,
+    input,
+    label,
+    placeholder,
+    type,
+    initialValue,
+    meta: { touched, error, warning },
+  } = props;
+  return (
+    <FormGroup className={classes.root}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            className="form-control"
+            variant="primary"
+            {...input}
+            value="true"
+            checked={input.value}
+            onChange={input.onChange}
+          />
+
+        }
+        label={label}
       />
       {touched && (
-        (error && <div className="form-error">{error}</div>) || (warning && <div className="form-warning">{warning}</div>)
+        (error && <div className={classes.formError}>{error}</div>) ||
+        (warning && <div className={classes.formWarning}>{warning}</div>)
       )}
-    </div>
-  </div>
-);
+    </FormGroup>
+  );
+};
 
-renderCheckbox.propTypes = propTypes;
+InputCheckbox.propTypes = propTypes;
 
-export default renderCheckbox;
+export default withStyles(styles, { name: 'StyledInputCheckbox' })(InputCheckbox);

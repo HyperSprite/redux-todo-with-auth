@@ -50,5 +50,27 @@ lib.dateStringFormat = (dateString, datePref = 'MM-DD-YYYY') => {
 };
 
 lib.numbersOnly = value => value.replace(/[^0-9-]+/g, '');
+lib.alphaNumbersOnly = value => value.replace(/[^a-zA-Z0-9]/g, '');
+
+lib.axiosConfig = {
+  headers: {
+    authorization: localStorage.getItem('token'),
+  },
+};
+
+lib.debounce = (fn, time) => {
+  let timeoutId;
+  return wrapper;
+  function wrapper(...args) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      timeoutId = null;
+      fn(...args);
+    }, time);
+  }
+};
+
 
 export default lib;

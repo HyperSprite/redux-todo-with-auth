@@ -17,18 +17,20 @@ These take the same input, an objects with the following form:
 
 ```js
   {
-    contentName: 'filter_commute',
-    contentLabel: 'Commute',
+    name: 'filter_commute',
+    label: 'Commute',
     contentAlt: '',
-    contentOptions: [
-      { value: '', label: 'Inclusive' },
-      { value: '1', label: 'Exclusive' },
-      { value: '2', label: 'Excluded' },
-    ],
+    contentOptions: {
+      data: [
+        { value: '', label: 'Inclusive' },
+        { value: '1', label: 'Exclusive' },
+        { value: '2', label: 'Excluded' },
+      ],
+    },
     contentHelp: '',
     contentPlaceholder: '',
-    contentType: 'filter',
-    componentType: 'InputRadio',
+    type: 'filter',
+    component: 'InputRadio',
     addButtonset: false,
   },
 ```

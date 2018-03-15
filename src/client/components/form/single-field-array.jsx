@@ -5,11 +5,20 @@ import { FlatButton, IconButton, List, ListItem } from 'material-ui';
 import { ActionDeleteForever, ContentAddCircle } from 'material-ui/svg-icons';
 import { TextField } from 'redux-form-material-ui';
 
+import EditSwitch from './edit/switch';
 import style from '../../styles/style';
 
 const propTypes = {
   fields: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
+};
+
+const formValues = {
+  contentAlt: '',
+  contentOptions: null,
+  contentType: 'text',
+  componentType: 'InputText',
+  addButtonset: false,
 };
 
 const singleFieldArray = ({ fields, label }) => (
@@ -22,11 +31,8 @@ const singleFieldArray = ({ fields, label }) => (
         style={style.listItem}
       >
         <div>
-          <Field
-            name={item}
-            type="text"
-            component={TextField}
-            floatingLabelText={`Add ${label}`}
+          <EditSwitch
+            formValues={{ ...formValues, name: item, label: `Add ${label}` }}
           />
           <IconButton
             type="button"

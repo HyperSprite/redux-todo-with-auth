@@ -27,7 +27,6 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
-    // marginTop: 10,
   },
   flexParent: {
     display: 'flex',
@@ -36,7 +35,7 @@ const styles = theme => ({
     marginTop: 10,
   },
   switch: {
-    width: 150,
+    width: 110,
     margin: '0 20px',
   },
 });
@@ -104,8 +103,8 @@ class FilterDrawer extends React.Component {
               </div>
             </AppBar>
             <div className={classes.flexParent} >
-              {this.props.radioFormValues.filter(fFV => (fFV.contentType === 'filter')).map(fV => (
-                <div key={fV.contentName}>
+              {this.props.radioFormValues.filter(fFV => (fFV.group === 'filter')).map(fV => (
+                <div key={fV.name}>
                   <EditSwitch
                     form={this.props.form}
                     formValues={fV}
