@@ -3,14 +3,14 @@ export const title = 'Route Search';
 export const relURL = 'apiv1/routeplan/search';
 export const formValues = [
   {
-    contentName: 'textsearch',
-    contentLabel: 'Search Terms',
+    name: 'textsearch',
+    label: 'Search Terms',
     contentAlt: '',
     contentOptions: null,
     contentHelp: '',
     contentPlaceholder: 'Route Name',
-    contentType: 'text',
-    componentType: 'Input',
+    type: 'text',
+    component: 'Input',
     addButtonset: false,
   },
   // { TODO need to build a better checkbox

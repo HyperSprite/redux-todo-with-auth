@@ -63,9 +63,10 @@ class RangeInput extends React.Component {
           (vals.conDef0 < vals.conDef1)) {
           if (element.value !== 'count') {
             buildRangeArr = [...buildRangeArr, {
-              componentType: 'InputRange',
-              contentName: element.value,
-              contentLabel: element.option,
+              component: 'InputRange',
+              name: element.value,
+              label: element.option,
+              type: 'text',
               contentDefautls: [
                 justFNS.round(vals.conDef0, 0),
                 justFNS.round(vals.conDef1, 0),
@@ -78,9 +79,9 @@ class RangeInput extends React.Component {
           }
         } else if (element.value === 'date') {
           buildRangeArr = [...buildRangeArr, {
-            componentType: 'InputRangeDates',
-            contentName: element.value,
-            contentLabel: element.option,
+            component: 'InputRangeDates',
+            name: element.value,
+            label: element.option,
             contentDefautls: [vals.conDef0, vals.conDef1],
             contentValue: [vals.conVal0, vals.conVal1],
           }];
@@ -112,11 +113,11 @@ class RangeInput extends React.Component {
       <div className={classes.flexParent} >
         <div className={classes.flexcontainer} >
           {(this.state.rangeArr.map(rA => (
-            <div key={rA.contentName} >
-              {rA.contentName !== 'count' ||
-                  rA.contentName !== 'maxSpeed' ||
-                  rA.contentName !== 'maxHeartrate' ||
-                  rA.contentName !== 'maxWatts' ||
+            <div key={rA.name} >
+              {rA.name !== 'count' ||
+                  rA.name !== 'maxSpeed' ||
+                  rA.name !== 'maxHeartrate' ||
+                  rA.name !== 'maxWatts' ||
                   !rA.contentDefautls[0] ? (
                     <EditSwitch
                       form={form}
@@ -128,7 +129,7 @@ class RangeInput extends React.Component {
                       datePref={datePref}
                       rangeValue={rA.rangeValue}
                     />
-              ) : <div>hi</div> }
+              ) : null }
             </div>
           )))}
         </div>

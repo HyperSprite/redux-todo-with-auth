@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { FlatButton, IconButton, List, ListItem, Subheader } from 'material-ui';
-import { ActionDeleteForever } from 'material-ui/svg-icons';
+import { List, ListItem, Subheader } from 'material-ui';
 import { TextField } from 'redux-form-material-ui';
 
+import ButtonDelete from '../button/delete';
+import ButtonAdd from '../button/add';
 import style from '../../styles/style';
 
 const propTypes = {
@@ -24,27 +25,26 @@ const defaultValues = {
 
 const renderEventRoutes = ({ fields, fetchStravaRoutes, eventSelector }) => (
   <List style={style.list}>
-    {fields.map((eventRoutes, index) =>
+    {fields.map((eventRoutes, index) => (
       <ListItem
         key={index}
-        disableTouchRipple
-        hoverColor="#fffefe"
-        style={style.listItem}
+        // disableTouchRipple
+        // hoverColor="#fffefe"
+        // style={style.listItem}
       >
         <Subheader
-          style={style.subheader}
+          // style={style.subheader}
         >
           Route {index + 1}
-          <IconButton
-            type="button"
-            tooltip="Remove Route"
-            style={style.iconButton}
+          <ButtonDelete
             onClick={() => fields.remove(index)}
-          >
-            <ActionDeleteForever
-              style={style.iconStyles}
-            />
-          </IconButton>
+            color="secondary"
+            label="Delete Route"
+            size="small"
+            toolTip={`Remove Route`}
+            toolTipId="tooltip-delete"
+            toolTipPlacement="bottom"
+          />
         </Subheader>
         <div>
           <Field
@@ -56,18 +56,16 @@ const renderEventRoutes = ({ fields, fetchStravaRoutes, eventSelector }) => (
             onBlur={() => fetchStravaRoutes(eventSelector[index].eventRouteURL, index)} // TODO this is not right yet
           />
         </div>
-      </ListItem>,
-    )}
+      </ListItem>
+    ))}
     <ListItem
-      disableTouchRipple
+      // disableTouchRipple
       hoverColor="#fffefe"
     >
-      <FlatButton
-        type="button"
-        label="Add Route Link"
-        primary
-        style={style.button}
-        onClick={() => fields.push({})}
+      <ButtonAdd
+        onClick={() => fields.push()}
+        label={`Add Route`}
+        size="small"
       />
     </ListItem>
   </List>

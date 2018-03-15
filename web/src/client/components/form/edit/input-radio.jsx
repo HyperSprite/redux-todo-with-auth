@@ -24,7 +24,7 @@ const propTypes = {
   meta: PropTypes.object,
 };
 
-const renderCheckbox = ({
+const InputRadio = ({
   classes,
   input,
   label,
@@ -33,39 +33,42 @@ const renderCheckbox = ({
   initialValue,
   contentOptions,
   meta: { touched, error, warning },
-}) => (
-  <div >
-    <FormControl
-      component="fieldset"
-      className={classes.formControl}
-    >
-      <FormLabel component="legend">
-        {label}
-      </FormLabel>
-      <RadioGroup
-        aria-label={input.name}
-        className={classes.group}
-        {...input}
-        value={input.value}
-        onChange={(event, value) => input.onChange(value)}
+}) => {
+  return (
+    <div >
+      <FormControl
+        component="fieldset"
+        className={classes.formControl}
       >
-        {contentOptions.map(cOpts => (
-          <FormControlLabel
-            key={cOpts.label}
-            value={cOpts.value}
-            control={<Radio />}
-            label={cOpts.label}
-          />
-        ))}
-      </RadioGroup>
-    </FormControl>
-    {touched && (
-      (error && <div className={classes.formError}>{error}</div>) ||
-      (warning && <div className={classes.formWarning}>{warning}</div>)
-    )}
-  </div>
-);
+        <FormLabel component="legend">
+          {label}
+        </FormLabel>
+        <RadioGroup
+          aria-label={input.name}
+          className={classes.group}
+          {...input}
+          // value={input.value || initialValue}
+          // onChange={(event, value) => input.onChange(value)}
+        >
+          {contentOptions.data.map(cOpts => (
+            <FormControlLabel
+              key={cOpts.label}
+              name={input.name}
+              value={cOpts.value}
+              control={<Radio />}
+              label={cOpts.label}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+      {touched && (
+        (error && <div className={classes.formError}>{error}</div>) ||
+        (warning && <div className={classes.formWarning}>{warning}</div>)
+      )}
+    </div>
+  );
+};
 
-renderCheckbox.propTypes = propTypes;
+InputRadio.propTypes = propTypes;
 
-export default withStyles(styles, { name: 'StyledrenderCheckbox' })(renderCheckbox);
+export default withStyles(styles, { name: 'StyledInputRadio' })(InputRadio);

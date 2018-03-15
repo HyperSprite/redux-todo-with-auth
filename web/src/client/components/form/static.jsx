@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui-next/styles';
-import ToggleCheckBox from 'material-ui/svg-icons/toggle/check-box';
-import ToggleCheckBoxOutlineBlank from 'material-ui/svg-icons/toggle/check-box-outline-blank';
-import LinearProgress from 'material-ui/LinearProgress';
+import CheckboxMarkedOutlineIcon from 'mdi-react/CheckboxMarkedOutlineIcon';
+import CheckboxBlankOutlineIcon from 'mdi-react/CheckboxBlankOutlineIcon';
+import { LinearProgress } from 'material-ui-next/Progress';
 
 const propTypes = {
   baseURL: PropTypes.string,
@@ -49,7 +49,7 @@ const styles = theme => ({
 const renderContent = (classes, content, contentType, contentAlt, baseURL) => {
   switch (contentType) {
     case 'bool': {
-      return content ? (<ToggleCheckBox />) : (<ToggleCheckBoxOutlineBlank />);
+      return content ? (<CheckboxMarkedOutlineIcon />) : (<CheckboxBlankOutlineIcon />);
     }
     case 'html': {
       return <div dangerouslySetInnerHTML={{ __html: content }} />;

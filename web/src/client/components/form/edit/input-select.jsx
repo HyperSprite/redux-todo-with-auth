@@ -28,14 +28,14 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
+    minWidth: 200,
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
 });
 
-const RenderSelect = (props) => {
+const InputSelect = (props) => {
   const {
     classes,
     input,
@@ -55,8 +55,8 @@ const RenderSelect = (props) => {
         onChange={event => input.onChange(event.target.value)}
         input={<Input name={input.name} id={input.name} />}
       >
-        {contentOptions.map(cOpts => (
-          <MenuItem key={cOpts.value} value={cOpts.value} >{cOpts.option}</MenuItem>
+        {contentOptions.data.map(cOpts => (
+          <MenuItem key={cOpts.value} value={cOpts.value} >{cOpts.label}</MenuItem>
         ))}
       </Select>
       {touched && (
@@ -67,6 +67,6 @@ const RenderSelect = (props) => {
   );
 };
 
-RenderSelect.propTypes = propTypes;
+InputSelect.propTypes = propTypes;
 
-export default withStyles(styles, { name: 'StyledRenderSelect' })(RenderSelect);
+export default withStyles(styles, { name: 'StyledInputSelect' })(InputSelect);

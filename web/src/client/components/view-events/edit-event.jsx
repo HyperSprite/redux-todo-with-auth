@@ -2,19 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Field, FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { Divider, FlatButton, LinearProgress, MenuItem, RaisedButton, RadioButton } from 'material-ui';
+import { Form, reduxForm, formValueSelector } from 'redux-form';
+import { withStyles } from 'material-ui-next/styles';
+
+import { Divider, FlatButton, LinearProgress, RaisedButton } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
-import { DatePicker, SelectField, TextField, RadioButtonGroup } from 'redux-form-material-ui';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
 import Alert from './../form/alert';
-import StaticMD from './../form/static-markdown';
 import { validate, warn } from './../form/validate';
-import EditEventRoute from './edit-event-routes';
-import singleFieldArray from '../form/single-field-array';
+
+import EditSwitch from '../form/edit/switch';
+import { formValues, relURLAdd, relURLEdit, thisForm, title, help } from './form-values';
 
 import style from '../../styles/style';
 
@@ -34,13 +35,18 @@ const propTypes = {
   hashId: PropTypes.string,
   submitting: PropTypes.bool,
 };
+const defaultProps = {
+  form: thisForm,
+};
 
-const relURLAdd = 'apiv1/events/addevent';
-const relURLEdit = 'apiv1/events';
 const NumOfDaysMenuOpts = [];
 for (let i = 1; i < 32; i++) {
   NumOfDaysMenuOpts.push(i);
 }
+
+const styles = theme => ({
+
+});
 
 let EditEvent = class EditEvent extends Component {
   constructor() {
@@ -91,6 +97,8 @@ let EditEvent = class EditEvent extends Component {
 
   render() {
     const {
+      classes,
+      form,
       handleSubmit,
       initialValues,
       authenticated,
@@ -118,155 +126,20 @@ let EditEvent = class EditEvent extends Component {
 
     const renderForm = (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>
-        <Field
-          component={TextField}
-          style={style.formelement}
-          floatingLabelText="Title"
-          name="eventTitle"
-          type="text"
-          hintText="Event Title"
-        />
-        <div>
-          <FieldArray
-            name="eventHashtags"
-            label="hashtag"
-            fieldName="hashtag"
-            component={singleFieldArray}
-          />
-        </div>
-        <Field
-          component={DatePicker}
-          style={style.formelement}
-          floatingLabelText="Event Date"
-          name="eventDate"
-          format={null}
-          hintText="Event Day?"
-          container="inline"
-          mode="landscape"
-        />
-        <div>
-          <Field
-            name="eventDays"
-            style={style.formelement}
-            component={SelectField}
-            floatingLabelText="Number of days"
-          >
-            {NumOfDaysMenuOpts.map(n => (
-              <MenuItem key={n} value={n} primaryText={n} />
+
+        <div className={classes.flexParent}>
+          <div className={classes.flexcontainer} >
+            {formValues.map(fV => (
+              <div key={fV.name} >
+                <EditSwitch
+                  form={this.props.form}
+                  formValues={fV}
+                />
+              </div>
             ))}
-          </Field>
-        </div>
-        <div>
-          <Field name="eventAthleteType" style={style.formelement} component={RadioButtonGroup}>
-            <RadioButton value="Cycling" label="Cycling" default />
-            <RadioButton value="Running" label="Running" />
-            <RadioButton value="Triathlon" label="Triathlon" />
-          </Field>
+          </div>
         </div>
 
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Series"
-            name="eventSeries"
-            type="text"
-            hintText="(optional)"
-          />
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Organizer"
-            name="eventOrg"
-            type="text"
-            hintText="(optional)"
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Street"
-            name="eventLocStreet"
-            type="text"
-            hintText="(optional)"
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="City"
-            name="eventLocCity"
-            type="text"
-            hintText="Type the City"
-          />
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="State"
-            name="eventLocState"
-            type="text"
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Country"
-            name="eventLocCountry"
-            type="text"
-          />
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="ZIP Code"
-            name="eventLocZip"
-            type="number"
-            hintText="(optional)"
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Event Homepage URL"
-            name="eventURL"
-            type="text"
-            hintText="(optional)"
-            fullWidth
-            multiLine
-          />
-        </div>
-        <div>
-          <Field
-            component={TextField}
-            style={style.formelement}
-            floatingLabelText="Description (Markdown)"
-            name="eventDesc"
-            type="text"
-            hintText="Event Description"
-            fullWidth
-            multiLine
-          />
-        </div>
-        <StaticMD
-          contentLabel="Formatted"
-          content={eventSelector.eventDesc}
-        />
-        <div>
-          <FieldArray
-            name="eventRoutes"
-            component={EditEventRoute}
-            fetchStravaRoutes={this.fetchStravaRoutes}
-            eventSelector={eventSelector.eventRoutes}
-          />
-        </div>
-        <FieldArray
-          name="eventOwners"
-          label="owner"
-          component={singleFieldArray}
-        />
         { this.renderAlert() }
         {submitSucceeded ? (
           <div>
@@ -354,6 +227,7 @@ let EditEvent = class EditEvent extends Component {
 };
 
 EditEvent.propTypes = propTypes;
+EditEvent.defaultProps = defaultProps;
 
 const selector = formValueSelector('editevent');
 
@@ -385,10 +259,10 @@ function mapStateToProps(state) {
 }
 
 EditEvent = reduxForm({
-  form: 'editevent',
+  form: thisForm,
   validate,
   warn,
 })(EditEvent);
 
-
-export default connect(mapStateToProps, actions)(EditEvent);
+const styledEditEvent = withStyles(styles, { name: 'StyledEditEvent' })(EditEvent);
+export default connect(mapStateToProps, actions)(styledEditEvent);

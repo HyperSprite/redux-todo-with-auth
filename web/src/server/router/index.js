@@ -17,6 +17,8 @@ const rteRoutes = require('./routeplans');
 const webhooks = require('./webhooks');
 const jsonfile = require('jsonfile');
 
+const autocompleteRoutes = require('../autocomplete/routes');
+
 let manifest;
 if (hlpr.isProd() || process.env.NODE_ENV === 'API-ONLY') {
   const manifestPath = `${__dirname}/../public/assets/manifest.json`;
@@ -106,6 +108,7 @@ router.use('/apiv1/activities', rLib.requireAuth, activitiesRoutes);
 router.use('/apiv1/activity', rLib.requireAuth, activityRoutes);
 router.use('/apiv1/routeplan', rLib.requireAuth, rteRoutes);
 router.use('/apiv1/strava', rLib.requireAuth, stravaRoutes);
+router.use('/apiv1/autocomplete', rLib.requireAuth, autocompleteRoutes);
 // all requireAdmin and requireAuth
 router.use('/apiv1/admin', rLib.requireAuth, rLib.requireAdmin, adminRoutes);
 
