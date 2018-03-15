@@ -8,10 +8,11 @@ import Paper from 'material-ui-next/Paper';
 import { MenuItem } from 'material-ui-next/Menu';
 import Chip from 'material-ui-next/Chip';
 
+import withData from '../../../containers/withData';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 250,
   },
   container: {
     flexGrow: 1,
@@ -73,12 +74,12 @@ renderSuggestion.propTypes = {
   suggestion: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-function getSuggestions(inputValue, contentOptions) {
+function getSuggestions(inputValue, data) {
   let count = 0;
-  return contentOptions.data.filter((suggestion) => {
+  return data.filter((suggestion) => {
     const keep =
       (!inputValue || suggestion.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1) &&
-      count < 5;
+      count < 10;
 
     if (keep) {
       count += 1;
@@ -134,7 +135,7 @@ class InputDownshiftMultiString extends React.Component {
   };
 
   render() {
-    const { classes, contentOptions, input, label, placeholder, meta, ...rest } = this.props;
+    const { classes, contentOptions, data, input, label, placeholder, meta, ...rest } = this.props;
     const { inputValue } = this.state;
 
     return (
@@ -162,6 +163,7 @@ class InputDownshiftMultiString extends React.Component {
                       onDelete={this.handleDelete(item)}
                     />
                   )),
+                  label,
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
                   onBlur: this.handleChange,
@@ -171,7 +173,7 @@ class InputDownshiftMultiString extends React.Component {
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
-                  {getSuggestions(inputValue2, contentOptions).map((suggestion, index) =>
+                  {getSuggestions(inputValue2, data).map((suggestion, index) =>
                     renderSuggestion({
                       suggestion,
                       index,
@@ -194,4 +196,6 @@ InputDownshiftMultiString.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(InputDownshiftMultiString);
+const styledInputDownshiftMultiString = withStyles(styles, { name: 'styledInputDownshiftMultiString' })(InputDownshiftMultiString);
+const withAutoData = withData(props => props.contentOptions.data);
+export default withAutoData(styledInputDownshiftMultiString);
