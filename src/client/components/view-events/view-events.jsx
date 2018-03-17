@@ -18,9 +18,14 @@ import EditEvent from './edit-event';
 
 const styles = theme => ({
   floatActButton: {
-    position: 'absolute',
     bottom: theme.spacing.unit * 2,
     right: theme.spacing.unit * 2,
+    position: 'fixed',
+  },
+  '@media print': {
+    floatActButton: {
+      display: 'none',
+    },
   },
 });
 

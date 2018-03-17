@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlusCircleIcon from 'mdi-react/PlusCircleIcon';
+import CancelIcon from 'mdi-react/CancelIcon';
 
 import ButtonBase from '../base';
 
 /**
 * Required only props
 
-<ButtonAdd
-  onClick={handleClose}
+<ButtonCancel
+  onClick={handleCancel}
 />
 
 *
 * All Props
 
-<ButtonAdd
-  onClick={handleClose}
+<ButtonCancel
+  onClick={handleCancel}
   color="secondary"
   label="Add Hashtag"
   size="small"
-  toolTip="Add hashtag"
-  toolTipId="tooltip-add"
+  toolTip="Cancel Edit"
+  toolTipId="tooltip-cancel"
   toolTipPlacement="bottom"
   variant="raised"
 />
@@ -50,10 +50,10 @@ const propTypes = {
 
 const defaultProps = {
   color: 'primary',
-  label: 'Add',
+  label: 'Cancel',
   hasIcon: true,
   size: 'small',
-  toolTip: 'Add',
+  toolTip: 'Cancel',
   toolTipId: 'tooltip-add',
   toolTipPlacement: 'top',
   variant: 'flat',
@@ -61,7 +61,7 @@ const defaultProps = {
 
 const ButtonRefresh = props => (
   <ButtonBase {...props} >
-    <PlusCircleIcon />
+    <CancelIcon />
   </ButtonBase>
 );
 

@@ -50,23 +50,24 @@ const routePlanProjection = {
 */
 const getOneRoute = (input, result) => {
   Routeplans.find({ routeplanId: input.routeplanId }, (err, oneRouteplan) => {
-    if (oneRouteplan[0]) {
+    if (oneRouteplan && oneRouteplan[0]) {
       hlpr.consLog(['found oneRouteplan']);
       return result(oneRouteplan[0]);
     }
     strava.routes.get({ id: input.routeplanId, access_token: input.user.access_token }, (
       err, oneRoute) => {
-      if (err || !oneRoute) {
-        console.log({ message: 'Error or no oneRoute found' });
-        return { message: 'Error or no oneRoute found' };
+      if (err || !oneRoute || !oneRoute.id) {
+        const message = 'No Strava Route found'
+        hlpr.logOutArgs(`${logObj.file}.getOneRoute strava.routes.get`, '404', 'user', 5, err, input.originalUrl, message, input.user.stravaId);
+        return result({ message });
       }
       if (oneRoute.message === 'Authorization Error') {
-        console.log(oneRoute.message);
-        return { message: oneRoute.message };
+        hlpr.logOutArgs(`${logObj.file}.getOneRoute strava.routes.get`, 'auth', 'user', 5, err, input.originalUrl, oneRoute.message, input.user.stravaId);
+        return result({ message: oneRoute.message });
       }
-      hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute.id]);
-
-      enhancePolylineLocation(oneRoute.map.summary_polyline, true, (enhancedData) => {
+      hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute]);
+      const summaryPolyline = (oneRoute && oneRoute.map && oneRoute.map.summary_polyline) || null;
+      enhancePolylineLocation(summaryPolyline, true, (enhancedData) => {
         const oneRouteEnhanced = Object.assign(
           oneRoute, enhancedData, { routeplanId: oneRoute.id }
         );

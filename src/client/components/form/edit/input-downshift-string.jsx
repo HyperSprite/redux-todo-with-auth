@@ -28,14 +28,21 @@ const styles = theme => ({
   chip: {
     margin: `${theme.spacing.unit}px ${theme.spacing.unit / 4}px`,
   },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: '99%',
+    paddingLeft: 6,
+  },
 });
 
 function getSuggestions(inputValue, data) {
   let count = 0;
   return data.filter((suggestion) => {
-    const keep =
-      (!inputValue || suggestion.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1) &&
-      count < 10;
+    const keep = (
+      !inputValue ||
+      suggestion.toString().toLowerCase().indexOf(inputValue.toString().toLowerCase()) !== -1
+    ) && count < 10;
 
     if (keep) {
       count += 1;
@@ -51,7 +58,7 @@ function renderInput(inputProps) {
     <div>
       <TextField
         inputRef={ref}
-        classes={classes.input}
+        className={classes.formControl}
         {...InputProps}
       />
       {(touched) && (
@@ -64,7 +71,7 @@ function renderInput(inputProps) {
 
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion) > -1;
+  const isSelected = (`${selectedItem}`).indexOf(suggestion) > -1;
   return (
     <MenuItem
       {...itemProps}
@@ -87,7 +94,7 @@ renderSuggestion.propTypes = {
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
-const InputDownshiftString = ({ classes, contentOptions, data, input, label, meta, placeholder, ...rest }) => {
+const InputDownshiftString = ({ classes, contentOptions, data, fullWidth, input, label, meta, placeholder, ...rest }) => {
     return (
       <div className={classes.root}>
         <Downshift
@@ -117,7 +124,7 @@ const InputDownshiftString = ({ classes, contentOptions, data, input, label, met
                   id: input.name,
                   input,
                   label,
-                  fullWidth: true,
+                  fullWidth,
                   meta,
                 }),
               })}

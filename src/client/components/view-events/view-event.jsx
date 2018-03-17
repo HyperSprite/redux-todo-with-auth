@@ -58,10 +58,16 @@ const styles = theme => ({
   flexedWrap: {
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   cardHeader: {
     ...theme.typography.title,
     color: theme.palette.primary.dark,
+  },
+  '@media print': {
+    expand: {
+      display: 'none',
+    },
   },
 });
 
@@ -118,19 +124,22 @@ class renderViewEvent extends React.Component {
               toggleCount={favCount}
             />}
 
-          action={<IconButton
-            className={classNames(classes.expand, {
-              [classes.expandOpen]: this.state.expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={this.state.expanded}
-            aria-label="Show more"
-          >
-            <SvgIcon size={24} >
-              <ChevronDownIcon />
-            </SvgIcon>
-          </IconButton>}
+          action={
+            <IconButton
+              className={classNames(classes.expand, {
+                [classes.expandOpen]: this.state.expanded,
+              })}
+              onClick={this.handleExpandClick}
+              aria-expanded={this.state.expanded}
+              aria-label="Show more"
+            >
+              <SvgIcon size={24} >
+                <ChevronDownIcon />
+              </SvgIcon>
+            </IconButton>
+          }
         />
+
         <Collapse
           in={this.state.expanded}
           timeout="auto"
@@ -197,7 +206,6 @@ class renderViewEvent extends React.Component {
                 />
               ))}
             </div>
-
             <Static
               contentLabel="Event Date"
               content={niceEventDate}

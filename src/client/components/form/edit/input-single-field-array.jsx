@@ -1,6 +1,8 @@
+// TODO - Not using this yet, will come back to this
 import React from 'react';
 import PropTypes from 'prop-types';
 import List, { ListItem } from 'material-ui-next/List';
+import { FieldArray } from 'redux-form';
 
 import ButtonDelete from '../../button/delete';
 import ButtonAdd from '../../button/add';
@@ -23,34 +25,37 @@ const styles = theme => ({
 
 });
 
-const InputSingleFieldArray = ({ input, label }) => {
+const InputSingleFieldArray = (props) => {
   console.warn('input.value', input.value);
+
+  const { form, name, input, label } = props;
   return (
     <List >
       {input.value.map((item, index) => (
         <ListItem
           key={`${item}`}
         >
-          <div>
-            <EditSwitch
-              formValues={{ ...formValues, name: item, value: item, label: `Add ${label}` }}
-            />
-            <ButtonDelete
-              onClick={() => input.value.remove(index)}
-              color="secondary"
-              label="Delete Hashtag"
-              size="small"
-              toolTip={`Remove hashtag ${label}`}
-              toolTipId="tooltip-delete"
-              toolTipPlacement="bottom"
-            />
-          </div>
+          <FieldArray
+            name={name}
+            component={(
+              <EditSwitch
+                formValues={{ ...formValues, name: `${name[index]}`, value: item, label: `${label}` }}
+              />
+            )}
+
+          />
+          <ButtonDelete
+            onClick={() => input.value.remove(index)}
+            color="secondary"
+            label="Delete"
+            size="small"
+            toolTip={`Remove ${label}`}
+            toolTipId="tooltip-delete"
+            toolTipPlacement="bottom"
+          />
         </ListItem>
       ))}
       <ListItem>
-        <EditSwitch
-          formValues={{ ...formValues, label: `Add ${label}` }}
-        />
         <ButtonAdd
           onClick={() => input.onChange([...input.value])}
           label={`Add ${label}`}

@@ -46,7 +46,7 @@ const returnValues = [
   },
   {
     activityType: 'geoStart',
-    activityLabel: 'Open Start in Google Maps',
+    activityLabel: 'Start in Google Maps',
     link: lib.googlemapbylnglat,
     arg1: 'geoStart',
   },

@@ -1,31 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// not ready yet, need to find the right icon
-import DownloadIcon from 'mdi-react/DownloadIcon';
+import UndoIcon from 'mdi-react/UndoIcon';
 
 import ButtonBase from '../base';
 
 /**
-
-import ButtonDownload from '../button/downlaod';
-
 * Required only props
 
-<ButtonDownload
+<ButtonReset
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonDownload
+<ButtonReset
   onClick={handleClose}
-  color="primary"
-  label="Download"
+  color="secondary"
+  label="Reset"
   size="small"
-  toolTip="Download Activities"
-  toolTipId="tooltip-downlaod"
-  toolTipPlacement="left"
+  toolTip="Reset"
+  toolTipId="tooltip-reset"
+  toolTipPlacement="bottom"
   variant="raised"
 />
 
@@ -38,7 +34,7 @@ const propTypes = {
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   /** enum: 'small', 'medium', 'large' */
   size: PropTypes.string,
   /** ToolTip text */
@@ -54,21 +50,22 @@ const propTypes = {
 
 const defaultProps = {
   color: 'primary',
-  label: 'Download',
+  label: 'Reset',
+  hasIcon: true,
   size: 'small',
-  toolTip: 'Downlaod',
-  toolTipId: 'tooltip-download',
+  toolTip: 'Reset',
+  toolTipId: 'tooltip-reset',
   toolTipPlacement: 'top',
   variant: 'flat',
 };
 
-const ButtonOpen = props => (
+const ButtonRefresh = props => (
   <ButtonBase {...props} >
-    <DownloadIcon />
+    <UndoIcon />
   </ButtonBase>
 );
 
-ButtonOpen.propTypes = propTypes;
-ButtonOpen.defaultProps = defaultProps;
+ButtonRefresh.propTypes = propTypes;
+ButtonRefresh.defaultProps = defaultProps;
 
-export default ButtonOpen;
+export default ButtonRefresh;

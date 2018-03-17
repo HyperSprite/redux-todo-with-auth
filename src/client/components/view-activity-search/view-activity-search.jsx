@@ -77,9 +77,6 @@ const styles = theme => ({
     width: 150,
     margin: theme.spacing.unit,
   },
-  progress: {
-
-  },
   div: {},
   toggleContainer: {
     width: 300,

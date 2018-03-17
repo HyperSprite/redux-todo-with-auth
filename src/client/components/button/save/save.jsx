@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import PlusCircleIcon from 'mdi-react/PlusCircleIcon';
+import ContentSaveIcon from 'mdi-react/ContentSaveIcon';
 
 import ButtonBase from '../base';
 
 /**
 * Required only props
 
-<ButtonAdd
+<ButtonSave
   onClick={handleClose}
 />
 
 *
 * All Props
 
-<ButtonAdd
+<ButtonSave
   onClick={handleClose}
   color="secondary"
-  label="Add Hashtag"
+  label="Save"
   size="small"
-  toolTip="Add hashtag"
-  toolTipId="tooltip-add"
+  toolTip="Save"
+  toolTipId="tooltip-save"
   toolTipPlacement="bottom"
   variant="raised"
 />
@@ -50,18 +50,18 @@ const propTypes = {
 
 const defaultProps = {
   color: 'primary',
-  label: 'Add',
+  label: 'Save',
   hasIcon: true,
   size: 'small',
-  toolTip: 'Add',
-  toolTipId: 'tooltip-add',
+  toolTip: 'Save',
+  toolTipId: 'tooltip-save',
   toolTipPlacement: 'top',
   variant: 'flat',
 };
 
 const ButtonRefresh = props => (
   <ButtonBase {...props} >
-    <PlusCircleIcon />
+    <ContentSaveIcon />
   </ButtonBase>
 );
 

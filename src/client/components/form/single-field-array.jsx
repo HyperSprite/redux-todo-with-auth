@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import { FlatButton, IconButton, List, ListItem } from 'material-ui';
-import { ActionDeleteForever, ContentAddCircle } from 'material-ui/svg-icons';
-import { TextField } from 'redux-form-material-ui';
+import { withStyles } from 'material-ui-next/styles';
+import { FormLabel } from 'material-ui-next/Form';
+import IconButton from 'material-ui-next/IconButton';
+import List, { ListItem } from 'material-ui-next/List';
+import SvgIcon from 'material-ui-next/SvgIcon';
+import DeleteIcon from 'mdi-react/DeleteIcon';
 
-import EditSwitch from './edit/switch';
+import EditSwitch from '../form/edit/switch';
+import ButtonAdd from '../button/add';
+// TODO material-ui-next - still needs formatting
 import style from '../../styles/style';
 
 const propTypes = {
@@ -14,55 +18,74 @@ const propTypes = {
 };
 
 const formValues = {
-  contentAlt: '',
-  contentOptions: null,
-  contentType: 'text',
-  componentType: 'InputText',
-  addButtonset: false,
+  type: 'text',
+  component: 'InputText',
 };
 
-const singleFieldArray = ({ fields, label }) => (
-  <List style={style.list}>
-    {fields.map((item, index) =>
-      <ListItem
-        key={`${index}${item}`}
-        disableTouchRipple
-        hoverColor="#fffefe"
-        style={style.listItem}
-      >
-        <div>
+const styles = theme => ({
+  formControl: {
+    margin: theme.spacing.unit,
+    // minWidth: 120,
+    maxWidth: '99%',
+    paddingLeft: 6,
+  },
+  list: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  listItem: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
+  },
+  iconButton: {
+    marginTop: 8,
+  },
+});
+
+const SingleFieldArray = ({ classes, form, fields, label }) => (
+  <div className={classes.formControl}>
+    <FormLabel htmlFor={label} >{label}</FormLabel>
+    <List className={classes.list}>
+      {fields.map((item, index) =>
+        (<ListItem
+          key={`${item}`}
+          className={classes.listItem}
+        >
           <EditSwitch
-            formValues={{ ...formValues, name: item, label: `Add ${label}` }}
+            form={form}
+            formValues={{
+              ...formValues,
+              form,
+              name: `${item}`,
+              value: item,
+              label: 'label',
+            }}
           />
           <IconButton
+            className={classes.iconButton}
             type="button"
             tooltip={`Remove ${label}`}
-            style={style.iconButton}
             onClick={() => fields.remove(index)}
           >
-            <ActionDeleteForever
-              style={style.iconStyles}
-            />
+            <SvgIcon>
+              <DeleteIcon />
+            </SvgIcon>
           </IconButton>
-        </div>
-      </ListItem>,
-    )}
-    <ListItem
-      disableTouchRipple
-      hoverColor="#fffefe"
-    >
-      <FlatButton
-        type="button"
-        label={`Add ${label}`}
-        primary
-        style={style.button}
-        icon={<ContentAddCircle />}
-        onClick={() => fields.push()}
-      />
-    </ListItem>
-  </List>
+        </ListItem>),
+      )}
+    </List>
+    <ButtonAdd
+      onClick={() => fields.push()}
+      color="secondary"
+      label={`Add ${label}`}
+      size="small"
+    />
+  </div>
+
 );
 
-singleFieldArray.propTypes = propTypes;
+SingleFieldArray.propTypes = propTypes;
 
-export default singleFieldArray;
+export default withStyles(styles, { name: 'StyledSingleFieldArray' })(SingleFieldArray);

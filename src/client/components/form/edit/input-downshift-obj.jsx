@@ -24,8 +24,11 @@ const styles = theme => ({
     left: 0,
     right: 0,
   },
-  chip: {
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit / 4}px`,
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: '99%',
+    paddingLeft: 6,
   },
 });
 
@@ -63,7 +66,7 @@ function renderInput(inputProps) {
 
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+  const isSelected = (`${selectedItem}`).indexOf(suggestion.label) > -1;
   return (
     <MenuItem
       {...itemProps}
@@ -86,7 +89,7 @@ renderSuggestion.propTypes = {
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
-const InputDownshiftSingleObj = ({ classes, contentOptions, data, input, label, meta, placeholder, ...rest }) => {
+const InputDownshiftSingleObj = ({ classes, contentOptions, data, fullWidth, input, label, meta, placeholder, ...rest }) => {
     return (
       <div className={classes.root}>
         <Downshift
@@ -110,7 +113,7 @@ const InputDownshiftSingleObj = ({ classes, contentOptions, data, input, label, 
                   id: input.name,
                   input,
                   label,
-                  fullWidth: true,
+                  fullWidth,
                   meta,
                 }),
               })}

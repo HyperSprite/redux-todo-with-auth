@@ -1,13 +1,27 @@
 import React from 'react';
-import Toolbar from 'material-ui-next/Toolbar';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui-next/styles';
+import { MenuItem } from 'material-ui-next/Menu';
 import FilterLink from './filter-toolbar-connect';
 
-const EventFilter = () => (
-  <Toolbar>
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+
+  },
+});
+
+const EventFilter = ({ classes }) => (
+  <MenuItem className={classes.root}>
     <FilterLink filter="EVENTS_SHOW_ALL" />
     <FilterLink filter="EVENTS_SHOW_FAVORITE" />
     <FilterLink filter="EVENTS_SHOW_OWNER" />
-  </Toolbar>
+  </MenuItem>
 );
 
-export default EventFilter;
+EventFilter.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles, { name: 'StyledEventFilter' })(EventFilter);

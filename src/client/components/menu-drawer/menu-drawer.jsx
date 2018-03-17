@@ -12,6 +12,7 @@ import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
 import SwitcherMPref from '../switcher-mpref';
 import SwitcherTheme from '../switcher-theme';
+import EventFilter from '../view-events/filter-toolbar';
 
 const styles = theme => ({
   list: {
@@ -51,11 +52,12 @@ class MenuDrawer extends Component {
   }
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, pageName, theme } = this.props;
     const drawer = (
       <div>
         <div className={classes.toolbar} />
         <List>
+          { pageName === 'Events' ? <EventFilter /> : null}
           <SwitcherMPref />
           <SwitcherTheme />
           <Divider />
@@ -63,6 +65,7 @@ class MenuDrawer extends Component {
             <MenuDrawerItem
               key={mI.linkTo}
               onClick={this.handleClose}
+              pageName={pageName}
               {...mI}
             />
           ))}
@@ -85,6 +88,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     adminMember: state.auth.user.adminMember,
     open: state.page.drawer,
+    pageName: state.page.name,
   };
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import InputDatePicker from './input-datepicker';
 // import InputDownshiftMultiObj from './input-downshift-multi-obj'; // auto select
 import InputDownshiftMultiString from './input-downshift-multi-string'; // auto select
 import InputDownshiftString from './input-downshift-string'; // auto select
@@ -11,9 +12,9 @@ import InputRadioCheckbox from './input-radio-checkbox';
 import InputRange from './input-range';
 import InputRangeDates from './input-range-dates';
 import InputSelect from './input-select';
-// import InputSelectAuto from './input-select-auto';
-import InputSingleFieldArray from './input-single-field-array';
+// import InputSingleFieldArray from './input-single-field-array';
 import InputText from './input-text';
+import InputTextMarkdown from './input-text-markdown';
 
 import WrapReduxForm from './wrap-redux-form';
 
@@ -32,6 +33,7 @@ const defaultProps = {
 };
 
 const inputs = {
+  InputDatePicker,
   InputDownshiftMultiString,
   InputDownshiftObj,
   InputDownshiftString,
@@ -41,8 +43,8 @@ const inputs = {
   InputRange,
   InputRangeDates,
   InputSelect,
-  InputSingleFieldArray,
   InputText,
+  InputTextMarkdown,
 };
 
 const EditSwitch = props => (

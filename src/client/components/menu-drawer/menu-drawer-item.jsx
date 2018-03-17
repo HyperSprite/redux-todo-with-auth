@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { withStyles } from 'material-ui-next/styles';
 import {
   ListItem,
   ListItemIcon,
@@ -12,6 +13,7 @@ const propTypes = {
   Icon: PropTypes.any,
   linkTo: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
+  pageName: PropTypes.string.isRequired,
   primaryText: PropTypes.string.isRequired,
   target: PropTypes.string,
 };
@@ -21,13 +23,21 @@ const defaultProps = {
   target: null,
 };
 
-const MenuDrawerItem = ({ Icon, linkTo, onClick, primaryText, target }) => (
+const styles = theme => ({
+  root: {
+    fill: theme.palette.primary[600],
+  },
+});
+
+const MenuDrawerItem = ({ classes, Icon, linkTo, onClick, pageName, primaryText, target }) => (
   <ListItem
+    className={classes.root}
     button
     onClick={onClick}
     component={Link}
     to={linkTo}
     target={target}
+    disabled={primaryText === pageName}
   >
     {Icon && (
       <ListItemIcon>
@@ -41,4 +51,4 @@ const MenuDrawerItem = ({ Icon, linkTo, onClick, primaryText, target }) => (
 MenuDrawerItem.propTypes = propTypes;
 MenuDrawerItem.defaultProps = defaultProps;
 
-export default MenuDrawerItem;
+export default withStyles(styles, { name: 'StyledMenuDrawerItem' })(MenuDrawerItem);
