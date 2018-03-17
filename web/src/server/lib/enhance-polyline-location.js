@@ -42,7 +42,7 @@ const logObj = {
 *   [[ lat,   lng ], [ lat,    lng ]]
 */
 module.exports = (polyline, extended, result) => {
-  if (!polyline) {
+  if (!polyline || typeof polyline !== 'string') {
     hlpr.logOut(Object.assign({}, logObj, {
       func: `${logObj.file} default`,
       message: '!polyline',

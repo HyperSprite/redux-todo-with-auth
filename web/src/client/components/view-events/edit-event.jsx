@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Form, reduxForm, formValueSelector } from 'redux-form';
+import { FieldArray, reduxForm, formValueSelector } from 'redux-form';
 import { withStyles } from 'material-ui-next/styles';
-
-import { Divider, FlatButton, LinearProgress, RaisedButton } from 'material-ui';
-import { Card, CardHeader } from 'material-ui/Card';
-import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
+import Typography from 'material-ui-next/Typography';
+import Card, { CardHeader } from 'material-ui-next/Card';
+import Toolbar from 'material-ui-next/Toolbar';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
@@ -16,8 +15,12 @@ import { validate, warn } from './../form/validate';
 
 import EditSwitch from '../form/edit/switch';
 import { formValues, relURLAdd, relURLEdit, thisForm, title, help } from './form-values';
-
-import style from '../../styles/style';
+import EditEventRoutes from './edit-event-routes';
+import singleFieldArray from '../form/single-field-array';
+import ProgressDivider from '../progress-divider';
+import ButtonCancel from '../button/cancel';
+import ButtonReset from '../button/reset';
+import ButtonSave from '../button/save';
 
 const propTypes = {
   authenticated: PropTypes.bool,
@@ -33,6 +36,7 @@ const propTypes = {
   postSuccess: PropTypes.bool,
   reset: PropTypes.func,
   hashId: PropTypes.string,
+  mPref: PropTypes.bool.isRequired,
   submitting: PropTypes.bool,
 };
 const defaultProps = {
@@ -45,16 +49,23 @@ for (let i = 1; i < 32; i++) {
 }
 
 const styles = theme => ({
-
+  root: {
+    display: 'inherit',
+  },
+  buttonSet: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    flexWrap: 'wrap',
+    padding: '4px 0',
+    alignItems: 'baseline',
+  },
 });
 
 let EditEvent = class EditEvent extends Component {
   constructor() {
     super();
-
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.cancelFormEdit = this.cancelFormEdit.bind(this);
-    this.fetchStravaRoutes = this.fetchStravaRoutes.bind(this);
   }
 
   handleFormSubmit(formProps) {
@@ -71,17 +82,6 @@ let EditEvent = class EditEvent extends Component {
     } else {
       this.props.cancelEdit();
     }
-  }
-
-// TODO This is not finished, need to get the value out of the form.
-  fetchStravaRoutes(routeId, index) {
-    this.props.fetchStrava(
-      'routes',
-      routeId,
-      index,
-      this.props.stravaToken,
-      'eventRoute',
-    );
   }
 
   renderAlert() {
@@ -106,6 +106,7 @@ let EditEvent = class EditEvent extends Component {
       pristine,
       reset,
       hashId,
+      mPref,
       submitting,
       fetchStravaRoutes,
       eventSelector,
@@ -125,10 +126,12 @@ let EditEvent = class EditEvent extends Component {
     }
 
     const renderForm = (
-      <form onSubmit={handleSubmit(this.handleFormSubmit)}>
+      <form className={classes.root} onSubmit={handleSubmit(this.handleFormSubmit)}>
 
-        <div className={classes.flexParent}>
-          <div className={classes.flexcontainer} >
+        {/* <div className={classes.flexParent}> */}
+          <div>
+            <div>
+          {/* <div className={classes.flexcontainer} > */}
             {formValues.map(fV => (
               <div key={fV.name} >
                 <EditSwitch
@@ -137,58 +140,43 @@ let EditEvent = class EditEvent extends Component {
                 />
               </div>
             ))}
+            <FieldArray
+              name="eventRoutes"
+              component={EditEventRoutes}
+              form={this.props.form}
+              mPref={mPref}
+              eventSelector={eventSelector.eventRoutes}
+            />
+            <FieldArray
+              name="eventOwners"
+              label="Owner"
+              form={this.props.form}
+              component={singleFieldArray}
+            />
           </div>
         </div>
 
         { this.renderAlert() }
-        {submitSucceeded ? (
-          <div>
-            <LinearProgress mode="indeterminate" />
-            <RaisedButton
-              type="button"
-              label="Submit"
-              primary
-              style={style.button}
-              disabled
-            />
-            <FlatButton
-              type="button"
-              label="Clear Values"
-              style={style.button}
-              disabled
-            />
-            <FlatButton
-              type="button"
-              label="Cancel"
-              style={style.button}
-              disabled
-            />
-          </div>
-        ) : (
-          <div>
-            <Divider style={{ height: 4 }} />
-            <RaisedButton
-              type="submit"
-              label="Submit"
-              primary
-              style={style.button}
-              disabled={pristine || submitting}
-            />
-            <FlatButton
-              type="button"
-              label="Clear Values"
-              style={style.button}
-              disabled={pristine || submitting}
-              onClick={reset}
-            />
-            <FlatButton
-              type="button"
-              label="Cancel"
-              style={style.button}
-              onClick={this.cancelFormEdit}
-            />
-          </div>
-        )}
+
+
+        <ProgressDivider isProgress={submitSucceeded} />
+        <div className={classes.buttonSet}>
+          <ButtonSave
+            type="submit"
+            label="Save"
+            variant={pristine ? 'flat' : 'raised'}
+            color="primary"
+            disabled={pristine || submitting || submitSucceeded}
+          />
+          <ButtonReset
+            disabled={pristine || submitting || submitSucceeded}
+            onClick={reset}
+          />
+          <ButtonCancel
+            onClick={this.cancelFormEdit}
+            disabled={submitSucceeded}
+          />
+        </div>
       </form>
     );
 
@@ -214,9 +202,9 @@ let EditEvent = class EditEvent extends Component {
             className="card"
           >
             <Toolbar>
-              <ToolbarTitle
-                text="Add Event"
-              />
+              <Typography variant="title" color="inherit">
+                Add Event
+              </Typography>
             </Toolbar>
             {renderForm}
           </Card>
@@ -255,6 +243,7 @@ function mapStateToProps(state) {
     hashId,
     eventSelector: selector(state, 'eventDesc', 'eventRoutes'),
     submitSucceeded: state.form.submitSucceeded,
+    mPref: state.page.mPref,
   };
 }
 

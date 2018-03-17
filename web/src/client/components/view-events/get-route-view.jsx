@@ -20,7 +20,6 @@ class RouteView extends React.Component {
     super(props);
     this.state = {
       routeData: {},
-      mPref: false,
     };
   }
 
@@ -37,9 +36,14 @@ class RouteView extends React.Component {
         throw new Error('Server fetch failed');
       })
       .then((responseData) => {
-        this.setState({ routeData: responseData, mPref: this.props.mPref });
+        this.setState({
+          routeData: responseData.routeplanId ? responseData : { error: `${this.props.eventRouteURL} not found` },
+          mPref: this.props.mPref,
+        });
       }).catch((error) => {
-        this.setState({ routeData: [error] });
+        this.setState({
+          routeData: { error: `${this.props.eventRouteURL} not found`, err: error },
+        });
       });
   }
 // measurementPref
@@ -47,7 +51,11 @@ class RouteView extends React.Component {
     const { mPref } = this.props;
     const { routeData } = this.state;
     return (
-      <ViewRoute mPref={mPref} routeData={routeData} height={400} />
+      <div>
+        {(routeData && routeData.routeplanId) ? (
+          <ViewRoute mPref={mPref} routeData={routeData} height={400} />
+        ) : null}
+      </div>
     );
   }
 }

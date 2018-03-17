@@ -1,15 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
-import { List, ListItem, Subheader } from 'material-ui';
-import { TextField } from 'redux-form-material-ui';
+import List, { ListItem } from 'material-ui-next/List';
 
+import EditSwitch from '../form/edit/switch';
+import GetViewRoute from './get-route-view';
 import ButtonDelete from '../button/delete';
 import ButtonAdd from '../button/add';
 import style from '../../styles/style';
 
 const propTypes = {
   fields: PropTypes.object,
+  mPref: PropTypes.bool.isRequired,
 };
 
 const defaultValues = {
@@ -23,44 +24,65 @@ const defaultValues = {
   ],
 };
 
-const renderEventRoutes = ({ fields, fetchStravaRoutes, eventSelector }) => (
+const formValues = {
+  name: 'eventRoutes',
+  label: 'Routes',
+  contentAlt: '',
+  contentOptions: {
+    data: '/apiv1/autocomplete/distinct/routes/routeid',
+    allowNew: true,
+    /* normalizer: '[^a-zA-Z0-9\':,- ]'*/
+  },
+  contentHelp: '',
+  type: 'text',
+  component: 'InputDownshiftString',
+  addButtonset: false,
+  // validate: {[]}
+  // component={EditEventRoute}
+  // fetchStravaRoutes={this.fetchStravaRoutes}
+  // eventSelector={eventSelector.eventRoutes}
+};
+
+const renderEditEventRoutes = ({ fields, form, mPref }) => (
   <List style={style.list}>
     {fields.map((eventRoutes, index) => (
       <ListItem
-        key={index}
-        // disableTouchRipple
-        // hoverColor="#fffefe"
-        // style={style.listItem}
+        key={`${eventRoutes}.eventRouteURL`}
       >
-        <Subheader
-          // style={style.subheader}
-        >
+        <div >
           Route {index + 1}
           <ButtonDelete
             onClick={() => fields.remove(index)}
             color="secondary"
             label="Delete Route"
             size="small"
-            toolTip={`Remove Route`}
+            toolTip="Remove Route"
             toolTipId="tooltip-delete"
             toolTipPlacement="bottom"
           />
-        </Subheader>
+        </div>
         <div>
-          <Field
-            name={`${eventRoutes}.eventRouteURL`}
-            type="text"
-            component={TextField}
-            floatingLabelText="Strava Route ID"
-            hintText="1201587"
-            onBlur={() => fetchStravaRoutes(eventSelector[index].eventRouteURL, index)} // TODO this is not right yet
+          <EditSwitch
+            form={form}
+            formValues={{
+              ...formValues,
+              name: `${eventRoutes}.eventRouteURL`,
+            }}
           />
+          <div>
+            {(fields.get(index) && fields.get(index).eventRouteURL) ? (
+              <GetViewRoute
+                eventRouteURL={fields.get(index).eventRouteURL * 1}
+                mPref={mPref}
+              />
+            ) : null}
+          </div>
         </div>
       </ListItem>
     ))}
     <ListItem
       // disableTouchRipple
-      hoverColor="#fffefe"
+      // hoverColor="#fffefe"
     >
       <ButtonAdd
         onClick={() => fields.push()}
@@ -71,7 +93,7 @@ const renderEventRoutes = ({ fields, fetchStravaRoutes, eventSelector }) => (
   </List>
 );
 
-renderEventRoutes.propTypes = propTypes;
-renderEventRoutes.defaultValues = defaultValues;
+renderEditEventRoutes.propTypes = propTypes;
+renderEditEventRoutes.defaultValues = defaultValues;
 
-export default renderEventRoutes;
+export default renderEditEventRoutes;

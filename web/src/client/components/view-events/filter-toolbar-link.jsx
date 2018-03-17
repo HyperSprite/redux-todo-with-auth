@@ -21,7 +21,6 @@ const propTypes = {
 const styles = theme => ({
   icon: {
     color: 'inherit',
-    // fontSize: 30,
   },
 });
 

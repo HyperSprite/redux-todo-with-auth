@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Divider from 'material-ui-next/Divider';
 import { LinearProgress } from 'material-ui-next/Progress';
 
+/**
+<ProgressDivider isProgress={actionOnTrue} />
+*/
+
 const propTypes = {
   isProgress: PropTypes.bool.isRequired,
 };

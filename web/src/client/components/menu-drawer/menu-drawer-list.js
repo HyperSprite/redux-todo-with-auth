@@ -17,13 +17,6 @@ const menuDrawerList = [
     access: ['anon', 'user', 'admin'],
   },
   {
-    primaryText: 'Blog and Help',
-    linkTo: '/blog',
-    target: 'blank',
-    Icon: HelpIcon,
-    access: ['anon', 'user', 'admin'],
-  },
-  {
     primaryText: 'Strava Club',
     linkTo: 'https://www.strava.com/clubs/araceathlete',
     target: 'blank',
@@ -71,6 +64,13 @@ const menuDrawerList = [
     linkTo: '/athlete',
     Icon: AccountIcon,
     access: ['admin'],
+  },
+  {
+    primaryText: 'Blog and Help',
+    linkTo: '/blog',
+    target: 'blank',
+    Icon: HelpIcon,
+    access: ['anon', 'user', 'admin'],
   },
   {
     primaryText: 'Sign out',

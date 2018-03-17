@@ -59,6 +59,7 @@ const InputText = (props) => {
     fullWidth,
     inputComponent,
     margin,
+    multiline,
     placeholder,
     rows,
     rowsMax,
@@ -67,7 +68,12 @@ const InputText = (props) => {
   } = props;
 
   return (
-    <FormControl className={classes.formControl}>
+    <FormControl
+      className={classes.formControl}
+      fullWidth={fullWidth}
+
+      margin={margin}
+    >
       <InputLabel htmlFor={input.name}>{label}</InputLabel>
       <Input
         className={classes.formControl}
@@ -76,9 +82,9 @@ const InputText = (props) => {
         disabled={disabled}
         endAdornment={endAdornment}
         error={!!error}
-        fullWidth={fullWidth}
+
         inputComponent={inputComponent}
-        margin={margin}
+        multiline={multiline}
         placeholder={placeholder}
         rows={rows}
         rowsMax={rowsMax}

@@ -20,17 +20,22 @@ export const formValues = [
     name: 'eventHashtags',
     label: 'Hashtags',
     contentAlt: '',
-    contentOptions: { data: '/apiv1/autocomplete/distinct/events/hashtags', allowNew: true, normalizer: '[^a-zA-Z0-9]' },
+    contentOptions: {
+      data: '/apiv1/autocomplete/distinct/events/hashtags',
+      allowNew: true,
+      normalizer: '[^a-zA-Z0-9]',
+    },
     contentHelp: '',
     type: 'text',
     component: 'InputDownshiftMultiString',
     addButtonset: false,
+    fullWidth: true,
   },
   {
     name: 'eventDate',
     label: 'Event Date',
     type: 'date',
-    component: 'InputText',
+    component: 'InputDatePicker',
     contentAlt: '',
     contentOptions: null,
     contentHelp: '',
@@ -71,9 +76,12 @@ export const formValues = [
     type: 'text',
     component: 'InputDownshiftString',
     contentAlt: '',
-    contentOptions: { data: '/apiv1/autocomplete/distinct/events/series', allowNew: false /* , normalizer: '[^a-zA-Z0-9\':,- ]'*/ },
+    contentOptions: {
+      data: '/apiv1/autocomplete/distinct/events/series',
+      allowNew: true,
+      normalizer: '[^a-zA-Z0-9\',- ]',
+    },
     contentHelp: '',
-    addButtonset: false,
   },
   {
     name: 'eventOrg',
@@ -81,7 +89,11 @@ export const formValues = [
     type: 'text',
     component: 'InputDownshiftString',
     contentAlt: '',
-    contentOptions: { data: '/apiv1/autocomplete/distinct/events/organizer', allowNew: true /* , normalizer: '[^a-zA-Z0-9\':,- ]'*/ },
+    contentOptions: {
+      data: '/apiv1/autocomplete/distinct/events/organizer',
+      allowNew: true,
+      normalizer: '[^a-zA-Z0-9\\\', -]',
+    },
     contentHelp: '',
     addButtonset: false,
   },
@@ -144,49 +156,26 @@ export const formValues = [
     contentOptions: null,
     contentHelp: '',
     addButtonset: false,
-    // full width
+    fullWidth: true,
   },
   {
     name: 'eventDesc',
     label: 'Description (Markdown)',
     type: 'text',
-    component: 'InputText',
+    component: 'InputTextMarkdown',
     contentAlt: '',
     contentOptions: null,
     contentHelp: '',
     addButtonset: false,
+    fullWidth: true,
+    multiline: true,
     // MDField
     // full width
-    // multiLine
+    // multiline
     // show staticMD
     // <StaticMD
     //  label="Formatted"
     //  content={eventSelector.eventDesc}
     // />
   },
-  // {
-  //   name: 'eventRoutes',
-  //   label: 'Routes',
-  //   contentAlt: '',
-  //   contentOptions: null,
-  //   contentHelp: '',
-  //   type: 'text',
-  //   component: 'SingleFieldArray',
-  //   addButtonset: false,
-
-  // component={EditEventRoute}
-  // fetchStravaRoutes={this.fetchStravaRoutes}
-  // eventSelector={eventSelector.eventRoutes}
-
-  // },
-  // {
-  //   name: 'eventOwners',
-  //   label: 'Owners',
-  //   contentAlt: '',
-  //   contentOptions: null,
-  //   contentHelp: '',
-  //   type: 'text',
-  //   component: 'SingleFieldArray',
-  //   addButtonset: false,
-  // },
 ];

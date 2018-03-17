@@ -5,7 +5,6 @@ const Routeplans = require('../models/routeplans');
 const User = require('../models/user');
 const UserCommon = require('../models/user-common');
 
-
 /**
 * Autocomplete:
 *   The following are gatekeepers for autocomplete
@@ -13,6 +12,7 @@ const UserCommon = require('../models/user-common');
 */
 const dictHander = {
   events: Events,
+  routes: Routeplans,
 };
 /**
 * converts incoming param key to scehma key.
@@ -24,9 +24,14 @@ const dictKey = {
     organizer: 'eventOrg',
     series: 'eventSeries',
   },
+  routes: {
+    routeid: 'routeplanId',
+  },
 };
 /**
+* Sample working routes
 * localhost:3080/apiv1/autocomplete/distinct/events/hashtags
+* localhost:3080/apiv1/autocomplete/distinct/routes/routeid
 */
 exports.handleDistinct = (req, res) => {
   const p = req.params;

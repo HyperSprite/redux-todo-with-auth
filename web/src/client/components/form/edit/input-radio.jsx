@@ -13,6 +13,10 @@ const styles = theme => ({
     color: '#dd9900',
     fontWeight: 'bold',
   },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
 });
 
 const propTypes = {

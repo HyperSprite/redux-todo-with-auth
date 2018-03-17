@@ -28,14 +28,21 @@ const styles = theme => ({
   chip: {
     margin: `${theme.spacing.unit}px ${theme.spacing.unit / 4}px`,
   },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: '99%',
+    paddingLeft: 6,
+  },
 });
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, ...other } = inputProps;
-
   return (
     <TextField
+      label={InputProps.label}
       {...other}
+      className={classes.formControl}
       inputRef={ref}
       InputProps={{
         classes: {
@@ -50,7 +57,7 @@ function renderInput(inputProps) {
 
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion) > -1;
+  const isSelected = (`${selectedItem}`).indexOf(suggestion) > -1;
 
   return (
     <MenuItem
@@ -135,9 +142,8 @@ class InputDownshiftMultiString extends React.Component {
   };
 
   render() {
-    const { classes, contentOptions, data, input, label, placeholder, meta, ...rest } = this.props;
+    const { classes, contentOptions, data, fullWidth, input, label, placeholder, meta, ...rest } = this.props;
     const { inputValue } = this.state;
-
     return (
       <div className={classes.root}>
         <Downshift inputValue={inputValue} onChange={this.handleChange} selectedItem={input.value}>
@@ -151,7 +157,7 @@ class InputDownshiftMultiString extends React.Component {
           }) => (
             <div className={classes.container}>
               {renderInput({
-                fullWidth: true,
+                fullWidth,
                 classes,
                 InputProps: getInputProps({
                   startAdornment: input.value.length > 0 && input.value.map(item => (

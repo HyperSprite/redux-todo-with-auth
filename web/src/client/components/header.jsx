@@ -42,7 +42,7 @@ const styles = theme => ({
     lineHeight: '48px',
   },
   help: {
-    padding: '0 12px 0 2px',
+    padding: '0 2px',
   },
   icon: {
     color: 'inherit',
@@ -77,9 +77,6 @@ class Header extends Component {
   renderRightMenu() {
     let rightMenu;
     switch (this.props.page.name) {
-      case 'Events':
-        rightMenu = EventFilter();
-        break;
       default:
         rightMenu = <ClubNotice />;
         break;
