@@ -106,6 +106,10 @@ const styles = theme => ({
     noPrint: {
       display: 'none',
     },
+    div: {
+      backgroundColor: 'inherit',
+      boxShadow: 'none',
+    },
   },
 });
 

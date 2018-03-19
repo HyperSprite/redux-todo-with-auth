@@ -19,11 +19,23 @@ const styles = theme => ({
     flexGrow: 1,
     marginTop: 10,
   },
-  paper: {
-    // color: theme.palette.text.secondary,
-    // fontFamily: theme.typography.fontFamily,
-    // fontSize: theme.typography.fontSize,
-    // fontWeight: theme.typography.fontWeightRegular,
+  '@media print': {
+    elevation2: {
+      backgroundColor: 'inherit',
+      boxShadow: 'none',
+    },
+    main: {
+      maxWidth: '100%',
+      width: '100%',
+      flexBasis: 'auto',
+    },
+    paper: {
+      backgroundColor: 'inherit',
+      boxShadow: 'none',
+    },
+    sidelight: {
+      display: 'none',
+    },
   },
 });
 
@@ -33,14 +45,14 @@ function ExtLayoutSimple(props) {
   return (
     <div className={classes.root}>
       <Grid container spacing={0}>
-        <Grid item xs sm={1} md={1} lg={2} />
-        <Grid item xs={12} sm={10} md={9} lg={7} >
+        <Grid item className={classes.sidelight} xs sm={1} md={1} lg={2} />
+        <Grid item className={classes.main} xs={12} sm={10} md={9} lg={7} >
           <Paper className={classes.paper}>
             {props.children}
             <ButtonPrint />
           </Paper>
         </Grid>
-        <Grid item xs sm={1} md={2} lg={3} />
+        <Grid item className={classes.sidelight} xs sm={1} md={2} lg={3} />
       </Grid>
     </div>
   );

@@ -53,9 +53,6 @@ const styles = theme => ({
     marginTop: 14,
     fontSize: 18,
   },
-  icons: {
-    // marginRight: '3vw',
-  },
   container: {
     display: 'flex',
     justifyContent: 'flex-start',
@@ -68,15 +65,12 @@ const styles = theme => ({
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
   },
-  // box: {
-  //   width: 200,
-  //   display: 'flex',
-  //   justifyContent: 'space-between',
-  //   flexWrap: 'wrap',
-  // },
+  '@media print': {
+    icons: {
+      display: 'none',
+    },
+  },
 });
-
-const deleteActivityURL = 'apiv1/activities/delete-activity';
 
 class ExtActivitySingle extends Component {
   constructor(props) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import Collapse from 'material-ui/transitions/Collapse';
 import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
 import { FormControlLabel } from 'material-ui/Form';
@@ -9,7 +10,6 @@ import Switch from 'material-ui/Switch';
 import BarChart from '../bar-chart';
 import GearTotals from './../gear-totals';
 import ActivitySingle from '../activity-single';
-import style from './style';
 
 const propTypes = {
   week: PropTypes.string.isRequired, // "2017-05-02"
@@ -23,7 +23,16 @@ const defaultProps = {
   // mPref: false,
 };
 
-class weeklyStats extends React.Component {
+const styles = theme => ({
+  boxes: {
+    width: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+});
+
+class WeeklyStats extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,7 +45,7 @@ class weeklyStats extends React.Component {
   };
 
   render() {
-    const { week, stats, mPref } = this.props;
+    const { classes, week, stats, mPref } = this.props;
     return (
       <Card>
         <CardHeader
@@ -44,7 +53,7 @@ class weeklyStats extends React.Component {
         />
         <CardContent>
           {stats.weeklyTotals.names[0] && <div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+            <div className={classes.boxes}>
               <BarChart
                 contentLabel="Moving Time"
                 content={`${stats.weeklyTotals.time.total}`}
@@ -71,7 +80,7 @@ class weeklyStats extends React.Component {
                 mPref={mPref}
               />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
+            <div className={classes.boxes}>
               {stats.weeklyTotals.tss.total ? (
                 <BarChart
                   contentLabel="TSS"
@@ -117,18 +126,19 @@ class weeklyStats extends React.Component {
         <GearTotals activityIds={stats.weeklyTotals.names.map(acts => acts.activityId)} />
 
         {stats.weeklyTotals.names[0] && (
-          <CardActions style={style.toggleContainer}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={this.state.expanded}
-                  onChange={this.handleToggle}
-                  color="primary"
-                />
-              }
-              label="Show this weeks activities"
-            />
-
+          <CardActions>
+            <div className={classes.boxes}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={this.state.expanded}
+                    onChange={this.handleToggle}
+                    color="primary"
+                  />
+                }
+                label="Show this weeks activities"
+              />
+            </div>
           </CardActions>
         )}
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
@@ -146,7 +156,7 @@ class weeklyStats extends React.Component {
   }
 }
 
-weeklyStats.propTypes = propTypes;
-weeklyStats.defaultProps = defaultProps;
+WeeklyStats.propTypes = propTypes;
+WeeklyStats.defaultProps = defaultProps;
 
-export default weeklyStats;
+export default withStyles(styles, { name: 'styledWeeklyStats' })(WeeklyStats);
