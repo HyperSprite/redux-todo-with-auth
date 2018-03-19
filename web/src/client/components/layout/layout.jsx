@@ -5,6 +5,8 @@ import Typography from 'material-ui-next/Typography';
 import Paper from 'material-ui-next/Paper';
 import Grid from 'material-ui-next/Grid';
 
+import ButtonPrint from '../button/print';
+
 const propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
@@ -36,6 +38,7 @@ function ExtLayoutSimple(props) {
         <Grid item xs={12} sm={10} md={9} lg={7} >
           <Paper className={classes.paper}>
             {props.children}
+            <ButtonPrint />
           </Paper>
         </Grid>
         <Grid item xs sm={1} md={2} lg={3} />

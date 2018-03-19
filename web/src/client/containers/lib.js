@@ -10,11 +10,13 @@ lib.googlemapbylnglat = lnglat => `https://www.google.com/maps/search/?api=1&que
 // if I find more, will add them to this object
 lib.dateFormating = (datePref) => {
   const dateFormats = {
+    Dutc: 'YYYY-MM-DD',
     'D%m/%d/%Y': 'MM-DD-YYYY',
     'D%d/%m/%Y': 'DD-MM-YYYY',
   };
   return dateFormats[`D${datePref}`];
 };
+
 
 lib.dateFormat = (date, datePref = '%m/%d/%Y') => format(date, lib.dateFormating(datePref));
 
@@ -24,27 +26,10 @@ lib.cleanDateTime = (dateTime, datePref = '%m/%d/%Y') => {
   return `${date} ${time}`;
 };
 
-/*
-* Function below no longer needed but it was fun to write so I left it here down here.
-* Can be removed (also make sure to remove test).
-* dateFormat above does the same thing.
-*
-* Formats a Strava date string into datePref
-* strava date string example: 2017-12-07T23:39:40Z
-*
-* create an object to map over for placement
-* Split the datePrefArr, default should return ['MM', 'DD', 'YYYY']
-*
-* Split dateString on - and T chars,
-* Example above returns: ['2017', '12', '07', '23:39:40Z']
-*
-* Map over datePrefArr and return string in proper order
-* using the dateObj[dPA] to match the element by index.
-*/
-lib.dateStringFormat = (dateString, datePref = 'MM-DD-YYYY') => {
+lib.dateStringFormat = (date, datePref = '%m/%d/%Y') => {
   const dateObj = { YYYY: 0, MM: 1, DD: 2 };
-  const datePrefArr = datePref.split('-');
-  const dateArr = dateString.split(/[-T/]+/);
+  const datePrefArr = lib.dateFormating(datePref).split('-');
+  const dateArr = date.toString().split(/[-T/]+/);
   const dateStringResult = datePrefArr.map(dPA => dateArr[dateObj[dPA]]).join('-');
   return dateStringResult;
 };

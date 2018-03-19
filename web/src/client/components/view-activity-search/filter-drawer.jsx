@@ -38,6 +38,11 @@ const styles = theme => ({
     width: 110,
     margin: '0 20px',
   },
+  '@media print': {
+    noPrint: {
+      display: 'none',
+    },
+  },
 });
 
 class FilterDrawer extends React.Component {
@@ -60,7 +65,7 @@ class FilterDrawer extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div>
+      <div className={classes.noPrint}>
         <div className={classes.switch} >
           <FormControlLabel
             control={

@@ -8,7 +8,7 @@ import Paper from 'material-ui-next/Paper';
 import { MenuItem } from 'material-ui-next/Menu';
 import Chip from 'material-ui-next/Chip';
 
-import withData from '../../../containers/withData';
+import withData from '../../../../containers/withData';
 
 const styles = theme => ({
   root: {
@@ -53,7 +53,6 @@ function renderInput(inputProps) {
     />
   );
 }
-
 
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;

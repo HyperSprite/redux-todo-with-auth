@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import InputDatePicker from './input-datepicker';
 // import InputDownshiftMultiObj from './input-downshift-multi-obj'; // auto select
-import InputDownshiftMultiString from './input-downshift-multi-string'; // auto select
-import InputDownshiftString from './input-downshift-string'; // auto select
-import InputDownshiftObj from './input-downshift-obj'; // auto select
+import InputDownshiftMultiString from './input-downshift/multi-string'; // auto select
+import InputDownshiftString from './input-downshift/string'; // auto select
+import InputDownshiftObj from './input-downshift/obj'; // auto select
 import InputCheckbox from './input-checkbox';
 import InputRadio from './input-radio';
 import InputRadioCheckbox from './input-radio-checkbox';

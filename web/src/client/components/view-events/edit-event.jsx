@@ -222,7 +222,7 @@ const selector = formValueSelector('editevent');
 function mapStateToProps(state) {
   const initialValues = state.events.event;
   if (state.events.event && state.events.event.eventDate) {
-    initialValues.eventDate = new Date(state.events.event.eventDate);
+    // initialValues.eventDate = new Date(state.events.event.eventDate);
   } else {
     initialValues.eventAthleteType = 'Cycling';
     initialValues.eventOwners = [state.auth.user.stravaId];

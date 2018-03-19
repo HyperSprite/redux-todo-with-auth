@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { withStyles } from 'material-ui-next/styles';
-import TextField from 'material-ui-next/TextField';
 
 import Paper from 'material-ui-next/Paper';
 import { MenuItem } from 'material-ui-next/Menu';
 
-import withData from '../../../containers/withData';
-
+import withData from '../../../../containers/withData';
+import DownshiftInput from './downshift-input';
 
 const styles = theme => ({
   root: {
@@ -49,24 +48,6 @@ function getSuggestions(inputValue, data) {
     }
     return keep;
   });
-}
-
-function renderInput(inputProps) {
-  const { InputProps, classes, ref } = inputProps;
-  const { touched, error, warning } = InputProps;
-  return (
-    <div>
-      <TextField
-        inputRef={ref}
-        className={classes.formControl}
-        {...InputProps}
-      />
-      {(touched) && (
-        (error && <div className={classes.formError}>{error}</div>) ||
-        (warning && <div className={classes.formWarning}>{warning}</div>)
-      )}
-    </div>
-  );
 }
 
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
@@ -117,17 +98,17 @@ const InputDownshiftString = ({ classes, contentOptions, data, fullWidth, input,
             selectedItem,
           }) => (
             <div className={classes.container}>
-              {renderInput({
-                classes,
-                InputProps: getInputProps({
+              <DownshiftInput
+                classes={classes}
+                InputProps={getInputProps({
                   placeholder,
                   id: input.name,
                   input,
                   label,
                   fullWidth,
                   meta,
-                }),
-              })}
+                })}
+              />
               {isOpen ? (
                 <Paper className={classes.paper} square>
                   {getSuggestions(inputValue, data).map((suggestion, index) =>

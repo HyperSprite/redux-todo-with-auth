@@ -71,7 +71,6 @@ const InputText = (props) => {
     <FormControl
       className={classes.formControl}
       fullWidth={fullWidth}
-
       margin={margin}
     >
       <InputLabel htmlFor={input.name}>{label}</InputLabel>

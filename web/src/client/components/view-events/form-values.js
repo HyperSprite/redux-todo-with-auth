@@ -35,7 +35,7 @@ export const formValues = [
     name: 'eventDate',
     label: 'Event Date',
     type: 'date',
-    component: 'InputDatePicker',
+    component: 'InputText',
     contentAlt: '',
     contentOptions: null,
     contentHelp: '',

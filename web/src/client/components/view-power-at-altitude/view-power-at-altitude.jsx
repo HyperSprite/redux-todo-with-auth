@@ -10,7 +10,6 @@ import Table, {
   TableHead,
   TableRow,
 } from 'material-ui-next/Table';
-import ButtonPrint from '../button/print';
 
 import justFns from 'just-fns';
 import * as actions from './../../actions';
@@ -201,7 +200,6 @@ class AltitudeTable extends Component {
                   ))}
                 </TableBody>
               </Table>
-              <ButtonPrint />
             </CardContent>
           ) : (
             <FeatureNotice
