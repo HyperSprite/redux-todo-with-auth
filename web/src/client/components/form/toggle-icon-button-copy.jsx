@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui-next/IconButton';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
 
 import PencilIcon from 'mdi-react/PencilIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';

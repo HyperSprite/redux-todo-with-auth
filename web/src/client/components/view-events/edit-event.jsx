@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { withStyles } from 'material-ui-next/styles';
-import Typography from 'material-ui-next/Typography';
-import Card, { CardHeader } from 'material-ui-next/Card';
-import Toolbar from 'material-ui-next/Toolbar';
+import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
+import Card, { CardHeader } from 'material-ui/Card';
+import Toolbar from 'material-ui/Toolbar';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';
@@ -16,6 +16,7 @@ import { validate, warn } from './../form/validate';
 import EditSwitch from '../form/edit/switch';
 import { formValues, relURLAdd, relURLEdit, thisForm, title, help } from './form-values';
 import EditEventRoutes from './edit-event-routes';
+import Layout from '../layout';
 import singleFieldArray from '../form/single-field-array';
 import ProgressDivider from '../progress-divider';
 import ButtonCancel from '../button/cancel';
@@ -181,7 +182,7 @@ let EditEvent = class EditEvent extends Component {
     );
 
     return (
-      <div>
+      <Layout>
         <ScrollIntoView
           id={location.hash}
           headerHeight={70}
@@ -209,7 +210,7 @@ let EditEvent = class EditEvent extends Component {
             {renderForm}
           </Card>
         )}
-      </div>
+      </Layout>
     );
   }
 };

@@ -1,10 +1,10 @@
-// TODO material-ui-next - move styles to jss
+// TODO material-ui - move styles to jss
 import React from 'react';
 import PropTypes from 'prop-types';
 import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
-import { FormControlLabel } from 'material-ui-next/Form';
-import IconButton from 'material-ui-next/IconButton';
-import Switch from 'material-ui-next/Switch';
+import { FormControlLabel } from 'material-ui/Form';
+import IconButton from 'material-ui/IconButton';
+import Switch from 'material-ui/Switch';
 import CrosshairsGpsIcon from 'mdi-react/CrosshairsGpsIcon';
 import CrosshairsIcon from 'mdi-react/CrosshairsIcon';
 import GoogleMapLocation from './google-map-location';

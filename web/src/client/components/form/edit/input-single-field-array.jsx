@@ -1,7 +1,7 @@
 // TODO - Not using this yet, will come back to this
 import React from 'react';
 import PropTypes from 'prop-types';
-import List, { ListItem } from 'material-ui-next/List';
+import List, { ListItem } from 'material-ui/List';
 import { FieldArray } from 'redux-form';
 
 import ButtonDelete from '../../button/delete';

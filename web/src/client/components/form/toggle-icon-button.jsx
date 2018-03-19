@@ -1,13 +1,12 @@
 // TODO setup tool tips again
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui-next/IconButton';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
 
 import PencilIcon from 'mdi-react/PencilIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 import PlaylistCheckIcon from 'mdi-react/PlaylistCheckIcon';
-import HelpIcon from 'mdi-react/HelpIcon';
 import SquareIcon from 'mdi-react/SquareIcon';
 import SquareOutlineIcon from 'mdi-react/SquareOutlineIcon';
 import StarIcon from 'mdi-react/StarIcon';

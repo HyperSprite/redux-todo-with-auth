@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem } from 'material-ui-next/Menu';
+import { MenuItem } from 'material-ui/Menu';
 
 const DownshiftSuggestion = ({ suggestion, index, itemProps, highlightedIndex, selectedItem }) => {
   const isHighlighted = highlightedIndex === index;

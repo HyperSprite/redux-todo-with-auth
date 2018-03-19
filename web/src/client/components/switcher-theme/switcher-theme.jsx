@@ -5,9 +5,9 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-} from 'material-ui-next/List';
-import IconButton from 'material-ui-next/IconButton';
-import SvgIcon from 'material-ui-next/SvgIcon';
+} from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
 import LightbulbIcon from 'mdi-react/LightbulbIcon';
 import LightbulbOutlineIcon from 'mdi-react/LightbulbOutlineIcon';
 // eslint-disable-next-line

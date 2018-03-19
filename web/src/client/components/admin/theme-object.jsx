@@ -1,6 +1,6 @@
 /**
   This component comes from the docs here
-  https://material-ui-next.com/customization/default-theme/
+  https://material-ui.com/customization/default-theme/
   Just comment out the 'createMuiTheme' section and import the theme from props
   See the comments below.
 */
@@ -11,12 +11,12 @@ import PropTypes from 'prop-types';
 import Inspector from 'react-inspector';
 /**
   remove ', createMuiTheme' from the imports
-  import { withStyles, withTheme, createMuiTheme } from 'material-ui-next/styles';
+  import { withStyles, withTheme, createMuiTheme } from 'material-ui/styles';
   see next line
 */
-import { withStyles, withTheme } from 'material-ui-next/styles';
-import { FormControlLabel } from 'material-ui-next/Form';
-import Switch from 'material-ui-next/Switch';
+import { withStyles, withTheme } from 'material-ui/styles';
+import { FormControlLabel } from 'material-ui/Form';
+import Switch from 'material-ui/Switch';
 
 const styles = theme => ({
   root: {

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Collapse from 'material-ui-next/transitions/Collapse';
-import Card, { CardActions, CardContent, CardHeader } from 'material-ui-next/Card';
-import { FormControlLabel } from 'material-ui-next/Form';
-import Switch from 'material-ui-next/Switch';
+import Collapse from 'material-ui/transitions/Collapse';
+import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
+import { FormControlLabel } from 'material-ui/Form';
+import Typography from 'material-ui/Typography';
+import Switch from 'material-ui/Switch';
 
 import BarChart from '../bar-chart';
 import GearTotals from './../gear-totals';
@@ -39,7 +40,7 @@ class weeklyStats extends React.Component {
     return (
       <Card>
         <CardHeader
-          title={`Week of ${week}`}
+          title={<Typography variant="subheading">{`Week of ${week}`}</Typography>}
         />
         <CardContent>
           {stats.weeklyTotals.names[0] && <div>

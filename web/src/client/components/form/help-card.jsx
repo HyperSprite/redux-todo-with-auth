@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Card, { CardHeader, CardContent } from 'material-ui-next/Card';
+import Card, { CardHeader, CardContent } from 'material-ui/Card';
 import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 
 import Iframe from './iframe';

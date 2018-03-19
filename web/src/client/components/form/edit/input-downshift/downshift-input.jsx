@@ -1,5 +1,5 @@
 import React from 'react';
-import TextField from 'material-ui-next/TextField';
+import TextField from 'material-ui/TextField';
 
 const DownshiftInput = (props) => {
   const { InputProps, classes, ref } = props;

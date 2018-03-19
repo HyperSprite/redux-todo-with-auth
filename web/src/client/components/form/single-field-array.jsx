@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import { FormLabel } from 'material-ui-next/Form';
-import IconButton from 'material-ui-next/IconButton';
-import List, { ListItem } from 'material-ui-next/List';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import { withStyles } from 'material-ui/styles';
+import { FormLabel } from 'material-ui/Form';
+import IconButton from 'material-ui/IconButton';
+import List, { ListItem } from 'material-ui/List';
+import SvgIcon from 'material-ui/SvgIcon';
 import DeleteIcon from 'mdi-react/DeleteIcon';
 
 import EditSwitch from '../form/edit/switch';
 import ButtonAdd from '../button/add';
-// TODO material-ui-next - still needs formatting
+// TODO material-ui - still needs formatting
 import style from '../../styles/style';
 
 const propTypes = {

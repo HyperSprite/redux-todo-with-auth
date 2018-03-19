@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
-import { withStyles } from 'material-ui-next/styles';
-import Button from 'material-ui-next/Button';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import SvgIcon from 'material-ui/SvgIcon';
 import PlusIcon from 'mdi-react/PlusIcon';
 
 import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } from 'date-fns';

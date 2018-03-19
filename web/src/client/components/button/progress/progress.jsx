@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress } from 'material-ui-next/Progress';
+import { CircularProgress } from 'material-ui/Progress';
 
 import ButtonBase from '../base';
 

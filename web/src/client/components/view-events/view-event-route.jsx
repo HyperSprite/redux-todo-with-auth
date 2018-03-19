@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import withStyles from 'material-ui-next/styles';
-import Card, { CardHeader } from 'material-ui-next/Card';
+import withStyles from 'material-ui/styles';
+import Card, { CardHeader } from 'material-ui/Card';
 
 import justFns from 'just-fns';
 import Static from './../form/static';

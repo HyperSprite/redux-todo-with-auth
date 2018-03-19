@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 // import { create } from 'jss';
 // import jssCompose from 'jss-compose';
 // import JssProvider from 'react-jss/lib/JssProvider';
-import { MuiThemeProvider, createMuiTheme /* , jssPreset */ } from 'material-ui-next/styles';
-import Reboot from 'material-ui-next/Reboot';
+import { MuiThemeProvider, createMuiTheme /* , jssPreset */ } from 'material-ui/styles';
+import CssBaseline from 'material-ui/CssBaseline';
 
 import palette from './mui-palette';
 import typography from './mui-typography';
@@ -56,7 +56,7 @@ class Theme extends React.Component {
     return (
       // <JssProvider jss={jss} >
       <MuiThemeProvider theme={theme} sheetsManager={new Map()} >
-        <Reboot />
+        <CssBaseline />
         {this.props.children}
       </MuiThemeProvider>
       // </JssProvider>

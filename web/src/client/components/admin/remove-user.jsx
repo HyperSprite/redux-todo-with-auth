@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { withStyles } from 'material-ui-next/styles';
-import Button from 'material-ui-next/Button';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 
 const styles = theme => ({
   button: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List, { ListItem } from 'material-ui-next/List';
+import List, { ListItem } from 'material-ui/List';
 
 import EditSwitch from '../form/edit/switch';
 import GetViewRoute from './get-route-view';

@@ -1,11 +1,11 @@
 import React from 'react';
-import { withStyles } from 'material-ui-next/styles';
-import { FormControlLabel } from 'material-ui-next/Form';
+import { withStyles } from 'material-ui/styles';
+import { FormControlLabel } from 'material-ui/Form';
 import classNames from 'classnames';
-import Drawer from 'material-ui-next/Drawer';
-import AppBar from 'material-ui-next/AppBar';
-import Switch from 'material-ui-next/Switch';
-import IconButton from 'material-ui-next/IconButton';
+import Drawer from 'material-ui/Drawer';
+import AppBar from 'material-ui/AppBar';
+import Switch from 'material-ui/Switch';
+import IconButton from 'material-ui/IconButton';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
 import CloseCircleIcon from 'mdi-react/CloseCircleIcon';
 

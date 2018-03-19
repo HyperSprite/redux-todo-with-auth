@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import { FormControl } from 'material-ui-next/Form';
-import Input, { InputLabel } from 'material-ui-next/Input';
+import { withStyles } from 'material-ui/styles';
+import { FormControl } from 'material-ui/Form';
+import Input, { InputLabel } from 'material-ui/Input';
 
 import StaticMD from '../static-markdown';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card, { CardHeader } from 'material-ui-next/Card';
-import IconButton from 'material-ui-next/IconButton';
+import Card, { CardHeader } from 'material-ui/Card';
+import IconButton from 'material-ui/IconButton';
 import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
 
 import VisibilitySensorLock from '../../containers/visibility-sensor-lock';

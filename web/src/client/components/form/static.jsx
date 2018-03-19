@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 import CheckboxMarkedOutlineIcon from 'mdi-react/CheckboxMarkedOutlineIcon';
 import CheckboxBlankOutlineIcon from 'mdi-react/CheckboxBlankOutlineIcon';
-import { LinearProgress } from 'material-ui-next/Progress';
+import { LinearProgress } from 'material-ui/Progress';
 
 const propTypes = {
   baseURL: PropTypes.string,

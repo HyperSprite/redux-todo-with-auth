@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import Tooltip from 'material-ui-next/Tooltip';
+import { withStyles } from 'material-ui/styles';
+import Tooltip from 'material-ui/Tooltip';
 
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line

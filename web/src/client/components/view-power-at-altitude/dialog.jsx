@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog, {
   withMobileDialog,
-} from 'material-ui-next/Dialog';
+} from 'material-ui/Dialog';
 
-import Button from 'material-ui-next/Button';
+import Button from 'material-ui/Button';
 import DialogMessage from './dialog-message';
 
 

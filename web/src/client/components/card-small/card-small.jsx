@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import Card from 'material-ui-next/Card';
+import { withStyles } from 'material-ui/styles';
+import Card from 'material-ui/Card';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
