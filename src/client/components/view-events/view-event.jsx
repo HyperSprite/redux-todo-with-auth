@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import classNames from 'classnames';
-import { withStyles } from 'material-ui-next/styles';
-import Chip from 'material-ui-next/Chip';
-import Card, { CardActions, CardHeader, CardContent } from 'material-ui-next/Card';
-import Collapse from 'material-ui-next/transitions/Collapse';
-import IconButton from 'material-ui-next/IconButton';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import { withStyles } from 'material-ui/styles';
+import Chip from 'material-ui/Chip';
+import Card, { CardActions, CardHeader, CardContent } from 'material-ui/Card';
+import Collapse from 'material-ui/transitions/Collapse';
+import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
 import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 
 import justFns from 'just-fns';

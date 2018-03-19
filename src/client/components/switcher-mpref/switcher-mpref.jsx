@@ -5,8 +5,8 @@ import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText,
-} from 'material-ui-next/List';
-import Switch from 'material-ui-next/Switch';
+} from 'material-ui/List';
+import Switch from 'material-ui/Switch';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 

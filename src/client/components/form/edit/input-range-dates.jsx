@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import TextField from 'material-ui-next/TextField';
-import { InputLabel } from 'material-ui-next/Input';
+import { withStyles } from 'material-ui/styles';
+import TextField from 'material-ui/TextField';
+import { InputLabel } from 'material-ui/Input';
 
 import lib from '../../../containers/lib';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 
 import Header from './header';
 import Footer from './footer';

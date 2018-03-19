@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Dialog, { DialogActions } from 'material-ui-next/Dialog';
-import IconButton from 'material-ui-next/IconButton';
-import Button from 'material-ui-next/Button';
-import SvgIcon from 'material-ui-next/SvgIcon';
+import Dialog, { DialogActions } from 'material-ui/Dialog';
+import IconButton from 'material-ui/IconButton';
+import Button from 'material-ui/Button';
+import SvgIcon from 'material-ui/SvgIcon';
 import ButtonClose from '../button/close';
 
 import Icon from '../icon';

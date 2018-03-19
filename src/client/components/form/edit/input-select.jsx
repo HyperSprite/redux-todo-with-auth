@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import { FormControl } from 'material-ui-next/Form';
-import Input, { InputLabel } from 'material-ui-next/Input';
-import Select from 'material-ui-next/Select';
-import { MenuItem } from 'material-ui-next/Menu';
+import { withStyles } from 'material-ui/styles';
+import { FormControl } from 'material-ui/Form';
+import Input, { InputLabel } from 'material-ui/Input';
+import Select from 'material-ui/Select';
+import { MenuItem } from 'material-ui/Menu';
 
 import './styles.css';
 

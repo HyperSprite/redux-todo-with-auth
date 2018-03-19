@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 import {
   DialogActions,
   DialogContent,
   DialogTitle,
-} from 'material-ui-next/Dialog';
-import Tooltip from 'material-ui-next/Tooltip';
-import Button from 'material-ui-next/Button';
-import CloseCircleIcon from 'mdi-react/CloseCircleIcon';
-import PrinterIcon from 'mdi-react/PrinterIcon';
+} from 'material-ui/Dialog';
 
 import justFns from 'just-fns';
 

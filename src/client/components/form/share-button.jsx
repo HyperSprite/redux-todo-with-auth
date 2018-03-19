@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import IconButton from 'material-ui-next/IconButton';
-import SvgIcon from 'material-ui-next/SvgIcon';
-import Tooltip from 'material-ui-next/Tooltip';
+import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
+import Tooltip from 'material-ui/Tooltip';
 import FacebookBoxIcon from 'mdi-react/FacebookBoxIcon';
 import TwitterBoxIcon from 'mdi-react/TwitterBoxIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';

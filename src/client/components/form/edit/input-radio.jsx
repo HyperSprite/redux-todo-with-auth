@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import Radio, { RadioGroup } from 'material-ui-next/Radio';
-import { FormLabel, FormControl, FormControlLabel } from 'material-ui-next/Form';
+import { withStyles } from 'material-ui/styles';
+import Radio, { RadioGroup } from 'material-ui/Radio';
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 
 const styles = theme => ({
   formError: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 import FaMapPin from 'react-icons/lib/fa/map-pin';
 
 const propTypes = {

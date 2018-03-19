@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card, { CardHeader, CardContent } from 'material-ui-next/Card';
+import Card, { CardHeader, CardContent } from 'material-ui/Card';
 
 const DialogMessage = props => (
   <Card>

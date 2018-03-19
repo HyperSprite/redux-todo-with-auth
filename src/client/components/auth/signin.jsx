@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { withStyles } from 'material-ui-next/styles';
-import Button from 'material-ui-next/Button';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
 
 import { signinUser, ifToken } from '../../actions';
 import Alert from './../form/alert';

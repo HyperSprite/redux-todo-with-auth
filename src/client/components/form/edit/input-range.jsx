@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 import justFNS from 'just-fns';

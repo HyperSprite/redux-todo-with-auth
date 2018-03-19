@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui-next/styles';
-import { MenuItem } from 'material-ui-next/Menu';
+import { withStyles } from 'material-ui/styles';
+import { MenuItem } from 'material-ui/Menu';
 import FilterLink from './filter-toolbar-connect';
 
 const styles = theme => ({

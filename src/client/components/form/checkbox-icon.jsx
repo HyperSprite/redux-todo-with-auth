@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from 'material-ui-next/Checkbox';
+import Checkbox from 'material-ui/Checkbox';
 
 const propTypes = {
   option: PropTypes.bool,

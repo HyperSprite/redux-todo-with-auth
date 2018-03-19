@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui-next/styles';
-import IconButton from 'material-ui-next/IconButton';
-import Card from 'material-ui-next/Card';
+import { withStyles } from 'material-ui/styles';
+import IconButton from 'material-ui/IconButton';
+import Card from 'material-ui/Card';
 import RefreshIcon from 'mdi-react/RefreshIcon';
 
 import justFns from 'just-fns';

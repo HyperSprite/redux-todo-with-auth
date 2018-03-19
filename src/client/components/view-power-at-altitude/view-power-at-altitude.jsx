@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames'
-import { withStyles } from 'material-ui-next/styles';
-import Card, { CardContent } from 'material-ui-next/Card';
+import { withStyles } from 'material-ui/styles';
+import Card, { CardContent } from 'material-ui/Card';
 import Table, {
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-} from 'material-ui-next/Table';
+} from 'material-ui/Table';
 
 import justFns from 'just-fns';
 import * as actions from './../../actions';

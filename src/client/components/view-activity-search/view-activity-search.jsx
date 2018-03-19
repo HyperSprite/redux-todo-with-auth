@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 // eslint-disable-next-line
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
-import { withStyles } from 'material-ui-next/styles';
-// import Button from 'material-ui-next/Button';
-import Card from 'material-ui-next/Card';
+import { withStyles } from 'material-ui/styles';
+// import Button from '/Button';
+import Card from 'material-ui/Card';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import qs from 'qs';

@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { withStyles } from 'material-ui-next/styles';
-import { LinearProgress } from 'material-ui-next/Progress';
-import Divider from 'material-ui-next/Divider';
-import Card, { CardHeader, CardContent } from 'material-ui-next/Card';
-import Button from 'material-ui-next/Button';
+import { withStyles } from 'material-ui/styles';
+import { LinearProgress } from 'material-ui/Progress';
+import Divider from 'material-ui/Divider';
+import Card, { CardHeader, CardContent } from 'material-ui/Card';
+import Button from 'material-ui/Button';
 
 import justFns from 'just-fns';
 import Static from './static';

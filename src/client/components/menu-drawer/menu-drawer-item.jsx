@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { withStyles } from 'material-ui-next/styles';
+import { withStyles } from 'material-ui/styles';
 import {
   ListItem,
   ListItemIcon,
   ListItemText,
-} from 'material-ui-next/List';
+} from 'material-ui/List';
 
 
 const propTypes = {

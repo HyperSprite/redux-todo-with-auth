@@ -1,4 +1,4 @@
-// TODO material-ui-next - complete redo with charts, still not public
+// TODO material-ui - complete redo with charts, still not public
 import React from 'react';
 import PropTypes from 'prop-types';
 
