@@ -109,7 +109,7 @@ class activeStats extends Component {
                   variant="raised"
                   label="Load Another Week"
                   color="primary"
-                  style={style.button}
+                  // style={style.button}
                   disabled
                 />
               ) : null}
