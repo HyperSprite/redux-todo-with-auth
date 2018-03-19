@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardActions, CardHeader, CardText } from 'material-ui/Card';
-import Toggle from 'material-ui/Toggle';
+import Collapse from 'material-ui-next/transitions/Collapse';
+import Card, { CardActions, CardContent, CardHeader } from 'material-ui-next/Card';
+import { FormControlLabel } from 'material-ui-next/Form';
+import Switch from 'material-ui-next/Switch';
 
 import BarChart from '../bar-chart';
 import GearTotals from './../gear-totals';
@@ -28,32 +30,18 @@ class weeklyStats extends React.Component {
     };
   }
 
-  handleExpandChange = (expanded) => {
-    this.setState({ expanded: expanded });
-  };
-
-  handleToggle = (event, toggle) => {
-    this.setState({ expanded: toggle });
-  };
-
-  handleExpand = () => {
-    this.setState({ expanded: true });
-  };
-
-  handleReduce = () => {
-    this.setState({ expanded: false });
+  handleToggle = () => {
+    this.setState({ expanded: !this.state.expanded });
   };
 
   render() {
     const { week, stats, mPref } = this.props;
     return (
-      <Card
-        expanded={this.state.expanded}
-      >
+      <Card>
         <CardHeader
           title={`Week of ${week}`}
         />
-        <CardActions>
+        <CardContent>
           {stats.weeklyTotals.names[0] && <div>
             <div style={{ display: 'flex', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
               <BarChart
@@ -124,30 +112,34 @@ class weeklyStats extends React.Component {
               ) : (null)}
             </div>
           </div>}
-        </CardActions>
+        </CardContent>
         <GearTotals activityIds={stats.weeklyTotals.names.map(acts => acts.activityId)} />
 
-        {stats.weeklyTotals.names[0] && <div style={style.toggleContainer}>
-          <Toggle
-            toggled={this.state.expanded}
-            onToggle={this.handleToggle}
-            labelPosition="right"
-            label="Show this weeks activities"
-            style={style.toggle}
-          />
-        </div>}
-        <CardText
-          expandable
-        >
-
-          {stats.weeklyTotals.names.map(act => (
-            <ActivitySingle
-              key={act.activityId}
-              {...act}
+        {stats.weeklyTotals.names[0] && (
+          <CardActions style={style.toggleContainer}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={this.state.expanded}
+                  onChange={this.handleToggle}
+                  color="primary"
+                />
+              }
+              label="Show this weeks activities"
             />
-          ))}
 
-        </CardText>
+          </CardActions>
+        )}
+        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+          <CardContent >
+            {stats.weeklyTotals.names.map(act => (
+              <ActivitySingle
+                key={act.activityId}
+                {...act}
+              />
+            ))}
+          </CardContent>
+        </Collapse>
       </Card>
     );
   }

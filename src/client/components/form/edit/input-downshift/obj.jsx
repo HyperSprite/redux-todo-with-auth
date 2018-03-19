@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import { withStyles } from 'material-ui-next/styles';
-import TextField from 'material-ui-next/TextField';
 import Paper from 'material-ui-next/Paper';
 import { MenuItem } from 'material-ui-next/Menu';
 
-import withData from '../../../containers/withData';
-
+import withData from '../../../../containers/withData';
+import DownshiftInput from './downshift-input';
 
 const styles = theme => ({
   root: {
@@ -46,24 +45,6 @@ function getSuggestions(inputValue, data) {
   });
 }
 
-function renderInput(inputProps) {
-  const { InputProps, classes, ref } = inputProps;
-  const { touched, error, warning } = InputProps;
-  return (
-    <div>
-      <TextField
-        inputRef={ref}
-        classes={classes.input}
-        {...InputProps}
-      />
-      {(touched) && (
-        (error && <div className={classes.formError}>{error}</div>) ||
-        (warning && <div className={classes.formWarning}>{warning}</div>)
-      )}
-    </div>
-  );
-}
-
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;
   const isSelected = (`${selectedItem}`).indexOf(suggestion.label) > -1;
@@ -89,7 +70,7 @@ renderSuggestion.propTypes = {
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
-const InputDownshiftSingleObj = ({ classes, contentOptions, data, fullWidth, input, label, meta, placeholder, ...rest }) => {
+const InputDownshiftObj = ({ classes, contentOptions, data, fullWidth, input, label, meta, placeholder, ...rest }) => {
     return (
       <div className={classes.root}>
         <Downshift
@@ -106,17 +87,17 @@ const InputDownshiftSingleObj = ({ classes, contentOptions, data, fullWidth, inp
             selectedItem,
           }) => (
             <div className={classes.container}>
-              {renderInput({
-                classes,
-                InputProps: getInputProps({
+              <DownshiftInput
+                classes={classes}
+                InputProps={getInputProps({
                   placeholder,
                   id: input.name,
                   input,
                   label,
                   fullWidth,
                   meta,
-                }),
-              })}
+                })}
+              />
               {isOpen ? (
                 <Paper className={classes.paper} square>
                   {getSuggestions(inputValue, data).map((suggestion, index) =>
@@ -137,11 +118,11 @@ const InputDownshiftSingleObj = ({ classes, contentOptions, data, fullWidth, inp
     );
 };
 
-InputDownshiftSingleObj.propTypes = {
+InputDownshiftObj.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styledInputDownshiftSingleObj = withStyles(styles, { name: 'styledInputDownshiftSingleObj' })(InputDownshiftSingleObj);
+const StyledInputDownshiftObj = withStyles(styles, { name: 'styledInputDownshiftObj' })(InputDownshiftObj);
 const withAutoData = withData(props => props.contentOptions.data);
 
-export default withAutoData(styledInputDownshiftSingleObj);
+export default withAutoData(StyledInputDownshiftObj);

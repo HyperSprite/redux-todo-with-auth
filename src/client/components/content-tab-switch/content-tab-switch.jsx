@@ -14,6 +14,11 @@ const styles = theme => ({
     marginBottom: 12,
     fontWeight: 400,
   },
+  '@media print': {
+    noPrint: {
+      display: 'none',
+    },
+  },
 });
 
 class ContentTabSwitch extends React.Component {
@@ -48,8 +53,9 @@ class ContentTabSwitch extends React.Component {
   */
 
   render() {
+    const { classes, tabs } = this.props;
     return (
-      <div>
+      <div className={classes.noPrint}>
         <Tabs
           value={this.state.value}
           onChange={this.handleChange}
@@ -57,7 +63,7 @@ class ContentTabSwitch extends React.Component {
           textColor="primary"
           centered
         >
-          {this.props.tabs.map(tab => (
+          {tabs.map(tab => (
             <Tab
               key={tab.value}
               label={tab.name}
@@ -65,10 +71,10 @@ class ContentTabSwitch extends React.Component {
             />
           ))}
         </Tabs>
-        {this.props.tabs.map(tab => (
+        {tabs.map(tab => (
           (this.state.value === tab.value) && (
             <div key={tab.value}>
-              {tab.header && <h2 className={this.props.classes.headline}>{tab.header}</h2>}
+              {tab.header && <h2 className={classes.headline}>{tab.header}</h2>}
               {tab.content}
             </div>
           )

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+// eslint-disable-next-line
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui-next/styles';
@@ -100,6 +101,11 @@ const styles = theme => ({
     paddingTop: 20,
     paddingLeft: 20,
     width: 200,
+  },
+  '@media print': {
+    noPrint: {
+      display: 'none',
+    },
   },
 });
 
@@ -336,7 +342,6 @@ class ActivitySearch extends Component {
 
     const SearchButton = (
       <div className={classes.buttonSet} >
-
         {isFetching ? (
           <ButtonSearch
             color="primary"
