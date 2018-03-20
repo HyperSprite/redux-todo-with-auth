@@ -50,6 +50,9 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  main: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class InputRangeDate extends React.Component {
@@ -85,7 +88,7 @@ class InputRangeDate extends React.Component {
     const { min, max } = this.state;
 
     return (
-      <div>
+      <div className={classes.main}>
         <InputLabel
           htmlFor={input.name}
         >
