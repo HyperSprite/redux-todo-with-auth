@@ -4,29 +4,6 @@ import RefreshIcon from 'mdi-react/RefreshIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonRefresh
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonRefresh
-  onClick={handleClose}
-  color="secondary"
-  label="Refresh"
-  size="small"
-  toolTip="Refresh Data"
-  toolTipId="tooltip-refresh"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Refresh',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Refresh Data',
   toolTipId: 'tooltip-refresh',

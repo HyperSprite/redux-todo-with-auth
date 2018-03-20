@@ -4,29 +4,6 @@ import ContentSaveIcon from 'mdi-react/ContentSaveIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonSave
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonSave
-  onClick={handleClose}
-  color="secondary"
-  label="Save"
-  size="small"
-  toolTip="Save"
-  toolTipId="tooltip-save"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Save',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Save',
   toolTipId: 'tooltip-save',

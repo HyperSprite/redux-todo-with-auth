@@ -4,29 +4,6 @@ import DeleteIcon from 'mdi-react/DeleteIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonDelete
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonDelete
-  onClick={handleClose}
-  color="secondary"
-  label="Delete Hashtag"
-  size="small"
-  toolTip="Delete hashtag"
-  toolTipId="tooltip-delete"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Delete',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Add',
   toolTipId: 'tooltip-delete',

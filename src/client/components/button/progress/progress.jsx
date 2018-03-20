@@ -1,34 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress } from 'material-ui/Progress';
 
 import ButtonBase from '../base';
-
-/**
-
-import ButtonProgress from '../button/progress';
-
-* Required only props
-
-<ButtonProgress
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonProgress
-  onClick={handleClose}
-  color="primary"
-  label="Search"
-  size="small"
-  toolTip="Search Activities"
-  toolTipId="tooltip-search"
-  toolTipPlacement="left"
-  variant="raised"
-/>
-
-*/
 
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
@@ -55,6 +28,7 @@ const defaultProps = {
   color: '',
   label: 'Search',
   hasIcon: false,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Search',
   toolTipId: 'tooltip-search',

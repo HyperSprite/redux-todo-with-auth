@@ -4,29 +4,6 @@ import PrinterIcon from 'mdi-react/PrinterIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonPrint
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonPrint
-  onClick={handleClose}
-  color="primary"
-  label="Print"
-  size="small"
-  toolTip="Print this page"
-  toolTipId="tooltip-print"
-  toolTipPlacement="bottom"
-  variant="flat"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */

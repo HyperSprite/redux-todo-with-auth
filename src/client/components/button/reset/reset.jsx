@@ -4,29 +4,6 @@ import UndoIcon from 'mdi-react/UndoIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonReset
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonReset
-  onClick={handleClose}
-  color="secondary"
-  label="Reset"
-  size="small"
-  toolTip="Reset"
-  toolTipId="tooltip-reset"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Reset',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Reset',
   toolTipId: 'tooltip-reset',

@@ -75,13 +75,6 @@ const ButtonBaseButton = (props) => {
         {...buttonProps}
         aria-label={props.label}
         className={classes.button}
-        // color={color}
-        // onClick={onClick}
-        // size={size}
-        // variant={variant}
-        // disabled={disabled}
-        // autoFocus={autoFocus}
-        // type={type}
       >
         {hasIcon && (
           <Icon

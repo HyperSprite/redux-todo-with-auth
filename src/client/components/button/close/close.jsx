@@ -4,29 +4,6 @@ import CloseCircleIcon from 'mdi-react/CloseCircleIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonClose
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonClose
-  onClick={handleClose}
-  color="primary"
-  label="Cancel"
-  size="small"
-  toolTip="Cancel Dialog"
-  toolTipId="tooltip-close"
-  toolTipPlacement="bottom"
-  variant="flat"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -34,7 +11,7 @@ const propTypes = {
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   /** enum: 'small', 'medium', 'large' */
   size: PropTypes.string,
   /** ToolTip text */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Close',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Close',
   toolTipId: 'tooltip-close',
