@@ -339,45 +339,40 @@ class ActivitySearch extends Component {
       },
     ];
 
-    const SearchButton = () => (
+    // Do not make this a function and import it as a component below.
+    // Doing so will cause the form to rerender when you move a slider
+    const SearchButton = (
       <div className={classes.buttonSet} >
-        {isFetching ? (
-          <ButtonSearch
-            color="primary"
-            label="Searching"
-            size="small"
-            variant="flat"
-            disabled
-          />
-        ) : (
-          <ButtonSearch
-            type={pristine ? 'button' : 'submit'}
-            onClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
-            color="primary"
-            label="Search"
-            size="small"
-            toolTip="Search Activities"
-            toolTipId="tooltip-search"
-            toolTipPlacement="left"
-            variant="raised"
-          />
-        )}
+        <ButtonSearch
+          type={pristine ? 'button' : 'submit'}
+          onClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
+          color="primary"
+          label="Search"
+          size="small"
+          toolTip="Search Activities"
+          toolTipId="tooltip-search"
+          toolTipPlacement="left"
+          variant={isFetching ? 'flat' : 'raised'}
+          disabled={isFetching}
+        />
         {pristine ? (
           <ButtonBase
             variant="flat"
+            color="secondary"
             hasIcon={false}
             onClick={() => this.props.clearActivitySearch()}
             className={classes.button}
-            disabled={submitting}
+            disabled={submitting || isFetching}
             label="Clear Activities"
           />
         ) : (
           <ButtonBase
             variant="flat"
+            color="secondary"
             hasIcon={false}
             onClick={() => this.handleReset()}
             className={classes.button}
-            disabled={submitting}
+            disabled={submitting || isFetching}
             label="Reset Search"
           />
         )}
@@ -387,6 +382,7 @@ class ActivitySearch extends Component {
           className={classes.button}
           onClick={handleSubmit(this.activitiesDownload)}
           label="Download"
+          disabled={isFetching}
         />
         <FilterDrawer
           {...this.props}
@@ -395,6 +391,7 @@ class ActivitySearch extends Component {
           form={form}
           radioFormValues={formValues}
           onSearchClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
+          disabled={isFetching}
         />
       </div>
     );
@@ -422,7 +419,7 @@ class ActivitySearch extends Component {
             />
             <ActivityCount />
             <div>
-              <SearchButton />
+              {SearchButton}
               <ProgressDivider isProgress={isFetching} />
             </div>
             {!activities ? (
@@ -448,9 +445,7 @@ class ActivitySearch extends Component {
                 ))}
                 <ProgressDivider isProgress={isFetching} />
                 {activities.length > 12 &&
-                  activities.length !== activCalcFilter.count ? (
-                    <SearchButton />
-                  ) : null}
+                  activities.length !== activCalcFilter.count ? SearchButton : null}
               </div>
             )}
           </Card>

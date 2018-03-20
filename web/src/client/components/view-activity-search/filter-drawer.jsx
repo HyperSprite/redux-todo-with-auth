@@ -63,11 +63,12 @@ class FilterDrawer extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, disabled } = this.props;
     return (
       <div className={classes.noPrint}>
         <div className={classes.switch} >
           <FormControlLabel
+            disabled={disabled}
             control={
               <Switch
                 checked={this.state.open}

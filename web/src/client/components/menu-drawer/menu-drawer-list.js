@@ -1,39 +1,33 @@
-import HomeIcon from 'mdi-react/HomeIcon';
-import HelpIcon from 'mdi-react/HelpIcon';
-import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
-import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon';
-import Magnify from 'mdi-react/MagnifyIcon';
-import CalendarIcon from 'mdi-react/CalendarIcon';
-import AltimeterIcon from 'mdi-react/AltimeterIcon';
-import ScaleIcon from 'mdi-react/ScaleIcon';
 import AccountIcon from 'mdi-react/AccountIcon';
+import AltimeterIcon from 'mdi-react/AltimeterIcon';
+import CalendarIcon from 'mdi-react/CalendarIcon';
+import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon';
+import HelpIcon from 'mdi-react/HelpIcon';
+import HomeIcon from 'mdi-react/HomeIcon';
 import LogoutIcon from 'mdi-react/LogoutIcon';
+import Magnify from 'mdi-react/MagnifyIcon';
+import OpenInAppIcon from 'mdi-react/OpenInAppIcon';
+import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
+import ScaleIcon from 'mdi-react/ScaleIcon';
 
 const menuDrawerList = [
   {
     primaryText: 'Home',
     linkTo: '/home',
     Icon: HomeIcon,
-    access: ['anon', 'user', 'admin'],
-  },
-  {
-    primaryText: 'Strava Club',
-    linkTo: 'https://www.strava.com/clubs/araceathlete',
-    target: 'blank',
-    Icon: OpenInNewIcon,
-    access: ['anon', 'user', 'admin'],
+    access: ['anon', 'user', 'club', 'admin'],
   },
   {
     primaryText: 'Weekly Stats',
     linkTo: '/weekly-stats',
     Icon: ChartBarStackedIcon,
-    access: ['user', 'admin'],
+    access: ['user', 'club', 'admin'],
   },
   {
     primaryText: 'Activity Search',
     linkTo: '/activity-search',
     Icon: Magnify,
-    access: ['user', 'admin'],
+    access: ['user', 'club', 'admin'],
   },
   {
     primaryText: 'Route Search (alpha)',
@@ -45,19 +39,33 @@ const menuDrawerList = [
     primaryText: 'Events',
     linkTo: '/events',
     Icon: CalendarIcon,
-    access: ['anon', 'user', 'admin'],
+    access: ['anon', 'user', 'club', 'admin'],
   },
   {
     primaryText: 'Power at Altitude',
     linkTo: '/power-at-altitude',
     Icon: AltimeterIcon,
-    access: ['user', 'admin'],
+    access: ['user', 'club', 'admin'],
   },
   {
     primaryText: 'Power & Weight',
     linkTo: '/power-and-weight',
     Icon: ScaleIcon,
-    access: ['user', 'admin'],
+    access: ['user', 'club', 'admin'],
+  },
+  {
+    primaryText: 'Strava Club',
+    linkTo: 'https://www.strava.com/clubs/araceathlete',
+    target: 'blank',
+    Icon: OpenInNewIcon,
+    access: ['anon', 'user', 'club', 'admin'],
+  },
+  {
+    primaryText: 'Blog and Help',
+    linkTo: '/blog',
+    target: 'blank',
+    Icon: HelpIcon,
+    access: ['anon', 'user', 'club', 'admin'],
   },
   {
     primaryText: 'Athlete',
@@ -66,17 +74,10 @@ const menuDrawerList = [
     access: ['admin'],
   },
   {
-    primaryText: 'Blog and Help',
-    linkTo: '/blog',
-    target: 'blank',
-    Icon: HelpIcon,
-    access: ['anon', 'user', 'admin'],
-  },
-  {
     primaryText: 'Sign out',
     linkTo: '/signout',
     Icon: LogoutIcon,
-    access: ['user', 'admin'],
+    access: ['user', 'club', 'admin'],
   },
 ];
 

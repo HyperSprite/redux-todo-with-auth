@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
-import List from 'material-ui/List';
+import List, { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
+import ButtonOpen from '../button/open';
 import SwitcherMPref from '../switcher-mpref';
 import SwitcherTheme from '../switcher-theme';
 import EventFilter from '../view-events/filter-toolbar';
@@ -28,6 +29,7 @@ class MenuDrawer extends Component {
   static propTypes = {
     adminMember: PropTypes.bool.isRequired,
     authenticated: PropTypes.bool,
+    clubMember: PropTypes.bool,
     open: PropTypes.bool,
     setDrawer: PropTypes.func.isRequired,
   };
@@ -35,6 +37,7 @@ class MenuDrawer extends Component {
   static defaultProps = {
     adminMember: false,
     authenticated: false,
+    clubMember: false,
     open: false,
   };
 
@@ -44,6 +47,8 @@ class MenuDrawer extends Component {
     switch (true) {
       case this.props.adminMember:
         return 'admin';
+      case this.props.clubMember:
+        return 'club';
       case this.props.authenticated:
         return 'user';
       default:
@@ -52,14 +57,14 @@ class MenuDrawer extends Component {
   }
 
   render() {
-    const { classes, pageName, theme } = this.props;
+    const { classes, adminMember, pageName, theme } = this.props;
+
     const drawer = (
       <div>
         <div className={classes.toolbar} />
         <List>
           { pageName === 'Events' ? <EventFilter /> : null}
           <SwitcherMPref />
-          <SwitcherTheme />
           <Divider />
           {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
             <MenuDrawerItem
@@ -69,6 +74,7 @@ class MenuDrawer extends Component {
               {...mI}
             />
           ))}
+          {adminMember && <SwitcherTheme />}
         </List>
       </div>
     );
@@ -89,6 +95,7 @@ function mapStateToProps(state) {
     adminMember: state.auth.user.adminMember,
     open: state.page.drawer,
     pageName: state.page.name,
+    clubMember: state.auth.clubMember,
   };
 }
 
