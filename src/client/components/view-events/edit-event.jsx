@@ -180,17 +180,14 @@ let EditEvent = class EditEvent extends Component {
         </div>
       </form>
     );
-
     return (
-      <Layout>
+      <div>
         <ScrollIntoView
           id={location.hash}
           headerHeight={70}
         />
         {(initialValues.eventTitle) ? (
-          <Card
-            className="card"
-          >
+          <Card className="card">
             <CardHeader
               className="card-header"
               title={initialValues.eventTitle}
@@ -199,18 +196,18 @@ let EditEvent = class EditEvent extends Component {
             {renderForm}
           </Card>
         ) : (
-          <Card
-            className="card"
-          >
-            <Toolbar>
-              <Typography variant="title" color="inherit">
-                Add Event
-              </Typography>
-            </Toolbar>
-            {renderForm}
-          </Card>
+          <Layout>
+            <Card className="card">
+              <Toolbar>
+                <Typography variant="title" color="inherit">
+                  Add Event
+                </Typography>
+              </Toolbar>
+              {renderForm}
+            </Card>
+          </Layout>
         )}
-      </Layout>
+      </div>
     );
   }
 };

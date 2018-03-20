@@ -106,7 +106,7 @@ exports.searchActivities = async (req, res) => {
     const coords = [q.lng * 1, q.lat * 1];
     let maxDist = 80000; // 50'ish miles
     if (q.maxDist) {
-      maxDist = q.mPref === true ? justFns.milesToMeters(q.maxDist * 1) : q.maxDist * 1000;
+      maxDist = q.mPref === 'true' ? justFns.milesToMeters(q.maxDist * 1) : q.maxDist * 1000;
     }
     geoData = {
       $geoNear: {

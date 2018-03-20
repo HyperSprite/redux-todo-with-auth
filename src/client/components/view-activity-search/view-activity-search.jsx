@@ -65,7 +65,6 @@ const defaultProps = {
 
 let queryOptions = {};
 let lastSearch = {};
-let lastmPref = false;
 
 const styles = theme => ({
   buttonSet: {
@@ -171,11 +170,11 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
-    console.log('pristine', formProps);
     this.props.setIsFetching();
+    formProps.mPref = this.props.mPref;
+    formProps.page = this.props.searchCount;
     let setDisabled = this.props.activities.length >= this.props.activCalcFilter.count;
     let page = this.props.searchCount;
-    const mPref = this.props.mPref;
     if (!this.props.activitySearchCustom) {
       this.props.setActivitySearchCustom();
       this.props.clearActivitySearch();
@@ -185,22 +184,18 @@ class ActivitySearch extends Component {
       this.props.clearActivitySearch();
       setDisabled = false;
       page = 1;
-    } else if (formProps.maxDist && this.state.lastmPref !== this.props.mPref) {
-      this.props.clearActivitySearch();
-      setDisabled = false;
-      page = 1;
     }
     this.setState({
       lat: formProps.lat,
       lng: formProps.lng,
       page,
       nextPage: page + 1,
-      lastSearch: Object.assign(formProps, { page }, { mPref }),
+      lastSearch: { ...formProps, ...{ page: page + 1 }, ...{ mPref: this.props.mPref } },
     });
     if (setDisabled) {
       this.props.setIsFetchingOff();
     } else {
-      this.props.fetchActivitiesSearch(relURL, formProps);
+      this.props.fetchActivitiesSearch(relURL, { ...formProps, ...{ page }, ...{ mPref: this.props.mPref } });
     }
   }
 
@@ -344,7 +339,7 @@ class ActivitySearch extends Component {
       },
     ];
 
-    const SearchButton = (
+    const SearchButton = () => (
       <div className={classes.buttonSet} >
         {isFetching ? (
           <ButtonSearch
@@ -427,7 +422,7 @@ class ActivitySearch extends Component {
             />
             <ActivityCount />
             <div>
-              {SearchButton}
+              <SearchButton />
               <ProgressDivider isProgress={isFetching} />
             </div>
             {!activities ? (
@@ -452,7 +447,10 @@ class ActivitySearch extends Component {
                   </div>
                 ))}
                 <ProgressDivider isProgress={isFetching} />
-                {!!this.state.page && SearchButton}
+                {activities.length > 12 &&
+                  activities.length !== activCalcFilter.count ? (
+                    <SearchButton />
+                  ) : null}
               </div>
             )}
           </Card>
