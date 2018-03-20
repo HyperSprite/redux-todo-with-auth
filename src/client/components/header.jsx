@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import Headroom from 'react-headroom';
 import IconButton from 'material-ui/IconButton';
@@ -12,11 +13,11 @@ import * as actions from './../actions';
 
 import AppBar from './app-bar';
 import Signin from './auth/signin';
-import EventFilter from './view-events/filter-toolbar';
-import ClubNotice from './club-notice';
+import ButtonOpen from './button/open';
 
 const propTypes = {
   authenticated: PropTypes.bool,
+  clubMember: PropTypes.bool,
   fetchData: PropTypes.func.isRequired,
   page: PropTypes.object.isRequired,
   setDrawer: PropTypes.func.isRequired,
@@ -26,6 +27,7 @@ const propTypes = {
 const defaultProps = {
   classes: PropTypes.object.isRequired,
   authenticated: false,
+  clubMember: false,
   user: {},
   page: {
     name: 'A Race athlete',
@@ -75,12 +77,14 @@ class Header extends Component {
   handleToggle = () => this.props.setDrawer({ drawer: !this.props.page.drawer });
 
   renderRightMenu() {
-    let rightMenu;
-    switch (this.props.page.name) {
-      default:
-        rightMenu = <ClubNotice />;
-        break;
-    }
+    const rightMenu = (!this.props.clubMember) ? (
+      <ButtonOpen
+        onClick={() => this.props.toggleClubNotice(false)}
+        to="/club-notice"
+        label="Club Notice"
+        color="inherit"
+      />
+    ) : null;
 
     return this.props.authenticated ? (
       <span>{rightMenu}</span>
@@ -92,6 +96,9 @@ class Header extends Component {
   render() {
     const { classes, page } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
+
+    const rightMenu = this.props.authenticated ? null : <Signin />;
+
     const pageNameWithHelp = this.props.page.help ? (
       <div className={classes.root}>
         <div>
@@ -126,15 +133,15 @@ class Header extends Component {
         <div className={classes.onlyPrint}>
           <AppBar
             title={<span>{`${pageName} A Race athlete`}</span>}
-            rightMenu={this.renderRightMenu()}
-            leftOnClick={this.handleToggle}
+            // rightMenu={this.renderRightMenu() }
+            // leftOnClick={this.handleToggle}
           />
         </div>
         <div className={classes.noPrint}>
           <Headroom>
             <AppBar
               title={pageNameWithHelp}
-              rightMenu={this.renderRightMenu()}
+              rightMenu={this.renderRightMenu() }
               leftOnClick={this.handleToggle}
             />
           </Headroom>
@@ -150,6 +157,8 @@ function mapStateToProps(state) {
     page: state.page,
     stravaId: state.auth.user.stravaId,
     user: state.auth.user,
+    clubMember: state.auth.user.clubMember,
+    clubNotice: state.auth.user.clubNotice,
   };
 }
 

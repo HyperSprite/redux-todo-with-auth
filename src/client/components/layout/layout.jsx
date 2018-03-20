@@ -5,6 +5,7 @@ import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 
 import ButtonPrint from '../button/print';
+import ClubNotice from '../club-notice';
 
 const propTypes = {
   children: PropTypes.oneOfType([
@@ -48,6 +49,7 @@ function ExtLayoutSimple(props) {
         <Grid item className={classes.sidelight} xs sm={1} md={1} lg={2} />
         <Grid item className={classes.main} xs={12} sm={10} md={9} lg={7} >
           <Paper className={classes.paper}>
+            <ClubNotice />
             {props.children}
             <ButtonPrint />
           </Paper>
