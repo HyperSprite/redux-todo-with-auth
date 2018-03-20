@@ -119,7 +119,7 @@ class GoogleMapLocation extends React.Component {
     /** Pins on the map - End */
 
     return (
-      <div style={{ width: this.props.containerWidth, height: 400 }}>
+      <div style={{ height: 400 }}>
         <GoogleMapReact
           onGoogleApiLoaded={({ map, maps }) => {
             this.setState({ map, maps, mapLoaded: true });
