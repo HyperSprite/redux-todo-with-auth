@@ -4,29 +4,6 @@ import CancelIcon from 'mdi-react/CancelIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonCancel
-  onClick={handleCancel}
-/>
-
-*
-* All Props
-
-<ButtonCancel
-  onClick={handleCancel}
-  color="secondary"
-  label="Add Hashtag"
-  size="small"
-  toolTip="Cancel Edit"
-  toolTipId="tooltip-cancel"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Cancel',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Cancel',
   toolTipId: 'tooltip-add',

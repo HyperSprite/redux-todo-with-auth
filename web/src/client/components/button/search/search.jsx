@@ -4,32 +4,6 @@ import MagnifyIcon from 'mdi-react/MagnifyIcon';
 
 import ButtonBase from '../base';
 
-/**
-
-import ButtonSearch from '../button/search';
-
-* Required only props
-
-<ButtonSearch
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonSearch
-  onClick={handleClose}
-  color="primary"
-  label="Search"
-  size="small"
-  toolTip="Search Activities"
-  toolTipId="tooltip-search"
-  toolTipPlacement="left"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -55,6 +29,7 @@ const defaultProps = {
   color: '',
   label: 'Search',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Search',
   toolTipId: 'tooltip-search',

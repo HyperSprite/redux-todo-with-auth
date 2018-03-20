@@ -17,6 +17,8 @@ import Button from './button';
 
 <ButtonBase
   onClick={handleClose}
+  component={Link}
+  to="/some-link"
   color="primary"
   label="Cancel"
   hasIcon={false}
@@ -32,6 +34,10 @@ const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
   color: PropTypes.string,
+  component: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
   disabled: PropTypes.bool,
   hasIcon: PropTypes.bool,
   /** Label for button */
@@ -53,9 +59,11 @@ const propTypes = {
 
 const defaultProps = {
   color: 'default',
+  component: '',
   disabled: false,
   hasIcon: false,
   label: '',
+  onClick: () => null,
   size: 'small',
   toolTip: '',
   toolTipId: '',

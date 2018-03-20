@@ -34,7 +34,7 @@ const propTypes = {
   /** Label for button */
   label: PropTypes.string,
   /** onClick handler */
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
   /** enum: 'small', 'medium', 'large' */
   size: PropTypes.string,
   /** ToolTip text */
@@ -52,6 +52,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Open',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Open',
   toolTipId: 'tooltip-open',

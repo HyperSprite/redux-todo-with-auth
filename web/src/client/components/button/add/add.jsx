@@ -4,29 +4,6 @@ import PlusCircleIcon from 'mdi-react/PlusCircleIcon';
 
 import ButtonBase from '../base';
 
-/**
-* Required only props
-
-<ButtonAdd
-  onClick={handleClose}
-/>
-
-*
-* All Props
-
-<ButtonAdd
-  onClick={handleClose}
-  color="secondary"
-  label="Add Hashtag"
-  size="small"
-  toolTip="Add hashtag"
-  toolTipId="tooltip-add"
-  toolTipPlacement="bottom"
-  variant="raised"
-/>
-
-*/
-
 const propTypes = {
   classes: PropTypes.object, // eslint-disable-line
   /** enum: 'default', 'inherit', 'primary', 'secondary' */
@@ -52,6 +29,7 @@ const defaultProps = {
   color: 'primary',
   label: 'Add',
   hasIcon: true,
+  onClick: () => null,
   size: 'small',
   toolTip: 'Add',
   toolTipId: 'tooltip-add',
