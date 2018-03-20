@@ -2,10 +2,7 @@ import 'typeface-roboto/index.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { create } from 'jss';
-// import jssCompose from 'jss-compose';
-// import JssProvider from 'react-jss/lib/JssProvider';
-import { MuiThemeProvider, createMuiTheme /* , jssPreset */ } from 'material-ui/styles';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import CssBaseline from 'material-ui/CssBaseline';
 
 import palette from './mui-palette';
@@ -17,10 +14,6 @@ const propTypes = {
     PropTypes.node,
   ]).isRequired,
 };
-
-
-// Configure JSS
-// const jss = create({ plugins: [...jssPreset().plugins, jssCompose()] });
 
 const getTheme = theme => createMuiTheme({
   typography,
