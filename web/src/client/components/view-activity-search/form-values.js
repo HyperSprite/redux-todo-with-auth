@@ -58,7 +58,7 @@ export const formValues = [
   },
   {
     name: 'wildcard',
-    label: 'Fuzzy search',
+    label: 'Precision',
     type: 'checkbox',
     group: 'text',
     component: 'InputCheckbox',
