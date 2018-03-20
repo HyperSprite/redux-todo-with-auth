@@ -21,9 +21,9 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
   },
-  flexcontainer: {
+  flexColumn: {
     display: 'flex',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     justifyContent: 'flex-start',
     padding: '10px 0 10px 0',
     minHeight: 80,
@@ -111,7 +111,7 @@ class RangeInput extends React.Component {
 
     const ranges = (
       <div className={classes.flexParent} >
-        <div className={classes.flexcontainer} >
+        <div className={classes.flexColumn} >
           {(this.state.rangeArr.map(rA => (
             <div key={rA.name} >
               {rA.name !== 'count' ||

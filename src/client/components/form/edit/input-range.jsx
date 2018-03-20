@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import { InputLabel } from 'material-ui/Input';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 import justFNS from 'just-fns';
 import metricConv from './metric-conversions';
+
+import muiPalette from '../../../styles/mui-palette';
 
 const propTypes = {
   /** [default min value, default max value] */
@@ -40,10 +43,9 @@ const styles = theme => ({
     fontWeight: 'bold',
   },
   container: {
-    width: 250,
+    flexGrow: 1,
     padding: '5px 15px',
   },
-  label: theme.typography.fontWeightMedium,
   flexParent: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -57,63 +59,35 @@ const styles = theme => ({
   div: {
     padding: '0 5px',
   },
-  rangeTrackStyle: [
-    {
-      backgroundColor: '#ef9a9a',
-      height: 13,
-    },
-  ],
-  rangeHandleStyle: [
-    {
-      borderColor: '#d50000',
-      height: 21,
-      width: 21,
-      marginLeft: -8,
-      marginTop: -4,
-      backgroundColor: '#d50000',
-    },
-    {
-      borderColor: '#d50000',
-      height: 21,
-      width: 21,
-      marginLeft: -8,
-      marginTop: -4,
-      backgroundColor: '#d50000',
-    },
-  ],
-  rangeRailStyle: {
-    backgroundColor: theme.palette.secondary[200],
-    height: 13,
-  },
 });
 const style = {
   rangeTrackStyle: [{
-    backgroundColor: '#ef9a9a',
-    height: 13,
+    backgroundColor: muiPalette.primary[700],
+    height: 4,
   }],
   rangeHandleStyle: [
     {
-      borderColor: '#d50000',
-      height: 21,
-      width: 21,
-      marginLeft: -8,
-      marginTop: -4,
-      backgroundColor: '#d50000',
+      borderColor: muiPalette.primary[500],
+      height: 16,
+      width: 16,
+      marginLeft: -4,
+      marginTop: -6,
+      backgroundColor: muiPalette.primary[500],
     },
     {
-      borderColor: '#d50000',
-      height: 21,
-      width: 21,
-      marginLeft: -8,
-      marginTop: -4,
-      backgroundColor: '#d50000',
+      borderColor: muiPalette.primary[500],
+      height: 16,
+      width: 16,
+      marginLeft: -4,
+      marginTop: -6,
+      backgroundColor: muiPalette.primary[500],
     },
   ],
   rangeRailStyle: {
-    backgroundColor: '#aebcc3',
-    height: 13,
+    backgroundColor: muiPalette.secondary[300],
+    height: 4,
   },
-}
+};
 
 const InputRange = (props) => {
   const {
@@ -139,19 +113,22 @@ const InputRange = (props) => {
   return (
     <div className={classes.root}>
       <div className={classes.container}>
-        <label htmlFor={input.name}>
-          <div className={classes.label} >{`${label} ${dsply.metric ? dsply.metric : ''}`}</div>
-          <div className={classes.flexParent} >
-            <div className={classes.flexChild} >
-              <div className={classes.div} >{dsply.min}</div>
-              <div className={classes.div} >{dsply.min !== dsply.iValue0 && dsply.iValue0}</div>
-            </div>
-            <div className={classes.flexChild}>
-              <div className={classes.div} >{dsply.max !== dsply.iValue1 && dsply.iValue1}</div>
-              <div className={classes.div} >{dsply.max}</div>
-            </div>
+        <InputLabel
+          htmlFor={input.name}
+        >
+          {label}
+        </InputLabel>
+        <div className={classes.flexParent} >
+          <div className={classes.flexChild} >
+            <div className={classes.div} >{dsply.min}</div>
+            <div className={classes.div} >{dsply.min !== dsply.iValue0 && dsply.iValue0}</div>
           </div>
-        </label>
+          <div className={classes.flexChild}>
+            <div className={classes.div} >{dsply.max !== dsply.iValue1 && dsply.iValue1}</div>
+            <div className={classes.div} >{dsply.max}</div>
+          </div>
+        </div>
+
         <div>
           <Range
             value={input.value || [min, max]}
