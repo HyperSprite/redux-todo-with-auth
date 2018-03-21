@@ -94,7 +94,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'flex-start',
     padding: '10px 0 10px 0',
-    minHeight: 80,
+    minHeight: 100,
   },
   toggle: {
     paddingTop: 20,

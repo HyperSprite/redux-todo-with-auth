@@ -1,12 +1,13 @@
 // TODO material-ui - complete redo with charts, still not public
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 
 import ActivityMetric from '../activity-metric';
-import style from './style';
 import returnValues from './return-values';
 
 const propTypes = {
+  classes: PropTypes.object.isRequired,
   data: PropTypes.any.isRequired,
   mPref: PropTypes.bool.isRequired,
   title: PropTypes.string,
@@ -22,6 +23,25 @@ const displayTypes = {
   sum: 'Sum',
 };
 
+const styles = theme => ({
+  title: {
+    display: 'flex',
+    verticalAlign: 'middle',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontWeight: 600,
+    fontSize: 16,
+  },
+  container: {
+    fontSize: 16,
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexWrap: 'wrap',
+    maxWidth: 800,
+  },
+});
+
+
 const activityTypeMod = (rv, mod) => {
   const tmpObj = Object.assign({}, rv);
   // tmpObj.activityType = `${rv.activityType}`;
@@ -36,18 +56,19 @@ const buildData = (data, aT, mod, i) => ({
 });
 
 const ActivityCalc = ({
+  classes,
   data,
   mPref,
   title,
 }) => (
   <div>
 
-    <div style={style.title}>
+    <div className={classes.title}>
       <div>
         {title}
       </div>
     </div>
-    <div style={style.container} >
+    <div className={classes.container} >
       <ActivityMetric
         key={'count'}
         data={{ count: data.count }}
@@ -93,4 +114,4 @@ const ActivityCalc = ({
 ActivityCalc.propTypes = propTypes;
 ActivityCalc.defaultProps = defaultProps;
 
-export default ActivityCalc;
+export default withStyles(styles, { name: 'styledActivityCalc' })(ActivityCalc);

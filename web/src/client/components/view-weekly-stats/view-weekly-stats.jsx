@@ -12,7 +12,6 @@ import Layout from '../layout';
 import WeeklyStats from './weekly-stats';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
-import style from '../../styles/style';
 
 const propTypes = {
   datePref: PropTypes.string,
