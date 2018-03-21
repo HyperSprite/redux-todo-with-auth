@@ -10,16 +10,6 @@ const logObj = {
   level: 10,
 };
 
-exports.stravaSubscriber = (req, res) => {
-  const subURL = 'https://api.strava.com/api/v3/push_subscriptions'
-  const clId = `client_id=${process.env.STRAVA_CLIENT_ID}`;
-  const clSec = `client_secret=${process.env.STRAVA_CLIENT_SECRET}`;
-  const objTyp = 'object_type=activity';
-  const aspTyp = 'aspect_type=create';
-  const cbURL = `callback_url=${process.env.ROOT_URL}/apiv1/webhook/inbound`;
-  const vrfTkn = `verify_token=${process.env.VERIFY_TOKEN}`;
-};
-
 /**
 * will receive GET query string
 *
@@ -30,10 +20,10 @@ exports.stravaSubscriber = (req, res) => {
 exports.stravaGetReceiver = (req, res) => {
   const q = qs.parse(req.query);
   if (q['hub.verify_token'] === process.env.STRAVA_VERIFY_TOKEN) {
-    hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver`, logObj.logType, 'success', 4, null, null, 'stravaGetReceiver subscribing success');
+    hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver`, logObj.logType, 'success', 1, null, null, `stravaGetReceiver subscribing success ${JSON.stringify(q)}`);
     return res.send({ 'hub.challenge': q['hub.challenge'] });
   }
-  hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, `stravaGetReceiver subscribing failure ${q}`);
+  hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, `stravaGetReceiver subscribing failure ${JSON.stringify(q)}`);
   return res.status(403).send({ error: 'Faild to verify token' });
 };
 
@@ -77,12 +67,12 @@ const postProcessor = (input, done) => {
         switch (input.aspect_type) {
           case 'create':
             return Activities.getActivityDetails(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${input}`);
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${input}`);
               return cDone;
             });
           case 'update':
             return Activities.getActivityUpdate(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${input}`);
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${input}`);
               return cDone;
             });
           case 'delete':
@@ -91,7 +81,7 @@ const postProcessor = (input, done) => {
             hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, 'Missed Cases');
         }
       } else {
-        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not a user or not clubMember ${user.stravaId}`);
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 8, null, null, `Not a user or not clubMember ${user.stravaId}`);
       }
     });
     hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not an activity for user ${input.owner_id}`);
