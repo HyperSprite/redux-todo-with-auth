@@ -58,9 +58,6 @@ class ClubNotice extends React.Component {
 
   render() {
     const { classes, firstname, clubMember, clubNotice } = this.props;
-
-    console.log('clubNotice', clubNotice, 'clubMember', clubMember);
-
     return (clubMember || clubNotice) ? null : (
       <Card>
         <CardHeader
