@@ -19,11 +19,12 @@ const logObj = {
 */
 exports.stravaGetReceiver = (req, res) => {
   const q = qs.parse(req.query);
+  const mssg = `stravaGetReceiver subscribing - local verify_token: ${process.env.STRAVA_VERIFY_TOKEN}, recieved verify_token: ${q['hub.verify_token']}`;
   if (process.env.STRAVA_VERIFY_TOKEN !== '' && q['hub.verify_token'] === process.env.STRAVA_VERIFY_TOKEN) {
-    hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver`, logObj.logType, 'success', 1, null, null, `stravaGetReceiver subscribing success local verify_token: ${process.env.STRAVA_VERIFY_TOKEN}, recieved verify_token: ${q['hub.verify_token']}`);
+    hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver`, logObj.logType, 'success', 1, null, null, mssg);
     return res.send({ 'hub.challenge': q['hub.challenge'] });
   }
-  hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, `stravaGetReceiver subscribing failure ${JSON.stringify(q)}`);
+  hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, mssg);
   return res.status(403).send({ error: 'Faild to verify token' });
 };
 
