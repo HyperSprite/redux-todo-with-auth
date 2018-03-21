@@ -43,18 +43,20 @@ lib.axiosConfig = {
   },
 };
 
-lib.debounce = (fn, time) => {
-  let timeoutId;
-  return wrapper;
-  function wrapper(...args) {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      timeoutId = null;
-      fn(...args);
-    }, time);
-  }
+lib.debounce = (func, wait, immediate) => {
+  let timeout;
+  return () => {
+    const context = this;
+    const args = arguments;
+    const later = () => {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
 };
 
 
