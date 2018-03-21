@@ -4,7 +4,6 @@ import { withStyles } from 'material-ui/styles';
 
 import returnValues from './return-values';
 import ActivityMetric from '../activity-metric';
-import style from './style';
 
 const propTypes = {
   classes: PropTypes.object.isRequired,
