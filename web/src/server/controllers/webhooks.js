@@ -1,9 +1,8 @@
 const qs = require('qs');
-const requestify = require('requestify'); // ? or axios...
 const hlpr = require('../lib/helpers');
 
 const Activities = require('./activities');
-const Users = require('./authentication');
+const User = require('../models/user');
 
 const logObj = {
   file: 'controllers/webhooks',
@@ -19,7 +18,6 @@ exports.stravaSubscriber = (req, res) => {
   const aspTyp = 'aspect_type=create';
   const cbURL = `callback_url=${process.env.ROOT_URL}/apiv1/webhook/inbound`;
   const vrfTkn = `verify_token=${process.env.VERIFY_TOKEN}`;
-
 };
 
 /**
@@ -42,29 +40,66 @@ exports.stravaGetReceiver = (req, res) => {
 /**
 * will receive POST body
 *
-* req.body = {
-*   "subscription_id": "1",
-*   "owner_id": 13408,
-*   "object_id": 12312312312,
-*   "object_type": "activity",
-*   "aspect_type": "create",
-*   "event_time": 1297286541
-* };
-*/
-exports.stravaPostReceiver = (req, res) => {
-  const b = req.body;
-  if (b.object_type === 'activity') {
-    Users.getUser(b.owner_id, (user) => {
-      const options = {
-        id: user.stravaId,
-        access_token: user.access_token,
-        user,
-      };
-      Activities.getActivityDetails(b.object_id, options, (done) => {
-        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${b}`);
-        return done;
-      });
-    });
+req.body = {
+  "aspect_type": "update", // Always "create," "update," or "delete."
+  "event_time": 1516126040,
+  "object_id": 1360128428,
+  "object_type": "activity",
+  "owner_id": 134815,
+  "subscription_id": 120475,
+  "updates": { // Empty for delete and create events.
+    "title": "Messy",
+    "type": "",
+    "private": false, // Always true or false
   }
-  res.send(req.body);
+}
+*/
+
+const postProcessor = (input, done) => {
+  if (input.object_type === 'activity') {
+    User.findOne({ stravaId: input.owner_id * 1 }, (err, user) => {
+      if (err || !user) {
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, 'No User');
+        return done;
+      }
+      if (user.stravaId && user.clubMember) {
+        const options = {
+          id: user.stravaId,
+          activityId: input.object_id,
+          access_token: user.access_token,
+          user,
+        };
+        const activity = { activityId: input.object_id };
+        const toDelete = {
+          activityId: input.object_id,
+          'athlete.id': user.stravaId,
+        };
+        switch (input.aspect_type) {
+          case 'create':
+            return Activities.getActivityDetails(activity, options, (cDone) => {
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${input}`);
+              return cDone;
+            });
+          case 'update':
+            return Activities.getActivityUpdate(activity, options, (cDone) => {
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 4, null, null, `Starting Activities.getActivityDetails ${input}`);
+              return cDone;
+            });
+          case 'delete':
+            return Activities.removeActivity(toDelete, rDone => rDone);
+          default:
+            hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, 'Missed Cases');
+        }
+      } else {
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not a user or not clubMember ${user.stravaId}`);
+      }
+    });
+    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not an activity for user ${input.owner_id}`);
+  }
+  return done;
+};
+
+exports.stravaPostReceiver = (req, res) => {
+  postProcessor(req.body, logThis => logThis);
+  res.sendStatus(200);
 };

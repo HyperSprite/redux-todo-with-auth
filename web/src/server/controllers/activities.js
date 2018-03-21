@@ -205,8 +205,10 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'error', 3, err, 'no_page', 'Error getting fullActivity', options.user.stravaId);
       return done([]);
     }
-    hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'error', 1, err, 'no_page', `!fullActivity for: ${options.activityId} data: ${JSON.stringify(data)}`, options.user.stravaId);
-    return done(null);
+    Activities.findOrCreate({ activityId: options.activityId }, data, options, (err, newActivity) => {
+      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOrCreate`, logObj.logType, 'success', 9, err, 'no_page', `Success for new activity for: ${options.activityId}`, options.user.stravaId);
+      return done(newActivity);
+    });
   });
 };
 
@@ -219,8 +221,11 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
 *   user: user,
 * }
 */
-const getActivityDetails = (activity, opts, cb) => {
-  strava.activities.get({ id: opts.activityId, access_token: opts.access_token }, (err, data, rateLimit) => {
+exports.getActivityDetails = (activity, opts, cb) => {
+  strava.activities.get({
+    id: opts.activityId,
+    access_token: opts.access_token,
+  }, (err, data, rateLimit) => {
     hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
@@ -319,6 +324,34 @@ const getActivityDetails = (activity, opts, cb) => {
   });
 };
 
+exports.getActivityUpdate = (activity, opts, cb) => {
+  console.log('getActivityDetails', activity, opts);
+  strava.activities.get({
+    id: opts.activityId,
+    access_token: opts.access_token,
+  }, (err, data) => {
+    if (err || !data || data.errors) {
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: `${logObj.file}.getActivityUpdate`,
+        logSubType: 'failure',
+        level: 1,
+        error: err,
+        message: `failedUpdate for ${activity.activityId} message: ${data ? data.message : 'No data'} errors: ${data.errors}`,
+      }));
+      findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
+    } else {
+      hlpr.logOut(Object.assign({}, logObj, {
+        func: `${logObj.file}.getActivityUpdate pushActivities not premium`,
+        logSubType: 'info',
+        level: 10,
+        error: err,
+        message: `activityId: ${opts.activityId} resource_state: ${data.resource_state}`,
+      }));
+      findActivityAndUpdate(opts.activityId, data, opts, fullActivity => cb(fullActivity));
+    }
+  });
+};
+
 exports.getRecentActivities = (req, res) => {
   const options = {
     id: req.user.stravaId,
@@ -343,7 +376,7 @@ exports.getRecentActivities = (req, res) => {
             }
           } else {
             options.activityId = dbActivity.activityId;
-            getActivityDetails(dbActivity, options, (done) => {
+            exports.getActivityDetails(dbActivity, options, (done) => {
               counter.push(done.activityId);
               if (counter.length === acts.length) {
                 return exports.getWeeklyStats(req, res);
@@ -417,7 +450,7 @@ exports.getExtendedActivityStats = () => {
             user: user,
             cronjob: true,
           };
-          getActivityDetails(dbActivity, options, done => done);
+          exports.getActivityDetails(dbActivity, options, done => done);
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
             hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats User.findOne failure`, logObj.logType, 'failure', 1, err, 'no_page', `No User ${authError.activityId}`, null);
@@ -650,19 +683,40 @@ exports.resetActivity = (req, res) => {
   });
 };
 
+/**
+Expects the following:
+input = {
+  activityId: req.body.activityId,
+  'athlete.id': req.user.stravaId,
+};
+*/
+
+exports.removeActivity = (input, output) => {
+  Activities.remove(input, (err) => {
+    if (err) {
+      hlpr.logOutArgs(`${logObj.file}.removeActivity err`, logObj.logType, 'error', 5, err, 'no_page', `Remove Activity activityid: ${JSON.stringify(input)}`);
+      return output({
+        status: 400,
+        message: {
+          type: 'MESSAGE_FOR_USER', payload: 'Activity not found or not removed',
+        },
+      });
+    }
+    hlpr.logOutArgs(`${logObj.file}.removeActivity info`, logObj.logType, 'info', 9, err, 'no_page', `Remove Activity activityid: ${JSON.stringify(input)}`);
+    return output({
+      status: 200,
+      message: [{ activityId: input.activityId, deleted: true }],
+    });
+  });
+};
+
 exports.deleteActivity = (req, res) => {
   const q = {
     activityId: req.body.activityId,
     'athlete.id': req.user.stravaId,
   };
-  Activities.remove(q, (err) => {
-    hlpr.consLog(['remove', q]);
-    if (err) {
-      hlpr.logOutArgs(`${logObj.file}.deleteActivity err`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
-      res.status(404).send({ type: 'MESSAGE_FOR_USER', payload: 'Activity not found or not removed' });
-    }
-    hlpr.logOutArgs(`${logObj.file}.deleteActivity info`, logObj.logType, 'info', 9, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
-    res.send([{ activityId: q.activityId, deleted: true }]);
+  exports.removeActivity(q, (ready) => {
+    res.status(ready.status).send(ready.message);
   });
 };
 
