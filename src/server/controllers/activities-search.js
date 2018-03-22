@@ -132,8 +132,8 @@ exports.searchActivities = async (req, res) => {
     asc: 1,
     true: true,
     false: false,
-    Max: '$lt',
-    Min: '$gt',
+    Max: '$lte',
+    Min: '$gte',
   };
 
   /**
@@ -188,7 +188,7 @@ exports.searchActivities = async (req, res) => {
           query.search.push({ [sortOptions[item]]: { $lte: q[item][1] } });
         }
       } else {
-        query.search.push({ [sortOptions[item]]: { $gt: q[item][0] * 1, $lt: q[item][1] * 1 } });
+        query.search.push({ [sortOptions[item]]: { $gte: q[item][0] * 1, $lte: q[item][1] * 1 } });
       }
     }
   });
@@ -229,7 +229,7 @@ exports.searchActivities = async (req, res) => {
   * Sorts --------------------------------------------------------------------
   *
   * query value will be like: 'sort=movingTime-des'
-  * slit this and check they match the qsValue and sortOptions objects
+  * split this and check they match the qsValue and sortOptions objects
   * if they don't they are ignored and defaults to $sort: { date: -1 }
   */
   if (q.sortBy) {
