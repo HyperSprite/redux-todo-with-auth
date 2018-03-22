@@ -47,10 +47,11 @@ req.body = {
 */
 
 const postProcessor = (input, done) => {
+  const mssg = `stravaId: ${input.owner_id}, activityId: ${input.object_id}, aspect_type: ${input.aspect_type}`
   if (input.object_type === 'activity') {
     User.findOne({ stravaId: input.owner_id * 1 }, (err, user) => {
       if (err || !user) {
-        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, 'No User');
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `No User ${mssg}`);
         return done;
       }
       if (user.stravaId && user.clubMember) {
@@ -68,24 +69,25 @@ const postProcessor = (input, done) => {
         switch (input.aspect_type) {
           case 'create':
             return Activities.getActivityDetails(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${input}`);
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${mssg}`);
               return cDone;
             });
           case 'update':
             return Activities.getActivityUpdate(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${input}`);
+              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${mssg}`);
               return cDone;
             });
           case 'delete':
             return Activities.removeActivity(toDelete, rDone => rDone);
           default:
-            hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, 'Missed Cases');
+            hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `Missed Cases ${mssg}`);
         }
       } else {
-        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 8, null, null, `Not a user or not clubMember ${user.stravaId}`);
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 8, null, null, `Not a user or not clubMember ${mssg}`);
       }
+      return done;
     });
-    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not an activity for user ${input.owner_id}`);
+    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not an activity for user ${mssg}`);
   }
   return done;
 };
