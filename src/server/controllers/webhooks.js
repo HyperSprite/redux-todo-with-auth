@@ -68,26 +68,20 @@ const postProcessor = (input, done) => {
         };
         switch (input.aspect_type) {
           case 'create':
-            return Activities.getActivityDetails(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${mssg}`);
-              return cDone;
-            });
+            return Activities.getActivityDetails(activity, options, cDone => cDone);
           case 'update':
-            return Activities.getActivityUpdate(activity, options, (cDone) => {
-              hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 8, null, null, `Starting Activities.getActivityDetails ${mssg}`);
-              return cDone;
-            });
+            return Activities.getActivityUpdate(activity, options, cDone => cDone);
           case 'delete':
             return Activities.removeActivity(toDelete, rDone => rDone);
           default:
             hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `Missed Cases ${mssg}`);
         }
       } else {
-        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 8, null, null, `Not a user or not clubMember ${mssg}`);
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 6, null, null, `Not a user or not clubMember ${mssg}`);
       }
       return done;
     });
-    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 6, null, null, `Not an activity for user ${mssg}`);
+    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 6, null, null, `Not an activity for user ${mssg}`);
   }
   return done;
 };
