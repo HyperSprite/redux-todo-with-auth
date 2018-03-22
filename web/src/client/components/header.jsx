@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { withStyles } from 'material-ui/styles';
 import Headroom from 'react-headroom';
+import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
 import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
@@ -36,10 +37,11 @@ const defaultProps = {
 
 const styles = theme => ({
   root: {
+    ...theme.typography.title2,
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    ...theme.typography.title2,
+    alignItems: 'baseline',
     color: 'inherit',
     lineHeight: '48px',
   },
@@ -49,14 +51,14 @@ const styles = theme => ({
   icon: {
     color: 'inherit',
   },
-  onlyPrint: {
+  forPrint: {
     display: 'none',
   },
   '@media print': {
     noPrint: {
       display: 'none',
     },
-    onlyPrint: {
+    forPrint: {
       display: 'inherit',
     },
   },
@@ -99,29 +101,27 @@ class Header extends Component {
 
     const rightMenu = this.props.authenticated ? null : <Signin />;
 
-    const pageNameWithHelp = this.props.page.help ? (
+    const pageNameWithHelp = (
       <div className={classes.root}>
-        <div>
+        <div >
           {page.name}
         </div>
-        <div className={classes.help}>
-          <IconButton
-            component="a"
-            href={this.props.page.help}
-            target="blank"
-            title="Help"
-            className={classes.icon}
-          >
-            <SvgIcon>
-              <HelpCircleIcon />
-            </SvgIcon>
-          </IconButton>
-        </div>
+        {this.props.page.help ? (
+          <div className={classes.help}>
+            <IconButton
+              component="a"
+              href={this.props.page.help}
+              target="blank"
+              title="Help"
+              className={classes.icon}
+            >
+              <SvgIcon>
+                <HelpCircleIcon />
+              </SvgIcon>
+            </IconButton>
+          </div>
+        ) : null}
       </div>
-    ) : (
-      <span>
-        {page.name}
-      </span>
     );
 
     return (
@@ -130,18 +130,16 @@ class Header extends Component {
           <title>{`${pageName} A Race athlete`}</title>
           <link rel="canonical" href={`${window.location.host}`} />
         </Helmet>
-        <div className={classes.onlyPrint}>
+        <div className={classes.forPrint}>
           <AppBar
             title={<span>{`${pageName} A Race athlete`}</span>}
-            // rightMenu={this.renderRightMenu() }
-            // leftOnClick={this.handleToggle}
           />
         </div>
         <div className={classes.noPrint}>
           <Headroom>
             <AppBar
               title={pageNameWithHelp}
-              rightMenu={this.renderRightMenu() }
+              rightMenu={this.renderRightMenu()}
               leftOnClick={this.handleToggle}
             />
           </Headroom>
