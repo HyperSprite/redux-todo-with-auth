@@ -76,12 +76,11 @@ const postProcessor = (input, done) => {
           default:
             hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `Webhook update- Missed Cases ${mssg}`);
         }
+        hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 6, null, null, `Webhook update ${mssg}`);
       } else {
         hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 6, null, null, `Webhook update - Not a user or not clubMember ${mssg}`);
       }
-      return done;
     });
-    hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'success', 6, null, null, `Webhook update ${mssg}`);
   }
   return done;
 };
