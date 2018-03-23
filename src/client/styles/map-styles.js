@@ -1,94 +1,95 @@
-import theme from './theme';
+import { withTheme } from 'material-ui/styles';
 
-export const palette = theme.palette;
-
-export default [
-  { elementType: 'geometry', stylers: [{ color: palette.accent2Color }] },
-  { elementType: 'labels.text.stroke', stylers: [{ color: palette.accent2Color }] },
-  { elementType: 'labels.text.fill', stylers: [{ color: palette.textBoldColor }] },
+const mapStyles = ({ theme }) => ([
+  { elementType: 'geometry', stylers: [{ color: theme.palette.background.appBar }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: theme.palette.background.appBar }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: theme.palette.primary[900] }] },
   {
     featureType: 'administrative.locality',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'landscape.natural',
     elementType: 'geometry',
-    stylers: [{ color: palette.accent4Color }],
+    stylers: [{ color: theme.palette.secondary[50] }],
   },
   {
     featureType: 'poi',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'poi',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'poi',
     elementType: 'geometry',
-    stylers: [{ color: palette.alternateTextColor }],
+    stylers: [{ color: theme.palette.background.default }],
   },
   {
     featureType: 'poi',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'road',
     elementType: 'geometry',
-    stylers: [{ color: palette.accent5Color }],
+    stylers: [{ color: theme.palette.secondary[700] }],
   },
   {
     featureType: 'road',
     elementType: 'geometry.stroke',
-    stylers: [{ color: palette.borderColor }],
+    stylers: [{ color: theme.palette.background.contentFrame }],
   },
   {
     featureType: 'road',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.accent6Color }],
+    stylers: [{ color: theme.palette.secondary[800] }],
   },
   {
     featureType: 'road.highway',
     elementType: 'geometry',
-    stylers: [{ color: palette.textBoldColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'road.highway',
     elementType: 'geometry.stroke',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'road.highway',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.primary2Color }],
+    stylers: [{ color: theme.palette.primary.main }],
   },
   {
     featureType: 'transit',
     elementType: 'geometry',
-    stylers: [{ color: palette.primary3Color }],
+    stylers: [{ color: theme.palette.secondary[200] }],
   },
   {
     featureType: 'transit.station',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.textColor }],
+    stylers: [{ color: theme.palette.primary.dark }],
   },
   {
     featureType: 'water',
     elementType: 'geometry',
-    stylers: [{ color: palette.accent1Color }],
+    stylers: [{ color: theme.palette.secondary.light }],
   },
   {
     featureType: 'water',
     elementType: 'labels.text.fill',
-    stylers: [{ color: palette.accent7Color }],
+    stylers: [{ color: theme.palette.secondary.dark }],
   },
   {
     featureType: 'water',
     elementType: 'labels.text.stroke',
-    stylers: [{ color: palette.accent1Color }],
+    stylers: [{ color: theme.palette.secondary.light }],
   },
-];
+]);
+
+
+export default withTheme(mapStyles);
