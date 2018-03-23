@@ -42,7 +42,6 @@ class GoogleMapWithPolyline extends React.Component {
   }
 
   render() {
-    console.log('theme', this.props.theme);
     const mapOptions = {
       styles: this.props.theme.mapStyles,
       mapTypeControl: true,
