@@ -444,7 +444,7 @@ class ActivitySearch extends Component {
                   </div>
                 ))}
                 <ProgressDivider isProgress={isFetching} />
-                {activities.length > 12 &&
+                {activities.length > 11 &&
                   activities.length !== activCalcFilter.count ? SearchButton : null}
               </div>
             )}
