@@ -10,7 +10,10 @@ import './styles.css';
 
 const propTypes = {
   input: PropTypes.object,
-  label: PropTypes.string,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.node,
+  ]),
   type: PropTypes.string,
   placeholder: PropTypes.string,
   initialValue: PropTypes.any,
