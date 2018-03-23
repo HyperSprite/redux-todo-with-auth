@@ -7,10 +7,11 @@ import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import Vignette from '@hypersprite/react-vignette';
+import { withTheme } from 'material-ui/styles';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import MapPin from '../map-pin';
-import googleMapStyles, { palette } from '../../styles/map-styles';
+import googleMapStyles from '../../styles/map-styles';
 
 class GoogleMapWithPolyline extends React.Component {
 
@@ -19,6 +20,7 @@ class GoogleMapWithPolyline extends React.Component {
     mapPolyline: PropTypes.string,
     height: PropTypes.number,
     width: PropTypes.number,
+    theme: PropTypes.object,
     // map: PropTypes.shape({
     //   polyline: PropTypes.string,
     // }), // supplied by google-map-react
@@ -40,8 +42,9 @@ class GoogleMapWithPolyline extends React.Component {
   }
 
   render() {
+    console.log('theme', this.props.theme);
     const mapOptions = {
-      styles: googleMapStyles,
+      styles: this.props.theme.mapStyles,
       mapTypeControl: true,
       mapTypeId: 'terrain',
       rotateControl: false,
@@ -99,14 +102,14 @@ class GoogleMapWithPolyline extends React.Component {
               <MapPin
                 lat={this.mapData[this.mapData.length - 1].lat}
                 lng={this.mapData[this.mapData.length - 1].lng}
-                color={palette.textColor}
+                color={this.props.theme.palette.primary.dark}
               />
             }
             { this.state.mapLoaded &&
               <MapPin
                 lat={this.mapData[0].lat}
                 lng={this.mapData[0].lng}
-                color={palette.accent8Color}
+                color="#2E7D32"
               />
             }
             { this.state.mapLoaded && (
@@ -134,4 +137,5 @@ class GoogleMapWithPolyline extends React.Component {
   }
 }
 
-export default Dimensions()(GoogleMapWithPolyline);
+const styledGoogleMapWithPolyline = withTheme()(GoogleMapWithPolyline);
+export default Dimensions()(styledGoogleMapWithPolyline);

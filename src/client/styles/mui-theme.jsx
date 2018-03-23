@@ -7,6 +7,7 @@ import CssBaseline from 'material-ui/CssBaseline';
 
 import palette from './mui-palette';
 import typography from './mui-typography';
+import mapStyles from './map-styles';
 
 const propTypes = {
   children: PropTypes.oneOfType([
@@ -17,11 +18,11 @@ const propTypes = {
 
 const getTheme = theme => createMuiTheme({
   typography,
-  direction: theme.direction,
   palette: {
     ...palette,
     type: theme.paletteType,
   },
+  mapStyles: mapStyles(theme),
 });
 
 
@@ -38,8 +39,7 @@ class Theme extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.uiTheme.paletteType !== this.props.uiTheme.paletteType ||
-      nextProps.uiTheme.direction !== this.props.uiTheme.direction
+      nextProps.uiTheme.paletteType !== this.props.uiTheme.paletteType
     ) {
       theme = getTheme(nextProps.uiTheme);
     }
@@ -47,12 +47,10 @@ class Theme extends React.Component {
 
   render() {
     return (
-      // <JssProvider jss={jss} >
       <MuiThemeProvider theme={theme} sheetsManager={new Map()} >
         <CssBaseline />
         {this.props.children}
       </MuiThemeProvider>
-      // </JssProvider>
     );
   }
 }
