@@ -6,10 +6,11 @@ import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import { isValid } from 'just-fns';
+import { withTheme } from 'material-ui/styles';
 
 import MapMarker from '../map-marker';
 import MapPin from '../map-pin';
-import googleMapStyles, { palette } from '../../styles/map-styles';
+import googleMapStyles from '../../styles/map-styles';
 
 class GoogleMapLocation extends React.Component {
 
@@ -59,7 +60,7 @@ class GoogleMapLocation extends React.Component {
 
   render() {
     const mapOptions = {
-      styles: googleMapStyles,
+      styles: this.props.theme.mapStyles,
       mapTypeControl: true,
       mapTypeId: 'terrain',
       rotateControl: false,
@@ -142,21 +143,21 @@ class GoogleMapLocation extends React.Component {
               lat={pin.lat}
               lng={pin.lng}
               name={pin.name}
-              color={palette.primary2Color}
+              color={this.props.theme.palette.primary.main}
             />
           ))}
           { clickReady &&
             <MapPin
               lat={this.state.lat || this.props.lat}
               lng={this.state.lng || this.props.lng}
-              color={palette.accent6Color}
+              color={this.props.theme.palette.secondary.dark}
             />
           }
           { (this.props.myLat) &&
             <MapMarker
               lat={this.props.myLat}
               lng={this.props.myLng}
-              color={palette.accent8Color}
+              color="#2E7D32"
             />
           }
         </GoogleMapReact>
@@ -165,4 +166,5 @@ class GoogleMapLocation extends React.Component {
   }
 }
 
-export default Dimensions()(GoogleMapLocation);
+const themedGoogleMapLocation = withTheme()(GoogleMapLocation);
+export default Dimensions()(themedGoogleMapLocation);
