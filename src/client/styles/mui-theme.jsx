@@ -47,7 +47,7 @@ class Theme extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider theme={theme} sheetsManager={new Map()} >
+      <MuiThemeProvider theme={theme} >
         <CssBaseline />
         {this.props.children}
       </MuiThemeProvider>
