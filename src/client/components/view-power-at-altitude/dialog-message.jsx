@@ -101,6 +101,7 @@ const styles = theme => ({
     paddingLeft: '0.5em',
   },
   content: {
+    ...theme.typography.body1,
     padding: '0.2em',
   },
   icon: {
@@ -120,13 +121,16 @@ const styles = theme => ({
       maxWidth: '20em',
       color: '#000000',
       fontWeight: 600,
+      margin: 0,
     },
     title: {
-      h2: {
-        fontSize: '0.8em',
-        padding: 0,
-      },
+      ...theme.typography.body2,
+      // h2: {
+      //   fontSize: '0.8em',
+      //   padding: 0,
+      // },
       margin: 0,
+      padding: 1,
     },
     boxLabel: {
       display: 'flex',
@@ -180,7 +184,7 @@ const DialogMessage = ({ classes, closeToolTip, data, handleClose, powerZones, p
     <div
       className={classes.root}
     >
-      <DialogTitle className={classes.title} disableTypography >
+      <DialogTitle className={classes.title} >
         <span className={classes.noPrint}>
           {'Zones for\u00A0'}
         </span>
