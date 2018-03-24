@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Headroom from 'react-headroom';
-import { withStyles } from 'material-ui/styles';
+import { withStyles, withTheme } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
@@ -44,6 +44,9 @@ const styles = theme => ({
     alignItems: 'baseline',
     color: 'inherit',
     lineHeight: '48px',
+  },
+  siteHeader: {
+    zIndex: theme.zIndex.appBar,
   },
   help: {
     padding: '0 2px',
@@ -96,11 +99,11 @@ class Header extends Component {
   }
 
   render() {
-    const { classes, page } = this.props;
+    const { classes, page, theme } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
 
     const rightMenu = this.props.authenticated ? null : <Signin />;
-
+    console.log(classes.siteHeader);
     const pageNameWithHelp = (
       <div className={classes.root}>
         <div >
@@ -125,7 +128,7 @@ class Header extends Component {
     );
 
     return (
-      <div className="site-header" >
+      <Headroom style={{ zIndex: theme.zIndex.appBar }} >
         <Helmet>
           <title>{`${pageName} A Race athlete`}</title>
           <link rel="canonical" href={`${window.location.host}`} />
@@ -135,16 +138,14 @@ class Header extends Component {
             title={<span>{`${pageName} A Race athlete`}</span>}
           />
         </div>
-        <div className={classes.noPrint}>
-          <Headroom>
-            <AppBar
-              title={pageNameWithHelp}
-              rightMenu={this.renderRightMenu()}
-              leftOnClick={this.handleToggle}
-            />
-          </Headroom>
-        </div>
-      </div>
+          <AppBar
+            className={classes.noPrint}
+            title={pageNameWithHelp}
+            rightMenu={this.renderRightMenu()}
+            leftOnClick={this.handleToggle}
+            position="absolute"
+          />
+      </Headroom>
     );
   }
 }
@@ -163,5 +164,6 @@ function mapStateToProps(state) {
 Header.propTypes = propTypes;
 Header.defaultProps = defaultProps;
 
-const styledHeader = withStyles(styles, { name: 'StyledHeader' })(Header);
+const themedHeader = withTheme()(Header);
+const styledHeader = withStyles(styles, { name: 'StyledHeader' })(themedHeader);
 export default connect(mapStateToProps, actions)(styledHeader);
