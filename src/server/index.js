@@ -15,6 +15,7 @@ const http = require('http');
 const https = require('https');
 const express = require('express');
 const bodyParser = require('body-parser');
+const helmet = require('helmet');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -93,14 +94,15 @@ function shouldCompress(req, res) {
 
 // Express Middleware
 app.use(secureHost);
+app.use(helmet());
 // compression
 app.use(compression({ filter: shouldCompress }));
 // app.use(cors());
-// parses everything that comes in as JSON
-app.use(bodyParser.json({ type: '*/*' }));
 
 app.use('/blog', express.static(`${rootDir}blog`, { maxAge: 0 }));
 app.use(express.static(rootDir, { maxAge: '30d' }));
+
+app.use(bodyParser.json());
 
 app.use('/', router);
 
