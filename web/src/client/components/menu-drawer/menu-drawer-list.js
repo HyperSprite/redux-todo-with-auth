@@ -48,7 +48,7 @@ const menuDrawerList = [
     access: ['user', 'club', 'admin'],
   },
   {
-    primaryText: 'Power & Weight',
+    primaryText: 'Power and Weight',
     linkTo: '/power-and-weight',
     Icon: ScaleIcon,
     access: ['user', 'club', 'admin'],
