@@ -102,8 +102,6 @@ class Header extends Component {
     const { classes, page, theme } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
 
-    const rightMenu = this.props.authenticated ? null : <Signin />;
-    console.log(classes.siteHeader);
     const pageNameWithHelp = (
       <div className={classes.root}>
         <div >
