@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
 import Drawer from 'material-ui/Drawer';
-import List, { ListItem } from 'material-ui/List';
+import List from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';
 import MenuDrawerItem from './menu-drawer-item';
-import ButtonOpen from '../button/open';
+import MenuListItemSwitch from '../menu-list-item-switch';
 import SwitcherMPref from '../switcher-mpref';
 import SwitcherTheme from '../switcher-theme';
 import EventFilter from '../view-events/filter-toolbar';
@@ -30,6 +30,7 @@ class MenuDrawer extends Component {
     adminMember: PropTypes.bool.isRequired,
     authenticated: PropTypes.bool,
     clubMember: PropTypes.bool,
+    clubNotice: PropTypes.bool,
     open: PropTypes.bool,
     setDrawer: PropTypes.func.isRequired,
   };
@@ -38,10 +39,16 @@ class MenuDrawer extends Component {
     adminMember: false,
     authenticated: false,
     clubMember: false,
+    clubNotice: true,
     open: false,
   };
 
   handleClose = () => this.props.setDrawer({ drawer: false });
+
+  handleClubNotice = () => {
+    this.props.toggleClubNotice(!this.props.clubNotice);
+    this.handleClose();
+  };
 
   accessLevel() {
     switch (true) {
@@ -57,13 +64,23 @@ class MenuDrawer extends Component {
   }
 
   render() {
-    const { classes, adminMember, pageName, theme } = this.props;
+    const { classes, authenticated, adminMember, clubMember, clubNotice, pageName, theme } = this.props;
+    console.log('clubMember', clubMember, clubNotice);
+    const ClubNoticeListItem = () => (
+      <MenuListItemSwitch
+        label="Club Notice"
+        onChange={this.handleClubNotice}
+        checked={!clubNotice}
+        color="secondary"
+      />
+    );
 
     const drawer = (
       <div>
         <div className={classes.toolbar} />
         <List>
-          { pageName === 'Events' ? <EventFilter /> : null}
+          {pageName === 'Events' ? <EventFilter /> : null}
+          {(authenticated && !clubMember) ? <ClubNoticeListItem /> : null}
           <SwitcherMPref />
           <Divider />
           {menuDrawerList.filter(mIF => mIF.access.includes(this.accessLevel())).map(mI => (
@@ -82,6 +99,7 @@ class MenuDrawer extends Component {
       <Drawer
         onClose={this.handleClose}
         open={this.props.open}
+        transitionDuration={{ exit: 700 }}
       >
         {drawer}
       </Drawer>
@@ -95,7 +113,8 @@ function mapStateToProps(state) {
     adminMember: state.auth.user.adminMember,
     open: state.page.drawer,
     pageName: state.page.name,
-    clubMember: state.auth.clubMember,
+    clubMember: state.auth.user.clubMember,
+    clubNotice: state.auth.user.clubNotice,
   };
 }
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
+
+import ActivityProcessingWithData from '../activity-processing/with-data';
 import ProgressDivider from '../progress-divider';
 import ButtonRefresh from '../button/refresh';
 import ButtonBase from '../button/base';
@@ -69,13 +71,14 @@ class activeStats extends Component {
   }
 
   render() {
-    const { weeklyStats, datePref, isFetching, mPref } = this.props;
+    const { weeklyStats, weeklyStatsCount, datePref, isFetching, mPref } = this.props;
     return (
       <Layout>
         <ScrollIntoView
           id={location.hash}
           headerHeight={70}
         />
+        <ActivityProcessingWithData />
         <div>
           <div>
             <ButtonRefresh
@@ -101,15 +104,15 @@ class activeStats extends Component {
               ))}
             </div>
           )}
-          {isFetching ? (
+          {(weeklyStats.length < 2) ? (
             <div>
               {weeklyStats.length ? (
                 <ButtonProgress
                   variant="raised"
                   label="Load Another Week"
                   color="primary"
-                  // style={style.button}
-                  disabled
+                  disabled={isFetching}
+                  onClick={this.fetchAnotherWeek}
                 />
               ) : null}
             </div>

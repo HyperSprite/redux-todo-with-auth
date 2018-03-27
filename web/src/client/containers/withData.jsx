@@ -6,11 +6,20 @@ const withData = url => Component => (
   class WithData extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        withDataFetching: false,
+        withDataNotice: '',
+      };
+      this.getData = this.getData.bind(this);
     }
 
     componentDidMount() {
+      this.getData();
+    }
+
+    getData() {
       const endpoint = typeof url === 'function' ? url(this.props) : url;
+      this.setState({ withDataFetching: true });
       axios.get(endpoint, lib.axiosConfig)
       .then((response) => {
         if (response.status === 200) {
@@ -19,14 +28,15 @@ const withData = url => Component => (
         throw new Error('Server fetch failed');
       })
       .then((responseData) => {
-        this.setState({ data: responseData });
+        this.setState({ data: responseData, withDataFetching: false });
       }).catch((error) => {
+        this.setState({ withDataFetching: false, withDataNotice: 'Could not fetch data' });
         throw (error);
       });
     }
 
     render() {
-      return <Component {...this.props} {...this.state} />;
+      return <Component {...this.props} {...this.state} onClick={this.getData} />;
     }
   }
 );
