@@ -81,23 +81,6 @@ class Header extends Component {
 
   handleToggle = () => this.props.setDrawer({ drawer: !this.props.page.drawer });
 
-  renderRightMenu() {
-    const rightMenu = (!this.props.clubMember) ? (
-      <ButtonOpen
-        onClick={() => this.props.toggleClubNotice(false)}
-        to="/club-notice"
-        label="Club Notice"
-        color="inherit"
-      />
-    ) : null;
-
-    return this.props.authenticated ? (
-      <span>{rightMenu}</span>
-    ) : (
-      <Signin />
-    );
-  }
-
   render() {
     const { classes, page, theme } = this.props;
     const pageName = this.props.page.name ? `${this.props.page.name} -` : '';
@@ -139,7 +122,7 @@ class Header extends Component {
           <AppBar
             className={classes.noPrint}
             title={pageNameWithHelp}
-            rightMenu={this.renderRightMenu()}
+            rightMenu={!this.props.authenticated ? <Signin /> : null}
             leftOnClick={this.handleToggle}
             position="absolute"
           />

@@ -720,6 +720,52 @@ exports.deleteActivity = (req, res) => {
   });
 };
 
+exports.resourceState = async (input) => {
+  let result;
+  const aggQuery = [
+    { $match: { 'athlete.id': input } },
+    { $group: {
+      _id: { $concat: ['state', { $substr: ['$resource_state', 0, 1] }] },
+      count: { $sum: 1 },
+    } },
+  ];
+  try {
+    result = await Activities.aggregate(aggQuery);
+  } catch (err) {
+    hlpr.logOutArgs(`${logObj.file}.resourceState err`, logObj.logType, 'err', 4, err, 'no_page', err, input);
+    console.log(err);
+    return { err };
+  }
+  const output = result.reduce((acc, tRE) => {
+    acc[tRE._id] = tRE.count; // eslint-disable-line
+    return acc;
+  }, {});
+  return { stravaId: input, RESOURCE_STATE: output };
+};
+
+/**
+processingStatus return
+resource_state: 2 is a lightweight activity, can be downloaded 200 at a time.
+resource_state: 3 is a full activity, can only be downloaded one at a time.
+{
+    "stravaId": 12345,
+    "RESOURCE_STATE": {
+        "state3": 426,
+        "state2": 1
+    }
+}
+*/
+exports.processingStatus = async (req, res) => {
+  const user = req.user.stravaId;
+  let result;
+  try {
+    result = await exports.resourceState(user);
+  } catch (err) {
+    return res.status(500).send({ error: 'failed request' });
+  }
+  return res.send(result);
+};
+
 // TODO work this into query
 // make a trie function for stopwords,
 // load the array on startup into a trie for faster resolution,

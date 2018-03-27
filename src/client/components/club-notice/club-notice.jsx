@@ -91,7 +91,7 @@ class ClubNotice extends React.Component {
         </CardActions>
         <CardContent>
           <Typography>
-            If at any time you want to see this message again, click the Club Notice button in the upper right
+            If at any time you want to see this message again, click the Club Notice switch in the app menu.
           </Typography>
         </CardContent>
       </Card>

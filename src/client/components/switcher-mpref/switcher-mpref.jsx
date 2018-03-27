@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-} from 'material-ui/List';
-import Switch from 'material-ui/Switch';
+import MenuListItemSwitch from '../menu-list-item-switch';
 // eslint-disable-next-line
 import * as actions from '../../actions';
-
 
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
@@ -31,19 +25,14 @@ class SwitcherMPref extends React.Component {
   render() {
     const { mPref } = this.props;
     return (
-      <ListItem>
-        <ListItemText primary={mPref ? 'Imperial' : 'Metric'} />
-        <ListItemSecondaryAction>
-          <Switch
-            onChange={this.switchMeasurementPref}
-            checked={mPref}
-            color="primary"
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
+      <MenuListItemSwitch
+        label={mPref ? 'Imperial' : 'Metric'}
+        onChange={this.switchMeasurementPref}
+        checked={mPref}
+        color="primary"
+      />
     );
   }
-
 }
 
 function mapStateToProps(state) {

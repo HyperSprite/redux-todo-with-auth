@@ -1,3 +1,4 @@
+const qs = require('qs');
 const User = require('../models/user');
 const Events = require('../models/events');
 const Activities = require('../models/activities');
@@ -6,6 +7,7 @@ const UserCommon = require('../models/user-common');
 const Logging = require('../models/logging');
 
 const stravaControl = require('./strava');
+const activControl = require('./activities');
 const hlpr = require('../lib/helpers');
 
 const logObj = {
@@ -114,6 +116,32 @@ exports.getLogs = (req, res) => {
     if (err) return err;
     res.send(result);
   });
+};
+
+// localhost:3080/apiv1/admin/activities/processing-status-all
+exports.processingStatusAll = async (req, res) => {
+  let results;
+  try {
+    const users = await User.find({}, { _id: 0, stravaId: 1 });
+    results = await Promise.all(users.map(async user => activControl.resourceState(user.stravaId)));
+  } catch (err) {
+    return res.status(500).send({ error: 'failed request', err });
+  }
+  return res.send(results);
+};
+
+// localhost:3080/apiv1/admin/activities/processing-status/12345
+exports.processingStatusOne = async (req, res) => {
+  const prms = qs.parse(req.params);
+  const user = parseInt(prms.stravaId || 0, 10);
+  console.log('processingStatusOne', user);
+  let result;
+  try {
+    result = await activControl.resourceState(user);
+  } catch (err) {
+    return res.status(500).send({ stravaId: user, error: 'failed request processing-status', err });
+  }
+  return res.send(result);
 };
 
 // run nightlyUpdate

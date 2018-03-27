@@ -7,6 +7,7 @@ import * as actions from './../actions';
 import Static from './form/static';
 // import Astrophases from './weather/astrophases';
 import ThemeObject from './admin/theme-object';
+import ProcessingStatusAll from './admin/processing-status-all';
 import Motivation from './motivation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
@@ -122,6 +123,7 @@ class Athlete extends Component {
               <ThemeObject />
               <Motivation style={style} />
               <TextBalance />
+              <ProcessingStatusAll />
               <div style={style.flexcontainer}>
                 <Static
                   contentLabel="Strava ID"

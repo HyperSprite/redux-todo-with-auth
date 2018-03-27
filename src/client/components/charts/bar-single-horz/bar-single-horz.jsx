@@ -18,15 +18,18 @@ const color = [
   palette.primary[50],
 ];
 
-// const testData = [
-//   {
-//     name: 'Activities', // name is reserved.
-//     total: 1018,
-//     downloaded: 320,
-//     display: 300,
-//
-//   },
-// ];
+/**
+props shape
+Object order is critical
+const testData = [
+  {
+    name: 'Activities', // key 'name' is reserved.
+    total: 1018,        // otherwise key names are arbitrary
+    downloaded: 320,    // but must be unique
+    display: 300,
+  },
+];
+*/
 
 const ChartBarSingleHorz = (props) => {
   const chartData = props.chartData || [{ name: '', total: 0 }];
@@ -55,9 +58,6 @@ const ChartBarSingleHorz = (props) => {
               yAxisId={i}
             />
           ))}
-
-          {/* <Tooltip /> */}
-          {/* <Legend /> */}
           {dataKeys.map((vN, i) => (
             <Bar
               key={vN}
