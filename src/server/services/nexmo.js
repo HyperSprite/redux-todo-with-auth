@@ -53,7 +53,7 @@ exports.checkBalance = (req, res) => {
     const newLog = new APIlog({
       logType: 'nexmo',
       logSubType: 'checkBalance',
-      remainingBalance: balance.value * 1,
+      remainingBalance: balance && balance.value * 1,
       dateTime: hlpr.getDate(d => d),
     });
     newLog.save();
