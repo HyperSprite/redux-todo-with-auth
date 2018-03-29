@@ -785,7 +785,9 @@ exports.processingStatusAllSockets = async () => {
     const users = await User.find({}, { _id: 0, stravaId: 1 });
     users.map(async (user) => {
       const oneStatus = await exports.resourceState(user.stravaId);
-      socketSrvr.ifConnected(user.stravaId, 'ACTIVITY_STATUS', oneStatus);
+      if (oneStatus.activStatus && oneStatus.activStatus.state2) {
+        socketSrvr.ifConnected(user.stravaId, 'ACTIVITY_STATUS', oneStatus);
+      }
     });
   } catch (err) {
     hlpr.logOutArgs(`${logObj.file}.processingStatusAllSockets err`, 'sockets', 'error', 5, err, 'no_page', 'ACTIVITY_STATUS', null);
