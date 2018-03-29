@@ -55,6 +55,7 @@ exports.startSockets = (httpServer) => {
 
 exports.ifConnected = (stravaId, actionType, actionPayload) => {
   if (connections[stravaId.toString()]) {
+    hlpr.consLog(['socketSrv.ifConnected', stravaId, actionType, actionPayload]);
     connections[stravaId.toString()].emit('action', {
       type: actionType,
       payload: actionPayload,

@@ -3,6 +3,7 @@ const hlpr = require('../lib/helpers');
 
 const Activities = require('./activities');
 const User = require('../models/user');
+const socketSrvr = require('../sockets');
 
 const logObj = {
   file: 'controllers/webhooks',
@@ -72,7 +73,10 @@ const postProcessor = (input, done) => {
           case 'update':
             return Activities.getActivityUpdate(activity, options, cDone => cDone);
           case 'delete':
-            return Activities.removeActivity(toDelete, rDone => rDone);
+            return Activities.removeActivity(toDelete, (rDone) => {
+              socketSrvr.ifConnected(toDelete.athlete.id, 'ACTIVITY_REMOVED', toDelete.activityId);
+              return rDone;
+            });
           default:
             hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `Webhook update- Missed Cases ${mssg}`);
         }
