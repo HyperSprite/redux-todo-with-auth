@@ -14,6 +14,10 @@ export default function (state = {
   activCalcFilter: {},
   weeklyStats: [],
   weeklyStatsCount: 0,
+  status: {
+    state2: 0,
+    state3: 0,
+  },
 }, action) {
   switch (action.type) {
     case TYPES.FETCH_USER_ACTIVITIES:
@@ -80,6 +84,12 @@ export default function (state = {
       return {
         ...state,
         activities: lib.insertOrReplaceArrayItem(state.activities, action.payload, null, 'activityId'),
+      };
+
+    case TYPES.ACTIVITY_STATUS:
+      return {
+        ...state,
+        status: action.payload.activStatus,
       };
 
     default:

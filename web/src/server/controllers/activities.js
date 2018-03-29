@@ -16,8 +16,9 @@ const _ = require('lodash');
 
 const Activities = require('../models/activities');
 const ActivityStreams = require('../models/activity-streams');
-const auth = require('./authentication');
 const User = require('../models/user');
+const auth = require('./authentication');
+const socketSrvr = require('../sockets');
 const enhancePolylineLocation = require('../lib/enhance-polyline-location');
 const stopwords = require('../lib/stopwords');
 const hlpr = require('../lib/helpers');
@@ -180,7 +181,7 @@ const getListZones = (activityId, accessToken, done) => {
     return done([]);
   }
   strava.activities.listZones({ id: activityId, access_token: accessToken }, (err, listZonesArr, rateLimit) => {
-    hlpr.consLog(['getListZones rateLimit', rateLimit]);
+    // hlpr.consLog(['getListZones rateLimit', rateLimit]);
     if (_.isArray(listZonesArr)) {
       return done(listZonesArr);
     }
@@ -226,7 +227,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
     id: opts.activityId,
     access_token: opts.access_token,
   }, (err, data, rateLimit) => {
-    hlpr.consLog(['getActivityDetails rateLimit', rateLimit]);
+    hlpr.consLog(['getActivityDetails rateLimit', JSON.stringify(rateLimit)]);
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityDetails`,
@@ -325,7 +326,6 @@ exports.getActivityDetails = (activity, opts, cb) => {
 };
 
 exports.getActivityUpdate = (activity, opts, cb) => {
-  console.log('getActivityDetails', activity, opts);
   strava.activities.get({
     id: opts.activityId,
     access_token: opts.access_token,
@@ -356,11 +356,12 @@ exports.getRecentActivities = (req, res) => {
   const options = {
     id: req.user.stravaId,
     access_token: req.user.access_token,
-    per_page: req.perPage || 21,
+    per_page: req.perPage || 7,
     page: req.pageCount,
     user: req.user,
   };
   strava.athlete.listActivities({ id: req.user.stravaId, access_token: req.user.access_token }, (err, acts) => {
+    exports.processingStatusOneSocket(req.user.stravaId);
     if (_.isArray(acts)) {
       const counter = [];
       acts.forEach((act, index) => {
@@ -371,12 +372,15 @@ exports.getRecentActivities = (req, res) => {
           }
           if (!created) {
             counter.push(dbActivity.activityId);
+            hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate !created`, logObj.logType, '!created', 7, err, req.originalUrl, dbActivity.activityId, req.user.stravaId);
             if (counter.length === acts.length) {
               return exports.getWeeklyStats(req, res);
             }
           } else {
             options.activityId = dbActivity.activityId;
-            exports.getActivityDetails(dbActivity, options, (done) => {
+            const theseOptions = Object.assign({}, options, { activity: dbActivity.activityId });
+            exports.getActivityDetails(dbActivity, theseOptions, (done) => {
+              hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate !created`, logObj.logType, 'created', 7, err, req.originalUrl, done.activityId, req.user.stravaId);
               counter.push(done.activityId);
               if (counter.length === acts.length) {
                 return exports.getWeeklyStats(req, res);
@@ -405,11 +409,11 @@ exports.getRecentActivities = (req, res) => {
 *  The activityStreamsCache is cleared every X minutes of ACTIVITY_STREAM_CACHE
 *  the default is two weeks or 20160 minutes
 */
-const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 3; // 3 min failsafe
+const minutes = process.env.ACTIVITY_UPDATE_INTERVAL * 1 || 1; // 3 min failsafe
 const theInterval = min => min * 60 * 1000;
 
 exports.getExtendedActivityStats = () => {
-  const limitCount = 22;
+  const limitCount = 7;
   const newDate = new Date();
   const activityStreamsCache = process.env.ACTIVITY_STREAM_CACHE * 1 || 20160;  // miuntes
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
@@ -420,6 +424,8 @@ exports.getExtendedActivityStats = () => {
       hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats activityStreamsCache`, logObj.logType, 'info', 5, err, 'no_page', `removed ${removed.n}`, null);
     }
   });
+
+  exports.processingStatusAllSockets();
 
   const toUpdate = {
     $and: [
@@ -733,14 +739,13 @@ exports.resourceState = async (input) => {
     result = await Activities.aggregate(aggQuery);
   } catch (err) {
     hlpr.logOutArgs(`${logObj.file}.resourceState err`, logObj.logType, 'err', 4, err, 'no_page', err, input);
-    console.log(err);
     return { err };
   }
   const output = result.reduce((acc, tRE) => {
     acc[tRE._id] = tRE.count; // eslint-disable-line
     return acc;
   }, {});
-  return { stravaId: input, RESOURCE_STATE: output };
+  return { stravaId: input, activStatus: output };
 };
 
 /**
@@ -749,7 +754,7 @@ resource_state: 2 is a lightweight activity, can be downloaded 200 at a time.
 resource_state: 3 is a full activity, can only be downloaded one at a time.
 {
     "stravaId": 12345,
-    "RESOURCE_STATE": {
+    "activStatus": {
         "state3": 426,
         "state2": 1
     }
@@ -764,6 +769,35 @@ exports.processingStatus = async (req, res) => {
     return res.status(500).send({ error: 'failed request' });
   }
   return res.send(result);
+};
+
+// exports.activityStatus = ()
+// exports.resourceState(req.user.stravaId)
+// socketSrvr.ifConnected(req.user.stravaId, 'ACTIVITY_STATUS', { drawer: true });
+
+
+
+exports.processingStatusAllSockets = async () => {
+  try {
+    const users = await User.find({}, { _id: 0, stravaId: 1 });
+    users.map(async (user) => {
+      const oneStatus = await exports.resourceState(user.stravaId);
+      socketSrvr.ifConnected(user.stravaId, 'ACTIVITY_STATUS', oneStatus);
+    });
+  } catch (err) {
+    hlpr.logOutArgs(`${logObj.file}.processingStatusAllSockets err`, 'sockets', 'error', 5, err, 'no_page', 'ACTIVITY_STATUS', null);
+  }
+  return null;
+};
+
+// localhost:3080/apiv1/admin/activities/processing-status/12345
+exports.processingStatusOneSocket = async (stravaId) => {
+  try {
+    const oneStatus = await exports.resourceState(stravaId);
+    socketSrvr.ifConnected(stravaId, 'ACTIVITY_STATUS', oneStatus);
+  } catch (err) {
+    hlpr.logOutArgs(`${logObj.file}.processingStatusOneSocket err`, 'sockets', 'error', 5, err, 'no_page', 'ACTIVITY_STATUS', stravaId);
+  }
 };
 
 // TODO work this into query
@@ -811,7 +845,6 @@ exports.toggleClubNotice = async (req, res) => {
   hlpr.logOutArgs(`${logObj.file}.toggleClubNotice info`, logObj.logType, 'info', 9, null, req.originalUrl, 'Club Notice Toggled', req.user.stravaId);
   return res.send({ clubNotice: result.clubNotice });
 };
-
 // No longer useing this version
 // localhost:3080/apiv1/activities/one-week/100 (returns -40 weeks)
 // localhost:3080/apiv1/activities/one-week (no number returns current week)

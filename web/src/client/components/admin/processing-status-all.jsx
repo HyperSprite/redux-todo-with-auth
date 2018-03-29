@@ -14,8 +14,8 @@ const ProcessingStatusAll = (props) => {
         <div key={d.stravaId}>
           {d.stravaId}
           <ActivityProcessing
-            processed={d.RESOURCE_STATE.state3}
-            queued={d.RESOURCE_STATE.state2}
+            processed={d.activStatus.state3}
+            queued={d.activStatus.state2}
           />
         </div>
       ))}

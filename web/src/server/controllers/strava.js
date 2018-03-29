@@ -1,9 +1,10 @@
 const strava = require('strava-v3');
 const schedule = require('node-schedule');
 
+const socketSrvr = require('../sockets');
 const User = require('../models/user');
-const activitiesCtrlr = require('./activities');
-const routeplansCtrlr = require('./routeplans');
+const ctrlActivities = require('./activities');
+const ctrlRouteplans = require('./routeplans');
 const authCtrlr = require('./authentication');
 const hlpr = require('../lib/helpers');
 
@@ -26,7 +27,7 @@ exports.getActivities = (req, res) => {
 // http://localhost:3080/apiv1/strava/user-activities
 exports.getUserActivities = (req, res) => {
   hlpr.logOutArgs(`${logObj.file}.getUserActivities`, logObj.logType, 'info', 9, null, req.originalUrl, 'status pageCount: 1', req.user.stravaId);
-  activitiesCtrlr.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
+  ctrlActivities.getRecentActivities(Object.assign(req, { pageCount: 1 }), res);
 };
 
 // TODO this is just starting but have tested it and it works to pull data.
@@ -46,7 +47,7 @@ exports.getUserRouteplans = (req, res) => {
   hlpr.consLog(['strava.getUserRouteplans start']);
   const tmpReq = req;
   tmpReq.pageCount = 1;
-  routeplansCtrlr.getRecentRouteplans(tmpReq, res);
+  ctrlRouteplans.getRecentRouteplans(tmpReq, res);
 };
 
 exports.getUser = (req, res) => {
@@ -59,6 +60,19 @@ exports.getUser = (req, res) => {
     // controllers/authentication.writeUser(userData, user, resultUser)
     authCtrlr.writeUser({ athlete: data }, req.user, (resultUser) => {
       hlpr.logOutArgs(`${logObj.file}.getUser`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${resultUser.id}`, req.user.stravaId);
+
+      if (resultUser.clubMember === true) {
+        const tmpAct = {
+          pageCount: 1,
+          activities: [],
+          cronjob: true,
+          user: resultUser,
+        };
+        ctrlActivities.getAllActivities(tmpAct, (result) => {
+          hlpr.logOutArgs(`${logObj.file}.getUser getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result}`, resultUser.stravaId);
+        });
+      }
+
       res.json({ user: resultUser });
     });
   });
@@ -94,7 +108,7 @@ exports.nightlyUpdate = () => {
             cronjob: true,
             user: fUser,
           };
-          routeplansCtrlr.getAllRouteplans(tmpRt, (result) => {
+          ctrlRouteplans.getAllRouteplans(tmpRt, (result) => {
             hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllRouteplans`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered routeplan count ${result.length}`, fUser.stravaId);
           });
           if (resUser.clubMember === true) {
@@ -104,7 +118,7 @@ exports.nightlyUpdate = () => {
               cronjob: true,
               user: fUser,
             };
-            activitiesCtrlr.getAllActivities(tmpAct, (result) => {
+            ctrlActivities.getAllActivities(tmpAct, (result) => {
               hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result}`, fUser.stravaId);
             });
           } else {
@@ -136,5 +150,6 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
 const runOnStartup = () => {
   hlpr.logOutArgs(`${logObj.file}.runOnStartup`, logObj.logType, 'system', 1, null, 'cron_no_page', 'Starting up', null);
   // exports.nightlyUpdate();
+  // console.log('socketRoomList', socketSrvr.socketRoomList());
 };
 runOnStartup();

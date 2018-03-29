@@ -65,8 +65,9 @@ class PowerAndWeight extends React.Component {
   }
 
   updateUser() {
+    this.props.socketConnect('FETCH_USER');
     // fetchStrava(path, id, index, stravatoken, context)
-    this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser');
+    // this.props.fetchStrava('user', this.props.user.stravaId, null, this.props.user.stravatoken, 'getUser');
   }
 
   render() {

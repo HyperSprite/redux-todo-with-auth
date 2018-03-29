@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import VisibilitySensor from 'react-visibility-sensor';
 
-import ActivityProcessingWithData from '../activity-processing/with-data';
+import ActivityProcessingWithData from '../activity-processing/with-redux';
 import ProgressDivider from '../progress-divider';
 import ButtonRefresh from '../button/refresh';
 import ButtonBase from '../button/base';
