@@ -91,6 +91,7 @@ class renderViewEvent extends React.Component {
       authenticated,
       canEdit,
       deleteClick,
+      copyClick,
       editClick,
       eventLink,
       expanded,
@@ -181,6 +182,13 @@ class renderViewEvent extends React.Component {
                     authenticated={authenticated}
                     toggle
                     toggleClick={editClick}
+                    toggleCount={null}
+                  />
+                  <ToggleIconButton
+                    buttonType="ActionCopy"
+                    authenticated={authenticated}
+                    toggle
+                    toggleClick={copyClick}
                     toggleCount={null}
                   />
                   {event.eventFavorites.length < 2 || adminMember ? (

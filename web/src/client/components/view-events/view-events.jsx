@@ -67,6 +67,10 @@ class ListEvent extends React.Component {
     this.props.editEvent(eventId, relURL);
   }
 
+  copyThisEvent(eventId) {
+    this.props.editEvent(eventId, relURL, 'copy');
+  }
+
   favThisEvent(eventId) {
     window.location.hash = '';
     this.props.favEvent(eventId, relURL);
@@ -105,6 +109,11 @@ class ListEvent extends React.Component {
       adminMember,
       user,
     } = this.props;
+
+    // For case of copyEvent
+    if (forEdit.eventTitle && !forEdit.eventDate) {
+      return <Redirect to="/events/addevent" />;
+    }
 
     return (
       <Layout>
@@ -201,6 +210,7 @@ class ListEvent extends React.Component {
                 canEdit={canEdit(event.eventOwners, stravaId, adminMember)}
                 deleteClick={() => this.deleteThisEvent(event.eventId)}
                 editClick={() => this.editThisEvent(event.eventId, i)}
+                copyClick={() => this.copyThisEvent(event.eventId)}
                 elevation={elevation}
                 // eventFullURL={`${urlRoot}/${urlPath}#${event.eventId}`}
                 eventLink={event.eventTitle}

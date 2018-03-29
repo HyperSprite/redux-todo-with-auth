@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 import SvgIcon from 'material-ui/SvgIcon';
 
+import AccountIcon from 'mdi-react/AccountIcon';
+import ContentDuplicateIcon from 'mdi-react/ContentDuplicateIcon';
+import DeleteIcon from 'mdi-react/DeleteIcon';
+import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
 import PencilIcon from 'mdi-react/PencilIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 import PlaylistCheckIcon from 'mdi-react/PlaylistCheckIcon';
@@ -11,9 +15,6 @@ import SquareIcon from 'mdi-react/SquareIcon';
 import SquareOutlineIcon from 'mdi-react/SquareOutlineIcon';
 import StarIcon from 'mdi-react/StarIcon';
 import StarOutlineIcon from 'mdi-react/StarOutlineIcon';
-import DeleteIcon from 'mdi-react/DeleteIcon';
-import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
-import AccountIcon from 'mdi-react/AccountIcon';
 
 import style from '../../styles/style';
 
@@ -50,6 +51,12 @@ const ToggleIconButton = ({ buttonType, authenticated, toggle, toggleClick, togg
       buttonOff: null,
       tooltipOn: 'Edit?',
       tooltipOff: 'Edit?',
+    },
+    ActionCopy: {
+      buttonOn: (<SvgIcon size={24}><ContentDuplicateIcon /></SvgIcon>),
+      buttonOff: null,
+      tooltipOn: 'Copy?',
+      tooltipOff: 'Copy?',
     },
     ToggleRadioButtonChecked: {
       buttonOn: (<SvgIcon size={24}><SquareIcon /></SvgIcon>),
