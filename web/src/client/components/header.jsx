@@ -119,13 +119,14 @@ class Header extends Component {
             title={<span>{`${pageName} A Race athlete`}</span>}
           />
         </div>
+        <div className={classes.noPrint}>
           <AppBar
-            className={classes.noPrint}
             title={pageNameWithHelp}
             rightMenu={!this.props.authenticated ? <Signin /> : null}
             leftOnClick={this.handleToggle}
             position="absolute"
           />
+        </div>
       </Headroom>
     );
   }
