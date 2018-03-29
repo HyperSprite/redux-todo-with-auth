@@ -11,15 +11,16 @@ const currentVersion = pckg.version.slice(0, 3) * 1;
 process.env.CURRENT_SCHEMA = process.env.CURRENT_SCHEMA || currentVersion;
 process.env.LOGGING = process.env.LOGGING || 'normal';
 
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const cors = require('cors');
+const express = require('express');
+const helmet = require('helmet');
 const http = require('http');
 const https = require('https');
-const express = require('express');
-const bodyParser = require('body-parser');
-const helmet = require('helmet');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const compression = require('compression');
+const morgan = require('morgan');
+
 const router = require('./router');
 const hlpr = require('./lib/helpers');
 const txt = require('./services/nexmo');
@@ -33,6 +34,7 @@ const portS = (port * 1) + 363;
 
 let httpServer;
 
+const sockets = require('./sockets');
 const contStrava = require('./controllers/strava');
 const dailyUserUpdate = contStrava.dailyUserUpdate;
 const contActivities = require('./controllers/activities');
@@ -143,3 +145,5 @@ if (isSSL) {
     console.log(`**** HTTP http://localhost:${port} ${runtimeSettings}`);
   });
 }
+
+sockets.startSockets(httpServer);

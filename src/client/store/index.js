@@ -2,18 +2,38 @@ import { applyMiddleware, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise-middleware';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
 import { createLogger } from 'redux-logger';
 
 import { loadState, saveState } from './localstorage';
 import { TYPES, fetchData } from '../actions';
 import reducers from '../reducers';
 
+const url = window.location.host;
+
 const persistentState = loadState();
 const token = localStorage.getItem('token');
+
+// const socket = io(url);
+
+const socket = io({
+  url,
+  transportOptions: {
+    polling: {
+      extraHeaders: {
+        authorization: token,
+      },
+    },
+  },
+});
+
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'SOCKET_CONNECT');
 
 const prodMiddleware = [
   promise(),
   thunk,
+  socketIoMiddleware,
 ];
 
 const devMiddleware = prodMiddleware.concat(prodMiddleware, [

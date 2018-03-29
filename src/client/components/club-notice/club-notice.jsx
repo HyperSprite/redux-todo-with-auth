@@ -6,6 +6,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
 import Checkbox from 'material-ui/Checkbox';
 import { FormControlLabel } from 'material-ui/Form';
+import ButtonRefresh from '../button/refresh';
 
 import * as actions from '../../actions';
 
@@ -36,6 +37,7 @@ class ClubNotice extends React.Component {
       open: false,
     };
     this.toggleNotice = this.toggleNotice.bind(this);
+    this.handleUserStatus = this.handleUserStatus.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +48,11 @@ class ClubNotice extends React.Component {
 
   toggleNotice() {
     this.props.toggleClubNotice(!this.props.clubNotice);
+  }
+
+  handleUserStatus() {
+    this.props.setIsFetching();
+    this.props.fetchStrava('user', this.props.stravaId, null, this.props.stravatoken, 'getUser');
   }
 
   handleOpen = () => {
@@ -88,10 +95,12 @@ class ClubNotice extends React.Component {
             }
             label="Disable this message"
           />
+          <ButtonRefresh onClick={this.handleUserStatus} label="Club Check" />
         </CardActions>
         <CardContent>
           <Typography>
-            If at any time you want to see this message again, click the Club Notice switch in the app menu.
+            {'Use the "Club Check" button after you have joined to refresh your session.'}<br />
+            {'If at any time you want to see this message again, click the Club Notice switch in the app menu.'}
           </Typography>
         </CardContent>
       </Card>
@@ -104,6 +113,8 @@ ClubNotice.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
+    stravaId: state.auth.user.stravaId,
+    stravatoken: state.auth.user.stravatoken,
     clubMember: state.auth.user.clubMember,
     clubNotice: state.auth.user.clubNotice,
     firstname: state.auth.user.firstname,

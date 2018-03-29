@@ -186,7 +186,19 @@ exports.user = (req, res, next) => {
     };
     hlpr.logOut(logObj);
     if (err || !user) { return next(err); }
-    res.json({ user: user });
+
+    return res.json({ user: user });
+  });
+};
+
+exports.userById = (input, output) => {
+  User.findById(input, (err, user) => {
+    if (err || !user || !user.stravaId) {
+      hlpr.logOutArgs(`${logObj.file}.userById`, 'auth', 'failure', 9, err, 'no_page', 'userById not found or error', input);
+       return { error: 'failed user lookup' }
+     }
+    hlpr.logOutArgs(`${logObj.file}.userById`, 'auth', 'success', 9, null, 'no_page', 'Found user', user.stravaId);
+    return output(user);
   });
 };
 

@@ -43,7 +43,7 @@ const ProcessingStatus = (props) => {
         </div>
       );
     }
-    if (!data || !data.RESOURCE_STATE.state3 || (data && data.RESOURCE_STATE.state2)) {
+    if (!data || !data.activStatus.state3 || (data && data.activStatus.state2)) {
       return (
         <div className={classes.button} >
           <IconButton color="secondary" onClick={onClick} >
@@ -60,11 +60,11 @@ const ProcessingStatus = (props) => {
   return (
     <div className={classes.root} >
       <Button />
-      {(data && data.RESOURCE_STATE.state2) ? (
+      {(data && data.activStatus.state2) ? (
         <div className={classes.chart} >
           <ActivityProcessing
-            processed={data.RESOURCE_STATE.state3}
-            queued={data.RESOURCE_STATE.state2}
+            processed={data.activStatus.state3}
+            queued={data.activStatus.state2}
           />
         </div>
       ) : null}

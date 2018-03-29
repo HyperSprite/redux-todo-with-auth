@@ -56,6 +56,8 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   MESSAGE_FOR_USER: 'MESSAGE_FOR_USER',
   SERVER_MESSAGE: 'SERVER_MESSAGE',
   THEME_CHANGE_PALETTE_TYPE: 'THEME_CHANGE_PALETTE_TYPE',
+  SOCKET_CONNECT: 'SOCKET_CONNECT',
+  ACTIVITY_STATUS: 'ACTIVITY_STATUS',
 };
 
 // handle error mesages
@@ -291,6 +293,9 @@ export function fetchStrava(path, id, index, stravatoken, context) {
               dispatch({
                 type: TYPES.FETCH_USER,
                 payload: response.data.user,
+              });
+              dispatch({
+                type: TYPES.SET_IS_FETCHING_OFF,
               });
               break;
             case 'getUserActivities':
@@ -618,4 +623,12 @@ export function setMUITheme(paletteType: string) {
   };
 }
 
-// /page
+
+// SOCKET_CONNECT
+// 'action', action.type, action.payload.user, action.payload.chat, action.payload.id, socket.id,
+export const socketConnect = (action: string, data: object) => ({
+  type: `SOCKET_CONNECT.${action}`,
+  payload: {
+    data,
+  },
+});
