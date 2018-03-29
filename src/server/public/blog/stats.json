@@ -21,8 +21,8 @@
       "path---events-7c9791ac286da0a749f4.js.map"
     ],
     "path---features": [
-      "path---features-5c4edb4b662468cf822a.js",
-      "path---features-5c4edb4b662468cf822a.js.map"
+      "path---features-c5288a583dec679ae75e.js",
+      "path---features-c5288a583dec679ae75e.js.map"
     ],
     "path---": [
       "path----131f9aef94525eeb6ecd.js",
@@ -41,8 +41,8 @@
       "path---toggle-m-pref-b294ac778ea6b4a21ee8.js.map"
     ],
     "path---tag": [
-      "path---tag-58001eb6d6547618f742.js",
-      "path---tag-58001eb6d6547618f742.js.map"
+      "path---tag-594b8b642cdae30a56b8.js",
+      "path---tag-594b8b642cdae30a56b8.js.map"
     ],
     "component---src-templates-blog-post-js": [
       "component---src-templates-blog-post-js-c9c2214aae715ae91ff5.js",
@@ -53,8 +53,8 @@
       "component---src-layouts-index-js-090f2436379567ca074c.js.map"
     ],
     "path---index": [
-      "path---index-0d8ed423fad5f461b725.js",
-      "path---index-0d8ed423fad5f461b725.js.map"
+      "path---index-19c38a5d9954c2318dec.js",
+      "path---index-19c38a5d9954c2318dec.js.map"
     ],
     "path---power-at-altitude": [
       "path---power-at-altitude-736d8b6f783e39eeb656.js",
@@ -81,9 +81,9 @@
       "path---activity-search-5145899acce3abac6e19.js.map"
     ],
     "app": [
-      "app-a9b29c5bf30f59ced33a.js",
+      "app-c29961cfb629b1a8a100.js",
       "build-js-styles.css",
-      "app-a9b29c5bf30f59ced33a.js.map",
+      "app-c29961cfb629b1a8a100.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-layouts-features-js": [
@@ -99,8 +99,8 @@
       "path---weekly-stats-7a09f8098b2a7afa1fb2.js.map"
     ],
     "path---news-for-v-5": [
-      "path---news-for-v-5-1207ae0b6723ecca1168.js",
-      "path---news-for-v-5-1207ae0b6723ecca1168.js.map"
+      "path---news-for-v-5-e6932bc20fba5317a142.js",
+      "path---news-for-v-5-e6932bc20fba5317a142.js.map"
     ],
     "path---404": [
       "path---404-a0e39f21c11f6a62c5ab.js",
