@@ -65,7 +65,6 @@ class MenuDrawer extends Component {
 
   render() {
     const { classes, authenticated, adminMember, clubMember, clubNotice, pageName, theme } = this.props;
-    console.log('clubMember', clubMember, clubNotice);
     const ClubNoticeListItem = () => (
       <MenuListItemSwitch
         label="Club Notice"

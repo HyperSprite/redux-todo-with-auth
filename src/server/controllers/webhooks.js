@@ -74,7 +74,7 @@ const postProcessor = (input, done) => {
             return Activities.getActivityUpdate(activity, options, cDone => cDone);
           case 'delete':
             return Activities.removeActivity(toDelete, (rDone) => {
-              socketSrvr.ifConnected(toDelete.athlete.id, 'ACTIVITY_REMOVED', toDelete.activityId);
+              socketSrvr.ifConnected(toDelete['athlete.id'], 'ACTIVITY_REMOVED', toDelete.activityId);
               return rDone;
             });
           default:
