@@ -347,7 +347,10 @@ exports.getActivityUpdate = (activity, opts, cb) => {
         error: err,
         message: `activityId: ${opts.activityId} resource_state: ${data.resource_state}`,
       }));
-      findActivityAndUpdate(opts.activityId, data, opts, fullActivity => cb(fullActivity));
+      findActivityAndUpdate(opts.activityId, data, opts, (fullActivity) => {
+        socketSrvr.ifConnected(opts.id, 'ACTIVITY_REFRESHED', fullActivity);
+        cb(fullActivity);
+      });
     }
   });
 };
