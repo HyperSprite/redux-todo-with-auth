@@ -18,7 +18,7 @@ const propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginTop: 10,
+    marginTop: 70,
   },
   '@media print': {
     elevation2: {
@@ -29,6 +29,8 @@ const styles = theme => ({
       maxWidth: '100%',
       width: '100%',
       flexBasis: 'auto',
+      '& :before': {
+      },
     },
     paper: {
       backgroundColor: 'inherit',

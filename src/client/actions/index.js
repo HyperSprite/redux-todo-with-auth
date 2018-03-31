@@ -213,11 +213,11 @@ export function deleteEvent(eventId, relURL) {
   };
 }
 
-export function editEvent(eventId, relURL, isCopy) {
+export function editEvent(eventId, relURL, option) {
   return (dispatch) => {
     axios.get(`${ROOT_URL}/${relURL}/${eventId}`, axiosConfig)
     .then((response) => {
-      if (isCopy) {
+      if (option === 'copy') {
         delete response.data._id;
         delete response.data.eventDate;
         delete response.data.eventId;

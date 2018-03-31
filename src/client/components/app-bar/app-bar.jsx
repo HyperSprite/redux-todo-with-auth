@@ -63,7 +63,7 @@ const styles = theme => ({
 });
 
 function ExtAppBar(props) {
-  const { classes, leftIcon, leftOnClick, rightImgSrc, rightOnClick, rightMenu, rightText } = props;
+  const { classes, color, leftIcon, leftOnClick, rightImgSrc, rightOnClick, rightMenu, rightText, position } = props;
   const LeftIcon = leftIcon === 'menu' ? <Icon force inverse size="md" ><MenuIcon /></Icon> : leftIcon;
   const RightButton = () => {
     if (rightMenu) {
@@ -84,7 +84,7 @@ function ExtAppBar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position={position} color={color}>
         <Toolbar>
           <IconButton onClick={leftOnClick} className={classes.menuButton} aria-label="Menu">
             {LeftIcon}

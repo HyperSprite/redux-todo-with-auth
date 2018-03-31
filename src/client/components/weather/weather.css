@@ -19,7 +19,7 @@
 }
 
 .weather-item {
-  margin: 0.3em;
+  padding: 0.3em;
   font-size: 1.2em;
   /*min-width: 9vw;*/
 }
@@ -31,7 +31,7 @@
   height: 50px;
   font-size: 1.2em;
   font-weight: 500;
-  margin: 0.2em;
+  padding: 0.2em;
   background-color: #F5F5F5;
 }
 
@@ -48,18 +48,17 @@
 }
 
 .weather-header-img {
-  margin-left: 1em;
-  margin-right: 1em;
+  padding: '0 1em';
 }
 
 .weather-detail {
   font-size: 0.6em;
   font-weight: 200;
-  margin: 0.1em;
+  padding: 0.1em;
 }
 
 .weather-temp-diff {
-  margin: 0.5em;
+  padding: 0.5em;
 }
 
 .weather-temp-diff hr {

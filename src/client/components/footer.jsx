@@ -70,7 +70,12 @@ const styles = theme => ({
     flexGrow: 1,
   },
   footerText: {
-    padding: 5,
+    paddingTop: 5,
+  },
+  brands: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   quoteBox: {
     maxWidth: '40em',
@@ -91,6 +96,7 @@ const styles = theme => ({
       display: 'none',
     },
     onlyPrint: {
+      ...theme.typography.subheading,
       display: 'inherit',
     },
     quoteBox: {
@@ -98,6 +104,9 @@ const styles = theme => ({
     },
     main: {
       marginTop: '1em',
+    },
+    flexContainer: {
+      height: 140,
     },
   },
 });
@@ -113,7 +122,10 @@ const Footer = (props) => {
             <p>{info}</p>
           </div>
           {imgSrc && (
-            <div>
+            <div className={classes.brands}>
+              <span className={classes.footerText}>
+                {'Thanks for using araceathlete.com '}
+              </span>
               <a href={imgLink} target="new">
                 <img src={imgSrc} alt={imgAlt} className={classes.img} />
               </a>
@@ -122,9 +134,6 @@ const Footer = (props) => {
           {brand && (
             <div>
               <p>
-                <span className={classes.onlyPrint}>
-                  Thanks for using araceathlete.com!
-                </span>
                 <span className={classes.footerText}>
                   &copy; {today} {brand}
                 </span>
