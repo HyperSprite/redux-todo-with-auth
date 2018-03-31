@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { format, startOfDay } from 'date-fns';
-import { CircularProgress } from 'material-ui/Progress';
 
 import ButtonRefresh from '../button/refresh';
 import HeadlineWeather from './headline-weather';

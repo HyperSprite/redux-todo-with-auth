@@ -30,6 +30,7 @@ const styles = theme => ({
 });
 
 const propTypes = {
+  classes: PropTypes.object,
   adminMember: PropTypes.bool,
   authenticated: PropTypes.bool,
   clearEvent: PropTypes.func,
@@ -40,6 +41,7 @@ const propTypes = {
   events: PropTypes.array,
   fetchEvents: PropTypes.func,
   forEdit: PropTypes.object,
+  mPref: PropTypes.bool,
   stravaId: PropTypes.number,
   setPageName: PropTypes.func,
   user: PropTypes.object,
@@ -55,24 +57,23 @@ class ListEvent extends React.Component {
     this.props.setPageName('Events', '/blog/events');
   }
 
-  deleteThisEvent = this.deleteThisEvent.bind(this);
+  editThisEvent = this.editThisEvent.bind(this);
 
-  deleteThisEvent(eventId) {
-    window.location.hash = '';
-    this.props.deleteEvent(eventId, `${relURL}/delete`);
-  }
-
-  editThisEvent(eventId) {
-    window.location.hash = eventId;
-    this.props.editEvent(eventId, relURL);
-  }
-
-  copyThisEvent(eventId) {
-    this.props.editEvent(eventId, relURL, 'copy');
+  editThisEvent(eventId, option) {
+    switch (option) {
+      case 'delete':
+        history.pushState('', document.title, window.location.pathname);
+        this.props.deleteEvent(eventId, `${relURL}/delete`);
+        break;
+      case 'edit':
+        window.location.hash = eventId;
+      default: // eslint-disable-line no-fallthrough
+        this.props.editEvent(eventId, relURL, option);
+    }
   }
 
   favThisEvent(eventId) {
-    window.location.hash = '';
+    history.pushState('', document.title, window.location.pathname);
     this.props.favEvent(eventId, relURL);
   }
 
@@ -133,7 +134,6 @@ class ListEvent extends React.Component {
               new Date(event.eventDate),
               new Date(),
             );
-
             getWeather = (daysToGo < 5);
           }
 
@@ -175,20 +175,13 @@ class ListEvent extends React.Component {
             }
           }
 
-
           // Expands Card on render if hash matchs eventid
           const expanded = (window.location.hash === `#${event.eventId}`);
-
           const fav = event.eventFavorites.indexOf(stravaId) !== -1;
-
           const favCount = event.eventFavorites.length;
-
           const goal = true;
-
           const urlPath = 'events';
-
           const urlRoot = 'https://www.araceathlete.com';
-
           const canEdit = (eCreator = [], sId, aMember) => (eCreator.some(e=> e === sId) || aMember);
 
           if (forEdit.eventId === event.eventId) {
@@ -196,23 +189,16 @@ class ListEvent extends React.Component {
               <EditEvent key={`${event.eventId}-edit`} index={i} />
             );
           }
-          // ${window.location.href}
-          // const eventFullURL = `${urlRoot}/${urlPath}#${event.eventId}`;
 
-          // const eventLink = (
-          //   <Link to={`/events#${event.eventId}`} className="card-header-title-link">{event.eventTitle}</Link>
-          // );
           return (
             <div key={event.eventId} id={`${event.eventId}`} >
               <ViewEvent
+                {...event}
                 adminMember={adminMember}
                 authenticated={authenticated}
                 canEdit={canEdit(event.eventOwners, stravaId, adminMember)}
-                deleteClick={() => this.deleteThisEvent(event.eventId)}
-                editClick={() => this.editThisEvent(event.eventId, i)}
-                copyClick={() => this.copyThisEvent(event.eventId)}
+                handleEventClick={this.editThisEvent}
                 elevation={elevation}
-                // eventFullURL={`${urlRoot}/${urlPath}#${event.eventId}`}
                 eventLink={event.eventTitle}
                 expanded={expanded}
                 fav={fav}
@@ -227,7 +213,6 @@ class ListEvent extends React.Component {
                 subTitleName={subTitleName}
                 urlPath={urlPath}
                 urlRoot={urlRoot}
-                {...event}
               />
             </div>
           );

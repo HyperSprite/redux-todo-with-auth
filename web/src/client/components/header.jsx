@@ -13,6 +13,7 @@ import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 import * as actions from './../actions';
 
 import AppBar from './app-bar';
+import Icon from './icon';
 import Signin from './auth/signin';
 import ButtonOpen from './button/open';
 
@@ -109,25 +110,24 @@ class Header extends Component {
     );
 
     return (
-      <Headroom style={{ zIndex: theme.zIndex.appBar }} >
+      <div>
         <Helmet>
           <title>{`${pageName} A Race athlete`}</title>
           <link rel="canonical" href={`${window.location.host}`} />
         </Helmet>
         <div className={classes.forPrint}>
-          <AppBar
-            title={<span>{`${pageName} A Race athlete`}</span>}
-          />
+          <Typography variant="title">
+            <Icon color="secondary" /><span>{` ${pageName} A Race athlete`}</span>
+          </Typography>
         </div>
-        <div className={classes.noPrint}>
+        <div className={classes.noPrint} >
           <AppBar
             title={pageNameWithHelp}
             rightMenu={!this.props.authenticated ? <Signin /> : null}
             leftOnClick={this.handleToggle}
-            position="absolute"
           />
         </div>
-      </Headroom>
+      </div>
     );
   }
 }

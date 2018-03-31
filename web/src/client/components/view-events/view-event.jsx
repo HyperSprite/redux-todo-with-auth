@@ -33,6 +33,7 @@ const propTypes = {
   getWeather: PropTypes.bool,
   goal: PropTypes.bool,
   goalClick: PropTypes.func,
+  handleEventClick: PropTypes.func,
   mPref: PropTypes.bool,
   niceEventDate: PropTypes.string,
   subTitleName: PropTypes.string,
@@ -42,8 +43,7 @@ const propTypes = {
 
 const styles = theme => ({
   chip: {
-    margin: 4,
-    paddingLeft: 10,
+    margin: '0.1em',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -51,6 +51,14 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest,
     }),
     marginLeft: 'auto',
+  },
+  expanded: {
+    // backgroundColor: theme.palette.background.appBar,
+    margin: '0.3em 0 0.4em 0',
+    transform: 'translate(0.1em 0.2em)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.short,
+    }),
   },
   expandOpen: {
     transform: 'rotate(180deg)',
@@ -80,7 +88,16 @@ class renderViewEvent extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+    if (this.props.expanded) {
+      this.handleExpandClick();
+    }
+  }
+
   handleExpandClick = () => {
+    if (this.state.expanded) {
+      history.pushState('', document.title, window.location.pathname);
+    }
     this.setState({ expanded: !this.state.expanded });
   };
 
@@ -101,6 +118,7 @@ class renderViewEvent extends React.Component {
       getWeather,
       goal,
       goalClick,
+      handleEventClick,
       mPref,
       niceEventDate,
       subTitleName,
@@ -110,7 +128,12 @@ class renderViewEvent extends React.Component {
     } = this.props;
 
     return (
-      <Card>
+      <Card
+        className={classNames(classes.cardBody, {
+          [classes.expanded]: this.state.expanded,
+        })}
+        raised={this.state.expanded}
+      >
 
         <CardHeader
           className={classes.cardHeader}
@@ -154,7 +177,7 @@ class renderViewEvent extends React.Component {
               <meta property="og:title" content={event.eventTitle} />
               <meta property="og:image" content={`${urlRoot}/images/logo-192x192.png`} />
             </Helmet>
-            <CardActions>
+            <CardActions disableActionSpacing >
               <ShareButtons
                 {...event}
                 hashtags={event.eventHashtags.concat('ARaceathlete')}
@@ -181,14 +204,14 @@ class renderViewEvent extends React.Component {
                     buttonType="ActionEdit"
                     authenticated={authenticated}
                     toggle
-                    toggleClick={editClick}
+                    toggleClick={() => handleEventClick(event.eventId, 'edit')}
                     toggleCount={null}
                   />
                   <ToggleIconButton
                     buttonType="ActionCopy"
                     authenticated={authenticated}
                     toggle
-                    toggleClick={copyClick}
+                    toggleClick={() => handleEventClick(event.eventId, 'copy')}
                     toggleCount={null}
                   />
                   {event.eventFavorites.length < 2 || adminMember ? (
@@ -197,7 +220,7 @@ class renderViewEvent extends React.Component {
                         buttonType="ActionDelete"
                         authenticated={authenticated}
                         toggle
-                        toggleClick={deleteClick}
+                        toggleClick={() => handleEventClick(event.eventId, 'delete')}
                         toggleCount={null}
                       />
                     </span>
@@ -286,19 +309,19 @@ class renderViewEvent extends React.Component {
               />
             ))}
           </CardContent>
+          {getWeather && event.eventGeoTzRawOffset ? (
+            <MultiDayWeather
+              geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
+              dstOffset={event.eventGeoTzDSTOffset}
+              tzOffset={event.eventGeoTzRawOffset}
+              date={new Date(event.eventDate)}
+              eventDays={event.eventDays || 1}
+              mPref={mPref}
+              expanded={expanded}
+              noShowExtender
+            />
+          ) : null }
         </Collapse>
-        {getWeather && event.eventGeoTzRawOffset ? (
-          <MultiDayWeather
-            geoCoordinates={`${event.eventGeoLongitude},${event.eventGeoLatitude}`}
-            dstOffset={event.eventGeoTzDSTOffset}
-            tzOffset={event.eventGeoTzRawOffset}
-            date={new Date(event.eventDate)}
-            eventDays={event.eventDays || 1}
-            mPref={mPref}
-            expanded={expanded}
-            noShowExtender
-          />
-        ) : null }
       </Card>
     );
   }

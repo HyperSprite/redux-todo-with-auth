@@ -34,4 +34,7 @@ export default {
     A700: '#48565d',
     contrastDefaultColor: 'light',
   },
+  background: {
+    appBar: '#f5f5f5',
+  },
 };
