@@ -70,7 +70,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   footerText: {
-    paddingTop: 5,
+    padding: '5px 5px 0 5px',
   },
   brands: {
     display: 'flex',
