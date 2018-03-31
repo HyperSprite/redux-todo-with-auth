@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { format, startOfDay } from 'date-fns';
+import { CircularProgress } from 'material-ui/Progress';
 
 import ButtonRefresh from '../button/refresh';
 import HeadlineWeather from './headline-weather';
@@ -165,8 +166,12 @@ class OneDayWeather extends Component {
     // something went wrong, no weatherforcast returned.
     if (!weatherforcast) {
       return (
-        <div>Sorry, we could not load the weather forcast. {' '}
-          <ButtonRefresh onClick={dayWF.updateWeather} color="secondary" />
+        <div className="weather-header">
+          <div className="weather-header-row">
+            <div>Sorry, we could not load the weather forcast. {' '}
+              <ButtonRefresh onClick={dayWF.updateWeather} color="secondary" />
+            </div>
+          </div>
         </div>
       );
     }
