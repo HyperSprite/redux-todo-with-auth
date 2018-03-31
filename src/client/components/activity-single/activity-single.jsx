@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
+import Card, { CardHeader, CardContent } from 'material-ui/Card';
+import Collapse from 'material-ui/transitions/Collapse';
 import IconButton from 'material-ui/IconButton';
+import SvgIcon from 'material-ui/SvgIcon';
+import ChevronDownIcon from 'mdi-react/ChevronDownIcon';
 import DeleteForeverIcon from 'mdi-react/DeleteForeverIcon';
 import OpenInNewIcon from 'mdi-react/OpenInNewIcon';
 import RefreshIcon from 'mdi-react/RefreshIcon';
@@ -12,6 +17,7 @@ import * as actions from '../../actions';
 import ActivityMetric from '../activity-metric';
 import Icon from '../icon';
 import returnValues from './return-values';
+import StaticMarkdown from '../form/static-markdown';
 
 const propTypes = {
   /** Activity ID */
@@ -65,8 +71,26 @@ const styles = theme => ({
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
   },
+  boxLabel: {
+    ...theme.typography.body1,
+    color: theme.palette.secondary.dark,
+    marginLeft: 10,
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+    marginLeft: 'auto',
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
   '@media print': {
     icons: {
+      display: 'none',
+    },
+    expand: {
       display: 'none',
     },
   },
@@ -75,9 +99,16 @@ const styles = theme => ({
 class ExtActivitySingle extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      expanded: false,
+    };
     this.deleteActivity = this.deleteActivity.bind(this);
     this.refreshActivity = this.refreshActivity.bind(this);
   }
+
+  handleExpandClick = () => {
+    this.setState({ expanded: !this.state.expanded });
+  };
 
   getThisActivity() {
     return this.props.activities.filter(activity => activity.activityId === this.props.activityId)[0];
@@ -106,7 +137,7 @@ class ExtActivitySingle extends Component {
           <div className={classes.titleBox} >
             {thisActivity.name}
           </div>
-          <div className={classes.icons} >
+          <div className={classNames(classes.container, classes.icons)} >
             <IconButton
               onClick={() => window.open(`https://www.strava.com/activities/${thisActivity.activityId}`, '_new')}
             >
@@ -130,8 +161,41 @@ class ExtActivitySingle extends Component {
                 <RefreshIcon />
               </Icon>
             </IconButton>
+            {thisActivity.description && (
+                <div className={classes.boxLabel}>
+                  Description
+                  <IconButton
+                    className={classNames(classes.expand, {
+                      [classes.expandOpen]: this.state.expanded,
+                    })}
+                    onClick={this.handleExpandClick}
+                    aria-expanded={this.state.expanded}
+                    aria-label="Show more"
+                  >
+                    <SvgIcon size={24} >
+                      <ChevronDownIcon />
+                    </SvgIcon>
+                  </IconButton>
+                </div>
+            )}
           </div>
+
+          {thisActivity.description && (
+              <Collapse
+                in={this.state.expanded}
+                timeout="auto"
+                unmountOnExit
+              >
+                <CardContent >
+                  <StaticMarkdown
+                    content={thisActivity.description}
+                  />
+                </CardContent>
+              </Collapse>
+          )}
+
         </div>
+
         <div className={classes.container} >
           <div className={classes.containerCol} >
             {returnValues.filter(f => f.category === 'group1').map(rV => (

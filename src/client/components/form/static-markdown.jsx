@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
 import marked from 'marked';
 
 const renderer = new marked.Renderer();
@@ -8,14 +9,30 @@ renderer.link = (href, title, text) => `<a target="new" href="${href}">${text}</
 
 const propTypes = {
   content: PropTypes.string,
+  contentLabel: PropTypes.string,
 };
 
 const defaultProps = {
   content: '',
+  contentLabel: '',
 };
 
+const styles = theme => ({
+  root: {
+    display: 'column',
+  },
+  boxLabel: {
+    ...theme.typography.body1,
+    color: theme.palette.secondary.dark,
+    marginLeft: 10,
+  },
+  boxData: {
+    ...theme.typography.body3,
+    color: theme.palette.primary.dark,
+  },
+});
 
-export default class RenderMDStatic extends Component {
+class RenderMDStatic extends React.Component {
   constructor(props) {
     super(props);
 
@@ -31,24 +48,31 @@ export default class RenderMDStatic extends Component {
   }
 
   render() {
-    const { content } = this.props;
+    const { classes, content, contentLabel } = this.props;
     const html = marked(content || '', { renderer });
     return (
       <div
-        className="static"
+        className={classes.root}
       >
-        <label
-          htmlFor={content}
-          className="static-label"
-        >
-          Preview
-        </label>
-        <div id={content} dangerouslySetInnerHTML={{ __html: html }} />
+        {contentLabel && (
+          <label
+            htmlFor={content}
+            className={classes.boxLabel}
+          >
+            {contentLabel}
+          </label>
+        )}
+        <div
+          className={classes.boxData}
+          id={content}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
       </div>
-
     );
   }
 }
 
 RenderMDStatic.propTypes = propTypes;
 RenderMDStatic.defaultProps = defaultProps;
+
+export default withStyles(styles, { name: 'StyledRenderMDStatic' })(RenderMDStatic);

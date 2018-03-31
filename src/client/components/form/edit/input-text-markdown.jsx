@@ -114,7 +114,7 @@ const InputTextMarkdown = (props) => {
       </FormControl>
       <div className={classes.formControlMD}>
         <StaticMD
-          contentLabel="Formatted"
+          contentLabel="Formatted Markdown"
           content={input.value}
         />
       </div>
