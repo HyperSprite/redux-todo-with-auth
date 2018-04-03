@@ -98,8 +98,27 @@ export const formValues = [
     contentOptions: {
       data: [
         { value: '', label: 'Inclusive' },
-        { value: '1', label: 'Exclusive' },
-        { value: '2', label: 'Excluded' },
+        { value: '1', label: 'Exclusive' }, // [fIEE.contentName]: true
+        { value: '2', label: 'Excluded' }, // [fIEE.contentName]: false
+      ],
+    },
+    contentHelp: '',
+    contentPlaceholder: '',
+    addButtonset: false,
+  },
+  {
+    name: 'filter_description',
+    label: 'Description',
+    // redux-form, don't set to 'radio', see issue 2880
+    type: 'text',
+    group: 'filter',
+    component: 'InputRadioCheckbox',
+    contentAlt: '',
+    contentOptions: {
+      data: [
+        { value: '', label: 'Inclusive' },
+        { value: '3', label: 'Exclusive' }, // [fIEE.contentName]: { $exists: true }
+        // { value: '2', label: 'Excluded' },
       ],
     },
     contentHelp: '',

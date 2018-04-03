@@ -153,6 +153,7 @@ class ActivitySearch extends Component {
   }
 
   activitiesSearch() {
+    console.warn('\n >>>>>>>>>>>>>>>>>> \n activitiesSearch: no formProps');
     this.props.setIsFetching();
     queryOptions.page = this.props.searchCount;
     if (this.props.location.search && this.props.searchCount === 1) {
@@ -170,6 +171,11 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
+    console.warn('\n >>>>>>>>>>>>>>>>>> \n handleFormSubmit:', formProps);
+    if (this.props.pristine) {
+      return this.activitiesSearch()
+    }
+
     this.props.setIsFetching();
     formProps.mPref = this.props.mPref;
     formProps.page = this.props.searchCount;
@@ -276,15 +282,15 @@ class ActivitySearch extends Component {
       user
     } = this.props;
 
-    if (!user.clubMember) {
-      return (
-        <FeatureNotice
-          user={user}
-          checks={['clubMember']}
-          title={title}
-        />
-      );
-    }
+    // if (!user.clubMember) {
+    //   return (
+    //     <FeatureNotice
+    //       user={user}
+    //       checks={['clubMember']}
+    //       title={title}
+    //     />
+    //   );
+    // }
 
     const geoData = {
       lat: this.state.lat || this.props.lat || user.userGeoLatitude,
@@ -345,7 +351,7 @@ class ActivitySearch extends Component {
       <div className={classes.buttonSet} >
         <ButtonSearch
           type={pristine ? 'button' : 'submit'}
-          onClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
+          onClick={handleSubmit(this.handleFormSubmit)}
           color="primary"
           label="Search"
           size="small"
@@ -390,7 +396,7 @@ class ActivitySearch extends Component {
           rangeValues={rangeValues}
           form={form}
           radioFormValues={formValues}
-          onSearchClick={handleSubmit(pristine ? this.activitiesSearch : this.handleFormSubmit)}
+          onSearchClick={handleSubmit(this.handleFormSubmit)}
           disabled={isFetching}
         />
       </div>
@@ -402,7 +408,14 @@ class ActivitySearch extends Component {
           id={location.hash}
           headerHeight={70}
         />
-
+        {!user.clubMember && (
+          <FeatureNotice
+            user={user}
+            checks={['clubMember']}
+            title={title}
+            optional
+          />
+        )}
         <Form
           id={name}
           onSubmit={handleSubmit(this.handleFormSubmit)}

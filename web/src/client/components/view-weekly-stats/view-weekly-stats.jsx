@@ -12,6 +12,7 @@ import ButtonProgress from '../button/progress';
 import * as actions from '../../actions';
 import Layout from '../layout';
 import WeeklyStats from './weekly-stats';
+import FeatureNotice from '../feature-notice';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 
@@ -71,13 +72,21 @@ class activeStats extends Component {
   }
 
   render() {
-    const { weeklyStats, weeklyStatsCount, datePref, isFetching, mPref } = this.props;
+    const { weeklyStats, weeklyStatsCount, datePref, isFetching, mPref, title, user } = this.props;
     return (
       <Layout>
         <ScrollIntoView
           id={location.hash}
           headerHeight={70}
         />
+        {!user.clubMember && (
+          <FeatureNotice
+            user={user}
+            checks={['clubMember']}
+            title={title}
+            optional
+          />
+        )}
         <ActivityProcessingWithData />
         <div>
           <div>
@@ -149,6 +158,7 @@ function mapStateToProps(state) {
     weeklyStats: state.activities.weeklyStats,
     weeklyStatsCount: state.activities.weeklyStatsCount,
     isFetching: state.page.isFetching,
+    title: state.page.name,
   };
 }
 

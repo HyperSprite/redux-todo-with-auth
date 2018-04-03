@@ -27,6 +27,7 @@ const EditWrapperReduxForm = (props) => {
     component,
     formValues,
     handleSubmit,
+    onBlurSubmit,
     auxButton,
     auxButtonLabel,
     anyTouched,
