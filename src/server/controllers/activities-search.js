@@ -150,6 +150,7 @@ exports.searchActivities = async (req, res) => {
   const filterIEE = [
     { contentName: 'commute', contentLabel: 'Commute', value: q.filter_commute || '' },
     { contentName: 'trainer', contentLabel: 'Trainer', value: q.filter_trainer || '' },
+    { contentName: 'description', contentLabel: 'Description', value: q.filter_description || '' },
   ];
 
   filterIEE.forEach((fIEE) => {
@@ -159,6 +160,9 @@ exports.searchActivities = async (req, res) => {
         break;
       case '2':
         query.search.push({ [fIEE.contentName]: false });
+        break;
+      case '3':
+        query.search.push({ [fIEE.contentName]: { $ne: null } }, { [fIEE.contentName]: { $ne: '' } });
         break;
       default:
     }

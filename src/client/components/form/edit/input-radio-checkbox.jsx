@@ -27,56 +27,76 @@ const styles = theme => ({
   },
 });
 
-const InputCheckboxGroup = (props) => {
-  const {
-    classes,
-    input,
-    label,
-    type,
-    initialValue,
-    contentOptions,
-    meta: { touched, error, warning },
-  } = props;
+class InputCheckboxGroup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      checkedValue: '',
+    };
+  }
 
-  return (
-    <div >
-      <FormControl
-        component="fieldset"
-        // className={classes.formControl}
-      >
-        <FormLabel
-          component="legend"
-          // className={classes.formGroupLabel}
+  handleChange(newValue) {
+    const checkedValue = this.state.checkedValue === newValue ? '' : newValue;
+    this.setState({
+      checkedValue,
+    });
+    this.props.input.onChange(checkedValue);
+    if (this.props.onChangeSubmit) {
+      setTimeout(() => {
+        this.props.input.onChange(this.props.onSearchClick());
+      }, 0);
+    }
+  }
+
+  render() {
+    const {
+      classes,
+      input,
+      label,
+      type,
+      initialValue,
+      contentOptions,
+      meta: { touched, error, warning },
+    } = this.props;
+
+    return (
+      <div >
+        <FormControl
+          component="fieldset"
+
         >
-          {label}
-        </FormLabel>
-        <FormGroup
-          aria-label={input.name}
-          // className={classes.group}
-        >
-          {contentOptions.data.filter(f => f.value > 0).map(cOpts => (
-            <FormControlLabel
-              // className={classes.formLabel}
-              key={cOpts.label}
-              label={cOpts.label}
-              control={
-                <Checkbox
-                  value={cOpts.value}
-                  onChange={() => input.onChange(cOpts.value)}
-                  checked={(input.value === cOpts.value)}
-                />
-              }
-            />
-          ))}
-        </FormGroup>
-      </FormControl>
-      {touched && (
-        (error && <div className={classes.formError}>{error}</div>) ||
-        (warning && <div className={classes.formWarning}>{warning}</div>)
-      )}
-    </div>
-  );
-};
+          <FormLabel
+            component="legend"
+          >
+            {label}
+          </FormLabel>
+          <FormGroup
+            aria-label={input.name}
+          >
+            {contentOptions.data.filter(f => f.value > 0).map(cOpts => (
+              <FormControlLabel
+                key={cOpts.label}
+                label={cOpts.label}
+                control={
+                  <Checkbox
+                    value={cOpts.value}
+                    onChange={() => this.handleChange(cOpts.value)}
+                    checked={(this.state.checkedValue === cOpts.value)}
+                  />
+                }
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
+        {touched && (
+          (error && <div className={classes.formError}>{error}</div>) ||
+          (warning && <div className={classes.formWarning}>{warning}</div>)
+        )}
+      </div>
+    );
+  }
+}
+
 
 InputCheckboxGroup.propTypes = propTypes;
 

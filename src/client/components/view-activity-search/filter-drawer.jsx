@@ -114,6 +114,8 @@ class FilterDrawer extends React.Component {
                   <EditSwitch
                     form={this.props.form}
                     formValues={fV}
+                    onSearchClick={this.props.onSearchClick}
+                    onChangeSubmit
                   />
                 </div>
               ))}

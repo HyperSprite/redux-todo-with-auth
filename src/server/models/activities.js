@@ -58,8 +58,8 @@ const activitiesSchema = new Schema(
     resource_state: { type: Number, index: true }, // 3,
     external_id: String, // 2012-12-12_21-40-32-80-29011.fit,
     upload_id: Number, // 361720,
-    name: { type: String, text: true }, // Evening Ride,
-    description: { type: String }, // the best ride ever,
+    name: { type: String, index: true }, // Evening Ride,
+    description: { type: String, index: true }, // the best ride ever,
     distance: Number, // 4475.4,
     moving_time: Number, // 1303,
     elapsed_time: Number, // 1333,
@@ -114,6 +114,16 @@ const activitiesSchema = new Schema(
 activitiesSchema.plugin(findOrCreate);
 activitiesSchema.index({ 'athlete.id': 1, resource_state: 1 });
 activitiesSchema.index({ resource_state: 1, 'athlete.id': 1, start_date_local: 1 });
+activitiesSchema.index({
+  name: 'text',
+  description: 'text',
+}, {
+  weights: {
+    name: 10,
+    description: 5,
+  },
+  name: 'text_index',
+});
 
 const Activities = mongoose.model('activities', activitiesSchema);
 
