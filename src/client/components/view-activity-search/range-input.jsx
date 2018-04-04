@@ -28,60 +28,8 @@ const styles = theme => ({
   },
 });
 
-class RangeInput extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rangeArr: [],
-    };
-  }
+const RangeInput = (props) => {
 
-  componentWillReceiveProps() {
-    this.shapeData();
-  }
-
-  shapeData() {
-    let buildRangeArr = [];
-    const {
-      valueItems,
-      valuesDefaults,
-    } = this.props;
-    Object.values(valueItems).forEach((element) => {
-      const vals = {
-        conDef0: valuesDefaults[element.value].range[0],
-        conDef1: valuesDefaults[element.value].range[1],
-      };
-      if (
-        justFNS.isValid(vals.conDef0) &&
-        justFNS.isValid(vals.conDef1) &&
-        (vals.conDef0 < vals.conDef1)) {
-        if (element.value !== 'count') {
-          buildRangeArr = [...buildRangeArr, {
-            component: 'InputRange',
-            name: element.value,
-            label: element.option,
-            type: 'text',
-            contentDefautls: [
-              justFNS.round(vals.conDef0, 0),
-              justFNS.round(vals.conDef1, 0),
-            ],
-          }];
-        }
-      } else if (element.value === 'date') {
-        buildRangeArr = [...buildRangeArr, {
-          component: 'InputRangeDates',
-          name: element.value,
-          label: element.option,
-          contentDefautls: [vals.conDef0, vals.conDef1],
-        }];
-      }
-    });
-    this.setState({
-      rangeArr: buildRangeArr,
-    });
-  }
-
-  render() {
     const {
       classes,
       form,
@@ -94,37 +42,36 @@ class RangeInput extends React.Component {
       placeholder,
       type,
       initialValues,
-    } = this.props;
+      rangeInputData
+    } = props;
 
-    const ranges = (
-      <div className={classes.flexParent} >
-        <div className={classes.flexColumn} >
-          {(this.state.rangeArr.map(rA => (
-            <div key={rA.name} >
-              {rA.name !== 'count' ||
-                rA.name !== 'maxSpeed' ||
-                rA.name !== 'maxHeartrate' ||
-                rA.name !== 'maxWatts' ||
-                !rA.contentDefautls[0] ? (
-                  <EditSwitch
-                    form={form}
-                    formValues={rA}
-                    defaultValue={rA.contentDefautls}
-                    min={rA.contentDefautls[0]}
-                    max={rA.contentDefautls[1]}
-                    mPref={mPref}
-                    datePref={datePref}
-                    rangeValue={rA.rangeValue}
-                  />
-              ) : null }
-            </div>
-          )))}
-        </div>
+  return (
+    <div className={classes.flexParent} >
+      <div className={classes.flexColumn} >
+        {(rangeInputData.map(rA => (
+          <div key={rA.name} >
+            {rA.name !== 'count' ||
+              rA.name !== 'maxSpeed' ||
+              rA.name !== 'maxHeartrate' ||
+              rA.name !== 'maxWatts' ||
+              !rA.contentDefautls[0] ? (
+                <EditSwitch
+                  form={form}
+                  formValues={rA}
+                  defaultValue={rA.contentDefautls}
+                  min={rA.contentDefautls[0]}
+                  max={rA.contentDefautls[1]}
+                  mPref={mPref}
+                  datePref={datePref}
+                  rangeValue={rA.rangeValue}
+                />
+            ) : null }
+          </div>
+        )))}
       </div>
-    );
-    return ranges;
-  }
-}
+    </div>
+  );
+};
 
 RangeInput.propTypes = propTypes;
 
@@ -134,7 +81,7 @@ function mapStateToProps(state) {
     valuesDefaults: activities.activCalcAll,
     query: search.query,
     valueItems: search.sortStrings,
-
+    rangeInputData: search.rangeInputData,
     mPref: page.mPref,
   };
 }

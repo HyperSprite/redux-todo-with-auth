@@ -9,6 +9,7 @@ export default function (state = {
   searchCount: 1,
   sortStrings: [],
   query: '',
+  rangeInputData: [],
 }, action) {
   switch (action.type) {
 
@@ -28,6 +29,7 @@ export default function (state = {
         searchCount: state.searchCount + 1,
         sortStrings: action.payload.sortStrings,
         query: action.payload.query,
+        rangeInputData: action.payload.rangeInputData,
       };
 
     default:

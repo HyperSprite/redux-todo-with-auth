@@ -12,7 +12,7 @@ import CloseIcon from 'mdi-react/CloseIcon';
 import EditSwitch from '../form/edit/switch';
 import RangeInput from './range-input';
 
-const drawerWidth = 300;
+const drawerWidth = 320;
 
 const styles = theme => ({
   root: {
