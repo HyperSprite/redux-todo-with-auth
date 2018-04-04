@@ -5,7 +5,12 @@ import { connect } from 'react-redux';
 import { Redirect, BrowserRouter as Router } from 'react-router-dom';
 import { Form, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui/styles';
-// import Button from '/Button';
+import Button from 'material-ui/Button';
+import SvgIcon from 'material-ui/SvgIcon';
+import MagnifyIcon from 'mdi-react/MagnifyIcon';
+
+import NotebookIcon from 'mdi-react/NotebookIcon';
+import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon'
 import Card from 'material-ui/Card';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
@@ -23,6 +28,7 @@ import EditSwitch from '../form/edit/switch';
 import FeatureNotice from '../feature-notice';
 import ActivityCount from '../activity-calc/activity-count';
 import ActivitySingle from '../activity-single';
+import ActivitySingleDetails from '../activity-single/details';
 import FilterDrawer from './filter-drawer';
 import GoogleMapLocation from '../google-map-location';
 import ActivityCalc from '../activity-calc';
@@ -101,6 +107,19 @@ const styles = theme => ({
     paddingLeft: 20,
     width: 200,
   },
+  fabSearch: {
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2,
+    position: 'fixed',
+    zIndex: theme.zIndex.drawer + 1,
+  },
+
+  fabDetails: {
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 10,
+    position: 'fixed',
+    zIndex: theme.zIndex.drawer + 1,
+  },
   '@media print': {
     noPrint: {
       display: 'none',
@@ -118,12 +137,14 @@ class ActivitySearch extends Component {
     this.state = {
       page: 0,
       tab: 'text-search',
+      details: false,
     };
     this.activitiesSearch = this.activitiesSearch.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.activitiesDownload = this.activitiesDownload.bind(this);
     this.cancelFormEdit = this.cancelFormEdit.bind(this);
     this.handleMapPinDrop = this.handleMapPinDrop.bind(this);
+    this.handleToggleDetails = this.handleToggleDetails.bind(this);
   }
   // TODO clear old search on entry to this page
   componentDidMount() {
@@ -153,7 +174,6 @@ class ActivitySearch extends Component {
   }
 
   activitiesSearch() {
-    console.warn('\n >>>>>>>>>>>>>>>>>> \n activitiesSearch: no formProps');
     this.props.setIsFetching();
     queryOptions.page = this.props.searchCount;
     if (this.props.location.search && this.props.searchCount === 1) {
@@ -171,7 +191,6 @@ class ActivitySearch extends Component {
   }
 
   handleFormSubmit(formProps) {
-    console.warn('\n >>>>>>>>>>>>>>>>>> \n handleFormSubmit:', formProps);
     if (this.props.pristine) {
       return this.activitiesSearch()
     }
@@ -254,6 +273,10 @@ class ActivitySearch extends Component {
     ) : (
       null
     );
+  }
+
+  handleToggleDetails() {
+    this.setState({ details: !this.state.details });
   }
 
   render() {
@@ -451,17 +474,48 @@ class ActivitySearch extends Component {
                 ) */ }
                 { activities.map(act => (
                   <div key={act} className={classes.div}>
-                    <ActivitySingle
-                      activityId={act}
-                    />
+                    {this.state.details ? (
+                      <ActivitySingleDetails
+                        activityId={act}
+                      />
+                    ) : (
+                      <ActivitySingle
+                        activityId={act}
+                      />
+                    )}
                   </div>
                 ))}
                 <ProgressDivider isProgress={isFetching} />
-                {activities.length > 11 &&
-                  activities.length !== activCalcFilter.count ? SearchButton : null}
               </div>
             )}
           </Card>
+          <Button
+            type={pristine ? 'button' : 'submit'}
+            onClick={handleSubmit(this.handleFormSubmit)}
+            variant="fab"
+            color="primary"
+            aria-label="search"
+            className={this.props.classes.fabSearch}
+            disabled={isFetching}
+          >
+            <SvgIcon >
+              <MagnifyIcon />
+            </SvgIcon>
+          </Button>
+
+          <Button
+            variant="fab"
+            mini
+            onClick={this.handleToggleDetails}
+            color="secondary"
+            aria-label="details"
+            className={this.props.classes.fabDetails}
+            disabled={isFetching}
+          >
+            <SvgIcon >
+              {this.state.details ? <ChartBarStackedIcon /> : <NotebookIcon /> }
+            </SvgIcon>
+          </Button>
         </Form>
       </Layout>
     );

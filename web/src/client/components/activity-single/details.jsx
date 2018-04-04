@@ -42,7 +42,7 @@ const defaultProps = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: '4px 8px',
+    margin: '4px 6px',
     overflow: 'hidden',
     border: `4px solid ${theme.palette.background.contentFrame}`,
     borderRadius: 2,
@@ -86,6 +86,10 @@ const styles = theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+  },
+  cardContent: {
+    padding: '4px 8px',
+    '&:lastChild': '4px 8px',
   },
   '@media print': {
     icons: {
@@ -132,6 +136,11 @@ class ExtActivitySingle extends Component {
     const { classes, mPref, datePref, deleteActivity, refreshActivity } = this.props;
     const thisActivity = this.getThisActivity();
     thisActivity.datePref = datePref;
+
+    if (!thisActivity.description) {
+      return null;
+    }
+
     return (
       <div key={`${thisActivity.activityId}-single`} className={classes.root} >
         <div className={classes.containerCol}>
@@ -163,8 +172,8 @@ class ExtActivitySingle extends Component {
               </Icon>
             </IconButton>
             {thisActivity.description && (
-                <div className={classes.boxLabel}>
-                  Description
+              <div className={classes.boxLabel}>
+                  Metrics
                   <IconButton
                     className={classNames(classes.expand, {
                       [classes.expandOpen]: this.state.expanded,
@@ -180,64 +189,59 @@ class ExtActivitySingle extends Component {
                 </div>
             )}
           </div>
-
-          {thisActivity.description && (
-              <Collapse
-                in={this.state.expanded}
-                timeout="auto"
-                unmountOnExit
-              >
-                <CardContent >
-                  <StaticMarkdown
-                    content={thisActivity.description}
+          <Collapse
+            in={this.state.expanded}
+            timeout="auto"
+            unmountOnExit
+          >
+            <div className={classes.container} >
+              <div className={classes.containerCol} >
+                {returnValues.filter(f => f.category === 'group1').map(rV => (
+                  <ActivityMetric
+                    key={rV.activityType}
+                    data={thisActivity}
+                    rV={rV}
+                    mPref={mPref}
                   />
-                </CardContent>
-              </Collapse>
-          )}
-
-        </div>
-
-        <div className={classes.container} >
-          <div className={classes.containerCol} >
-            {returnValues.filter(f => f.category === 'group1').map(rV => (
-              <ActivityMetric
-                key={rV.activityType}
-                data={thisActivity}
-                rV={rV}
-                mPref={mPref}
-              />
-            ))}
-          </div>
-          <div className={classes.containerCol} >
-            {returnValues.filter(f => f.category === 'group2').map(rV => (
-              <ActivityMetric
-                key={rV.activityType}
-                data={thisActivity}
-                rV={rV}
-                mPref={mPref}
-              />
-            ))}
-          </div>
-          <div className={classes.containerCol} >
-            {returnValues.filter(f => f.category === 'group3').map(rV => (
-              <ActivityMetric
-                key={rV.activityType}
-                data={thisActivity}
-                rV={rV}
-                mPref={mPref}
-              />
-            ))}
-          </div>
-          <div className={classes.containerCol} >
-            {returnValues.filter(f => f.category === 'group4').map(rV => (
-              <ActivityMetric
-                key={rV.activityType}
-                data={thisActivity}
-                rV={rV}
-                mPref={mPref}
-              />
-            ))}
-          </div>
+                ))}
+              </div>
+              <div className={classes.containerCol} >
+                {returnValues.filter(f => f.category === 'group2').map(rV => (
+                  <ActivityMetric
+                    key={rV.activityType}
+                    data={thisActivity}
+                    rV={rV}
+                    mPref={mPref}
+                  />
+                ))}
+              </div>
+              <div className={classes.containerCol} >
+                {returnValues.filter(f => f.category === 'group3').map(rV => (
+                  <ActivityMetric
+                    key={rV.activityType}
+                    data={thisActivity}
+                    rV={rV}
+                    mPref={mPref}
+                  />
+                ))}
+              </div>
+              <div className={classes.containerCol} >
+                {returnValues.filter(f => f.category === 'group4').map(rV => (
+                  <ActivityMetric
+                    key={rV.activityType}
+                    data={thisActivity}
+                    rV={rV}
+                    mPref={mPref}
+                  />
+                ))}
+              </div>
+            </div>
+          </Collapse>
+          <CardContent className={classes.cardContent} >
+            <StaticMarkdown
+              content={thisActivity.description}
+            />
+          </CardContent>
         </div>
         <Divider light />
       </div>
