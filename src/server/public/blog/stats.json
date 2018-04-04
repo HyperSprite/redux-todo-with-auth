@@ -9,20 +9,20 @@
       "path---odd-readings-from-heart-rate-monitors-5753f65b7ce7566b6cb5.js.map"
     ],
     "path---power-and-weight": [
-      "path---power-and-weight-2cddc26aed26c683506f.js",
-      "path---power-and-weight-2cddc26aed26c683506f.js.map"
+      "path---power-and-weight-1bb074361d2419dc696d.js",
+      "path---power-and-weight-1bb074361d2419dc696d.js.map"
     ],
     "component---src-pages-index-js": [
       "component---src-pages-index-js-97f8dca7b96f5fdbdabd.js",
       "component---src-pages-index-js-97f8dca7b96f5fdbdabd.js.map"
     ],
     "path---events": [
-      "path---events-daf345c9e8d7b7e6b71c.js",
-      "path---events-daf345c9e8d7b7e6b71c.js.map"
+      "path---events-152cb534b1257343ad3a.js",
+      "path---events-152cb534b1257343ad3a.js.map"
     ],
     "path---features": [
-      "path---features-51fde5d4c0b25a4ef899.js",
-      "path---features-51fde5d4c0b25a4ef899.js.map"
+      "path---features-43b2f5b9c6935b0622ca.js",
+      "path---features-43b2f5b9c6935b0622ca.js.map"
     ],
     "path---": [
       "path----131f9aef94525eeb6ecd.js",
@@ -41,8 +41,8 @@
       "path---toggle-m-pref-28fadccf95c758ea3502.js.map"
     ],
     "path---tag": [
-      "path---tag-eec22e045806f7cf5819.js",
-      "path---tag-eec22e045806f7cf5819.js.map"
+      "path---tag-4b0ee1321ed68de9b0c1.js",
+      "path---tag-4b0ee1321ed68de9b0c1.js.map"
     ],
     "path---theme-object": [
       "path---theme-object-a0e39f21c11f6a62c5ab.js",
@@ -57,12 +57,12 @@
       "component---src-layouts-index-js-b721554a523b05834315.js.map"
     ],
     "path---index": [
-      "path---index-ac1f5d7473ebc277beea.js",
-      "path---index-ac1f5d7473ebc277beea.js.map"
+      "path---index-e8088439c812cfa368b3.js",
+      "path---index-e8088439c812cfa368b3.js.map"
     ],
     "path---power-at-altitude": [
-      "path---power-at-altitude-7ec00da657421ddcc997.js",
-      "path---power-at-altitude-7ec00da657421ddcc997.js.map"
+      "path---power-at-altitude-b8e4c63233273c1d80c1.js",
+      "path---power-at-altitude-b8e4c63233273c1d80c1.js.map"
     ],
     "component---src-pages-404-js": [
       "component---src-pages-404-js-395a01dbcea2c83d7cc8.js",
@@ -85,13 +85,13 @@
       "path---markdown-for-activity-descriptions-ed83367a31722784603c.js.map"
     ],
     "path---activity-search": [
-      "path---activity-search-7d802506d70e3a5162a6.js",
-      "path---activity-search-7d802506d70e3a5162a6.js.map"
+      "path---activity-search-dc33727ff975c91f1a05.js",
+      "path---activity-search-dc33727ff975c91f1a05.js.map"
     ],
     "app": [
-      "app-db593d1e86057545dd89.js",
+      "app-3316266d82f87b09f044.js",
       "build-js-styles.css",
-      "app-db593d1e86057545dd89.js.map",
+      "app-3316266d82f87b09f044.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-layouts-features-js": [
@@ -99,8 +99,8 @@
       "component---src-layouts-features-js-4b3d3260cedf1f0ba9c6.js.map"
     ],
     "path---weekly-stats": [
-      "path---weekly-stats-663700cc352d612d25ca.js",
-      "path---weekly-stats-663700cc352d612d25ca.js.map"
+      "path---weekly-stats-1ba23ad2ef5f0add7078.js",
+      "path---weekly-stats-1ba23ad2ef5f0add7078.js.map"
     ],
     "path---news-for-v-5": [
       "path---news-for-v-5-17b32f17c42b3bfaf22f.js",
