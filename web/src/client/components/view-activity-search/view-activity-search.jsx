@@ -7,10 +7,12 @@ import { Form, reduxForm } from 'redux-form';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import SvgIcon from 'material-ui/SvgIcon';
+import RestartIcon from 'mdi-react/RestartIcon';
+import DownloadIcon from 'mdi-react/DownloadIcon';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
-
+import RefreshIcon from 'mdi-react/RefreshIcon';
 import NotebookIcon from 'mdi-react/NotebookIcon';
-import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon'
+import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon';
 import Card from 'material-ui/Card';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
@@ -106,6 +108,18 @@ const styles = theme => ({
     paddingTop: 20,
     paddingLeft: 20,
     width: 200,
+  },
+  fabReset: {
+    bottom: theme.spacing.unit * 16,
+    right: theme.spacing.unit * 2,
+    position: 'fixed',
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  fabDownload: {
+    bottom: theme.spacing.unit * 10,
+    right: theme.spacing.unit * 2,
+    position: 'fixed',
+    zIndex: theme.zIndex.drawer + 1,
   },
   fabSearch: {
     bottom: theme.spacing.unit * 2,
@@ -372,47 +386,79 @@ class ActivitySearch extends Component {
     // Doing so will cause the form to rerender when you move a slider
     const SearchButton = (
       <div className={classes.buttonSet} >
-        <ButtonSearch
-          type={pristine ? 'button' : 'submit'}
-          onClick={handleSubmit(this.handleFormSubmit)}
-          color="primary"
-          label="Search"
-          size="small"
-          toolTip="Search Activities"
-          toolTipId="tooltip-search"
-          toolTipPlacement="left"
-          variant={isFetching ? 'flat' : 'raised'}
-          disabled={isFetching}
-        />
+
+
+
         {pristine ? (
-          <ButtonBase
-            variant="flat"
+          <Button
+            variant="fab"
             color="secondary"
-            hasIcon={false}
+            mini
             onClick={() => this.props.clearActivitySearch()}
-            className={classes.button}
+            className={this.props.classes.fabReset}
             disabled={submitting || isFetching}
             label="Clear Activities"
-          />
+          >
+            <SvgIcon >
+              <RestartIcon />
+            </SvgIcon>
+          </Button>
         ) : (
-          <ButtonBase
-            variant="flat"
+          <Button
+            variant="fab"
             color="secondary"
-            hasIcon={false}
+            mini
             onClick={() => this.handleReset()}
-            className={classes.button}
+            className={this.props.classes.fabReset}
             disabled={submitting || isFetching}
             label="Reset Search"
-          />
+          >
+            <SvgIcon >
+              <RestartIcon />
+            </SvgIcon>
+          </Button>
         )}
-        <ButtonDownload
-          variant="flat"
-          color="secondary"
-          className={classes.button}
+
+        <Button
+          variant="fab"
+          mini
           onClick={handleSubmit(this.activitiesDownload)}
-          label="Download"
+          color="secondary"
+          aria-label="download"
+          className={this.props.classes.fabDownload}
           disabled={isFetching}
-        />
+        >
+          <SvgIcon >
+            <DownloadIcon />
+          </SvgIcon>
+        </Button>
+
+        <Button
+          type={pristine ? 'button' : 'submit'}
+          onClick={handleSubmit(this.handleFormSubmit)}
+          variant="fab"
+          color="primary"
+          aria-label="search"
+          className={this.props.classes.fabSearch}
+          disabled={isFetching}
+        >
+          <SvgIcon >
+            <MagnifyIcon />
+          </SvgIcon>
+        </Button>
+        <Button
+          variant="fab"
+          mini
+          onClick={this.handleToggleDetails}
+          color="secondary"
+          aria-label="details"
+          className={this.props.classes.fabDetails}
+          disabled={isFetching}
+        >
+          <SvgIcon >
+            {this.state.details ? <ChartBarStackedIcon /> : <NotebookIcon /> }
+          </SvgIcon>
+        </Button>
         <FilterDrawer
           {...this.props}
           classes={{}}
@@ -455,7 +501,7 @@ class ActivitySearch extends Component {
             />
             <ActivityCount />
             <div>
-              {SearchButton}
+
               <ProgressDivider isProgress={isFetching} />
             </div>
             {!activities ? (
@@ -485,37 +531,14 @@ class ActivitySearch extends Component {
                     )}
                   </div>
                 ))}
+                {SearchButton}
                 <ProgressDivider isProgress={isFetching} />
               </div>
             )}
           </Card>
-          <Button
-            type={pristine ? 'button' : 'submit'}
-            onClick={handleSubmit(this.handleFormSubmit)}
-            variant="fab"
-            color="primary"
-            aria-label="search"
-            className={this.props.classes.fabSearch}
-            disabled={isFetching}
-          >
-            <SvgIcon >
-              <MagnifyIcon />
-            </SvgIcon>
-          </Button>
 
-          <Button
-            variant="fab"
-            mini
-            onClick={this.handleToggleDetails}
-            color="secondary"
-            aria-label="details"
-            className={this.props.classes.fabDetails}
-            disabled={isFetching}
-          >
-            <SvgIcon >
-              {this.state.details ? <ChartBarStackedIcon /> : <NotebookIcon /> }
-            </SvgIcon>
-          </Button>
+
+
         </Form>
       </Layout>
     );

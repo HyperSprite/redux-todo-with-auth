@@ -15,9 +15,9 @@ export default function (state = {
     case TYPES.CLEAR_ACTIVITY_SEARCH:
       return {
         ...state,
-        filterIEE: [],
+        // filterIEE: [],
         searchCount: 1,
-        sortStrings: [],
+        // sortStrings: [],
         query: '',
       };
 
