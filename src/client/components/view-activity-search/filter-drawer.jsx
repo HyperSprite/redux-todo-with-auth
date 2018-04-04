@@ -21,15 +21,15 @@ const styles = theme => ({
   drawerPaper: {
     width: drawerWidth,
     zIndex: theme.zIndex.appBar - 1,
-    margin: '70px 0 0 0',
+    margin: '65px 0 0 0',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      margin: '70 16px 0 16px'
+      margin: '65 16px 0 16px'
     },
   },
   innerDrawer: {
     flexGrow: 1,
-    margin: '18px 0 180px 0',
+    margin: '18px 0 240px 0',
   },
   flexAppBar: {
     display: 'flex',
