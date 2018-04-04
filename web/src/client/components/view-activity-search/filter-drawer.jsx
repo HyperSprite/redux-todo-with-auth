@@ -24,7 +24,7 @@ const styles = theme => ({
     margin: '65px 0 0 0',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
-      margin: '65 16px 0 16px'
+      margin: '65 16px 0 16px',
     },
   },
   innerDrawer: {
