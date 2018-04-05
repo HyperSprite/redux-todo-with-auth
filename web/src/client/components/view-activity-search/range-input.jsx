@@ -42,13 +42,15 @@ const RangeInput = (props) => {
       placeholder,
       type,
       initialValues,
-      rangeInputData
+      rangeInputData,
+      rangeInputActivitiesAll,
     } = props;
 
   return (
     <div className={classes.flexParent} >
+      {/* {rangeInputActivitiesAll ? ( */}
       <div className={classes.flexColumn} >
-        {(rangeInputData.map(rA => (
+        {(rangeInputActivitiesAll.map(rA => (
           <div key={rA.name} >
             {rA.name !== 'count' ||
               rA.name !== 'maxSpeed' ||
@@ -69,6 +71,7 @@ const RangeInput = (props) => {
           </div>
         )))}
       </div>
+    {/* ) : null } */}
     </div>
   );
 };
@@ -81,7 +84,7 @@ function mapStateToProps(state) {
     valuesDefaults: activities.activCalcAll,
     query: search.query,
     valueItems: search.sortStrings,
-    rangeInputData: search.rangeInputData,
+    rangeInputActivitiesAll: search.rangeInputActivitiesAll,
     mPref: page.mPref,
   };
 }

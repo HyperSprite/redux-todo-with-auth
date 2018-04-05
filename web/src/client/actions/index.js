@@ -386,10 +386,12 @@ export function fetchActivitiesSearch(relURL, queryOptions) {
   return (dispatch) => {
     axios.get(`${relURL}?${qs.stringify(queryOptions)}`, axiosConfig)
       .then((response) => {
-        const rangeInputData = calcRangeInputData(response.data.activCalcAll, response.data.sortStrings);
+        const rangeInputActivitiesAll = calcRangeInputData(response.data.activCalcAll, response.data.sortStrings);
+        const rangeInputActivitiesFilter = calcRangeInputData(response.data.activCalcFilter, response.data.sortStrings);
         const data = {
           ...response.data,
-          rangeInputData: rangeInputData,
+          rangeInputActivitiesAll,
+          rangeInputActivitiesFilter,
         };
         dispatch({
           type: TYPES.FETCH_ACTIVITIES_SEARCH,

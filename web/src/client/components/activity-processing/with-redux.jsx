@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
 import ActivityProcessing from '../activity-processing';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-});
+import types from '../../types';
 
 const ProcessingStatus = (props) => {
   const { classes, processed, queued } = props;
@@ -28,9 +22,9 @@ const ProcessingStatus = (props) => {
 };
 
 ProcessingStatus.propTypes = {
-  classes: PropTypes.object.isRequired,
-  processed: PropTypes.number.isRequired,
-  queued: PropTypes.number,
+  classes: types.classes,
+  processed: types.processed.isRequired,
+  queued: types.queued,
 };
 
 ProcessingStatus.defaultProps = {
@@ -44,5 +38,4 @@ function mapStateToProps(state) {
   };
 }
 
-const styledProcessingStatus = withStyles(styles, { name: 'styledProcessingStatus' })(ProcessingStatus);
-export default connect(mapStateToProps)(styledProcessingStatus);
+export default connect(mapStateToProps)(ProcessingStatus);
