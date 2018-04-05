@@ -2,6 +2,23 @@ import justFNS from 'just-fns';
 
 // This builds the array of range inputs for Activity Search
 // Uses API results and then passes them to Redux
+/**
+[
+  {
+    component: "InputRangeDates",
+    contentDefautls: ["2013-05-04T13:25:59Z", "2018-03-23T12:24:35Z"],
+    label: "Date",
+    name: "date",
+  },
+  {
+    component: "InputRange",
+    contentDefautls: [0, 219546],
+    label: "Distance",
+    name: "distance",
+    type: "text",
+  },
+]
+*/
 
 const rangeInputData = (activCalcAll, sortStrings) => {
   const buildRangeArr = Object.values(sortStrings).reduce((accArr, element) => {

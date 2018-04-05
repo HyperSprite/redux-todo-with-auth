@@ -9,7 +9,8 @@ export default function (state = {
   searchCount: 1,
   sortStrings: [],
   query: '',
-  rangeInputData: [],
+  rangeInputActivitiesAll: [],
+  rangeInputActivitiesFilter: [],
 }, action) {
   switch (action.type) {
 
@@ -18,7 +19,7 @@ export default function (state = {
         ...state,
         // filterIEE: [],
         searchCount: 1,
-        // sortStrings: [],
+        rangeInputActivitiesFilter: state.rangeInputActivitiesAll,
         query: '',
       };
 
@@ -29,7 +30,8 @@ export default function (state = {
         searchCount: state.searchCount + 1,
         sortStrings: action.payload.sortStrings,
         query: action.payload.query,
-        rangeInputData: action.payload.rangeInputData,
+        rangeInputActivitiesAll: action.payload.rangeInputActivitiesAll,
+        rangeInputActivitiesFilter: action.payload.rangeInputActivitiesFilter,
       };
 
     default:
