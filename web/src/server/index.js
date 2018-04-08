@@ -135,14 +135,14 @@ if (isSSL) {
     key: fs.readFileSync(`${__dirname}/../ssl/cert.pem`),
     cert: fs.readFileSync(`${__dirname}/../ssl/cert.crt`),
   }, app).listen(portS, () => {
-    console.log(`**** HTTPS https://localhost:${port} ${runtimeSettings}`);
+    console.log(`**** isSSL: HTTPS https://localhost:${port} ${runtimeSettings}`);
   });
   const insecureServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP http://localhost:${port} ${runtimeSettings}`);
+    console.log(`**** isSSL: HTTP http://localhost:${port} ${runtimeSettings}`);
   });
 } else {
   httpServer = http.createServer(app).listen(port, () => {
-    console.log(`**** HTTP http://localhost:${port} ${runtimeSettings}`);
+    console.log(`**** HTTP ${process.env.ROOT_URL} ${runtimeSettings}`);
   });
 }
 
