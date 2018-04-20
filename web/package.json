@@ -82,7 +82,7 @@
     "marked": "^0.3.19",
     "match-sorter": "^2.2.1",
     "material-ui": "^1.0.0-beta.42",
-    "mdi-react": "^2.1.19",
+    "mdi-react": "^3.2.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
     "mongoose": "^4.13.12",

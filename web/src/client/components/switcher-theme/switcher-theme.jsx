@@ -44,9 +44,9 @@ class SwitcherTheme extends React.Component {
                 aria-labelledby="appbar-theme"
               >
                 {uiTheme.paletteType === 'light' ? (
-                  <SvgIcon><LightbulbOutlineIcon /></SvgIcon>
+                  <SvgIcon><LightbulbOutlineIcon color="inherit" /></SvgIcon>
                 ) : (
-                  <SvgIcon><LightbulbIcon /></SvgIcon>
+                  <SvgIcon><LightbulbIcon color="inherit" /></SvgIcon>
                 )}
               </IconButton>
             </ListItemSecondaryAction>

@@ -114,7 +114,7 @@ class FilterDrawer extends React.Component {
           className={this.props.classes.fabFilter}
         >
           <SvgIcon >
-            {this.state.open ? <CloseIcon /> : <FilterIcon />}
+            {this.state.open ? <CloseIcon color="inherit" /> : <FilterIcon color="inherit" />}
           </SvgIcon>
         </Button>
         <Hidden lgUp >

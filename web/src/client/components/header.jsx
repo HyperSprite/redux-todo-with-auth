@@ -100,8 +100,8 @@ class Header extends Component {
               title="Help"
               className={classes.icon}
             >
-              <SvgIcon>
-                <HelpCircleIcon />
+              <SvgIcon >
+                <HelpCircleIcon color="inherit" />
               </SvgIcon>
             </IconButton>
           </div>

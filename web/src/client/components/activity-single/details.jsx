@@ -183,7 +183,7 @@ class ExtActivitySingle extends Component {
                     aria-label="Show more"
                   >
                     <SvgIcon size={24} >
-                      <ChevronDownIcon />
+                      <ChevronDownIcon color="inherit" />
                     </SvgIcon>
                   </IconButton>
                 </div>

@@ -32,42 +32,42 @@ const ToggleIconButton = ({ buttonType, authenticated, toggle, toggleClick, togg
 
   switch (buttonType) {
     case 'ActionBookmark':
-      buttonOn = (<SvgIcon size={24}><StarIcon /></SvgIcon>);
-      buttonOff = (<SvgIcon size={24}><StarOutlineIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><StarIcon color="inherit" /></SvgIcon>);
+      buttonOff = (<SvgIcon size={24}><StarOutlineIcon color="inherit" /></SvgIcon>);
       tooltipOn = toggleCount ? (`You + ${toggleCount - 1}`) : null;
       tooltipOff = toggleCount ? (`${toggleCount}`) : null;
       break;
     case 'ActionDelete':
-      buttonOn = (<SvgIcon size={24}><DeleteIcon /></SvgIcon>);
-      buttonOff = (<SvgIcon size={24}><DeleteForeverIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><DeleteIcon color="inherit" /></SvgIcon>);
+      buttonOff = (<SvgIcon size={24}><DeleteForeverIcon color="inherit" /></SvgIcon>);
       tooltipOn = 'Delete?';
       tooltipOff = 'Delete?';
       break;
     case 'ActionAddGoal':
-      buttonOn = (<SvgIcon size={24}><PlaylistCheckIcon /></SvgIcon>);
-      buttonOff = (<SvgIcon size={24}><PlaylistPlusIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><PlaylistCheckIcon color="inherit" /></SvgIcon>);
+      buttonOff = (<SvgIcon size={24}><PlaylistPlusIcon color="inherit" /></SvgIcon>);
       tooltipOn = 'You\'ve set this as a Goal!';
       tooltipOff = 'Set this as a Goal?';
       break;
     case 'ActionEdit':
-      buttonOn = (<SvgIcon size={24}><PencilIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><PencilIcon color="inherit" /></SvgIcon>);
       buttonOff = (null);
       tooltipOn = 'Edit?';
       tooltipOff = 'Edit?';
       break;
     case 'ToggleRadioButtonChecked':
-      buttonOn = (<SvgIcon size={24}><SquareIcon /></SvgIcon>);
-      buttonOff = (<SvgIcon size={24}><SquareOutlineIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><SquareIcon color="inherit" /></SvgIcon>);
+      buttonOff = (<SvgIcon size={24}><SquareOutlineIcon color="inherit" /></SvgIcon>);
       tooltipOn = 'You\'ve set this as a Goal!';
       tooltipOff = 'Set this as a Goal?';
       break;
     case 'SocialPerson':
-      buttonOn = (<SvgIcon size={24}><AccountIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><AccountIcon color="inherit" /></SvgIcon>);
       buttonOff = (null);
       break;
     default:
-      buttonOn = (<SvgIcon size={24}><HelpIcon /></SvgIcon>);
-      buttonOff = (<SvgIcon size={24}><HelpIcon /></SvgIcon>);
+      buttonOn = (<SvgIcon size={24}><HelpIcon color="inherit" /></SvgIcon>);
+      buttonOff = (<SvgIcon size={24}><HelpIcon color="inherit" /></SvgIcon>);
       break;
   }
 

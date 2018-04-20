@@ -33,7 +33,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             className={classes.icon}
             aria-label="Show All"
           >
-            <SvgIcon><SquareIcon /></SvgIcon>
+            <SvgIcon><SquareIcon color="inherit" /></SvgIcon>
           </IconButton>
         );
       }
@@ -43,7 +43,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             className={classes.icon}
             aria-label="Show Favorites"
           >
-            <SvgIcon><StarIcon /></SvgIcon>
+            <SvgIcon><StarIcon color="inherit" /></SvgIcon>
           </IconButton>
         );
       }
@@ -53,7 +53,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             className={classes.icon}
             aria-label="Show Mine"
           >
-            <SvgIcon><AccountIcon /></SvgIcon>
+            <SvgIcon><AccountIcon color="inherit" /></SvgIcon>
           </IconButton>
         );
       }
@@ -71,7 +71,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             onClick();
           }}
         >
-          <SvgIcon><SquareOutlineIcon /></SvgIcon>
+          <SvgIcon><SquareOutlineIcon color="inherit" /></SvgIcon>
         </IconButton>
       );
     }
@@ -84,7 +84,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             onClick();
           }}
         >
-          <SvgIcon><StarOutlineIcon /></SvgIcon>
+          <SvgIcon><StarOutlineIcon color="inherit" /></SvgIcon>
         </IconButton>
       );
     }
@@ -97,7 +97,7 @@ const EventTBLink = ({ classes, active, filter, onClick }) => {
             onClick();
           }}
         >
-          <SvgIcon><AccountOutlineIcon /></SvgIcon>
+          <SvgIcon><AccountOutlineIcon color="inherit" /></SvgIcon>
         </IconButton>
       );
     }

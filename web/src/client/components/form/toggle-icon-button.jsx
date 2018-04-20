@@ -29,43 +29,43 @@ const ToggleIconButton = ({ buttonType, authenticated, toggle, toggleClick, togg
 
   const iconType = {
     ActionBookmark: {
-      buttonOn: (<SvgIcon size={24}><StarIcon /></SvgIcon>),
-      buttonOff: (<SvgIcon size={24}><StarOutlineIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><StarIcon color="inherit" /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><StarOutlineIcon color="inherit" /></SvgIcon>),
       tooltipOn: toggleCount ? (`You + ${toggleCount - 1}`) : null,
       tooltipOff: toggleCount ? (`${toggleCount}`) : null,
     },
     ActionDelete: {
-      buttonOn: (<SvgIcon size={24}><DeleteIcon /></SvgIcon>),
-      buttonOff: (<SvgIcon size={24}><DeleteForeverIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><DeleteIcon color="inherit" /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><DeleteForeverIcon color="inherit" /></SvgIcon>),
       tooltipOn: 'Delete?',
       tooltipOff: 'Delete?',
     },
     ActionAddGoal: {
-      buttonOn: (<SvgIcon size={24}><PlaylistCheckIcon /></SvgIcon>),
-      buttonOff: (<SvgIcon size={24}><PlaylistPlusIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><PlaylistCheckIcon color="inherit" /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><PlaylistPlusIcon color="inherit" /></SvgIcon>),
       tooltipOn: 'You\'ve set this as a Goal!',
       tooltipOff: 'Set this as a Goal?',
     },
     ActionEdit: {
-      buttonOn: (<SvgIcon size={24}><PencilIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><PencilIcon color="inherit" /></SvgIcon>),
       buttonOff: null,
       tooltipOn: 'Edit?',
       tooltipOff: 'Edit?',
     },
     ActionCopy: {
-      buttonOn: (<SvgIcon size={24}><ContentDuplicateIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><ContentDuplicateIcon color="inherit" /></SvgIcon>),
       buttonOff: null,
       tooltipOn: 'Copy?',
       tooltipOff: 'Copy?',
     },
     ToggleRadioButtonChecked: {
-      buttonOn: (<SvgIcon size={24}><SquareIcon /></SvgIcon>),
-      buttonOff: (<SvgIcon size={24}><SquareOutlineIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><SquareIcon color="inherit" /></SvgIcon>),
+      buttonOff: (<SvgIcon size={24}><SquareOutlineIcon color="inherit" /></SvgIcon>),
       tooltipOn: 'You\'ve set this as a Goal!',
       tooltipOff: 'Set this as a Goal?',
     },
     SocialPerson: {
-      buttonOn: (<SvgIcon size={24}><AccountIcon /></SvgIcon>),
+      buttonOn: (<SvgIcon size={24}><AccountIcon color="inherit" /></SvgIcon>),
       buttonOff: null,
     },
   };

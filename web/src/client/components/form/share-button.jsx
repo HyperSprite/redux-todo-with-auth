@@ -71,7 +71,7 @@ const ShareButtons = ({ ...event, classes, hashtags, title, urlHash, urlPath, ur
 
   const socialSet = sites.map((s) => {
     const SocialIcon = templates[s].icon;
-    const Icon = () => <SvgIcon><SocialIcon size={24} /></SvgIcon>;  // need to pull in Icon here
+    const Icon = () => <SvgIcon><SocialIcon size={24} color="inherit" /></SvgIcon>;  // need to pull in Icon here
     const iconButton = (
       <Tooltip
         id={`social${s.icon}`}

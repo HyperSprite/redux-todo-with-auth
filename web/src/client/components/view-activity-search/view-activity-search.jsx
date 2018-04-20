@@ -400,7 +400,7 @@ class ActivitySearch extends Component {
             label="Clear Activities"
           >
             <SvgIcon >
-              <RestartIcon />
+              <RestartIcon color="inherit" />
             </SvgIcon>
           </Button>
         ) : (
@@ -414,7 +414,7 @@ class ActivitySearch extends Component {
             label="Reset Search"
           >
             <SvgIcon >
-              <RestartIcon />
+              <RestartIcon color="inherit" />
             </SvgIcon>
           </Button>
         )}
@@ -429,7 +429,7 @@ class ActivitySearch extends Component {
           disabled={isFetching}
         >
           <SvgIcon >
-            <DownloadIcon />
+            <DownloadIcon color="inherit" />
           </SvgIcon>
         </Button>
 
@@ -443,7 +443,7 @@ class ActivitySearch extends Component {
           disabled={isFetching}
         >
           <SvgIcon >
-            <MagnifyIcon />
+            <MagnifyIcon color="inherit" />
           </SvgIcon>
         </Button>
         <Button
@@ -456,7 +456,7 @@ class ActivitySearch extends Component {
           disabled={isFetching}
         >
           <SvgIcon >
-            {this.state.details ? <ChartBarStackedIcon /> : <NotebookIcon /> }
+            {this.state.details ? <ChartBarStackedIcon color="inherit" /> : <NotebookIcon color="inherit" /> }
           </SvgIcon>
         </Button>
         <FilterDrawer

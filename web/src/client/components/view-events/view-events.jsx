@@ -92,7 +92,7 @@ class ListEvent extends React.Component {
           disabled={!this.props.clubMember}
         >
           <SvgIcon >
-            <PlusIcon />
+            <PlusIcon color="inherit" />
           </SvgIcon>
         </Button>
       </Link>

@@ -21,11 +21,11 @@ const RenderSelect = ({ classes, form, sortStrings }) => {
   const sortArr = sortStrings.reduce((acc, sS) => {
     acc.push(
       {
-        label: <span className={classes.spanContainer}><SvgIcon className={classes.icon}><SortDescendingIcon /></SvgIcon> {sS.option}</span>,
+        label: <span className={classes.spanContainer}><SvgIcon className={classes.icon}><SortDescendingIcon color="inherit" /></SvgIcon> {sS.option}</span>,
         value: `${sS.value}-des`,
       },
       {
-        label: <span className={classes.spanContainer}><SvgIcon className={classes.icon}><SortAscendingIcon /></SvgIcon> {sS.option}</span>,
+        label: <span className={classes.spanContainer}><SvgIcon className={classes.icon}><SortAscendingIcon color="inherit" /></SvgIcon> {sS.option}</span>,
         value: `${sS.value}-asc`,
       },
     );
