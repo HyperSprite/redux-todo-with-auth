@@ -41,7 +41,7 @@ const MenuDrawerItem = ({ classes, Icon, linkTo, onClick, pageName, primaryText,
   >
     {Icon && (
       <ListItemIcon>
-        <Icon />
+        <Icon color="inherit" />
       </ListItemIcon>
     )}
     <ListItemText primary={primaryText} />

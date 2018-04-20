@@ -70,7 +70,7 @@ const SingleFieldArray = ({ classes, form, fields, label }) => (
             onClick={() => fields.remove(index)}
           >
             <SvgIcon>
-              <DeleteIcon />
+              <DeleteIcon color="inherit" />
             </SvgIcon>
           </IconButton>
         </ListItem>),

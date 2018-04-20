@@ -48,7 +48,7 @@ const ProcessingStatus = (props) => {
         <div className={classes.button} >
           <IconButton color="secondary" onClick={onClick} >
             <SvgIcon>
-              <RefreshIcon />
+              <RefreshIcon color="inherit" />
             </SvgIcon>
           </IconButton>
         </div>
