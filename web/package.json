@@ -117,7 +117,7 @@
     "react-widgets": "^4.2.6",
     "recharts": "^1.0.0-beta.10",
     "recompose": "^0.27.0",
-    "redux": "^3.7.2",
+    "redux": "^4.0.0",
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.3.0",
     "redux-form-material-ui": "^4.3.4",
