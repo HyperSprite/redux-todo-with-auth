@@ -103,7 +103,7 @@ class WeeklyStats extends React.Component {
 
               {stats.weeklyTotals.ss.total ? (
                 <BarChart
-                  contentLabel="Suffer Score"
+                  contentLabel="Relative Effort"
                   content={`${stats.weeklyTotals.ss.total}`}
                   contentType="text"
                   metric="ss"

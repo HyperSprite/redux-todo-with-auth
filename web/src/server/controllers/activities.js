@@ -269,6 +269,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
             geoData,
             { streamData: !!strmArr.length },
             { streamTime: strmTmArr },
+            { resource_state: 3 },
             { currentSchema: currentVersion } //eslint-disable-line
           );
 
