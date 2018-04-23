@@ -36,7 +36,7 @@ const returnValues = [
   },
   {
     activityType: 'sufferScore',
-    activityLabel: 'Suffering',
+    activityLabel: 'Relative Effort',
     displayType: ['range', 'avg', 'sum'],
     compute: justFns.round,
     arg1: 'sufferScore',

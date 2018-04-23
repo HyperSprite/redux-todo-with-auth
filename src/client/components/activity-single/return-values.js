@@ -14,7 +14,7 @@ const returnValues = [
   {
     category: 'group1',
     activityType: 'suffer_score',
-    activityLabel: 'Suffer Score',
+    activityLabel: 'Relative Effort',
   },
   {
     category: 'group1',
