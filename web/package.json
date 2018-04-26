@@ -1,10 +1,10 @@
 {
   "name": "araceathlete",
-  "version": "5.0.12",
+  "version": "5.0.13",
   "description": "Search and Visualize Strava cycling data",
   "main": "main.js",
   "engines": {
-    "node": "8.9.1"
+    "node": "8.11.1"
   },
   "repository": {
     "type": "git",

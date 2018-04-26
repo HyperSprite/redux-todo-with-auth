@@ -197,9 +197,10 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
-  Activities.findOneAndUpdate({ activityId: options.activityId }, data, options, (err, fullActivity) => {
+  const extendedData = Object.assign({}, data, { resource_state: 3 });
+  Activities.findOneAndUpdate({ activityId: options.activityId }, extendedData, options, (err, fullActivity) => {
     if (fullActivity) {
-      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'success', 9, err, 'no_page', 'Success fullActivity', options.user.stravaId);
+      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'success', 6, err, 'no_page', 'Success fullActivity', options.user.stravaId);
       return done(fullActivity);
     }
     if (err) {
@@ -207,7 +208,7 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
       return done([]);
     }
     Activities.findOrCreate({ activityId: options.activityId }, data, options, (err, newActivity) => {
-      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOrCreate`, logObj.logType, 'success', 9, err, 'no_page', `Success for new activity for: ${options.activityId}`, options.user.stravaId);
+      hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOrCreate`, logObj.logType, 'success', 6, err, 'no_page', `Success for new activity for: ${options.activityId}`, options.user.stravaId);
       return done(newActivity);
     });
   });
@@ -269,7 +270,6 @@ exports.getActivityDetails = (activity, opts, cb) => {
             geoData,
             { streamData: !!strmArr.length },
             { streamTime: strmTmArr },
-            { resource_state: 3 },
             { currentSchema: currentVersion } //eslint-disable-line
           );
 
