@@ -299,7 +299,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
                   indx -= 1;
                 }
                 enhancedData.ftp = ftp;
-                enhancedData.tssScore = justFns.calcTssScore(enhancedData.elapsed_time, enhancedData.weighted_average_watts, ftp);
+                enhancedData.tssScore = justFns.calcTssScore(enhancedData.moving_time, enhancedData.weighted_average_watts, ftp);
               }
               hlpr.logOut(Object.assign({}, logObj, {
                 func: `${logObj.file}.getActivityDetails pushActivities premium`,
