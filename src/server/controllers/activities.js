@@ -197,8 +197,10 @@ const getListZones = (activityId, accessToken, done) => {
 };
 
 const findActivityAndUpdate = (activityId, data, options, done) => {
+  const newOptions = options;
+  newOptions.new = true;
   const extendedData = Object.assign({}, data, { resource_state: 3 });
-  Activities.findOneAndUpdate({ activityId: options.activityId }, extendedData, options, (err, fullActivity) => {
+  Activities.findOneAndUpdate({ activityId: newOptions.activityId }, extendedData, newOptions, (err, fullActivity) => {
     if (fullActivity) {
       hlpr.logOutArgs(`${logObj.file}.findActivityAndUpdate Activities.findOneAndUpdate`, logObj.logType, 'success', 6, err, 'no_page', 'Success fullActivity', options.user.stravaId);
       return done(fullActivity);
@@ -299,7 +301,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
                   indx -= 1;
                 }
                 enhancedData.ftp = ftp;
-                enhancedData.tssScore = justFns.calcTssScore(enhancedData.moving_time, enhancedData.weighted_average_watts, ftp);
+                enhancedData.tssScore = justFns.calcTssScore(enhancedData.elapsed_time, enhancedData.weighted_average_watts, ftp);
               }
               hlpr.logOut(Object.assign({}, logObj, {
                 func: `${logObj.file}.getActivityDetails pushActivities premium`,

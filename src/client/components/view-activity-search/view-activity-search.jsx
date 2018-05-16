@@ -10,7 +10,6 @@ import SvgIcon from 'material-ui/SvgIcon';
 import RestartIcon from 'mdi-react/RestartIcon';
 import DownloadIcon from 'mdi-react/DownloadIcon';
 import MagnifyIcon from 'mdi-react/MagnifyIcon';
-import RefreshIcon from 'mdi-react/RefreshIcon';
 import NotebookIcon from 'mdi-react/NotebookIcon';
 import ChartBarStackedIcon from 'mdi-react/ChartBarStackedIcon';
 import Card from 'material-ui/Card';
@@ -21,9 +20,6 @@ import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
 import Layout from '../layout';
-import ButtonBase from '../button/base';
-import ButtonDownload from '../button/download';
-import ButtonSearch from '../button/search';
 import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
 import EditSwitch from '../form/edit/switch';
@@ -170,17 +166,6 @@ class ActivitySearch extends Component {
     this.props.clearActivitySearch();
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { query } = this.props;
-  //   const { pathname, search } = this.props.location;
-  //   if (query !== search.slice(1)) {
-  //     this.props.history.push({
-  //       pathname,
-  //       search: `?${query}`,
-  //     });
-  //   }
-  // }
-
   handleMapPinDrop(lat, lng) {
     this.setState({ lat, lng });
     this.props.change('lng', justFNS.round(lng, 5));
@@ -225,8 +210,8 @@ class ActivitySearch extends Component {
       page = 1;
     }
     this.setState({
-      lat: formProps.lat,
-      lng: formProps.lng,
+      lat: formProps.lat * 1,
+      lng: formProps.lng * 1,
       page,
       nextPage: page + 1,
       lastSearch: { ...formProps, ...{ page: page + 1 }, ...{ mPref: this.props.mPref } },
@@ -386,9 +371,6 @@ class ActivitySearch extends Component {
     // Doing so will cause the form to rerender when you move a slider
     const SearchButton = (
       <div className={classes.buttonSet} >
-
-
-
         {pristine ? (
           <Button
             variant="fab"
@@ -536,9 +518,6 @@ class ActivitySearch extends Component {
               </div>
             )}
           </Card>
-
-
-
         </Form>
       </Layout>
     );
@@ -546,7 +525,7 @@ class ActivitySearch extends Component {
 }
 
 function mapStateToProps(state) {
-  // console.log('ownProps', ownProps);
+  // .log('ownProps', ownProps);
   // const initialValues = (ownProps.location.search) ?
   //   qs.parse(ownProps.location.search.slice(1)) :
   //   null;
@@ -555,13 +534,12 @@ function mapStateToProps(state) {
     activities.activities.filter(aF => aF.geoStart &&
       aF.activityType !== 'VirtualRide' &&
       aF.name.indexOf('Zwift') !== 0).map(aM => ({
-      lat: aM.geoStart[1],
-      lng: aM.geoStart[0],
-      name: aM.name,
-      id: aM.activityId,
-    })) : [];
+        lat: aM.geoStart[1],
+        lng: aM.geoStart[0],
+        name: aM.name,
+        id: aM.activityId,
+      })) : [];
 
-  // console.log('initialValues', initialValues);
   return {
     activCalcAll: activities.activCalcAll,
     activCalcFilter: { ...activities.activCalcAll, ...activities.activCalcFilter },

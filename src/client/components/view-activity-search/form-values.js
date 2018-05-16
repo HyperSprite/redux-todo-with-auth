@@ -20,7 +20,7 @@ export const formValues = [
   {
     name: 'lat',
     label: 'Latitude',
-    type: 'text',
+    type: 'number',
     group: 'geo',
     component: 'InputText',
     contentAlt: '',
@@ -33,7 +33,7 @@ export const formValues = [
   {
     name: 'lng',
     label: 'Longitude',
-    type: 'text',
+    type: 'number',
     group: 'geo',
     component: 'InputText',
     contentAlt: '',
