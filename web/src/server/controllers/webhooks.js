@@ -2,6 +2,7 @@ const qs = require('qs');
 const hlpr = require('../lib/helpers');
 
 const Activities = require('./activities');
+const ActivitiesSearch = require('./activities-search');
 const User = require('../models/user');
 const socketSrvr = require('../sockets');
 
@@ -49,8 +50,10 @@ req.body = {
 
 const postProcessor = (input, done) => {
   const mssg = `stravaId: ${input.owner_id}, activityId: ${input.object_id}, aspect_type: ${input.aspect_type}`
+  console.log('test postProcessor', input);
   if (input.object_type === 'activity') {
     User.findOne({ stravaId: input.owner_id * 1 }, (err, user) => {
+
       if (err || !user) {
         hlpr.logOutArgs(`${logObj.file}.stravaPostReceiver`, logObj.logType, 'error', 4, null, null, `No User ${mssg}`);
         return done;
@@ -69,9 +72,15 @@ const postProcessor = (input, done) => {
         };
         switch (input.aspect_type) {
           case 'create':
-            return Activities.getActivityDetails(activity, options, cDone => cDone);
+            return Activities.getActivityDetails(activity, options, (cDone) => {
+              ActivitiesSearch.fitnessTodaySave(options);
+              return cDone;
+            });
           case 'update':
-            return Activities.getActivityUpdate(activity, options, cDone => cDone);
+            return Activities.getActivityUpdate(activity, options, (cDone) => {
+              ActivitiesSearch.fitnessTodaySave(options);
+              return cDone;
+            });
           case 'delete':
             return Activities.removeActivity(toDelete, (rDone) => {
               socketSrvr.ifConnected(toDelete['athlete.id'], 'ACTIVITY_REMOVED', toDelete.activityId);

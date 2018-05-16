@@ -1,17 +1,16 @@
 const csv = require('fast-csv');
 const addDays = require('date-fns/add_days');
-const subDays = require('date-fns/sub_days');
 const format = require('date-fns/format');
 const startOfWeek = require('date-fns/start_of_week');
 const subWeeks = require('date-fns/sub_weeks');
-const getTime = require('date-fns/get_time');
 const eachDay = require('date-fns/each_day');
-const isAfter = require('date-fns/is_after');
 const justFns = require('just-fns');
 const qs = require('qs');
 const url = require('url');
 
 const Activities = require('../models/activities');
+const UserCommon = require('../models/user-common');
+const User = require('../models/user');
 const hlpr = require('../lib/helpers');
 
 const logObj = {
@@ -112,7 +111,8 @@ exports.searchActivities = async (req, res) => {
       $geoNear: {
         near: {
           type: 'Point',
-          coordinates: coords },
+          coordinates: coords,
+        },
         distanceField: 'distance',
         maxDistance: maxDist, // 200 miles in meters
         spherical: true,
@@ -196,7 +196,7 @@ exports.searchActivities = async (req, res) => {
       }
     }
   });
-  console.log(`item: ${JSON.stringify(query.search)}`);
+  console.log(`item 199: ${JSON.stringify(query.search)}`);
 
   /**
   * This builds a $group object based on sortStrings
@@ -403,11 +403,9 @@ exports.searchActivities = async (req, res) => {
 * Fatigue / ATL (Acute Training Load) - exp average TSS for 7 days
 * Form - difference between the two
 *
-* localhost:3080/apiv1/activities/fitness-today
-*
 * Returns one days worth of stats:
 
-  fitnessToday.daysArr.daysAggr.days: [
+  fitnessToday: [
     {
         "ss": 129,
         "dst": 41255.8,
@@ -434,13 +432,7 @@ exports.searchActivities = async (req, res) => {
 *
 */
 
-
-exports.fitnessToday = async (req, res) => {
-  const q = qs.parse(req.query);
-  const weeksPast = q.weeksPast * 1 || 0;
-  const startDate = q.startDate || req.user.created_at;
-  const endDate = q.endDate || format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
-
+exports.fitnessTodayCalc = async (stravaId, startDate, endDate) => {
   const daysArr = eachDay(startDate, addDays(endDate, 6)).map(d => ({
     count: 0,
     tss: 0,
@@ -456,7 +448,7 @@ exports.fitnessToday = async (req, res) => {
   const aggregate = [
     {
       $match: { $and: [
-        { 'athlete.id': req.user.stravaId },
+        { 'athlete.id': stravaId },
         { resource_state: 3 },
         { start_date_local: {
           $gt: daysArr[0].date,
@@ -683,6 +675,38 @@ exports.fitnessToday = async (req, res) => {
   let result;
   try {
     result = await Activities.aggregate(aggregate);
+  } catch (err) {
+    hlpr.logOutArgs(`${logObj.file}.fitnessTodayCalc err`, logObj.logType, 'error', 5, err, 'noReq', 'Failed to get todays fitness', stravaId);
+    return { Error: 'Failed to get todays fitness' };
+  }
+  hlpr.logOutArgs(`${logObj.file}.fitnessTodayCalc info`, logObj.logType, 'info', 9, null, 'noReq', 'Success getting todays fitness', stravaId);
+  return result[0].daysArr[0].daysAggr.days;
+};
+
+exports.fitnessTodaySave = async (options) => {
+  const stravaId = options.id;
+  const user = await User.findOne({ stravaId });
+  const endDate = await format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), 0), 'YYYY-MM-DD');
+  const result = await exports.fitnessTodayCalc(stravaId, user.created_at, endDate);
+  UserCommon.findOneAndUpdate({ stravaId }, { fitness: result }, { upsert: true, new: true })
+    .exec();
+  hlpr.logOutArgs(`${logObj.file}.fitnessTodaySave info`, logObj.logType, 'info', 9, null, 'no_page', `last result ${JSON.stringify(result[result.length - 1])}`, stravaId);
+};
+
+/**
+*  localhost:3080/apiv1/activities/fitness-today
+*/
+
+exports.fitnessToday = async (req, res) => {
+  const q = qs.parse(req.query);
+  const stravaId = req.user.stravaId;
+  const weeksPast = q.weeksPast * 1 || 0;
+  const startDate = q.startDate || req.user.created_at;
+  const endDate = q.endDate || format(subWeeks(startOfWeek(new Date(), { weekStartsOn: 1 }), weeksPast), 'YYYY-MM-DD');
+
+  let result;
+  try {
+    result = await exports.fitnessTodayCalc(stravaId, startDate, endDate);
   } catch (err) {
     hlpr.logOutArgs(`${logObj.file}.fitnessToday err`, logObj.logType, 'error', 5, err, req.originalUrl, 'Failed to get todays fitness', req.user.stravaId);
     return res.status(500).send({ Error: 'Failed to get todays fitness' });

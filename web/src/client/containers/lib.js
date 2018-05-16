@@ -34,7 +34,7 @@ lib.dateStringFormat = (date, datePref = '%m/%d/%Y') => {
   return dateStringResult;
 };
 
-lib.numbersOnly = value => value.replace(/[^0-9-]+/g, '');
+lib.numbersOnly = value => value.replace(/[^0-9.-]+/g, '');
 lib.alphaNumbersOnly = value => value.replace(/[^a-zA-Z0-9]/g, '');
 
 lib.axiosConfig = {
