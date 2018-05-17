@@ -123,10 +123,10 @@ class Header extends Component {
         <div className={classes.noPrint} >
           <AppBar
             title={pageNameWithHelp}
-            rightMenu={!this.props.authenticated ? <Signin /> : null}
             leftOnClick={this.handleToggle}
           />
         </div>
+
       </div>
     );
   }

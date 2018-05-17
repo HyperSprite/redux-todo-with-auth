@@ -1,10 +1,12 @@
 import React from 'react';
 import { withStyles } from 'material-ui/styles';
+import ToggleState from '@hypersprite/toggle-state-rp';
 
 import Header from './header';
 import Footer from './footer';
 import MenuDrawer from './menu-drawer';
 import PoweredByStrava from '../assets/api_logo_pwrdBy_strava_horiz_gray.svg';
+import Signin from './auth/signin';
 
 const styles = theme => ({
   root: {
@@ -38,6 +40,13 @@ class App extends React.Component {
             <Header />
             <MenuDrawer />
             {children}
+            {!this.props.authenticated && (
+              <ToggleState
+                render={toggleStateRP => (
+                  <Signin {...toggleStateRP } />
+                )}
+              />
+            )}
           </div>
           <div className={classes.footer}>
             <Footer
