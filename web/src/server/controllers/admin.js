@@ -62,8 +62,23 @@ exports.userList = (req, res) => {
         authorizationErrors: 1,
         // activityCount: { $size: '$useractivities' },
         eventCount: { $size: '$userevents' },
-        logCount: { $size: '$userlogs' },
-        logLastAccess: { $slice: ['$userlogs', -1] },
+        logCount: { $size: {
+          $filter: {
+            input: '$userlogs',
+            as: 'userLogs',
+            cond: { $eq: ['$$userLogs.logType', 'auth'] },
+          } },
+        },
+        logLastAccess: {
+          $slice: [
+            { $filter: {
+              input: '$userlogs',
+              as: 'userLogs',
+              cond: { $eq: ['$$userLogs.logType', 'auth'] },
+            } },
+            -1,
+          ],
+        },
         _id: 0,
       } },
       { $sort: { firstname: 1, lastname: 1 } },
