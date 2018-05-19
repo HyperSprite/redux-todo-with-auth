@@ -54,7 +54,7 @@ class ListEvent extends React.Component {
   componentDidMount() {
     this.props.fetchEvents(relURL, this.props.stravaId);
     this.props.clearEvent();
-    this.props.setPageName('Events', '/blog/events');
+    this.props.setPageName('Events', 'https://blog.araceathlete.com/events');
   }
 
   editThisEvent = this.editThisEvent.bind(this);

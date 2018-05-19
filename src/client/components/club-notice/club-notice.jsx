@@ -85,7 +85,7 @@ class ClubNotice extends React.Component {
             <li>Creating New Events</li>
             <li>Activity Search</li>
           </ul>
-          <Typography>For more information, see our <a href="/blog/feature-requirements" target="new">Feature Requirements blog post</a> </Typography>
+          <Typography>For more information, see our <a href="https://blog.araceathlete.com/feature-requirements" target="new">Feature Requirements blog post</a> </Typography>
         </CardContent>
         <CardActions>
           <FormControlLabel

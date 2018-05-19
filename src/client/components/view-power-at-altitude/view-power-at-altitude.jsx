@@ -10,7 +10,7 @@ import FeatureNotice from '../feature-notice';
 import AltitudeTable from '../altitude-table';
 
 const title = 'Power at Altitude';
-const help = '/blog/power-at-altitude';
+const help = 'https://blog.araceathlete.com/power-at-altitude';
 
 class PowerAtAltitude extends Component {
   componentDidMount() {

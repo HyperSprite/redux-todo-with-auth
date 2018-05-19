@@ -45,7 +45,7 @@ const FeatureNotice = ({ classes, checks, title, user, optional }) => {
       </ul>
       <p>
         {'For more information, see '}
-        <a href={'/blog/feature-requirements'} target="new" >Feature Requirements</a>
+        <a href={'https://blog.araceathlete.com/feature-requirements'} target="new" >Feature Requirements</a>
       </p>
     </div>
   );
@@ -54,7 +54,7 @@ const FeatureNotice = ({ classes, checks, title, user, optional }) => {
       <p>
         <strong>{`Non club mebers are limted to 30 activities. `}</strong>
         {'For more information, see '}
-        <a href={'/blog/feature-requirements'} target="new" >Feature Requirements</a>
+        <a href={'https://blog.araceathlete.com/feature-requirements'} target="new" >Feature Requirements</a>
       </p>
     </div>
   );
