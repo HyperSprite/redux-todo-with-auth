@@ -2,15 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ExtGeolocation from '@hypersprite/react-geolocation-hoc';
-import { withStyles } from 'material-ui/styles';
-import { FormControlLabel } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
-import Switch from 'material-ui/Switch';
+import { withStyles } from '@material-ui/core/styles';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import IconButton from '@material-ui/core/IconButton';
+import Switch from '@material-ui/core/Switch';
 import CrosshairsGpsIcon from 'mdi-react/CrosshairsGpsIcon';
 import CrosshairsIcon from 'mdi-react/CrosshairsIcon';
 import GoogleMapLocation from './google-map-location';
 import Icon from '../icon';
-import style from './style';
 
 const styles = theme => ({
   root: {},

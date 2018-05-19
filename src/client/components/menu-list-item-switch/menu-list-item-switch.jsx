@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-} from 'material-ui/List';
-import Switch from 'material-ui/Switch';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Switch from '@material-ui/core/Switch';
 
 const propTypes = {
   checked: PropTypes.bool.isRequired,

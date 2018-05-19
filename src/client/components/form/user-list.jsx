@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { withStyles } from 'material-ui/styles';
-import { LinearProgress } from 'material-ui/Progress';
-import Divider from 'material-ui/Divider';
-import Card, { CardHeader, CardContent } from 'material-ui/Card';
-import Button from 'material-ui/Button';
-
+import { withStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import justFns from 'just-fns';
 import Static from './static';
 import GetUpdateAllUsers from '../admin/get-update-all-users';

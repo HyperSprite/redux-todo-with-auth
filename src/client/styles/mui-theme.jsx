@@ -2,8 +2,8 @@ import 'typeface-roboto/index.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import CssBaseline from 'material-ui/CssBaseline';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import palette from './mui-palette';
 import typography from './mui-typography';

@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Collapse from 'material-ui/transitions/Collapse';
-import Card, { CardActions, CardContent, CardHeader } from 'material-ui/Card';
-import { FormControlLabel } from 'material-ui/Form';
-import Typography from 'material-ui/Typography';
-import Switch from 'material-ui/Switch';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Collapse from '@material-ui/core/Collapse';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
 
 import BarChart from '../bar-chart';
 import GearTotals from './../gear-totals';

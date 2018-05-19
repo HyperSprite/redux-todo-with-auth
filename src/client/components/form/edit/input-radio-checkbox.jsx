@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Checkbox from 'material-ui/Checkbox';
-import { FormControl, FormControlLabel, FormGroup, FormLabel } from 'material-ui/Form';
+import { withStyles } from '@material-ui/core/styles';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const propTypes = {
   input: PropTypes.object,

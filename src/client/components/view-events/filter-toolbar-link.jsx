@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import AccountIcon from 'mdi-react/AccountIcon';
 import AccountOutlineIcon from 'mdi-react/AccountOutlineIcon';

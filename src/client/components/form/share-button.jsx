@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
-import Tooltip from 'material-ui/Tooltip';
+import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
+import Tooltip from '@material-ui/core/Tooltip';
 import FacebookBoxIcon from 'mdi-react/FacebookBoxIcon';
 import TwitterBoxIcon from 'mdi-react/TwitterBoxIcon';
 import LinkVariantIcon from 'mdi-react/LinkVariantIcon';
@@ -27,7 +27,7 @@ const styles = theme => ({
   root: {},
 });
 
-const ShareButtons = ({ ...event, classes, hashtags, title, urlHash, urlPath, urlRoot }) => {
+const ShareButtons = ({ classes, hashtags, title, urlHash, urlPath, urlRoot, ...event }) => {
   const url = encodeURIComponent(`${urlRoot}/${urlPath}#${urlHash}`);
   const imagePath = encodeURIComponent(`${urlRoot}/assets/araceathlete240x240.png`);
   const encodedTitle = encodeURIComponent(title);

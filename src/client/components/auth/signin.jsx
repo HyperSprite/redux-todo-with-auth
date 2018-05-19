@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import Button from 'material-ui/Button';
-import { LinearProgress } from 'material-ui/Progress';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { signinUser, ifToken } from '../../actions';
 import Alert from './../form/alert';

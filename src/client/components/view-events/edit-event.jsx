@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { FieldArray, reduxForm, formValueSelector } from 'redux-form';
-import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import Card, { CardHeader } from 'material-ui/Card';
-import Toolbar from 'material-ui/Toolbar';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';

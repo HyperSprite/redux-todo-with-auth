@@ -1,6 +1,6 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles } from '@material-ui/core/styles';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import SortAscendingIcon from 'mdi-react/SortAscendingIcon';
 import SortDescendingIcon from 'mdi-react/SortDescendingIcon';
 import EditSwitch from './switch';

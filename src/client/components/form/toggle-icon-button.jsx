@@ -1,8 +1,8 @@
 // TODO setup tool tips again
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 
 import AccountIcon from 'mdi-react/AccountIcon';
 import ContentDuplicateIcon from 'mdi-react/ContentDuplicateIcon';

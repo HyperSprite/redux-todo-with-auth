@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
-import Drawer from 'material-ui/Drawer';
-import List from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
 import * as actions from './../../actions';
 
 import menuDrawerList from './menu-drawer-list';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Divider from 'material-ui/Divider';
-import { LinearProgress } from 'material-ui/Progress';
+import Divider from '@material-ui/core/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 /**
 <ProgressDivider isProgress={actionOnTrue} />

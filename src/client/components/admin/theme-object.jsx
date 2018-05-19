@@ -11,12 +11,12 @@ import PropTypes from 'prop-types';
 import Inspector from 'react-inspector';
 /**
   remove ', createMuiTheme' from the imports
-  import { withStyles, withTheme, createMuiTheme } from 'material-ui/styles';
+  import { withStyles, withTheme, createMuiTheme } from '@material-ui/core/styles';
   see next line
 */
-import { withStyles, withTheme } from 'material-ui/styles';
-import { FormControlLabel } from 'material-ui/Form';
-import Switch from 'material-ui/Switch';
+import { withStyles, withTheme } from '@material-ui/core/styles';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 
 const styles = theme => ({
   root: {

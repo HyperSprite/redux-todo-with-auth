@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui';
+import { withStyles } from '@material-ui/core/styles';
 import justFNS from 'just-fns';
 
 import ChartBarSingleHorz from '../charts/bar-single-horz';

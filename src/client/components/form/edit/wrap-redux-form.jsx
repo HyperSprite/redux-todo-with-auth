@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, Form, reduxForm } from 'redux-form';
-import { withStyles } from 'material-ui/styles';
-import Button from 'material-ui/Button';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
 // eslint-disable-next-line
 import * as actions from '../../../actions';
