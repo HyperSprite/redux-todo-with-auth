@@ -18,9 +18,11 @@ export default class FullheightIframe extends Component {
   }
 
   render() {
+    document.domain = window.location.hostname;
     return (
       <div>
         <iframe
+          title={this.props.iFrameId}
           style={{ maxWidth: '100%', width: '100%', height: this.state.iFrameHeight, overflow: 'visible' }}
           onLoad={() => {
             this.setState({

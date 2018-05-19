@@ -22,7 +22,7 @@ class Home extends Component {
     return (
       <div>
         <Hero backgroundImageWide={lrgImage} backgroundImageNarrow={smlImage} />
-        <Iframe src={'blog/features'} iFrameId="features" />
+        <Iframe src={'https://blog.araceathlete.com/features'} iFrameId="features" />
       </div>
     );
   }
