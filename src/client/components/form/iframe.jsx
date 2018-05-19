@@ -18,7 +18,7 @@ export default class FullheightIframe extends Component {
   }
 
   render() {
-    document.domain = window.location.hostname;
+    document.domain = 'araceathlete.com';
     return (
       <div>
         <iframe
