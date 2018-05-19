@@ -1,6 +1,6 @@
 export const thisForm = 'editevent';
 export const title = 'Edit Event';
-export const help = '/blog/events';
+export const help = 'https://blog.araceathlete.com/events';
 export const relURLAdd = 'apiv1/events/addevent';
 export const relURLEdit = 'apiv1/events';
 

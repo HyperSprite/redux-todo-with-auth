@@ -48,7 +48,7 @@ class activeStats extends Component {
 
   componentDidMount() {
     this.updateUserActivities();
-    this.props.setPageName('Weekly Stats', '/blog/weekly-stats');
+    this.props.setPageName('Weekly Stats', 'https://blog.araceathlete.com/weekly-stats');
   }
 
   componentWillUnmount() {

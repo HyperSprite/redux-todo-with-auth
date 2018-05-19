@@ -61,7 +61,7 @@ class PowerAndWeight extends React.Component {
 
   componentDidMount() {
     this.props.fetchData('auth/user');
-    this.props.setPageName('Power and Weight', '/blog/power-and-weight');
+    this.props.setPageName('Power and Weight', 'https://blog.araceathlete.com/power-and-weight');
   }
 
   updateUser() {

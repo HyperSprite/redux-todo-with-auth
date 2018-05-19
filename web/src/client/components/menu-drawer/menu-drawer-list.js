@@ -62,7 +62,7 @@ const menuDrawerList = [
   },
   {
     primaryText: 'Blog and Help',
-    linkTo: '/blog',
+    linkTo: 'https://blog.araceathlete.com',
     target: 'blank',
     Icon: HelpIcon,
     access: ['anon', 'user', 'club', 'admin'],

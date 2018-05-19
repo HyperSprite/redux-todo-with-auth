@@ -17,7 +17,7 @@ const defaultProps = {
   iFrameId: '',
 };
 
-// example: <HelpCard src="/blog/weekly-stats" title="Learn more about Weekly Stats" />
+// example: <HelpCard src="https://blog.araceathlete.com/weekly-stats" title="Learn more about Weekly Stats" />
 
 export default class HelpCard extends Component {
   constructor(props) {
