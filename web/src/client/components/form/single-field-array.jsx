@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import { FormLabel } from 'material-ui/Form';
-import IconButton from 'material-ui/IconButton';
-import List, { ListItem } from 'material-ui/List';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles } from '@material-ui/core/styles';
+import FormLabel from '@material-ui/core/FormLabel';
+import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import DeleteIcon from 'mdi-react/DeleteIcon';
 
 import EditSwitch from '../form/edit/switch';

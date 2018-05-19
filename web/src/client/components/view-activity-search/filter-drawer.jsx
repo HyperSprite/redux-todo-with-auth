@@ -1,11 +1,10 @@
 import React from 'react';
-import { withStyles } from 'material-ui/styles';
-import { FormControlLabel } from 'material-ui/Form';
 import classNames from 'classnames';
-import Drawer from 'material-ui/Drawer';
-import Hidden from 'material-ui/Hidden';
-import Button from 'material-ui/Button';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import Button from '@material-ui/core/Button';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import FilterIcon from 'mdi-react/FilterIcon';
 import CloseIcon from 'mdi-react/CloseIcon';
 

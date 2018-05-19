@@ -7,7 +7,7 @@ import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';
 import Vignette from '@hypersprite/react-vignette';
-import { withTheme } from 'material-ui/styles';
+import { withTheme } from '@material-ui/core/styles';
 
 import ViewRouteMapPolylineDraw from './google-map-polyline-draw';
 import MapPin from '../map-pin';

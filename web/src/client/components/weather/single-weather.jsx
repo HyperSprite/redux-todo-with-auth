@@ -14,7 +14,7 @@ const propTypes = {
   windSpeedType: PropTypes.string,
 };
 
-const SingleWeather = ({ ...eDWF, localTime, temp, tempType, windSpeed, windSpeedType }) => {
+const SingleWeather = ({ localTime, temp, tempType, windSpeed, windSpeedType, ...eDWF }) => {
   return (
     <div className="weather-single">
       <div className="weather-item">

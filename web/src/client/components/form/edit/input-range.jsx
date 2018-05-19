@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import { InputLabel } from 'material-ui/Input';
+import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
 import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 import justFNS from 'just-fns';

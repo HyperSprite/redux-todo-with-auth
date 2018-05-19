@@ -4,10 +4,10 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Headroom from 'react-headroom';
-import { withStyles, withTheme } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import IconButton from 'material-ui/IconButton';
-import SvgIcon from 'material-ui/SvgIcon';
+import { withStyles, withTheme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import HelpCircleIcon from 'mdi-react/HelpCircleIcon';
 
 import * as actions from './../actions';

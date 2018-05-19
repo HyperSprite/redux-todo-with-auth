@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { Field, FieldArray, reduxForm } from 'redux-form';
-import Button from 'material-ui/Button';
-import Paper from 'material-ui/Paper';
-import Card, { CardHeader } from 'material-ui/Card';
-import Toolbar from 'material-ui/Toolbar';
-// import { DatePicker, TextField } from 'redux-form-material-ui';
+import { FieldArray, reduxForm } from 'redux-form';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import Toolbar from '@material-ui/core/Toolbar';
 
 import ScrollIntoView from '../../containers/scroll-into-view';
 import * as actions from '../../actions';

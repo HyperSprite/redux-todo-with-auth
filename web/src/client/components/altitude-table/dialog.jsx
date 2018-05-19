@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Dialog, {
-  withMobileDialog,
-} from 'material-ui/Dialog';
+import Dialog from '@material-ui/core/Dialog';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
-import Button from 'material-ui/Button';
+import Button from '@material-ui/core/Button';
 import DialogMessage from './dialog-message';
-
 
 const propTypes = {
   dialogData: PropTypes.number.isRequired,
