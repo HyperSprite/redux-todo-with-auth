@@ -17,8 +17,13 @@ export default class FullheightIframe extends Component {
     };
   }
 
+  componentDidMount() {
+    if (document.domain !== 'localhost') {
+      document.domain = process.env.SITE_URL;
+    }
+  }
+
   render() {
-    document.domain = 'araceathlete.com';
     return (
       <div>
         <iframe
