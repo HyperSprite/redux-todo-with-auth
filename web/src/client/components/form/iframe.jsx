@@ -18,8 +18,8 @@ export default class FullheightIframe extends Component {
   }
 
   componentDidMount() {
-    if (document.domain !== 'localhost') {
-      document.domain = process.env.SITE_URL;
+    if (document.domain.indexOf('www') !== -1) {
+      document.domain = document.domain.substr(4);
     }
   }
 
