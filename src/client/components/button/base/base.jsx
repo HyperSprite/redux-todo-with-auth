@@ -59,7 +59,6 @@ const propTypes = {
 
 const defaultProps = {
   color: 'default',
-  component: '',
   disabled: false,
   hasIcon: false,
   label: '',

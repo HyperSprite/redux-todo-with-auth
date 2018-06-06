@@ -15,7 +15,7 @@ const propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     flexGrow: 1,
     marginTop: 70,
@@ -53,7 +53,7 @@ function ExtLayoutSimple(props) {
           <Paper className={classes.paper}>
             <ClubNotice />
             {props.children}
-            <ButtonPrint />
+            {/* <ButtonPrint /> */}
           </Paper>
         </Grid>
         <Grid item className={classes.sidelight} xs sm={1} md={2} lg={3} />

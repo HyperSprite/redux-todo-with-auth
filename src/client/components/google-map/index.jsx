@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dimensions from 'react-dimensions';
 import GoogleMapReact from 'google-map-react';
-import mbPolyline from 'polyline';
+import mbPolyline from '@mapbox/polyline';
 import { fitBounds } from 'google-map-react/utils';
 import { lineString } from '@turf/helpers';
 import bbox from '@turf/bbox';

@@ -22,7 +22,11 @@ class Home extends Component {
     return (
       <div>
         <Hero backgroundImageWide={lrgImage} backgroundImageNarrow={smlImage} />
-        <Iframe src={'https://blog.araceathlete.com/features'} iFrameId="features" />
+        {process.env.NODE_ENV === 'production' ? (
+          <Iframe src={'https://blog.araceathlete.com/features'} iFrameId="features" />
+        ) : (
+          <div>Running in development</div>
+        )}
       </div>
     );
   }

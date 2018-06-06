@@ -15,6 +15,16 @@ const logObj = {
   level: 10,
 };
 
+function promiseCallback(func, ...args) {
+  return new Promise((resolve, reject) => {
+    args.push((err, res) => {
+      if (err) reject(err);
+      else resolve(res);
+    });
+    func.apply(args);
+  });
+}
+
 exports.getActivities = (req, res) => {
   strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
@@ -78,10 +88,26 @@ exports.getUser = (req, res) => {
   });
 };
 
+exports.deauthUser = async (user) => {
+  let result;
+  try {
+    result = await promiseCallback(strava.oauth.deauthorize, { access_token: user.access_token });
+    hlpr.logOutArgs(`${logObj.file}.getUser getAllActivities club member`, logObj.logType, 'info', 9, 'none', 'cron_no_page', `status triggered activities count ${result}`, user.stravaId);
+    return result;
+  } catch (err) {
+    result = { message: 'remove user failed', err };
+    hlpr.logOutArgs(`${logObj.file}.getUser getAllActivities club member`, logObj.logType, 'info', 4, err, 'cron_no_page', `status triggered activities count ${result}`, user.stravaId);
+    return result;
+  }
+};
+
 exports.getFriends = (req, res) => {
-  strava.athlete.listFriends({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
+  strava.athlete.listFriends({
+    id: req.user.stravaId,
+    access_token: req.user.access_token,
+  }, (err, data) => {
     const result = data.map(d => d.id);
-    res.json(result)
+    res.json(result);
   });
 };
 

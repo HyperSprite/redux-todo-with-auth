@@ -21,6 +21,7 @@ import justFNS from 'just-fns';
 */
 
 const rangeInputData = (activCalcAll, sortStrings) => {
+  if (!activCalcAll || activCalcAll.count === 0) return {}; 
   const buildRangeArr = Object.values(sortStrings).reduce((accArr, element) => {
     const vals = {
       conDef0: activCalcAll[element.value].range[0],

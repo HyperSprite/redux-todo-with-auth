@@ -78,7 +78,7 @@ const ButtonBaseButton = (props) => {
       >
         {hasIcon && (
           <Icon
-            color={props.color}
+            // color={props.color}
             size={props.size}
             variant={props.variant}
             disabled={props.disabled}

@@ -20,7 +20,7 @@ import PowerAtAltitude from './../components/view-power-at-altitude';
 
 const router = (
   <Switch>
-    <RouteAuthorized exact path="/" component={WeeklyStats} />
+    <RouteAuthorized exact path="/" component={Home} />
     <RouteAuthorized path="/athlete" component={Athlete} />
     <RouteAuthorized path="/activity-search" component={ActivitySearch} />
     <RouteAuthorized path="/dashboard" component={Dashboard} />
