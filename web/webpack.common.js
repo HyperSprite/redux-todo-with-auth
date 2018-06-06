@@ -2,8 +2,6 @@ const webpack = require('webpack');
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ManifestPlugin = require('webpack-manifest-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const resolve = dir => path.join(__dirname, dir);
 
@@ -43,29 +41,40 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: [{
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              'env',
-              'stage-0',
-              'react',
-            ],
-            plugins: [
-              'lodash',
-              'date-fns',
-              'recharts',
-              'transform-flow-strip-types',
-              'transform-runtime',
-            ],
-          },
-        }],
-      },
-      {
         test: /\.html$/,
         use: 'raw-loader',
+      },
+      {
+        test: /\.gif$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/png',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 10000,
+              mimetype: 'application/font-woff',
+              publicPath: '/assets/',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        use: [
+          {
+            loader: 'file-loader',
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -89,40 +98,6 @@ module.exports = {
         ],
       },
       {
-        test: /\.gif$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              mimetype: 'image/png',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              limit: 10000,
-              minetype: 'application/font-woff',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-            },
-          },
-        ],
-      },
-      {
         test: /\.(jpe?g|png|gif)$/i,
         use: [
           {
@@ -138,6 +113,27 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              'env',
+              'stage-0',
+              'react',
+            ],
+            plugins: [
+              'lodash',
+              'date-fns',
+              'recharts',
+              'transform-flow-strip-types',
+              'transform-runtime',
+            ],
+          },
+        }],
       },
     ],
   },
