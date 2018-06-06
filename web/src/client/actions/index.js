@@ -404,7 +404,10 @@ export function fetchActivitiesSearch(relURL, queryOptions) {
       .catch((error) => {
         dispatch({
           type: TYPES.FETCH_DATA,
-          payload: error.data,
+          payload: error,
+        });
+        dispatch({
+          type: TYPES.SET_IS_FETCHING_OFF,
         });
       });
   };

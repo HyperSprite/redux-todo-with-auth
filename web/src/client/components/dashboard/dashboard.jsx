@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Layout from '../layout';
+// import Layout from '../layout';
 
 const Dashboard = (props) => {
   return (
-    <Layout>
+    // <Layout>
       <div>
         hello
       </div>
-    </Layout>
+    // </Layout>
   );
 };
 

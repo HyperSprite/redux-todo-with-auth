@@ -46,7 +46,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  color: '',
+  // color: '',
   disabled: false,
   force: false,
   inverse: false,
@@ -77,15 +77,15 @@ const styles = theme => ({
     },
   },
   force: {
-    fill: theme.palette.primary[500],
+    fill: theme.palette.primary.main,
     backgroundColor: 'white',
     '&$inverse': {
       fill: theme.palette.background.default,
-      backgroundColor: theme.palette.primary[500],
+      backgroundColor: theme.palette.primary.main,
     },
   },
   primary: {
-    fill: theme.palette.primary[500],
+    fill: theme.palette.primary.main,
     backgroundColor: 'transparent',
     '&$disabled': {
       fill: theme.palette.action.disabled,
@@ -102,9 +102,9 @@ const styles = theme => ({
   },
   secondary: {
     fill: theme.palette.secondary.A200,
-    backgroundColor: theme.palette.getContrastText(theme.palette.secondary.A200),
+    // backgroundColor: theme.palette.getContrastText(theme.palette.secondary.A200),
     '&$inverse': {
-      fill: theme.palette.getContrastText(theme.palette.secondary.A200),
+      // fill: theme.palette.getContrastText(theme.palette.secondary.A200),
       backgroundColor: 'transparent',
     },
     '&$variant': {

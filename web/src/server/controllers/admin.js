@@ -165,8 +165,30 @@ exports.updateAllUsers = (req, res) => {
   res.send({ message: 'update started' });
 };
 
-exports.removeUser = (req, res) => {
+exports.removeUser = async (req, res) => {
   const userToRemove = req.params.userToRemove; // stravaId
+  let logMessage = '';
+  try {
+    const userCommonRes = await UserCommon.findOneAndRemove({ stravaId: userToRemove });
+    const userActivitiesRes = await Activities.remove({ stravaId: userToRemove });
+    const userAuthRes = await User.findOneAndRemove({ stravaId: userToRemove });
+    const deauthUserRes = await stravaControl.deauthUser(userAuthRes);
+    logMessage = `Remove User Success: ${userToRemove}, deauthUserRes: ${!!deauthUserRes}, userCommonRemoved: ${!!userCommonRes}, activitiesRemoved: ${!!userActivitiesRes}, userRemoved: ${!!userAuthRes}`;
+    hlpr.logOutArgs(`${logObj.file}.removeUser User removed`, 'admin', 'info', 5, null, req.originalUrl, logMessage, req.user.stravaId);
+    return res.send({
+      userToRemove,
+      deauthUserRes,
+      success: true,
+      userCommonRes: !!userCommonRes,
+      userActivitiesRes: !!userActivitiesRes,
+      userAuthRes: !!userAuthRes,
+    });
+  } catch (err) {
+    hlpr.logOutArgs(`${logObj.file}.removeUser UserCommon err`, 'admin', 'err', 2, err, req.originalUrl, logMessage, req.user.stravaId);
+    return res.status(500).send({ userToRemove, err });
+  }
+
+
   UserCommon.findOneAndRemove({ stravaId: userToRemove }, (err, userCommonRemoved) => {
     if (err) {
       const logMessage = `removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} adminId: ${req.user.stravaId}`;
@@ -192,3 +214,31 @@ exports.removeUser = (req, res) => {
     });
   });
 };
+
+// exports.removeUser = (req, res) => {
+//   const userToRemove = req.params.userToRemove; // stravaId
+//   UserCommon.findOneAndRemove({ stravaId: userToRemove }, (err, userCommonRemoved) => {
+//     if (err) {
+//       const logMessage = `removeUser Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} adminId: ${req.user.stravaId}`;
+//       hlpr.logOutArgs(`${logObj.file}.removeUser UserCommon err`, 'admin', 'err', 2, err, req.originalUrl, logMessage, req.user.stravaId);
+//       return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
+//     }
+//     Activities.remove({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
+//       if (err) {
+//         const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`;
+//         hlpr.logOutArgs(`${logObj.file}.removeUser Activities err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
+//         return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
+//       }
+//       User.findOneAndRemove({ stravaId: userToRemove }, (err, userRemoved) => {
+//         if (err) {
+//           const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`;
+//           hlpr.logOutArgs(`${logObj.file}.removeUser User err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
+//           return res.send({ userToRemove, success: false });
+//         }
+//         const logMessage = `Remove User Success ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved} userRemoved ${!!userRemoved}`;
+//         hlpr.logOutArgs(`${logObj.file}.removeUser User removed`, 'admin', 'info', 5, err, req.originalUrl, logMessage, req.user.stravaId);
+//         return res.send({ userToRemove, success: true });
+//       });
+//     });
+//   });
+// };

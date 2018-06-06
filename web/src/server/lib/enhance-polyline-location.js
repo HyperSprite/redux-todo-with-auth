@@ -1,4 +1,4 @@
-const mbPolyline = require('polyline');
+const mbPolyline = require('@mapbox/polyline');
 const _ = require('lodash');
 const resources = require('./resources');
 const hlpr = require('./helpers');

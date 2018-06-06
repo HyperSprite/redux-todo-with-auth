@@ -62,13 +62,14 @@ const secureHost = (req, res, next) => {
 if (!hlpr.isProd() && process.env.NODE_ENV !== 'API-ONLY') {
   hlpr.consLog(['**** Using Webpack Dev Middleware']);
   const webpack = require('webpack');
-  const webpackConfig = require('../../webpack.config');
+  const webpackConfig = require('../../webpack.dev');
+  console.dir(webpackConfig);
+  console.dir(webpackConfig.module.rules);
   const compiler = webpack(webpackConfig);
+  app.use(require('webpack-hot-middleware')(compiler));
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true, publicPath: webpackConfig.output.publicPath
   }));
-  app.use(require('webpack-hot-middleware')(compiler));
-  // app.use(morgan('combined'));
 }
 
 mongoose.plugin(require('./models/middleware-current-schema'));
