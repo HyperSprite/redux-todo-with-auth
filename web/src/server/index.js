@@ -120,11 +120,13 @@ app.use((err, req, res) => {
 });
 
 const runtimeSettings = `${process.env.NODE_ENV} v${pckg.version} log: ${process.env.LOGGING}`;
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' && process.env.ROOT_URL !== 'http://localhost:3080') {
   hlpr.getDateLocal('America/Los_Angeles', 'YYYY-MM-DD HH:mm', (date) => {
     const txtMessage = `${date} - ARaceathlete started ${runtimeSettings} - ${process.env.ROOT_URL}`;
     txt.sendText(process.env.ADMIN_TXT_NUMBER, txtMessage);
   });
+} else {
+  console.log(`txtMessage: ${runtimeSettings} - ${process.env.ROOT_URL}`);
 }
 
 // HTTPS
