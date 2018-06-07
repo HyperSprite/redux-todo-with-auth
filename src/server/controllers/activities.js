@@ -370,19 +370,25 @@ exports.getRecentActivities = (req, res) => {
     exports.processingStatusOneSocket(req.user.stravaId);
     if (_.isArray(acts)) {
       const counter = [];
-      acts.forEach((act, index) => {
+      console.log('listActivities !created', counter, acts);
+      if (acts.length === 0) {
+        return exports.getWeeklyStats(req, res);
+      }
+      acts.forEach((act) => {
         Activities.findOrCreate({ activityId: act.id }, act, (err, dbActivity, created) => {
           if (err) {
             hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)}`, req.user.stravaId);
             return { error: err };
           }
           if (!created) {
+            console.log('listActivities !created', counter, acts);
             counter.push(dbActivity.activityId);
             hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate !created`, logObj.logType, '!created', 7, err, req.originalUrl, dbActivity.activityId, req.user.stravaId);
             if (counter.length === acts.length) {
               return exports.getWeeklyStats(req, res);
             }
           } else {
+            console.log('listActivities', counter, acts);
             options.activityId = dbActivity.activityId;
             const theseOptions = Object.assign({}, options, { activity: dbActivity.activityId });
             exports.getActivityDetails(dbActivity, theseOptions, (done) => {
@@ -397,7 +403,7 @@ exports.getRecentActivities = (req, res) => {
       });
     } else {
       const message = 'Unable to update your activities at this time. Strava may be down or some other error has occurred. Here is what we already have';
-      hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)} or !isArray ${JSON.stringify(acts).slice(0, 50)}`, req.user.stravaId);
+      hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is err ${JSON.stringify(err)} or !isArray`, req.user.stravaId);
       return exports.getWeeklyStats(Object.assign({}, req, { serverMessage: { error: message } }), res);
     }
   });
@@ -631,6 +637,7 @@ exports.getWeeklyStats = async (req, res) => {
     startDate,
     serverMessage: req.serverMessage,
   };
+  console.log('getWeeklyStats', startDate);
   try {
     result.week = await getOneWeek(startDate, req.user.stravaId);
     result.stats = await weeklyStats(startDate, result.week, req.user.date_preference);
