@@ -5,10 +5,15 @@ import { withStyles } from '@material-ui/core/styles';
 import justFNS from 'just-fns';
 import EditSwitch from '../form/edit/switch';
 
+// const objHasKeys = (obj) => {
+//   if (Object.keys(obj).length) return true;
+//   return false;
+// };
+
 const propTypes = {
   mPref: PropTypes.bool.isRequired,
   /** Object */
-  valuesDefaults: PropTypes.object.isRequired,
+  valuesDefaults: PropTypes.object,
   /** Array */
   valueItems: PropTypes.array.isRequired,
 };
@@ -45,33 +50,32 @@ const RangeInput = (props) => {
       rangeInputData,
       rangeInputActivitiesAll,
     } = props;
-
   return (
     <div className={classes.flexParent} >
-      {/* {rangeInputActivitiesAll ? ( */}
-      <div className={classes.flexColumn} >
-        {(rangeInputActivitiesAll.map(rA => (
-          <div key={rA.name} >
-            {rA.name !== 'count' ||
-              rA.name !== 'maxSpeed' ||
-              rA.name !== 'maxHeartrate' ||
-              rA.name !== 'maxWatts' ||
-              !rA.contentDefautls[0] ? (
-                <EditSwitch
-                  form={form}
-                  formValues={rA}
-                  defaultValue={rA.contentDefautls}
-                  min={rA.contentDefautls[0]}
-                  max={rA.contentDefautls[1]}
-                  mPref={mPref}
-                  datePref={datePref}
-                  rangeValue={rA.rangeValue}
-                />
-            ) : null }
-          </div>
-        )))}
-      </div>
-    {/* ) : null } */}
+      {rangeInputActivitiesAll.length && valuesDefaults ? (
+        <div className={classes.flexColumn} >
+          {(rangeInputActivitiesAll.map(rA => (
+            <div key={rA.name} >
+              {rA.name !== 'count' ||
+                rA.name !== 'maxSpeed' ||
+                rA.name !== 'maxHeartrate' ||
+                rA.name !== 'maxWatts' ||
+                !rA.contentDefautls[0] ? (
+                  <EditSwitch
+                    form={form}
+                    formValues={rA}
+                    defaultValue={rA.contentDefautls}
+                    min={rA.contentDefautls[0]}
+                    max={rA.contentDefautls[1]}
+                    mPref={mPref}
+                    datePref={datePref}
+                    rangeValue={rA.rangeValue}
+                  />
+              ) : null }
+            </div>
+          )))}
+        </div>
+      ) : null }
     </div>
   );
 };
