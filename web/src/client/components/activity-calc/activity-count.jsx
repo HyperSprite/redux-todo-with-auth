@@ -48,9 +48,9 @@ const styles = theme => ({
 const ActivityCount = (props) => {
   const {
     classes,
-    activitySearchCount,
-    activCalcAll,
-    activCalcFilter,
+    activitySearchCount = 0,
+    activCalcAll = 0,
+    activCalcFilter = 0,
   } = props;
 
   return (activCalcFilter && activCalcAll) ? (
@@ -102,8 +102,8 @@ function mapStateToProps(state) {
   const { activities } = state;
   return {
     activitySearchCount: activities.activitySearch && activities.activitySearch.length,
-    activCalcAll: activities.activCalcAll.count,
-    activCalcFilter: activities.activCalcFilter.count,
+    activCalcAll: activities.activCalcAll && activities.activCalcAll.count,
+    activCalcFilter: activities.activCalcFilter && activities.activCalcFilter.count,
   };
 }
 
