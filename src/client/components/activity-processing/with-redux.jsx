@@ -22,13 +22,13 @@ const ProcessingStatus = (props) => {
 };
 
 ProcessingStatus.propTypes = {
-  classes: types.classes,
-  processed: types.processed.isRequired,
+  processed: types.processed,
   queued: types.queued,
 };
 
 ProcessingStatus.defaultProps = {
   queued: 0,
+  processed: 0,
 };
 
 function mapStateToProps(state) {
