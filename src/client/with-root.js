@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import store from './store';
 import getPageContext from './get-page-context';
 
 function withRoot(Component) {
@@ -23,16 +26,18 @@ function withRoot(Component) {
     pageContext = null;
 
     render() {
-      // MuiThemeProvider makes the theme available down the React tree thanks to React context.
       return (
-        <MuiThemeProvider
-          theme={this.pageContext.theme}
-          sheetsManager={this.pageContext.sheetsManager}
-        >
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...this.props} />
-        </MuiThemeProvider>
+        <Provider store={store}>
+          <Router>
+            <MuiThemeProvider
+              theme={this.pageContext.theme}
+              sheetsManager={this.pageContext.sheetsManager}
+            >
+              <CssBaseline />
+              <Component {...this.props} />
+            </MuiThemeProvider>
+          </Router>
+        </Provider>
       );
     }
   }
