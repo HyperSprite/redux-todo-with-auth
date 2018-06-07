@@ -63,7 +63,7 @@ export default function (state = {
         return {
           ...state,
           activities: action.payload.activities,
-          activitySearch: action.payload.activitySearch,
+          activitySearch: action.payload.activitySearch || [],
           activitySearchCount: state.activitySearchCount + 1,
           activitySearchEnd: !action.payload.activities.length,
           activCalcAll: action.payload.activCalcAll,
@@ -73,7 +73,7 @@ export default function (state = {
       return {
         ...state,
         activities: [...state.activities.concat(action.payload.activities)],
-        activitySearch: [...state.activitySearch.concat(action.payload.activitySearch)],
+        activitySearch: [...state.activitySearch.concat(action.payload.activitySearch || [])],
         activitySearchCount: state.activitySearchCount + 1,
         activitySearchEnd: !action.payload.activities.length,
         activCalcAll: action.payload.activCalcAll,
