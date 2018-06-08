@@ -21,19 +21,19 @@ const menuDrawerList = [
     primaryText: 'Weekly Stats',
     linkTo: '/weekly-stats',
     Icon: ChartBarStackedIcon,
-    access: ['user', 'club', 'admin'],
+    access: ['club', 'admin'],
   },
   {
     primaryText: 'Activity Search',
     linkTo: '/activity-search',
     Icon: Magnify,
-    access: ['user', 'club', 'admin'],
+    access: ['club', 'admin'],
   },
   {
-    primaryText: 'Route Search (alpha)',
+    primaryText: 'Routes Search (beta)',
     linkTo: '/route-search',
     Icon: Magnify,
-    access: ['admin'],
+    access: ['club', 'admin'],
   },
   {
     primaryText: 'Events',
