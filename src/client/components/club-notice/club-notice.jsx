@@ -1,15 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import ButtonRefresh from '../button/refresh';
+
+import ClubNoticeStyles from './club-notice-styles';
+import ClubNoticeView from './club-notice-view';
 
 import * as actions from '../../actions';
 
@@ -26,27 +20,11 @@ const defaultProps = {
   clubNotice: true,
 };
 
-const styles = theme => ({
-  root: {
-    padding: 6,
-  },
-
-});
-
 class ClubNotice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      open: false,
-    };
     this.toggleNotice = this.toggleNotice.bind(this);
     this.handleUserStatus = this.handleUserStatus.bind(this);
-  }
-
-  componentDidMount() {
-    if (!this.state.open && !this.props.clubMember) {
-      this.handleOpen();
-    }
   }
 
   toggleNotice() {
@@ -58,55 +36,19 @@ class ClubNotice extends React.Component {
     this.props.fetchStrava('user', this.props.stravaId, null, this.props.stravatoken, 'getUser');
   }
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
   render() {
-    const { classes, firstname, clubMember, clubNotice } = this.props;
+    const { clubMember, clubNotice } = this.props;
     return (clubMember || clubNotice) ? null : (
-      <Card>
-        <CardHeader
-          title={`Welcome ${firstname}`}
-        />
-        <CardContent>
-          <Typography variant="body1">You have connected with Strava!</Typography>
-          <Typography>{'Don\'t forget to join the '}
-            <a href="https://www.strava.com/clubs/araceathlete" target="blank">
-              A Race athlete Strava Club
-            </a>
-          </Typography>
-          <Typography>Joining the club grants you additional features such as:</Typography>
-          <ul>
-            <li>Creating New Events</li>
-            <li>Activity Search</li>
-          </ul>
-          <Typography>For more information, see our <a href="https://blog.araceathlete.com/feature-requirements" target="new">Feature Requirements blog post</a> </Typography>
-        </CardContent>
-        <CardActions>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={clubNotice}
-                onChange={this.toggleNotice}
-                color="primary"
-              />
-            }
-            label="Disable this message"
+      <ClubNoticeStyles
+        render={wStyles => (
+          <ClubNoticeView
+            {...wStyles}
+            {...this.props}
+            handleUserStatus={this.handleUserStatus}
+            toggleNotice={this.toggleNotice}
           />
-          <ButtonRefresh onClick={this.handleUserStatus} label="Club Check" />
-        </CardActions>
-        <CardContent>
-          <Typography>
-            {'Use the "Club Check" button after you have joined to refresh your session.'}<br />
-            {'If at any time you want to see this message again, click the Club Notice switch in the app menu.'}
-          </Typography>
-        </CardContent>
-      </Card>
+        )}
+      />
     );
   }
 }
@@ -124,5 +66,4 @@ function mapStateToProps(state) {
   };
 }
 
-const StyledClubNotice = withStyles(styles, { name: 'styledClubNotice' })(ClubNotice);
-export default connect(mapStateToProps, actions)(StyledClubNotice);
+export default connect(mapStateToProps, actions)(ClubNotice);
