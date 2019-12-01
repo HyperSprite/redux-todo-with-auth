@@ -1,4 +1,5 @@
 const jwt = require('jwt-simple');
+const refresh = require('passport-oauth2-refresh');
 const strava = require('strava-v3');
 const moment = require('moment');
 
@@ -63,6 +64,8 @@ exports.writeUser = (userData, user, resultUser) => {
 // setting up app permissions
   let admin = false;
   let club = false;
+  // admin = (userData.athlete.id * 1 === 2088740); // temp fix
+  // club = (userData.athlete.id * 1 === 2088740);
 
   if (userData.athlete.clubs && userData.athlete.clubs.length !== 0) {
     admin = userData.athlete.clubs.some((c) => {
@@ -150,13 +153,27 @@ exports.signinError = (err, req, res) => {
 };
 
 exports.stravaSignin = (req, res) => {
+  const { user } = req;
   const stravaArgs = {
-    id: req.user.stravaId,
-    access_token: req.user.access_token
+    id: user.stravaId,
+    access_token: user.access_token,
   }
   strava.athlete.get(stravaArgs, (err, athlete) => {
+    if (err && err.code === 401) {
+      refresh.requestNewAccessToken('stravaLogin', user.refresh_token, (err, accessToken) => {
+        if(err || !accessToken) { return send401Response(); }
+          // Save the new accessToken for future use
+          return User.findOneAndUpdate(
+            { stravaId: user.stravaId },
+            { access_token: accessToken },
+            { new: true },
+            (err, updatedUser) => exports.stravaSignin({ user: updatedUser}, res));
+          });
+
+    }
     if (err || !athlete) return res.status(401).send({ error: 'Error or no data found' });
     if (athlete.message === 'Authorization Error') exports.stravaSignOut(req, res);
+
     exports.writeUser({ athlete: athlete }, req.user, (resultUser) => {
       hlpr.consLog(['getUser ................', { athlete: resultUser }, req.user.stravaId]);
       const result = `
