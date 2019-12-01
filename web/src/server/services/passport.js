@@ -1,4 +1,5 @@
 const passport = require('passport');
+const refresh = require('passport-oauth2-refresh');
 const LocalStrategy = require('passport-local');
 const StravaStrategy = require('passport-strava-oauth2').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
@@ -28,11 +29,13 @@ const stravaLogin = new StravaStrategy({
   clientID: process.env.STRAVA_CLIENT_ID,
   clientSecret: process.env.STRAVA_CLIENT_SECRET,
   callbackURL: `/${process.env.STRAVA_REDIRECT_URI}`,
+  scope: `read_all,activity:read_all,profile:read_all`,
 },
 (accessToken, refreshToken, profile, done) => {
   const tmpAthlete = {};
   tmpAthlete.stravaId = profile.id;
   tmpAthlete.access_token = profile.token;
+  tmpAthlete.refresh_token = refreshToken;
   User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user, created) => {
     if (created) {
       const message = `ARaceathlete new user ${user.firstname} ${user.lastname}, https://www.strava.com/athletes/${user.stravaId}, clubMember: ${user.clubMember}`;
@@ -43,7 +46,10 @@ const stravaLogin = new StravaStrategy({
     if (tmpAthlete.access_token !== user.access_token) {
       User.findOneAndUpdate(
         { stravaId: tmpAthlete.stravaId },
-        { access_token: tmpAthlete.access_token },
+        {
+          access_token: tmpAthlete.access_token,
+          refresh_token: tmpAthlete.refresh_token,
+        },
         { new: true },
         (err, updatedUser) => done(err, updatedUser));
     } else {
@@ -70,3 +76,4 @@ const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
 passport.use(jwtLogin);
 // passport.use(localLogin);  // not using any localLogin
 passport.use(stravaLogin);
+refresh.use(stravaLogin);
