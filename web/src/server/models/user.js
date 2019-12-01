@@ -79,6 +79,7 @@ const userSchema = new Schema({
   password: String,
   stravaId: Number,
   access_token: String,
+  refresh_token: String,
   resource_state: Number,
   firstname: String,
   lastname: String,
