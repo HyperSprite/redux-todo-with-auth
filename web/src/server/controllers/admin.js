@@ -170,7 +170,7 @@ exports.removeUser = async (req, res) => {
   let logMessage = '';
   try {
     const userCommonRes = await UserCommon.findOneAndRemove({ stravaId: userToRemove });
-    const userActivitiesRes = await Activities.remove({ stravaId: userToRemove });
+    const userActivitiesRes = await Activities.deleteOne({ stravaId: userToRemove });
     const userAuthRes = await User.findOneAndRemove({ stravaId: userToRemove });
     const deauthUserRes = await stravaControl.deauthUser(userAuthRes);
     logMessage = `Remove User Success: ${userToRemove}, deauthUserRes: ${!!deauthUserRes}, userCommonRemoved: ${!!userCommonRes}, activitiesRemoved: ${!!userActivitiesRes}, userRemoved: ${!!userAuthRes}`;
@@ -195,7 +195,7 @@ exports.removeUser = async (req, res) => {
       hlpr.logOutArgs(`${logObj.file}.removeUser UserCommon err`, 'admin', 'err', 2, err, req.originalUrl, logMessage, req.user.stravaId);
       return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
     }
-    Activities.remove({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
+    Activities.deleteOne({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
       if (err) {
         const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`;
         hlpr.logOutArgs(`${logObj.file}.removeUser Activities err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
@@ -223,7 +223,7 @@ exports.removeUser = async (req, res) => {
 //       hlpr.logOutArgs(`${logObj.file}.removeUser UserCommon err`, 'admin', 'err', 2, err, req.originalUrl, logMessage, req.user.stravaId);
 //       return res.send({ userToRemove, success: false, message: 'activitiesRemoved failed' });
 //     }
-//     Activities.remove({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
+//     Activities.deleteOne({ 'athlete.id': userToRemove }, (err, activitiesRemoved) => {
 //       if (err) {
 //         const logMessage = `Remove User Failed ${userToRemove} userCommonRemoved ${!!userCommonRemoved} activitiesRemoved ${!!activitiesRemoved}`;
 //         hlpr.logOutArgs(`${logObj.file}.removeUser Activities err`, 'admin', 'err', 1, err, req.originalUrl, logMessage, req.user.stravaId);
