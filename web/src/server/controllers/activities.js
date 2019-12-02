@@ -431,7 +431,7 @@ exports.getExtendedActivityStats = () => {
   const backDate = new Date(newDate.getTime() - theInterval(activityStreamsCache));
   hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats start`, logObj.logType, 'info', 9, null, 'no_page', `Get ${limitCount} activities every ${minutes} minutes with backDate ${backDate}`, null);
   const cacheQuery = { updatedAt: { $lt: backDate } };
-  ActivityStreams.find(cacheQuery).remove().exec((err, removed) => {
+  ActivityStreams.find(cacheQuery).deleteMany().exec((err, removed) => {
     if (removed.n) {
       hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats activityStreamsCache`, logObj.logType, 'info', 5, err, 'no_page', `removed ${removed.n}`, null);
     }
@@ -711,7 +711,7 @@ input = {
 */
 
 exports.removeActivity = (input, output) => {
-  Activities.remove(input, (err) => {
+  Activities.deleteOne(input, (err) => {
     if (err) {
       hlpr.logOutArgs(`${logObj.file}.removeActivity err`, logObj.logType, 'error', 5, err, 'no_page', `Remove Activity activityid: ${JSON.stringify(input)}`);
       return output({
