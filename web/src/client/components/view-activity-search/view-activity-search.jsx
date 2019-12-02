@@ -318,7 +318,7 @@ class ActivitySearch extends Component {
       lat: this.state.lat || this.props.lat || user.userGeoLatitude,
       lng: this.state.lng || this.props.lng || user.userGeoLongitude,
     };
-    console.log(geoData);
+    // console.log(geoData);
     const SearchTextForm = (
       <div className={classes.flexParent}>
         <div className={classes.flexcontainer} >
