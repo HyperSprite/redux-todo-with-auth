@@ -9,7 +9,7 @@ const propTypes = {
 };
 
 class Signout extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.signoutUser();
   }
 
