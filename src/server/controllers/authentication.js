@@ -154,9 +154,11 @@ exports.signinError = (err, req, res) => {
 
 exports.handleRefresh = (callingFnc, req, res) => {
   const { user } = req;
-  refresh.requestNewAccessToken('stravaLogin', user.refresh_token, (err, accessToken) => {
-    hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is accessToken ${JSON.stringify(accessToken)} or !isArray`, req.user.stravaId);
-    if(err || !accessToken) { return res }
+  refresh.requestNewAccessToken('strava', user.refresh_token, (err, accessToken) => {
+    if(err || !accessToken) {
+      hlpr.logOutArgs(`${logObj.file}.handleRefresh err`, logObj.logType, 'info', 3, err, req.originalUrl, `Failed Refresh Token ${JSON.stringify(err)}`, req.user.stravaId);
+      exports.signinError = ({ error: 'Failed Refresh Token'}, req, res)
+    }
     // Save the new accessToken for future use
     return User.findOneAndUpdate(
       { stravaId: user.stravaId },
