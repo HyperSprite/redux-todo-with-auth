@@ -333,6 +333,9 @@ exports.getActivityUpdate = (activity, opts, cb) => {
     id: opts.activityId,
     access_token: opts.access_token,
   }, (err, data) => {
+    if (data && data.message === 'Authorization Error') {
+      auth.handleRefresh(exports.getActivityUpdate, req, res);
+    }
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityUpdate`,
@@ -370,7 +373,6 @@ exports.getRecentActivities = (req, res) => {
   };
   strava.athlete.listActivities({ id: user.stravaId, access_token: user.access_token }, (err, acts) => {
     exports.processingStatusOneSocket(user.stravaId);
-
 
     if (acts && acts.message === 'Authorization Error') {
       auth.handleRefresh(exports.getRecentActivities, req, res);
