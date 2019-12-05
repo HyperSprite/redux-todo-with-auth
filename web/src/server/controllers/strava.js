@@ -28,7 +28,9 @@ function promiseCallback(func, ...args) {
 exports.getActivities = (req, res) => {
   strava.activities.get({ id: req.user.stravaId, access_token: req.user.access_token }, (err, data) => {
     if (err || !data) res.status(401).send({ error: 'Error or no data found' });
-    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
+    if (data && data.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(exports.getActivities, req, res);
+    }
     hlpr.logOutArgs(`${logObj.file}.getActivities`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${data.message}`, req.user.stravaId);
     res.send(data);
   });
@@ -47,7 +49,9 @@ exports.getRoute = (req, res) => {
       hlpr.logOutArgs(`${logObj.file}.getRoute`, logObj.logType, 'failure', 3, err, req.originalUrl, `status 401 ${data.message} ${data.id}`, req.user.stravaId);
       res.status(401).send({ error: 'Error or no data found' });
     }
-    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
+    if (data && data.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(exports.getRoute, req, res);
+    }
     hlpr.logOutArgs(`${logObj.file}.getRoute`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${data.message} ${data.id}`, req.user.stravaId);
     res.send(data);
   });
@@ -66,7 +70,9 @@ exports.getUser = (req, res) => {
       hlpr.logOutArgs(`${logObj.file}.getUser err`, logObj.logType, 'failure', 3, err, req.originalUrl, `status 401 ${data.message} ${data.id}`, req.user.stravaId);
       res.status(401).send({ error: 'Error or no data found' });
     }
-    if (data.message === 'Authorization Error') authCtrlr.stravaSignOut(req, res);
+    if (data && data.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(exports.getUser, req, res);
+    }
     // controllers/authentication.writeUser(userData, user, resultUser)
     authCtrlr.writeUser({ athlete: data }, req.user, (resultUser) => {
       hlpr.logOutArgs(`${logObj.file}.getUser`, logObj.logType, 'info', 9, err, req.originalUrl, `status ${resultUser.id}`, req.user.stravaId);
@@ -106,52 +112,57 @@ exports.getFriends = (req, res) => {
     id: req.user.stravaId,
     access_token: req.user.access_token,
   }, (err, data) => {
+    if (data && data.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(exports.getFriends, req, res);
+    }
     const result = data.map(d => d.id);
     res.json(result);
   });
 };
 
+function getNightlyUser(fUser){
+  strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
+    hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
+    if (err || !athlete) {
+      hlpr.logOutArgs(`${logObj.file}.nightlyUpdate err`, logObj.logType, 'failure', 2, err, 'cron_no_page', 'status error or no athlete', fUser.stravaId);
+      hlpr.consLog(['error: Error or no data found']);
+      return null;
+    }
+    if (data && data.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(getNightlyUser, fUser);
+    }
+    authCtrlr.writeUser({ athlete: athlete }, fUser, (resUser) => {
+      hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
+      const tmpRt = {
+        pageCount: 1,
+        routeplans: [],
+        cronjob: true,
+        user: fUser,
+      };
+      ctrlRouteplans.getAllRouteplans(tmpRt, (result) => {
+        hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllRouteplans`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered routeplan count ${result.length}`, fUser.stravaId);
+      });
+      if (resUser.clubMember === true) {
+        const tmpAct = {
+          pageCount: 1,
+          activities: [],
+          cronjob: true,
+          user: fUser,
+        };
+        ctrlActivities.getAllActivities(tmpAct, (result) => {
+          hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result}`, fUser.stravaId);
+        });
+      } else {
+        hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities non club member`, logObj.logType, 'info', 9, err, 'cron_no_page', 'status triggered activities non clubmember', fUser.stravaId);
+      }
+    });
+  });
+}
+
 exports.nightlyUpdate = () => {
   User.find({}, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
-      strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
-        hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
-        if (err || !athlete) {
-          hlpr.logOutArgs(`${logObj.file}.nightlyUpdate err`, logObj.logType, 'failure', 2, err, 'cron_no_page', 'status error or no athlete', fUser.stravaId);
-          hlpr.consLog(['error: Error or no data found']);
-          return null;
-        }
-        if (athlete.message === 'Authorization Error') {
-          hlpr.logOutArgs(`${logObj.file}.nightlyUpdate Authorization Error`, logObj.logType, 'failure', 1, err, 'cron_no_page', `status Authorization Error for ${fUser.stravaId}`, fUser.stravaId);
-          authCtrlr.updateAuthorizationError(fUser.stravaId);
-          return null;
-        }
-        authCtrlr.writeUser({ athlete: athlete }, fUser, (resUser) => {
-          hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
-          const tmpRt = {
-            pageCount: 1,
-            routeplans: [],
-            cronjob: true,
-            user: fUser,
-          };
-          ctrlRouteplans.getAllRouteplans(tmpRt, (result) => {
-            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllRouteplans`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered routeplan count ${result.length}`, fUser.stravaId);
-          });
-          if (resUser.clubMember === true) {
-            const tmpAct = {
-              pageCount: 1,
-              activities: [],
-              cronjob: true,
-              user: fUser,
-            };
-            ctrlActivities.getAllActivities(tmpAct, (result) => {
-              hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities club member`, logObj.logType, 'info', 9, err, 'cron_no_page', `status triggered activities count ${result}`, fUser.stravaId);
-            });
-          } else {
-            hlpr.logOutArgs(`${logObj.file}.nightlyUpdate getAllActivities non club member`, logObj.logType, 'info', 9, err, 'cron_no_page', 'status triggered activities non clubmember', fUser.stravaId);
-          }
-        });
-      });
+      getNightlyUser(fUser);
     });
   });
 };
