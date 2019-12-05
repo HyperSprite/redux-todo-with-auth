@@ -379,7 +379,7 @@ exports.getRecentActivities = (req, res) => {
     }
     if (_.isArray(acts)) {
       const counter = [];
-      console.log('listActivities !created', counter, acts);
+      console.log('listActivities !created', counter);
       if (acts.length === 0) {
         return exports.getWeeklyStats(req, res);
       }
@@ -390,14 +390,14 @@ exports.getRecentActivities = (req, res) => {
             return { error: err };
           }
           if (!created) {
-            console.log('listActivities !created', counter, acts);
+            console.log('listActivities !created', counter);
             counter.push(dbActivity.activityId);
             hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate !created`, logObj.logType, '!created', 7, err, req.originalUrl, dbActivity.activityId, req.user.stravaId);
             if (counter.length === acts.length) {
               return exports.getWeeklyStats(req, res);
             }
           } else {
-            console.log('listActivities', counter, acts);
+            console.log('listActivities', counter);
             options.activityId = dbActivity.activityId;
             const theseOptions = Object.assign({}, options, { activity: dbActivity.activityId });
             exports.getActivityDetails(dbActivity, theseOptions, (done) => {
