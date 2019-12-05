@@ -152,6 +152,20 @@ exports.signinError = (err, req, res) => {
   return res.status(422).send({ error: 'Signin failed: Bad Email or Password.' });
 };
 
+exports.handleRefresh = (callingFnc, req, res) => {
+  const { user } = req;
+  refresh.requestNewAccessToken('stravaLogin', user.refresh_token, (err, accessToken) => {
+    if(err || !accessToken) { return send401Response(); }
+    // Save the new accessToken for future use
+    return User.findOneAndUpdate(
+      { stravaId: user.stravaId },
+      { access_token: accessToken },
+      { new: true },
+      (err, updatedUser) => callingFnc({ ...req, user: updatedUser}, res));
+  });
+}
+
+
 exports.stravaSignin = (req, res) => {
   const { user } = req;
   const stravaArgs = {
