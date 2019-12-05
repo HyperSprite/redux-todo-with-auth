@@ -358,16 +358,21 @@ exports.getActivityUpdate = (activity, opts, cb) => {
   });
 };
 
+
 exports.getRecentActivities = (req, res) => {
+  const { pageCount, perPage, user } = req;
   const options = {
-    id: req.user.stravaId,
-    access_token: req.user.access_token,
-    per_page: req.perPage || 7,
-    page: req.pageCount,
-    user: req.user,
+    id: user.stravaId,
+    access_token: user.access_token,
+    per_page: perPage || 7,
+    page: pageCount,
+    user: user,
   };
-  strava.athlete.listActivities({ id: req.user.stravaId, access_token: req.user.access_token }, (err, acts) => {
-    exports.processingStatusOneSocket(req.user.stravaId);
+  strava.athlete.listActivities({ id: user.stravaId, access_token: user.access_token }, (err, acts) => {
+    exports.processingStatusOneSocket(user.stravaId);
+    if (err && err.code === 401) {
+      auth.handleRefresh(exports.getRecentActivities, req, res);
+    }
     if (_.isArray(acts)) {
       const counter = [];
       console.log('listActivities !created', counter, acts);
