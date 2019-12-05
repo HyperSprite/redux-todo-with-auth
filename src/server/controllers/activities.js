@@ -371,8 +371,8 @@ exports.getRecentActivities = (req, res) => {
   strava.athlete.listActivities({ id: user.stravaId, access_token: user.access_token }, (err, acts) => {
     exports.processingStatusOneSocket(user.stravaId);
 
-    hlpr.logOutArgs(`${logObj.file}.getRecentActivities strava.athlete.listActivities err`, logObj.logType, 'error', 3, err, req.originalUrl, `Result is acts ${JSON.stringify(acts)} or !isArray`, req.user.stravaId);
-    if (err && err.code === 401) {
+
+    if (acts && acts.message === 'Authorization Error') {
       auth.handleRefresh(exports.getRecentActivities, req, res);
     }
     if (_.isArray(acts)) {
