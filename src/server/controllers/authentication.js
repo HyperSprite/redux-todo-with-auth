@@ -195,8 +195,11 @@ exports.stravaSignin = (req, res) => {
 };
 
 exports.stravaSignOut = (req, res) => {
-  hlpr.consLog(['stravaSignOut', req.user.stravaId]);
-  res.send({ signout: true, types: 'UNAUTH_USER' });
+  return User.findOneAndUpdate(
+    { stravaId: req.user.stravaId },
+    { access_token: '' },
+    { new: true },
+    (err, updatedUser) => res.send({ signout: true, types: 'UNAUTH_USER' }))
 };
 
 exports.user = (req, res, next) => {
