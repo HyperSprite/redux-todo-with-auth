@@ -116,7 +116,7 @@ class UserList extends React.Component {
         {this.state.userList.map(user => (
           <Card key={user.stravaId}>
             <CardHeader
-              title={`${user.firstname} ${user.lastname}`}
+              title={`${user.firstname} ${user.lastname} : Current access token ${!!user.access_token}`}
               subheader={AthleteLink(user)}
             />
 
