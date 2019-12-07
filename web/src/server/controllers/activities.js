@@ -66,7 +66,7 @@ exports.getAllActivities = (input, result) => {
     }
     if (!input.cronjob && acts.message === 'Authorization Error') {
       hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
-      auth.stravaSignOut(input, result);
+      auth.handleRefresh(exports.getAllActivities, req, res);
     }
     if (!acts || !acts.length) {
       input.arrLength = 0;

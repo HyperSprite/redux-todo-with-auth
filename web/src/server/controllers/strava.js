@@ -122,14 +122,14 @@ exports.getFriends = (req, res) => {
 
 function getNightlyUser(fUser){
   strava.athlete.get({ id: fUser.stravaId, access_token: fUser.access_token }, (err, athlete) => {
-    hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
     if (err || !athlete) {
       hlpr.logOutArgs(`${logObj.file}.nightlyUpdate err`, logObj.logType, 'failure', 2, err, 'cron_no_page', 'status error or no athlete', fUser.stravaId);
       hlpr.consLog(['error: Error or no data found']);
       return null;
     }
-    if (data && data.message === 'Authorization Error') {
-      authCtrlr.handleRefresh(getNightlyUser, fUser);
+    hlpr.consLog(['nightlyUpdate athlete', athlete.id]);
+    if (athlete && athlete.message === 'Authorization Error') {
+      authCtrlr.handleRefresh(getNightlyUser, { user: fUser });
     }
     authCtrlr.writeUser({ athlete: athlete }, fUser, (resUser) => {
       hlpr.consLog(['nightlyUpdate writeUser done', resUser.stravaId]);
@@ -160,7 +160,7 @@ function getNightlyUser(fUser){
 }
 
 exports.nightlyUpdate = () => {
-  User.find({}, (err, foundUsers) => {
+  User.find({ access_token: { $ne: '' } }, (err, foundUsers) => {
     foundUsers.forEach((fUser) => {
       getNightlyUser(fUser);
     });
@@ -186,7 +186,7 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
 
 const runOnStartup = () => {
   hlpr.logOutArgs(`${logObj.file}.runOnStartup`, logObj.logType, 'system', 1, null, 'cron_no_page', 'Starting up', null);
-  // exports.nightlyUpdate();
+  exports.nightlyUpdate();
   // console.log('socketRoomList', socketSrvr.socketRoomList());
 };
 runOnStartup();
