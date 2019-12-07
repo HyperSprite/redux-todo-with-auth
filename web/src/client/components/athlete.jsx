@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 
 import * as actions from './../actions';
 import Static from './form/static';
-// import Astrophases from './weather/astrophases';
+import Astrophases from './weather/astrophases';
 import ThemeObject from './admin/theme-object';
 import ProcessingStatusAll from './admin/processing-status-all';
+
+import ActivityProcessing from './activity-processing';
 import Motivation from './motivation';
 import OneDayWeather from './weather/one-day-weather';
 import UserList from './form/user-list';
@@ -181,6 +183,7 @@ class Athlete extends Component {
                 </div>
               )} */}
             </div>
+
             <UserList />
           </div>
           <div className="side-lite right-pane" />
