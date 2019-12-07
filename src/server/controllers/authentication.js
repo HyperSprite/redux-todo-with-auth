@@ -155,8 +155,8 @@ exports.signinError = (err, req, res) => {
 exports.handleRefresh = (callingFnc, req, res) => {
   const { user } = req;
   refresh.requestNewAccessToken('strava', user.refresh_token, (err, accessToken) => {
-    if(err || !accessToken || accessToken.errors) {
-      hlpr.logOutArgs(`${logObj.file}.handleRefresh err`, logObj.logType, 'info', 3, err, req.originalUrl, `Failed Refresh Token ${JSON.stringify(accessToken.data)} ${JSON.stringify(err)}`, req.user.stravaId);
+    if(err || !accessToken) {
+      hlpr.logOutArgs(`${logObj.file}.handleRefresh err`, logObj.logType, 'info', 3, err, req.originalUrl, `Failed Refresh Token no data ${JSON.stringify(err)}`, req.user.stravaId);
       exports.stravaSignOut(req, res);
     }
     // Save the new accessToken for future use
