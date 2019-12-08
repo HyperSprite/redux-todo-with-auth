@@ -28,7 +28,7 @@ export default function (state = { events: [], event: { eventRoutes: [] } }, act
           ...state.event.eventRoutes[action.payload.index] = action.payload.data,
         }
       };
-    case TYPES.DELET_EVENT:
+    case TYPES.DELETE_EVENT:
       return {
         ...state,
         events: [
