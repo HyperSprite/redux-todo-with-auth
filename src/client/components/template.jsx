@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import ToggleState from '@hypersprite/toggle-state-rp';
 
@@ -64,4 +65,11 @@ class App extends React.Component {
   }
 }
 
-export default withStyles(styles, { name: 'StyledApp' })(App);
+function mapStateToProps(state) {
+  return {
+    authenticated: state.auth.authenticated,
+  };
+}
+
+const AppWithStyles = withStyles(styles, { name: 'StyledApp' })(App);
+export default connect(mapStateToProps)(AppWithStyles);
