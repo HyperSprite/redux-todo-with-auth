@@ -9,6 +9,7 @@ import RefreshIcon from 'mdi-react/RefreshIcon';
 import justFns from 'just-fns';
 import * as actions from './../../actions';
 
+import ActivityProcessingWithData from '../activity-processing/with-redux';
 import Layout from '../layout';
 import FtpWeight from './ftp-weight';
 
@@ -82,6 +83,7 @@ class PowerAndWeight extends React.Component {
     return (
       <Layout>
         <Card >
+          <ActivityProcessingWithData />
           {justFns.getLastInArray(ftpHistory, 'ftp') && justFns.getLastInArray(weightHistory, 'weight') ? (
             <FtpWeight
               ftpHistory={ftpHistory}

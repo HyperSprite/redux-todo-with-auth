@@ -19,6 +19,7 @@ import qs from 'qs';
 import justFNS from 'just-fns';
 // eslint-disable-next-line
 import * as actions from '../../actions';
+import ActivityProcessingWithData from '../activity-processing/with-redux';
 import Layout from '../layout';
 import Alert from '../form/alert';
 import ContentTabSwitch from '../content-tab-switch';
@@ -472,6 +473,7 @@ class ActivitySearch extends Component {
           onSubmit={handleSubmit(this.handleFormSubmit)}
         >
           <Card className={classes.div} >
+            <ActivityProcessingWithData />
             <ContentTabSwitch tabs={tabs} switch={tab => this.handleSwitch(tab)} />
 
             <GoogleMapLocation
