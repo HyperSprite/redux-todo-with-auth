@@ -12,6 +12,7 @@ import { differenceInCalendarWeeks, differenceInCalendarDays, format, isValid } 
 import ScrollIntoView from '../../containers/scroll-into-view';
 
 import * as actions from '../../actions';
+import ActivityProcessingWithData from '../activity-processing/with-redux';
 import Layout from '../layout';
 import ViewEvent from './view-event';
 import EditEvent from './edit-event';
@@ -127,6 +128,7 @@ class ListEvent extends React.Component {
           id={location.hash}
           headerHeight={70}
         />
+        <ActivityProcessingWithData />
         {events.map((event, i) => {
           let getWeather = false;
           if (isValid(new Date(event.eventDate))) {

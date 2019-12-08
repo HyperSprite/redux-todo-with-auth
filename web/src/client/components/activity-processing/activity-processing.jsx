@@ -81,7 +81,7 @@ const ActivityProcessing = (props) => {
         ) : null}
         <div className={classes.box} >
           <div className={classes.boxLabel}>
-            {'Total'}
+            {'Total Activities'}
           </div>
           <div className={classes.boxData}>
             {total}

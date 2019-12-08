@@ -5,6 +5,7 @@ import Card from '@material-ui/core/Card';
 import justFns from 'just-fns';
 import types from '../../types';
 import * as actions from './../../actions';
+import ActivityProcessingWithData from '../activity-processing/with-redux';
 import Layout from '../layout';
 import FeatureNotice from '../feature-notice';
 import AltitudeTable from '../altitude-table';
@@ -29,6 +30,7 @@ class PowerAtAltitude extends Component {
     return (
       <Layout>
         <Card>
+        <ActivityProcessingWithData />
           {(user.premium &&
               user.userGeoElevation &&
               altitudeTableProps.currentFTP &&
