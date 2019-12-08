@@ -50,6 +50,7 @@ exports.userList = (req, res) => {
         firstname: 1,
         lastname: 1,
         stravaId: 1,
+        access_token: 1,
         premium: 1,
         ftpHistory: 1,
         userGeoElevation: 1,

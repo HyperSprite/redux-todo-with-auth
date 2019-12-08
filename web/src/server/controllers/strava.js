@@ -186,7 +186,7 @@ exports.dailyUserUpdate = schedule.scheduleJob('00 20 * * *', () => {
 
 const runOnStartup = () => {
   hlpr.logOutArgs(`${logObj.file}.runOnStartup`, logObj.logType, 'system', 1, null, 'cron_no_page', 'Starting up', null);
-  // exports.nightlyUpdate();
+  exports.nightlyUpdate();
   // console.log('socketRoomList', socketSrvr.socketRoomList());
 };
 runOnStartup();
