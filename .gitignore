@@ -11,6 +11,8 @@ coverage
 # production
 build
 dist
+nodestatic.*
+bundle-*
 
 # misc
 .DS_Store
