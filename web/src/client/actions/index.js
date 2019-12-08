@@ -43,7 +43,7 @@ export const TYPES: {[key: ActionStrings]: ActionStrings} = {
   POST_EVENT: 'POST_EVENT',
   EDIT_EVENT: 'EDIT_EVENT',
   CLEAR_EVENT: 'CLEAR_EVENT',
-  DELET_EVENT: 'DELET_EVENT',
+  DELETE_EVENT: 'DELETE_EVENT',
   FETCH_EVENT: 'FETCH_EVENT',
   FETCH_EVENTS: 'FETCH_EVENTS',
   SET_FAV_EVENT: 'SET_FAV_EVENT',
@@ -201,7 +201,7 @@ export function deleteEvent(eventId, relURL) {
     axios.post(`${ROOT_URL}/${relURL}`, formData, axiosConfig)
       .then(() => {
         dispatch({
-          type: TYPES.DELET_EVENT,
+          type: TYPES.DELETE_EVENT,
           payload: eventId,
         });
       })

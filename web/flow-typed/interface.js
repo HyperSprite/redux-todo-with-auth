@@ -36,7 +36,7 @@ export type ActionStrings = (
   'POST_EVENT' |
   'EDIT_EVENT' |
   'CLEAR_EVENT' |
-  'DELET_EVENT' |
+  'DELETE_EVENT' |
   'FETCH_EVENT' |
   'FETCH_EVENTS' |
   'SET_FAV_EVENT' |
