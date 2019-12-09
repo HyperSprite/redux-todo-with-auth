@@ -32,10 +32,11 @@ const stravaLogin = new StravaStrategy({
   scope: `read_all,activity:read_all,profile:read_all`,
 },
 (accessToken, refreshToken, profile, done) => {
-  const tmpAthlete = {};
-  tmpAthlete.stravaId = profile.id;
-  tmpAthlete.access_token = profile.token;
-  tmpAthlete.refresh_token = refreshToken;
+  const tmpAthlete = {
+    stravaId: profile.id,
+    access_token: accessToken, // was profile.token
+    refresh_token: refreshToken,
+  };
   User.findOrCreate({ stravaId: tmpAthlete.stravaId }, tmpAthlete, (err, user, created) => {
     if (created) {
       const message = `ARaceathlete new user ${user.firstname} ${user.lastname}, https://www.strava.com/athletes/${user.stravaId}, clubMember: ${user.clubMember}`;
