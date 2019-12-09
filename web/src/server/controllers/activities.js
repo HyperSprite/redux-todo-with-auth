@@ -66,7 +66,7 @@ exports.getAllActivities = (input, result) => {
     }
     if (!input.cronjob && acts.message === 'Authorization Error') {
       hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
-      auth.handleRefresh(exports.getAllActivities, req, res);
+      return auth.handleRefresh(exports.getAllActivities, req, res);
     }
     if (!acts || !acts.length) {
       input.arrLength = 0;
@@ -117,7 +117,7 @@ const getStreams = (activityId, accessToken, done) => {
   strava.streams.activity({ id: activityId, access_token: accessToken, types: streamTypes }, (err, streams, rateLimit) => {
     hlpr.consLog(['getStreams rateLimit', JSON.stringify(rateLimit)]);
     if (err) {
-      hlpr.logOutArgs(`${logObj.file}.getStreams got streams err`, logObj.logType, 'activities', 3, err, 'no_page', `err for ${activityId} streams: ${streams.message}`, null);
+      hlpr.logOutArgs(`${logObj.file}.getStreams got streams err`, logObj.logType, 'activities', 3, err, 'no_page', `err for ${activityId} streams: ${streams && streams.message}`, null);
       return done([]);
     } else if (_.isArray(streams)) {
       const newStreams = Object.assign({}, { streams }, { activityId });
@@ -231,15 +231,15 @@ exports.getActivityDetails = (activity, opts, cb) => {
     access_token: opts.access_token,
   }, (err, data, rateLimit) => {
     hlpr.consLog(['getActivityDetails rateLimit', JSON.stringify(rateLimit)]);
-    if (err || !data || data.errors) {
+    if (err || !data) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityDetails`,
         logSubType: 'failure',
         level: 1,
         error: err,
-        message: `failedUpdate for ${activity.activityId} message: ${data ? data.message : 'No data'} errors: ${data.errors}`,
+        message: `failedUpdate for ${activity.activityId} message: 'No data' errors: ${err.errors}`,
       }));
-      findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
+      return findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
     } else if (data.elapsed_time === 0) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityDetails`,
@@ -248,7 +248,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
         error: err,
         message: `data.elapsed_time === 0 for ${activity.activityId}`,
       }));
-      findActivityAndUpdate(activity.activityId, data, opts, fullActivity => cb(fullActivity));
+      return findActivityAndUpdate(activity.activityId, data, opts, fullActivity => cb(fullActivity));
     }
 
     // const getPolyline = (map) => {
@@ -310,7 +310,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
                 error: err,
                 message: `activityId: ${opts.activityId} resource_state: ${enhancedData.resource_state}`,
               }));
-              findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
+              return findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
             });
           } else {
             hlpr.logOut(Object.assign({}, logObj, {
@@ -320,7 +320,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
               error: err,
               message: `activityId: ${opts.activityId} resource_state: ${enhancedData.resource_state}`,
             }));
-            findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
+            return findActivityAndUpdate(opts.activityId, enhancedData, opts, fullActivity => cb(fullActivity));
           }
         });
       });
@@ -334,7 +334,7 @@ exports.getActivityUpdate = (activity, opts, cb) => {
     access_token: opts.access_token,
   }, (err, data) => {
     if (data && data.message === 'Authorization Error') {
-      auth.handleRefresh(exports.getActivityUpdate, req, res);
+      return auth.handleRefresh(exports.getActivityUpdate, req, res);
     }
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
@@ -375,7 +375,7 @@ exports.getRecentActivities = (req, res) => {
     exports.processingStatusOneSocket(user.stravaId);
 
     if (acts && acts.message === 'Authorization Error') {
-      auth.handleRefresh(exports.getRecentActivities, req, res);
+      return auth.handleRefresh(exports.getRecentActivities, req, res);
     }
     if (_.isArray(acts)) {
       const counter = [];
@@ -805,6 +805,7 @@ exports.processingStatusAllSockets = async () => {
     users.map(async (user) => {
       const oneStatus = await exports.resourceState(user.stravaId);
       if (oneStatus.activStatus && oneStatus.activStatus.state2) {
+        console.log('processingStatusAllSockets', oneStatus.activStatus)
         socketSrvr.ifConnected(user.stravaId, 'ACTIVITY_STATUS', oneStatus);
       }
     });
@@ -818,6 +819,7 @@ exports.processingStatusAllSockets = async () => {
 exports.processingStatusOneSocket = async (stravaId) => {
   try {
     const oneStatus = await exports.resourceState(stravaId);
+    console.log('processingStatusOneSocket', oneStatus)
     socketSrvr.ifConnected(stravaId, 'ACTIVITY_STATUS', oneStatus);
   } catch (err) {
     hlpr.logOutArgs(`${logObj.file}.processingStatusOneSocket err`, 'sockets', 'error', 5, err, 'no_page', 'ACTIVITY_STATUS', stravaId);

@@ -154,7 +154,7 @@ exports.signinError = (err, req, res) => {
 
 exports.handleRefresh = (callingFnc, req, res) => {
   const { user } = req;
-  refresh.requestNewAccessToken('strava', user.refresh_token, (err, accessToken) => {
+  refresh.requestNewAccessToken('strava', user.refresh_token, (err, accessToken, refreshToken) => {
     if(err || !accessToken) {
       hlpr.logOutArgs(`${logObj.file}.handleRefresh err`, logObj.logType, 'info', 3, err, req.originalUrl, `Failed Refresh Token no data ${JSON.stringify(err)}`, req.user.stravaId);
       exports.stravaSignOut(req, res);
@@ -162,11 +162,30 @@ exports.handleRefresh = (callingFnc, req, res) => {
     // Save the new accessToken for future use
     return User.findOneAndUpdate(
       { stravaId: user.stravaId },
-      { access_token: accessToken },
+      { access_token: accessToken, refresh_token: refreshToken },
       { new: true },
       (err, updatedUser) => callingFnc({ ...req, user: updatedUser}, res));
   });
 }
+
+exports.isAuthRefreshed  = (req, done) => {
+  const { user } = req;
+  const stravaArgs = {
+    id: user.stravaId,
+    access_token: user.access_token,
+  }
+  strava.athlete.get(stravaArgs, (err, athlete) => {
+    if (athlete && athlete.message === 'Authorization Error') {
+      return exports.handleRefresh(exports.isAuthRefreshed, req, done);
+    }
+    if (err || !athlete) return done(err);
+    if (athlete.message === 'Authorization Error') {
+      const error = new Error('Bad Strava Refresh');
+      return done(error);
+    }
+    return done(athlete);
+  });
+};
 
 
 exports.stravaSignin = (req, res) => {
@@ -177,7 +196,7 @@ exports.stravaSignin = (req, res) => {
   }
   strava.athlete.get(stravaArgs, (err, athlete) => {
     if (athlete && athlete.message === 'Authorization Error') {
-      exports.handleRefresh(exports.stravaSignin, req, res);
+      return exports.handleRefresh(exports.stravaSignin, req, res);
     }
     if (err || !athlete || athlete.errors) return res.status(401).send({ error: 'Error or no data found' });
     if (athlete.message === 'Authorization Error') exports.stravaSignOut(req, res);
@@ -220,11 +239,15 @@ exports.user = (req, res, next) => {
 };
 
 exports.userById = (input, output) => {
-  User.findById(input, (err, user) => {
+  const authedUser = exports.isAuthRefreshed({user}, () => done);
+  console.log('>>>>> userById', authedUser);
+  const { goodUser } = authedUser;
+  User.findById(goodUser, (err, user) => {
     if (err || !user || !user.stravaId) {
       hlpr.logOutArgs(`${logObj.file}.userById`, 'auth', 'failure', 9, err, 'no_page', 'userById not found or error', input);
-       return { error: 'failed user lookup' }
-     }
+      const error = new Error('db - failed user lookup')
+      return error;
+    }
     hlpr.logOutArgs(`${logObj.file}.userById`, 'auth', 'success', 9, null, 'no_page', 'Found user', user.stravaId);
     return output(user);
   });
