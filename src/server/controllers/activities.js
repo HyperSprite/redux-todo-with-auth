@@ -55,18 +55,18 @@ exports.getAllActivities = (input, result) => {
     per_page: input.perPage || 200,
     page: input.pageCount,
   };
-
+  console.log('>>>>>> getAllActivities', input);
   if (input.arrLength === 0) {
     return result(input);
   }
   strava.athlete.listActivities(options, (err, acts) => {
+    if (acts.message === 'Authorization Error' || err && err.message === 'Authorization Error') {
+      hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
+      return auth.handleRefresh(exports.getAllActivities, req, res);
+    }
     if (err) {
       hlpr.consLog(['strava.getAllActivities err', err]);
       return err;
-    }
-    if (!input.cronjob && acts.message === 'Authorization Error') {
-      hlpr.consLog(['getAllActivities Authorization Error', input.user.stravaId, input.cronjob]);
-      return auth.handleRefresh(exports.getAllActivities, req, res);
     }
     if (!acts || !acts.length) {
       input.arrLength = 0;
@@ -333,7 +333,7 @@ exports.getActivityUpdate = (activity, opts, cb) => {
     id: opts.activityId,
     access_token: opts.access_token,
   }, (err, data) => {
-    if (data && data.message === 'Authorization Error') {
+    if (data && data.message === 'Authorization Error' || err) {
       return auth.handleRefresh(exports.getActivityUpdate, req, res);
     }
     if (err || !data || data.errors) {
@@ -374,7 +374,7 @@ exports.getRecentActivities = (req, res) => {
   strava.athlete.listActivities({ id: user.stravaId, access_token: user.access_token }, (err, acts) => {
     exports.processingStatusOneSocket(user.stravaId);
 
-    if (acts && acts.message === 'Authorization Error') {
+    if (acts && acts.message === 'Authorization Error' || err) {
       return auth.handleRefresh(exports.getRecentActivities, req, res);
     }
     if (_.isArray(acts)) {
@@ -424,7 +424,7 @@ exports.getRecentActivities = (req, res) => {
 *  the daily rate never exceeds 30000 requests, works out to under 300 requests
 *  per day. Use ACTIVITY_UPDATE_INTERVAL to adjust.
 *
-*  It seraches for resource_state: 2 (indexed) then pulls more detailed Strava data
+*  It searches for resource_state: 2 (indexed) then pulls more detailed Strava data
 *  and Zone info.
 *
 *  The activityStreamsCache is cleared every X minutes of ACTIVITY_STREAM_CACHE
@@ -461,10 +461,10 @@ exports.getExtendedActivityStats = () => {
 
   Activities.find(toUpdate).limit(limitCount).sort({ start_date: -1 }).exec((err, activities) => {
     if (err) {
-      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find err`, logObj.logType, 'err', 3, err, 'no_page', `Error finding activities query opts: ${toUpdate}`, null);
+      hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find err`, logObj.logType, 'err', 3, err, 'no_page', `Error finding activities query opts: ${JSON.stringify(toUpdate)}`, null);
       return err;
     }
-    hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find info`, logObj.logType, 'info', 10, err, 'no_page', `activities  query opts: ${toUpdate}`, null);
+    hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats Activities.find info`, logObj.logType, 'info', 10, err, 'no_page', `activities: ${JSON.stringify(activities, null, 2)}`, null);
     activities.forEach((dbActivity) => {
       User.findOne({ stravaId: dbActivity.athlete.id }, { access_token: 1, premium: 1, ftpHistory: 1, stravaId: 1, _id: 0 }, (err, user) => {
         if (user && !err) {
