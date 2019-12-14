@@ -49,21 +49,22 @@ const routePlanProjection = {
 * used by getRouteplan
 */
 const getOneRoute = (input, result) => {
-  Routeplans.find({ routeplanId: input.routeplanId }, (err, oneRouteplan) => {
+  const { user, routeplanId, cronjob } = input;
+  Routeplans.find({ routeplanId: routeplanId }, (err, oneRouteplan) => {
     if (oneRouteplan && oneRouteplan[0]) {
       hlpr.consLog(['found oneRouteplan']);
       return result(oneRouteplan[0]);
     }
-    strava.routes.get({ id: input.routeplanId, access_token: input.user.access_token }, (
+    strava.routes.get({ id: routeplanId, access_token: user.access_token }, (
       err, oneRoute) => {
+      if (oneRoute && oneRoute.message === 'Authorization Error' || err) {
+        hlpr.consLog(['getAllActivities Authorization Error', JSON.stringify(input), user.stravaId, cronjob, err, (err && err.message)]);
+        return auth.handleRefresh(getOneRoute, input, result);
+      }
       if (err || !oneRoute || !oneRoute.id) {
         const message = 'No Strava Route found'
         hlpr.logOutArgs(`${logObj.file}.getOneRoute strava.routes.get`, '404', 'user', 5, err, input.originalUrl, message, input.user.stravaId);
         return result({ message });
-      }
-      if (oneRoute.message === 'Authorization Error') {
-        hlpr.logOutArgs(`${logObj.file}.getOneRoute strava.routes.get`, 'auth', 'user', 5, err, input.originalUrl, oneRoute.message, input.user.stravaId);
-        return result({ message: oneRoute.message });
       }
       hlpr.consLog(['getOneRoute oneRoute >>>>>>>', oneRoute]);
       const summaryPolyline = (oneRoute && oneRoute.map && oneRoute.map.summary_polyline) || null;
@@ -103,10 +104,12 @@ const getOneRoute = (input, result) => {
 *   /apiv1/routeplan/:routeplanId
 */
 exports.getRouteplan = (req, res) => {
+  const { user } = req;
   const rPInput = {
     routeplanId: req.params.routeplanId,
     user: {
-      access_token: req.user.access_token,
+      stravaId: user.stravaId,
+      access_token: user.access_token,
     },
   };
   getOneRoute(rPInput, result => res.send(result));
@@ -121,25 +124,25 @@ const limitCount = 40;
 
 //
 // and Zone info.
-exports.getRouteplansOnTimer = setInterval(async () => {
-  const usersRouteplans = await UserCommon.distinct('routeplans').exec();
-  const savedRouteplans = await Routeplans.distinct('routeplanId').exec();
-  const getNewRouteplans = _.difference(usersRouteplans.filter(rP => typeof rP === 'number'), savedRouteplans);
+// exports.getRouteplansOnTimer = setInterval(async () => {
+//   const usersRouteplans = await UserCommon.distinct('routeplans').exec();
+//   const savedRouteplans = await Routeplans.distinct('routeplanId').exec();
+//   const getNewRouteplans = _.difference(usersRouteplans.filter(rP => typeof rP === 'number'), savedRouteplans);
 
-  if (getNewRouteplans.length) {
-    const shortListNewRouteplans = _.slice(getNewRouteplans, 0, limitCount);
-    shortListNewRouteplans.forEach((rP) => {
-      const rPInput = {
-        routeplanId: rP,
-        user: {
-          access_token: process.env.STRAVA_ROUTES_ACCESS_TOKEN,
-        },
-      };
-      hlpr.consLog(['shortListNewRouteplans', rPInput.routeplanId]);
-      getOneRoute(rPInput, done => hlpr.consLog([`getRouteplansOnTimer OneRoute: ${done.routeplanId}`]));
-    });
-  }
-}, theInterval(minutes));
+//   if (getNewRouteplans.length) {
+//     const shortListNewRouteplans = _.slice(getNewRouteplans, 0, limitCount);
+//     shortListNewRouteplans.forEach((rP) => {
+//       const rPInput = {
+//         routeplanId: rP,
+//         user: {
+//           access_token: process.env.STRAVA_ROUTES_ACCESS_TOKEN,
+//         },
+//       };
+//       hlpr.consLog(['shortListNewRouteplans', rPInput.routeplanId]);
+//       getOneRoute(rPInput, done => hlpr.consLog([`getRouteplansOnTimer OneRoute: ${done.routeplanId}`]));
+//     });
+//   }
+// }, theInterval(minutes));
 
 /**
 * Creates or updates usercommons routeplans array
@@ -152,7 +155,7 @@ const userCommonRouteUpdate = (input, result) => {
   };
   UserCommon.findOneAndUpdate({ stravaId: input.stravaId }, input, optsFOAU, (err, updated) => {
     if (err) {
-      hlpr.consLog(['faided to update UserCommon']);
+      hlpr.consLog(['failded to update UserCommon']);
       return result({ message: 'Error failed to update UserCommon' });
     }
     hlpr.consLog(['UserCommon.findOneAndUpdate'])
