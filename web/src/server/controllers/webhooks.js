@@ -72,12 +72,12 @@ const postProcessor = (input, done) => {
         };
         switch (input.aspect_type) {
           case 'create':
-            return Activities.getActivityDetails(activity, options, (cDone) => {
+            return Activities.getActivityDetails(options, (cDone) => {
               ActivitiesSearch.fitnessTodaySave(options);
               return cDone;
             });
           case 'update':
-            return Activities.getActivityUpdate(activity, options, (cDone) => {
+            return Activities.getActivityUpdate(options, (cDone) => {
               ActivitiesSearch.fitnessTodaySave(options);
               return cDone;
             });

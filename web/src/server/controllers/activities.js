@@ -225,30 +225,33 @@ const findActivityAndUpdate = (activityId, data, options, done) => {
 *   user: user,
 * }
 */
-exports.getActivityDetails = (activity, opts, cb) => {
+exports.getActivityDetails = (opts, cb) => {
   strava.activities.get({
     id: opts.activityId,
     access_token: opts.access_token,
   }, (err, data, rateLimit) => {
     hlpr.consLog(['getActivityDetails rateLimit', JSON.stringify(rateLimit)]);
-    if (err || !data) {
+    if (data && data.message === 'Authorization Error' || err) {
+      return auth.handleRefresh(exports.getActivityDetails, opts, cb);
+    }
+    if (!data) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityDetails`,
         logSubType: 'failure',
         level: 1,
         error: err,
-        message: `failedUpdate for ${activity.activityId} message: 'No data' errors: ${err.errors}`,
+        message: `failedUpdate for ${opts.activityId} message: 'No data' errors: ${err.errors}`,
       }));
-      return findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
+      return findActivityAndUpdate(opts.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
     } else if (data.elapsed_time === 0) {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityDetails`,
         logSubType: 'failure',
         level: 6,
         error: err,
-        message: `data.elapsed_time === 0 for ${activity.activityId}`,
+        message: `data.elapsed_time === 0 for ${opts.activityId}`,
       }));
-      return findActivityAndUpdate(activity.activityId, data, opts, fullActivity => cb(fullActivity));
+      return findActivityAndUpdate(opts.activityId, data, opts, fullActivity => cb(fullActivity));
     }
 
     // const getPolyline = (map) => {
@@ -264,7 +267,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
     }
 
     // enhancePolylineLocation(getPolyline(data.map), true, (geoData) => {
-      getStreams(activity.activityId, opts.access_token, (strmArr) => {
+      getStreams(opts.activityId, opts.access_token, (strmArr) => {
         getStreamTimeAverages(strmArr, (strmTmArr) => {
           const enhancedData = Object.assign(
             {},
@@ -275,7 +278,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
             { currentSchema: currentVersion } //eslint-disable-line
           );
 
-          const mssg = `Controllers/Activity.getActivityDetails Enhancing Data activityId ${activity.activityId}
+          const mssg = `Controllers/Activity.getActivityDetails Enhancing Data activityId ${opts.activityId}
             data: ${JSON.stringify(data.id)},
             streamData: ${!!strmArr.length},
             streamTime: ${JSON.stringify([strmTmArr[0], strmTmArr[1], strmTmArr[3]])},
@@ -290,7 +293,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
           }));
 
           if (opts.user.premium) {
-            getListZones(activity.activityId, opts.access_token, (listZonesArr) => {
+            getListZones(opts.activityId, opts.access_token, (listZonesArr) => {
               enhancedData.zones = listZonesArr;
 
               if (enhancedData.weighted_average_watts && opts.user.ftpHistory.length) {
@@ -328,7 +331,7 @@ exports.getActivityDetails = (activity, opts, cb) => {
   });
 };
 
-exports.getActivityUpdate = (activity, opts, cb) => {
+exports.getActivityUpdate = (opts, cb) => {
   strava.activities.get({
     id: opts.activityId,
     access_token: opts.access_token,
@@ -342,9 +345,9 @@ exports.getActivityUpdate = (activity, opts, cb) => {
         logSubType: 'failure',
         level: 1,
         error: err,
-        message: `failedUpdate for ${activity.activityId} message: ${data ? data.message : 'No data'} errors: ${data.errors}`,
+        message: `failedUpdate for ${opts.activityId} message: ${data ? data.message : 'No data'} errors: ${data.errors}`,
       }));
-      findActivityAndUpdate(activity.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
+      findActivityAndUpdate(opts.activityId, { failedUpdate: true }, opts, fullActivity => cb(fullActivity));
     } else {
       hlpr.logOut(Object.assign({}, logObj, {
         func: `${logObj.file}.getActivityUpdate pushActivities not premium`,
@@ -671,7 +674,10 @@ exports.refreshActivity = (req, res) => {
   hlpr.logOutArgs(`${logObj.file}.refreshActivity info`, logObj.logType, 'info', 9, null, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
 
   strava.activities.get({ id: q.activityId, access_token: req.user.access_token }, (err, data) => {
-    if (err || !data) {
+    if (data && data.message === 'Authorization Error' || err) {
+      return auth.handleRefresh(exports.refreshActivity, req, res);
+    }
+    if (!data) {
       hlpr.logOutArgs(`${logObj.file}.refreshActivity strava.activities.get 404`, logObj.logType, 'error', 5, err, req.originalUrl, `Refresh Activity activityid: ${q.activityId}, athlete: ${q.athlete}`, req.user.stravaId);
       return res.status(404).send({ error: true, message: 'Activity not found on Strava' });
     }
