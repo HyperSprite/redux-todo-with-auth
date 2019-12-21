@@ -27,7 +27,7 @@ exports.stravaGetReceiver = (req, res) => {
     return res.send({ 'hub.challenge': q['hub.challenge'] });
   }
   hlpr.logOutArgs(`${logObj.file}.stravaGetReceiver 403`, logObj.logType, 'failure', 1, null, null, mssg);
-  return res.status(403).send({ error: 'Faild to verify token' });
+  return res.status(403).send({ error: 'Failed to verify token' });
 };
 
 /**
@@ -50,7 +50,6 @@ req.body = {
 
 const postProcessor = (input, done) => {
   const mssg = `stravaId: ${input.owner_id}, activityId: ${input.object_id}, aspect_type: ${input.aspect_type}`
-  console.log('test postProcessor', input);
   if (input.object_type === 'activity') {
     User.findOne({ stravaId: input.owner_id * 1 }, (err, user) => {
 
