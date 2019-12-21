@@ -78,6 +78,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useFindAndModify: false,
   useCreateIndex: true,
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 mongoose.connection.on('error', (err) => {
   hlpr.getDateLocal('America/Los_Angeles', 'YYYY-MM-DD HH:mm', (date) => {
