@@ -337,7 +337,7 @@ exports.getActivityUpdate = (opts, cb) => {
     access_token: opts.access_token,
   }, (err, data) => {
     if (data && data.message === 'Authorization Error' || err) {
-      return auth.handleRefresh(exports.getActivityUpdate, req, res);
+      return auth.handleRefresh(exports.getActivityUpdate, opts, cb);
     }
     if (err || !data || data.errors) {
       hlpr.logOut(Object.assign({}, logObj, {
