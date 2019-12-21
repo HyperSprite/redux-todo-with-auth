@@ -332,6 +332,7 @@ exports.getActivityDetails = (opts, cb) => {
 };
 
 exports.getActivityUpdate = (opts, cb) => {
+  console.log('getActivityUpdate opts', JSON.stringify(opts, null, 2));
   strava.activities.get({
     id: opts.activityId,
     access_token: opts.access_token,
