@@ -403,8 +403,8 @@ exports.getRecentActivities = (req, res) => {
           } else {
             console.log('listActivities', counter);
             options.activityId = dbActivity.activityId;
-            const theseOptions = Object.assign({}, options, { activity: dbActivity.activityId });
-            exports.getActivityDetails(dbActivity, theseOptions, (done) => {
+            // const theseOptions = { ...options, { activityId: dbActivity.activityId }};
+            exports.getActivityDetails(options, (done) => {
               hlpr.logOutArgs(`${logObj.file}.getRecentActivities acts.forEach Activities.findOrCreate !created`, logObj.logType, 'created', 7, err, req.originalUrl, done.activityId, req.user.stravaId);
               counter.push(done.activityId);
               if (counter.length === acts.length) {
@@ -481,7 +481,7 @@ exports.getExtendedActivityStats = () => {
             user: user,
             cronjob: true,
           };
-          exports.getActivityDetails(dbActivity, options, done => done);
+          exports.getActivityDetails(options, done => done);
         } else {
           Activities.findOneAndUpdate({ activityId: dbActivity.activityId }, { authorizationError: true }, { new: true }, (err, authError) => {
             hlpr.logOutArgs(`${logObj.file}.getExtendedActivityStats User.findOne failure`, logObj.logType, 'failure', 1, err, 'no_page', `No User ${authError.activityId}`, null);
