@@ -41,6 +41,7 @@ const config = {
   NEXMO_VIRTUAL_NUMBER: '<virtual number from Nexmo>',
   NEXMO_SECRET: '<secret from Nexmo>',
   NEXMO_KEY: '<key from Nexmo>',
+  NEXMO_ACTIVE: 'false',
   ADMIN_TXT_NUMBER: '<Your Mobile Number>',
   STRAVA_ROUTES_ACCESS_TOKEN: '', // Strava access token for routes.
   STRAVA_CLIENT_ID: '<YOUR_KEY>', // Strava API Key holders ID
@@ -81,6 +82,7 @@ const localMongoURI = !hlpr.isProd() ?
     process.env.NEXMO_VIRTUAL_NUMBER = process.env.NEXMO_VIRTUAL_NUMBER || config.NEXMO_VIRTUAL_NUMBER;
     process.env.NEXMO_KEY = process.env.NEXMO_KEY || config.NEXMO_KEY;
     process.env.NEXMO_SECRET = process.env.NEXMO_SECRET || config.NEXMO_SECRET;
+    process.env.NEXMO_ACTIVE = process.env.NEXMO_ACTIVE || config.NEXMO_ACTIVE;
     process.env.SITE_PUBLIC = process.env.SITE_PUBLIC || config.SITE_PUBLIC;
     process.env.SITE_URL = process.env.SITE_URL || config.SITE_URL;
     process.env.STRAVA_ROUTES_ACCESS_TOKEN = process.env.STRAVA_ROUTES_ACCESS_TOKEN || config.STRAVA_ROUTES_ACCESS_TOKEN;
