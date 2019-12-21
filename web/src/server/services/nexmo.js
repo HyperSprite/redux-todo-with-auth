@@ -9,7 +9,7 @@ const hlpr = require('../lib/helpers');
 
 exports.sendText = (txtNumber, txtMessage) => {
   /** nexmo is production only, !production, just log it */
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' && process.env.NEXMO_ACTIVE === 'true') {
     nexmo.message.sendSms(
       process.env.NEXMO_VIRTUAL_NUMBER, txtNumber, txtMessage,
       (err, responseData) => {
