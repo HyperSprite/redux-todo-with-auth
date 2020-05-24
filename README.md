@@ -1,7 +1,7 @@
 ![A Race athlete icon](https://github.com/HyperSprite/redux-todo-with-auth/raw/master/web/src/server/public/favicons/android-chrome-192x192.png)
 # A Race athlete
 
-The idea behind **A Race athlete** is to help people pick, plan and train for their primary endurance race goals, or "A race". It works using by connecting to [Strava](https://strava.com), a popular endurance sport application for authentication, authorization and data. To see A Race athlete in action or check out the features, just go to the [homepage](https://www.araceathlete.com/home).
+The idea behind **A Race athlete** is to help people pick, plan and train for their primary endurance race goals, or "A race". It works using by connecting to [Strava](https://strava.com), a popular endurance sport application for authentication, authorization and data. To see A Race athlete in action or check out the features, just go to the [homepage](https://blog.araceathlete.com/home).
 
 It uses a fairly standard Nodejs/Express setup for serving up MongoDB data and a React/Redux front end skinned in Material-ui.
 
